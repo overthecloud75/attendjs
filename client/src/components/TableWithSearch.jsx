@@ -75,6 +75,7 @@ const Dates = styled.div`
 const TableWrapper = styled.div`
     display: flex;
     justify-content: center;
+    padding: 30px;
 `;
 
 const TableWithSearch = () => {
