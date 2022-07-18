@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useMemo, useState} from 'react'
 import styled from "styled-components";
 import PersonIcon from '@mui/icons-material/Person';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -7,16 +7,18 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css'; 
 import { format } from "date-fns"
 import useFetch from '../hooks/useFetch';
+import Table from './ReactTable'
+import { attendColumnData } from '../config';
 
 const Container = styled.div`
     background-color: white;
     display: flex;
-    justify-content: center;
+    flex-direction : column;
 `;
 
 const Wrapper = styled.div`
     width: 100%;
-    max-width: 1024px;
+    display: flex;
     margin: 10px 0px 10px 0px;
     justify-content: center;
 `;
@@ -70,7 +72,12 @@ const Dates = styled.div`
     z-index: 2;
 `;
 
-const Search = () => {
+const TableWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+`;
+
+const TableWithSearch = () => {
 
     const [name, setName] = useState("");
     const [openDate, setOpenDate] = useState(false);
@@ -86,7 +93,8 @@ const Search = () => {
         "/attend/search", {name: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}
     );
 
-    console.log('data', data, loading);
+    const columns = useMemo(() => attendColumnData, []);
+    const tableData = useMemo(() => data, [data]);
 
     return (
         <Container>
@@ -123,8 +131,14 @@ const Search = () => {
                     </Item>
                 </Items>
             </Wrapper>
+            <TableWrapper>
+                <Table 
+                    columns = {columns}
+                    data = {tableData}
+                />
+            </TableWrapper>
         </Container>
     )
 }
 
-export default Search
+export default TableWithSearch
