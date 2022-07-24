@@ -1,12 +1,19 @@
 import React from 'react';
-import { useTable, useSortBy } from 'react-table';
+import { useTable, useSortBy, usePagination } from 'react-table';
 import styled from 'styled-components';
 import { v } from '../variable';
 
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding 0px 100px;
+    font-size: 14px;
+`;
+
 const TableSheet = styled.table`
-    width: 100%;
     border-collapse: collapse;
     text-align: center;
     border-radius: ${v.borderRadius};
@@ -19,21 +26,21 @@ const THead = styled.thead`
 `;
 
 const HeadTr = styled.tr`
-    background: ${({ theme }) => theme.bg};
+    background: black;
 `;
 
 const Th = styled.th`
     font-weight: normal;
     padding: ${v.smSpacing};
-    color: ${({ theme }) => theme.text};
+    border: 1px solid ${({ theme }) => theme.bg2};
+    color: white;
     text-transform: capitalize;
     font-weight: 600;
-    font-size: 14px;
 `;
 
 const Td = styled.td`
     padding: ${v.smSpacing};
-    border: 1px solid ${({ theme }) => theme.bg2};
+    border: 1px solid ${({ theme }) => theme.bg2};  
     font-size: 14px;
 `;
 
@@ -41,42 +48,154 @@ const TBody = styled.tbody`
 `;
 
 const BodyTr = styled.tr`
-    background: ${({ theme }) => theme.white};
+    background-color: transparent;
+`;
+
+const Pagination = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    margin: 16px;
+`;
+
+const PageButton = styled.button`
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 0;
+  background: black;
+  color: white;
+  font-size: 1rem;
+
+  &:hover {
+    background: tomato;
+    cursor: pointer;
+    transform: translateY(-2px);
+  }
+
+  &[disabled] {
+    background: grey;
+    cursor: revert;
+    transform: revert;
+  }
+
+  &[aria-current] {
+    background: deeppink;
+    font-weight: bold;
+    cursor: revert;
+    transform: revert;
+  }
+`;
+
+const PageSpan = styled.span`
+    margin: 0px 5px;
+`;
+
+const PageInput = styled.input`
+    margin: 0px 5px;
+    padding: 8px 8px;
+    border: 1px solid;
+	border-radius: 8px;
+    width: 50px;
+    background-color: transparent;
+	}
+`;
+
+const PageSelect = styled.select`
+    margin: 0px 5px;
+	display: block;
+	padding: 8px 8px;
+	border: 1px solid;
+	border-radius: 8px;
+
+	background-color: transparent;
+	&:focus {
+		border-color: red;
+	}
 `;
 
 // useTable에다가 작성한 columns와 data를 전달한 후 아래 4개의 props를 받아온다
+// initialState https://github.com/TanStack/table/discussions/2029
+
 const Table = ({ columns, data }) => {
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        useTable({ columns, data }, useSortBy);
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,  
+        page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize, state: { pageIndex, pageSize } } =
+        useTable({ columns, data, initialState: { pageSize: 20 } }, useSortBy, usePagination);
 
     return (
-        <TableSheet {...getTableProps()}>
-            <THead>
-                {headerGroups.map(header => (
-                // getHeaderGroupProps를 통해 header 배열을 호출한다
-                    <HeadTr {...header.getHeaderGroupProps()}>
-                        {header.headers.map(col => (
-                        // getHeaderProps는 각 셀 순서에 맞게 header를 호출한다
-                        <Th {...col.getHeaderProps(col.getSortByToggleProps())}>{col.render('Header')}</Th>
-                        ))}
-                    </HeadTr>
-                ))}
-            </THead>
-            <TBody {...getTableBodyProps()}>
-                {rows.map(row => {
-                    prepareRow(row);
-                        return (
-                            // getRowProps는 각 row data를 호출해낸다
-                            <BodyTr {...row.getRowProps()}>
-                            {row.cells.map(cell => (
-                                // getCellProps는 각 cell data를 호출해낸다
-                                <Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>
+        <Container>
+            <TableSheet {...getTableProps()}>
+                <THead>
+                    {headerGroups.map(header => (
+                    // getHeaderGroupProps를 통해 header 배열을 호출한다
+                        <HeadTr {...header.getHeaderGroupProps()}>
+                            {header.headers.map(col => (
+                            // getHeaderProps는 각 셀 순서에 맞게 header를 호출한다
+                            <Th {...col.getHeaderProps(col.getSortByToggleProps())}>{col.render('Header')}</Th>
                             ))}
-                            </BodyTr>
-                    );
-                })}
-            </TBody>
-        </TableSheet>
+                        </HeadTr>
+                    ))}
+                </THead>
+                <TBody {...getTableBodyProps()}>
+                    {page.map(row => {
+                        prepareRow(row);
+                            return (
+                                // getRowProps는 각 row data를 호출해낸다
+                                <BodyTr {...row.getRowProps()}>
+                                {row.cells.map(cell => (
+                                    // getCellProps는 각 cell data를 호출해낸다
+                                    <Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>
+                                ))}
+                                </BodyTr>
+                        );
+                    })}
+                </TBody>
+            </TableSheet>
+            <Pagination>
+                <PageButton onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                    {"<<"}
+                </PageButton>{" "}
+                <PageButton onClick={() => previousPage()} disabled={!canPreviousPage}>
+                    {"<"}
+                </PageButton>{" "}
+                <PageButton onClick={() => nextPage()} disabled={!canNextPage}>
+                    {">"}
+                </PageButton>{" "}
+                <PageButton onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                    {">>"}
+                </PageButton>{" "}
+                <PageSpan>
+                    Page{" "}
+                    <strong>
+                        {pageIndex + 1} of {pageOptions.length}
+                    </strong>{" "}
+                </PageSpan>
+                <PageSpan>
+                    Go to page:{" "}
+                    <PageInput
+                        type="number"
+                        defaultValue={pageIndex + 1}
+                        onChange={(e) => {
+                        const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                        gotoPage(page);
+                        }}
+                    />
+                </PageSpan>{" "}
+                <PageSelect
+                    value={pageSize}
+                    onChange={(e) => {
+                        setPageSize(Number(e.target.value));
+                    }}
+                >
+                    {[20, 40, 60].map((pageSize) => (
+                        <option key={pageSize} value={pageSize}>
+                            Show {pageSize}
+                        </option>
+                    ))}
+                </PageSelect>
+            </Pagination>
+        </Container>
     );
 };
 

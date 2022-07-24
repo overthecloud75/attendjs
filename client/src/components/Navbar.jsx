@@ -1,46 +1,56 @@
 import styled from "styled-components";
-
-const Container = styled.div`
-    height: 60px;
-    background-color: #003580;
-    display: flex;
-    justify-content: center;
-`;
-
-const Wrapper = styled.div`
-    width: 100%;
-    max-width: 1024px;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`;
-
-const Logo = styled.div`
-    font-weight: 500;
-`;
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'
+import WifiFindIcon from '@mui/icons-material/WifiFind';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import PeopleIcon from '@mui/icons-material/People';
+import NoteAltIcon from '@mui/icons-material/NoteAlt';
+import { Link } from "react-router-dom";
 
 const Items = styled.div`
-`
-const Item = styled.button`
-    margin-left: 20px;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    color: #003580;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-bottom: 10px;
 `;
 
+const Item = styled(Link)`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: ${props => props.active ? "1px solid white" : "none"};
+    border-radius: ${props => props.active ? "20px" : "none"};
+    padding: ${props => props.active ? "10px" : "none"};
+`;   
+
 const Navbar = () => {
-    return (
-        <Container>
-            <Wrapper> 
-                <Logo>Attendance.com</Logo>
-                <Items>
-                    <Item>REGISTER</Item>
-                    <Item>SIGN IN</Item>
-                </Items>
-            </Wrapper>
-        </Container>
+  return (
+    <Items>
+        <Item to="/attend" active="true">
+            <DirectionsRunIcon/>
+            <span>Attend</span>
+        </Item>
+        <Item to="/wifi-attend">
+            <WifiFindIcon/>
+            <span>Wifi-Attend</span>
+        </Item>
+        <Item to="/summary">
+            <SummarizeIcon/>
+            <span>Summary</span>
+        </Item>
+        <Item to="/calendar">
+            <CalendarMonthIcon/>
+            <span>Calendar</span>
+        </Item>
+        <Item to="/users">
+            <PeopleIcon/>
+            <span>Users</span>
+        </Item>
+        <Item to="/board">
+            <NoteAltIcon/>
+            <span>Board</span>
+        </Item>
+    </Items>
   )
 }
 

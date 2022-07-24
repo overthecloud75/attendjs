@@ -19,7 +19,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
     width: 100%;
     display: flex;
-    margin: 10px 0px 10px 0px;
+    margin: 20px 0px 20px 0px;
     justify-content: center;
 `;
 
@@ -69,19 +69,14 @@ const Button = styled.button`
 const Dates = styled.div`
     position: absolute;
     top: 50px;
-    z-index: 2;
+    z-index: 9999;
 `;
 
-const TableWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    padding: 30px;
-`;
-
-const TableWithSearch = () => {
+const TableWithSearch = ({url}) => {
 
     const [name, setName] = useState("");
     const [openDate, setOpenDate] = useState(false);
+    const [clickCount, setClickCount] = useState(0);
     const [date, setDate] = useState([
         {
             startDate: new Date(),
@@ -90,8 +85,14 @@ const TableWithSearch = () => {
         }
       ]);
     
+    const handleSearch = (e) => {
+        e.preventDefault();
+        setOpenDate(false);
+        setClickCount(clickCount+1);
+    }
+
     const { data, loading, error } = useFetch(
-        "/attend/search", {name: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}
+        "/attend/search", {name: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}, clickCount
     );
 
     const columns = useMemo(() => attendColumnData, []);
@@ -122,22 +123,20 @@ const TableWithSearch = () => {
                                 onChange={item => setDate([item.selection])}
                                 moveRangeOnFirstSelection={false}
                                 ranges={date}
-                                dateDisplayFormat="yyyy/MM/dd"
+                                dateDisplayFormat="yyyy-MM-dd"
                             />
                         </Dates>
                         }
                     </Item>
                     <Item>
-                        <Button onClick={() => setOpenDate(false)}>Search</Button>
+                        <Button onClick={handleSearch}>Search</Button>
                     </Item>
                 </Items>
             </Wrapper>
-            <TableWrapper>
-                <Table 
-                    columns = {columns}
-                    data = {tableData}
-                />
-            </TableWrapper>
+            <Table 
+                columns = {columns}
+                data = {tableData}
+            />
         </Container>
     )
 }
