@@ -1,0 +1,12 @@
+{
+  "name": "attendjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start" :  "concurrently \"npm run start --prefix api\" \"npm run start --prefix client\""
+  },
+  "dependencies": {
+    "concurrently": "^7.3.0"
+  }
+}

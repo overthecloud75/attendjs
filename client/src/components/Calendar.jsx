@@ -1,7 +1,7 @@
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
-import { getEvents, addEvent, deleteEvent } from '../utils/EventUtil';
+import { getColor, getEvents, addEvent, deleteEvent } from '../utils/EventUtil';
 
 const Calendar = () => {
 
@@ -15,7 +15,7 @@ const Calendar = () => {
         let calendarApi = selectInfo.view.calendar
     
         calendarApi.unselect() // clear date selection
-    
+
         if (title) {
             let event = {
                 id: Date.now(),
@@ -24,6 +24,7 @@ const Calendar = () => {
                 end: selectInfo.endStr}
             console.log('event', event)
             addEvent(event)
+            event = getColor(event)
             calendarApi.addEvent(event)
         }
     }
@@ -42,7 +43,7 @@ const Calendar = () => {
             initialView="dayGridMonth"
             editable={true}
             selectable={true}
-            aspectRatio={2}
+            aspectRatio={2.1}
             initialEvents={initialEvents}
             weekends={true}
             select={handleDateSelect}
