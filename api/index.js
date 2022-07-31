@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import authRoute from "./routes/auth.js";
 import usersRoute from "./routes/users.js";
 import attendRoute from "./routes/attend.js";
+import eventRoute from "./routes/event.js";
 import cors from "cors";
 
 const app = express()
@@ -35,6 +36,7 @@ app.use(express.json());
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
 app.use("/api/attend", attendRoute);
+app.use("/api/event", eventRoute);
 
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500;

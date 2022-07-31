@@ -8,7 +8,7 @@ import 'react-date-range/dist/theme/default.css';
 import { format } from "date-fns"
 import useFetch from '../hooks/useFetch';
 import Table from './ReactTable'
-import { attendColumnData } from '../config';
+import { attendColumnHeaders, attendCsvHeaders } from '../config';
 
 const Container = styled.div`
     background-color: white;
@@ -63,6 +63,7 @@ const Button = styled.button`
     font-weight: 500;
     border: none;
     padding: 10px;
+    border-radius: 8px;
     cursor: pointer;
 `;
 
@@ -74,9 +75,7 @@ const Dates = styled.div`
 
 const TableWithSearch = ({url}) => {
 
-    const [name, setName] = useState("");
-    const [openDate, setOpenDate] = useState(false);
-    const [clickCount, setClickCount] = useState(0);
+    const [name, setName] = useState("")
     const [date, setDate] = useState([
         {
             startDate: new Date(),
@@ -84,19 +83,23 @@ const TableWithSearch = ({url}) => {
             key: 'selection'
         }
       ]);
-    
+    const [openDate, setOpenDate] = useState(false)
+    const [clickCount, setClickCount] = useState(0)
+    const [fileName, setFileName] = useState("download.csv")
+
     const handleSearch = (e) => {
-        e.preventDefault();
-        setOpenDate(false);
-        setClickCount(clickCount+1);
+        e.preventDefault()
+        setOpenDate(false)
+        setClickCount(clickCount+1)
+        setFileName('attend' + '_' + format(date[0].startDate, "yyyy-MM-dd") + '_'+ format(date[0].endDate, "yyyy-MM-dd") + '_' + name)
     }
 
     const { data, loading, error } = useFetch(
-        "/attend/search", {name: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}, clickCount
+        '/attend/search', {name: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}, clickCount
     );
 
-    const columns = useMemo(() => attendColumnData, []);
-    const tableData = useMemo(() => data, [data]);
+    const columns = useMemo(() => attendColumnHeaders, [])
+    const tableData = useMemo(() => data, [data])
 
     return (
         <Container>
@@ -136,6 +139,8 @@ const TableWithSearch = ({url}) => {
             <Table 
                 columns = {columns}
                 data = {tableData}
+                fileName = {fileName}
+                csvHeaders = {attendCsvHeaders}
             />
         </Container>
     )

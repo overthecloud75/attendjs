@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import styled from 'styled-components';
+import { CSVLink } from "react-csv";
 import { v } from '../variable';
 
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
@@ -115,10 +116,20 @@ const PageSelect = styled.select`
 	}
 `;
 
+const CsvButton = styled.button`
+    background-color: #0071c2;
+    color: white;
+    font-weight: 500;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+`;
+
 // useTable에다가 작성한 columns와 data를 전달한 후 아래 4개의 props를 받아온다
 // initialState https://github.com/TanStack/table/discussions/2029
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data, csvHeaders, fileName }) => {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,  
         page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize, state: { pageIndex, pageSize } } =
         useTable({ columns, data, initialState: { pageSize: 20 } }, useSortBy, usePagination);
@@ -194,6 +205,15 @@ const Table = ({ columns, data }) => {
                         </option>
                     ))}
                 </PageSelect>
+                <CsvButton>
+                    <CSVLink 
+                        data={data}
+                        headers={csvHeaders}
+                        filename={fileName}
+                        >
+                            CSV download
+                    </CSVLink>
+                </CsvButton>
             </Pagination>
         </Container>
     );

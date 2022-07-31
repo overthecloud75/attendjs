@@ -5,6 +5,10 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
+    "@fullcalendar/common": "^5.11.2",
+    "@fullcalendar/daygrid": "^5.11.0",
+    "@fullcalendar/interaction": "^5.11.2",
+    "@fullcalendar/react": "^5.11.1",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.9.0",
     "@testing-library/jest-dom": "^5.16.4",
@@ -12,6 +16,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "react": "^18.2.0",
+    "react-csv": "^2.2.2",
     "react-date-range": "^1.4.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",

@@ -1,4 +1,4 @@
-export const attendColumnData = [
+export const attendColumnHeaders = [
     {
         accessor: 'name',
         Header: 'Name',
@@ -26,5 +26,36 @@ export const attendColumnData = [
     {
         accessor: 'reason',
         Header: 'Reason',
+    },
+]
+
+export const attendCsvHeaders = [
+    {
+        key: 'name',
+        label: 'Name',
+    },
+    {
+        key: 'date',
+        label: 'Date',
+    },
+    {
+        key: 'begin',
+        label: 'Begin',
+    },
+    {
+        key: 'end',
+        label: 'End',
+    },
+    {
+        key: 'workingHours',
+        label: 'WorkingHours',
+    },
+    {
+        key: 'status',
+        label: 'Status',
+    },
+    {
+        key: 'reason',
+        label: 'Reason',
     },
 ]

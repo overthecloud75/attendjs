@@ -3,12 +3,12 @@ import {
     Routes,
     Route,
 } from "react-router-dom"
+import styled from "styled-components";
 import Navbar from "./components/Navbar";
 import Attend from "./pages/Attend";
-import Calendar from "./pages/Calendar";
+import Schedule from "./pages/Schedule";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
-import styled from "styled-components";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -73,7 +73,7 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<Home/>}/>
                         <Route exact path="/attend" element={<Attend/>}/>
-                        <Route exact path="/calendar" element={<Calendar/>}/>
+                        <Route exact path="/schedule" element={<Schedule/>}/>
                         <Route path="*" element={<NotFound/>} />
                     </Routes>
                 </Right>

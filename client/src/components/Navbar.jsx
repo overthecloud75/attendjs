@@ -38,9 +38,9 @@ const Navbar = () => {
             <SummarizeIcon/>
             <span>Summary</span>
         </Item>
-        <Item to="/calendar">
+        <Item to="/schedule">
             <CalendarMonthIcon/>
-            <span>Calendar</span>
+            <span>Schedule</span>
         </Item>
         <Item to="/users">
             <PeopleIcon/>
