@@ -1,4 +1,5 @@
 import express from "express";
+import { logger } from './config/winston.js';
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
@@ -13,19 +14,19 @@ dotenv.config();
 
 const connect = async () => {
     try {
-        await mongoose.connect(process.env.MONGO);
-        console.log("Connected to mongoDB.");
+        await mongoose.connect(process.env.MONGO)
+        logger.info('Connected to mongoDB.')
     } catch (error) {
-        throw error;
+        throw error
     }
 };
 
 mongoose.connection.on("disconnected", () => {
-    console.log("mongoDB disconnected!");
+    logger.info('mongoDB disconnected!')
 });
 
 mongoose.connection.on("connected", () => {
-    console.log("mongoDB connected!");
+    logger.info('mongoDB connected!')
 });
 
 //middlewares
@@ -50,6 +51,6 @@ app.use((err, req, res, next) => {
   });
 
 app.listen(8800, () => {
-  connect();
-  console.log("Connected to backend.");
+  connect()
+  logger.info('Connected to backend.')
 });

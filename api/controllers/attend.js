@@ -1,6 +1,7 @@
 import Report from "../models/Report.js";
 import Employee from "../models/Employee.js";
-import { WORKING } from "../config.js";
+import { WORKING } from "../config/WORKING.js";
+
 
 const calculateWorkingHours = (begin, end, overnight) => {
     let workingHours = (Number(end.substring(0, 2)) - Number(begin.substring(0,2))) + (Number(end.substring(2,4)) - Number(begin.substring(2,4))) / 60
