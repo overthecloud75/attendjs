@@ -18,10 +18,10 @@ export const getColor = (event) => {
             event.color = 'yellow'
             event.textColor = 'black'
         }
-        else if (Object.keys(WORKING.status).includes(event_title)){
-            event.color = 'green'
-        }
+        else if (Object.keys(WORKING.status).includes(event_title)){ }
+        else { event.color = 'green' }
     }
+
     else {
         event.color = 'red'
     }

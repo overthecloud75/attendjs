@@ -6,6 +6,7 @@ import {
 import styled from "styled-components";
 import Navbar from "./components/Navbar";
 import Attend from "./pages/Attend";
+import Summary from "./pages/Summary";
 import Schedule from "./pages/Schedule";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
@@ -71,10 +72,11 @@ function App() {
                 </Left>
                 <Right>
                     <Routes>
-                        <Route exact path="/" element={<Home/>}/>
-                        <Route exact path="/attend" element={<Attend/>}/>
-                        <Route exact path="/schedule" element={<Schedule/>}/>
-                        <Route path="*" element={<NotFound/>} />
+                        <Route exact path='/' element={<Home/>}/>
+                        <Route exact path='attend' element={<Attend/>}/>
+                        <Route exact path='/summary' element={<Summary/>}/>
+                        <Route exact path='/schedule' element={<Schedule/>}/>
+                        <Route path='*' element={<NotFound/>} />
                     </Routes>
                 </Right>
             </Container>

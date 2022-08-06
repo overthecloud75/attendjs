@@ -26,23 +26,23 @@ const Item = styled(Link)`
 const Navbar = () => {
   return (
     <Items>
-        <Item to="/attend" active="true">
+        <Item to='/attend' active="true">
             <DirectionsRunIcon/>
             <span>Attend</span>
         </Item>
-        <Item to="/wifi-attend">
+        <Item to='/wifi-attend'>
             <WifiFindIcon/>
             <span>Wifi-Attend</span>
         </Item>
-        <Item to="/summary">
+        <Item to='/summary'>
             <SummarizeIcon/>
             <span>Summary</span>
         </Item>
-        <Item to="/schedule">
+        <Item to='/schedule'>
             <CalendarMonthIcon/>
             <span>Schedule</span>
         </Item>
-        <Item to="/users">
+        <Item to='/users'>
             <PeopleIcon/>
             <span>Users</span>
         </Item>

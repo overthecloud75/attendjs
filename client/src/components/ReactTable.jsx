@@ -129,7 +129,7 @@ const CsvButton = styled.button`
 // useTable에다가 작성한 columns와 data를 전달한 후 아래 4개의 props를 받아온다
 // initialState https://github.com/TanStack/table/discussions/2029
 
-const Table = ({ columns, data, csvHeaders, fileName }) => {
+const Table = ({ columns, data, csvHeaders, fileName, startDate, endDate }) => {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,  
         page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize, state: { pageIndex, pageSize } } =
         useTable({ columns, data, initialState: { pageSize: 20 } }, useSortBy, usePagination);
@@ -154,10 +154,12 @@ const Table = ({ columns, data, csvHeaders, fileName }) => {
                             return (
                                 // getRowProps는 각 row data를 호출해낸다
                                 <BodyTr {...row.getRowProps()}>
-                                {row.cells.map(cell => (
-                                    // getCellProps는 각 cell data를 호출해낸다
-                                    <Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>
-                                ))}
+                                    {row.cells.map((cell, index) => (
+                                        // getCellProps는 각 cell data를 호출해낸다
+                                        <Td {...cell.getCellProps()}>
+                                            {cell.render('Cell')}
+                                        </Td>                
+                                    ))}
                                 </BodyTr>
                         );
                     })}

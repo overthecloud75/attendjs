@@ -8,7 +8,6 @@ import 'react-date-range/dist/theme/default.css';
 import { format } from "date-fns"
 import useFetch from '../hooks/useFetch';
 import Table from './ReactTable'
-import { attendColumnHeaders, attendCsvHeaders } from '../config';
 
 const Container = styled.div`
     background-color: white;
@@ -73,8 +72,7 @@ const Dates = styled.div`
     z-index: 9999;
 `;
 
-const TableWithSearch = ({url}) => {
-
+const TableWithSearch = ({page, url, columnHeaders, csvHeaders}) => {
     const [name, setName] = useState("")
     const [date, setDate] = useState([
         {
@@ -91,14 +89,14 @@ const TableWithSearch = ({url}) => {
         e.preventDefault()
         setOpenDate(false)
         setClickCount(clickCount+1)
-        setFileName('attend' + '_' + format(date[0].startDate, "yyyy-MM-dd") + '_'+ format(date[0].endDate, "yyyy-MM-dd") + '_' + name)
+        setFileName(page + '_' + format(date[0].startDate, "yyyy-MM-dd") + '_'+ format(date[0].endDate, "yyyy-MM-dd") + '_' + name)
     }
 
     const { data, loading, error } = useFetch(
-        '/attend/search', {name: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}, clickCount
+        url, {name: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}, clickCount
     );
 
-    const columns = useMemo(() => attendColumnHeaders, [])
+    const columns = useMemo(() => columnHeaders, [])
     const tableData = useMemo(() => data, [data])
 
     return (
@@ -137,10 +135,12 @@ const TableWithSearch = ({url}) => {
                 </Items>
             </Wrapper>
             <Table 
-                columns = {columns}
-                data = {tableData}
-                fileName = {fileName}
-                csvHeaders = {attendCsvHeaders}
+                columns={columns}
+                data={tableData}
+                fileName={fileName}
+                csvHeaders={csvHeaders}
+                startDate={format(date[0].startDate, "yyyy-MM-dd")}
+                endDate={format(date[0].endDate, "yyyy-MM-dd")}
             />
         </Container>
     )
