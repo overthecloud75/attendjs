@@ -73,7 +73,7 @@ const Dates = styled.div`
 `;
 
 const TableWithSearch = ({page, url, columnHeaders, csvHeaders}) => {
-    const [name, setName] = useState("")
+    const [name, setName] = useState('')
     const [date, setDate] = useState([
         {
             startDate: new Date(),

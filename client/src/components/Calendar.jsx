@@ -40,7 +40,7 @@ const Calendar = () => {
     return (
         <FullCalendar
             plugins={[ dayGridPlugin, interactionPlugin ]}
-            initialView="dayGridMonth"
+            initialView='dayGridMonth'
             editable={true}
             selectable={true}
             aspectRatio={2.1}

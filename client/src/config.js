@@ -21,6 +21,10 @@ export const WORKING = {
 
 export const attendColumnHeaders = [
     {
+        accessor: 'employeeId',
+        Header: 'ID',
+    },
+    {
         accessor: 'name',
         Header: 'Name',
     },

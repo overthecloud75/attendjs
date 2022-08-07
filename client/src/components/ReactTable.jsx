@@ -3,6 +3,7 @@ import { useTable, useSortBy, usePagination } from 'react-table';
 import styled from 'styled-components';
 import { CSVLink } from "react-csv";
 import { v } from '../variable';
+import { Link } from "react-router-dom";
 
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 
@@ -158,8 +159,9 @@ const Table = ({ columns, data, csvHeaders, fileName, startDate, endDate }) => {
                                         // getCellProps는 각 cell data를 호출해낸다
                                         <Td {...cell.getCellProps()}>
                                             {cell.render('Cell')}
-                                        </Td>                
-                                    ))}
+                                        </Td>  
+                                        )   
+                                    )}
                                 </BodyTr>
                         );
                     })}

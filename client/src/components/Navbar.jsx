@@ -6,6 +6,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PeopleIcon from '@mui/icons-material/People';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Items = styled.div`
     display: flex;
@@ -23,35 +24,62 @@ const Item = styled(Link)`
     padding: ${props => props.active ? "10px" : "none"};
 `;   
 
+const itemList = [
+    {
+        to: '/attend', 
+        icon: <DirectionsRunIcon/>,
+        title: 'Attend'
+    },
+    {    
+        to: '/wifi-attend',
+        icon: <WifiFindIcon/>,
+        title: 'Wifi-Attend'
+    }, 
+    {
+        to: '/summary',
+        icon: <SummarizeIcon/>,
+        title: 'Summary'
+    },
+    {
+        to: '/schedule',
+        icon: <CalendarMonthIcon/>,
+        title: 'Schedule'
+    },
+    {
+        to: '/users',
+        icon: <PeopleIcon/>,
+        title: 'Users'
+    },
+    {
+        to: '/board',
+        icon: <NoteAltIcon/>,
+        title: 'Board'
+    },
+]
+
+const NavbarItem = () => {
+    const [activeIndex, setActiveIndex] = useState(-1)
+    return (
+        itemList.map((item, index) => (
+            <Item 
+                to={item.to} 
+                key={index} 
+                onClick={() => setActiveIndex(index)}
+                active={activeIndex===index?1:0}
+            >
+                {item.icon}
+                <span>{item.title}</span>
+            </Item>
+        ))
+    )
+}
+
 const Navbar = () => {
-  return (
-    <Items>
-        <Item to='/attend' active="true">
-            <DirectionsRunIcon/>
-            <span>Attend</span>
-        </Item>
-        <Item to='/wifi-attend'>
-            <WifiFindIcon/>
-            <span>Wifi-Attend</span>
-        </Item>
-        <Item to='/summary'>
-            <SummarizeIcon/>
-            <span>Summary</span>
-        </Item>
-        <Item to='/schedule'>
-            <CalendarMonthIcon/>
-            <span>Schedule</span>
-        </Item>
-        <Item to='/users'>
-            <PeopleIcon/>
-            <span>Users</span>
-        </Item>
-        <Item to="/board">
-            <NoteAltIcon/>
-            <span>Board</span>
-        </Item>
-    </Items>
-  )
+    return (
+        <Items>
+            <NavbarItem/>
+        </Items>
+    )
 }
 
 export default Navbar
