@@ -1,4 +1,4 @@
-import TableWithSearch from "../components/TableWithSearch"
+import TableWithSearch from '../components/TableWithSearch'
 import { attendColumnHeaders, attendCsvHeaders } from '../config'
 
 const Attend = () => {

@@ -202,3 +202,65 @@ export const summaryCsvHeaders = [
         label: '기타',
     }
 ]
+
+export const deviceColumnHeaders = [
+    {
+        accessor: 'ip',
+        Header: 'IP',
+    },
+    {
+        accessor: 'mac',
+        Header: 'MAC',
+    },
+    {
+        accessor: 'vendor',
+        Header: 'Vendor',
+    },
+    {
+        accessor: 'registerDate',
+        Header: '등록일',
+    },
+    {
+        accessor: 'endDate',
+        Header: '최종 확인일',
+    },
+    {
+        accessor: 'info',
+        Header: 'Info',
+    },
+    {
+        accessor: 'owner',
+        Header: '소유자',
+    },
+]
+
+export const deviceCsvHeaders = [
+    {
+        key: 'ip',
+        label: 'IP',
+    },
+    {
+        key: 'mac',
+        label: 'MAC',
+    },
+    {
+        key: 'vendor',
+        label: 'Vendor',
+    },
+    {
+        key: 'registerDate',
+        label: '등록일',
+    },
+    {
+        key: 'endDate',
+        label: '최종 확인일',
+    },
+    {
+        key: 'info',
+        label: 'Info',
+    },
+    {
+        key: 'owner',
+        label: '소유자',
+    },
+]

@@ -1,12 +1,13 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'
-import WifiFindIcon from '@mui/icons-material/WifiFind';
-import SummarizeIcon from '@mui/icons-material/Summarize';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import PeopleIcon from '@mui/icons-material/People';
-import NoteAltIcon from '@mui/icons-material/NoteAlt';
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import WifiFindIcon from '@mui/icons-material/WifiFind'
+import SummarizeIcon from '@mui/icons-material/Summarize'
+import ComputerIcon from '@mui/icons-material/Computer'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+import PeopleIcon from '@mui/icons-material/People'
+import NoteAltIcon from '@mui/icons-material/NoteAlt'
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
 
 const Items = styled.div`
     display: flex;
@@ -39,6 +40,11 @@ const itemList = [
         to: '/summary',
         icon: <SummarizeIcon/>,
         title: 'Summary'
+    },
+    {
+        to: '/device',
+        icon: <ComputerIcon/>,
+        title: 'Device'
     },
     {
         to: '/schedule',

@@ -1,12 +1,29 @@
 import mongoose from 'mongoose'
 
-const EmployeeSchema = new mongoose.Schema(
+const DeviceSchema = new mongoose.Schema(
     {
-        name: {
+        mac: {
             type: String,
             required: true,
+            unique: true
         },
-        beginDate: {
+        ip: {
+            type: String,
+            required: false,
+        },
+        ipStr: {
+            type: String,
+            required: false,
+        },
+        owner: {
+            type: String,
+            required: false,
+        },
+        employeeId: {
+            type: Number,
+            required: false,
+        },
+        registerDate: {
             type: String,
             required: false,
         },
@@ -14,32 +31,15 @@ const EmployeeSchema = new mongoose.Schema(
             type: String,
             required: false,
         },
-        department: {
-            type: String,
-            required: true,
-        },
-        employeeId: {
-            type: Number,
-            required: true
-        },
-        rank: {
-            type: Number,
-            required: true
-        },
-        email: {
+        vendor: {
             type: String,
             required: false,
-            unique: true
         },
-        regular: {
+        vendor: {
             type: String,
-            required: true,
-        },
-        mode: {
-            type: String,
-            required: true,
+            required: false,
         },
     },
 );
 
-export default mongoose.model('Employee', EmployeeSchema);
+export default mongoose.model('Device', DeviceSchema);

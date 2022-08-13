@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
 const ReportSchema = new mongoose.Schema(
     {
@@ -35,4 +35,4 @@ const ReportSchema = new mongoose.Schema(
     },
 );
 
-export default mongoose.model("Report", ReportSchema);
+export default mongoose.model('Report', ReportSchema)

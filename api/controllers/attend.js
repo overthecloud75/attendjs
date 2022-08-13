@@ -18,12 +18,14 @@ export const searchAttend = async (req,res,next) => {
         const startDate = req.query.startDate
         const endDate = req.query.endDate
         let attends
+        // [문제] endDate: 이름 검색시에만 실행
         if (name && name !== '') {
             const employee = await Employee.findOne({name}).lean()
             if (employee.regular === '병특') {
-                attends = await Report.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({name: 1, date: 1}).lean()
+                attends = await Report.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({date: 1}).lean()
                 for (let attend of attends) {
                     if (attend.reason === '파견') {
+                        attend.status = '정상출근'
                         attend.reason = null
                         attend.begin = '08' + randomAttend(30, 30) + randomAttend(60, 0)
                         attend.end = '18' + randomAttend(60, 0) + randomAttend(60, 0)
@@ -32,7 +34,7 @@ export const searchAttend = async (req,res,next) => {
                 }
             }
             else {
-                attends = await Report.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({name: 1, date: 1})
+                attends = await Report.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({date: 1})
             }
         }
         else { 

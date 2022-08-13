@@ -7,6 +7,7 @@ import authRoute from "./routes/auth.js";
 import usersRoute from "./routes/users.js";
 import attendRoute from "./routes/attend.js";
 import summaryRoute from "./routes/summary.js";
+import deviceRoute from "./routes/device.js";
 import eventRoute from "./routes/event.js";
 import cors from "cors";
 
@@ -39,6 +40,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
 app.use("/api/attend", attendRoute);
 app.use("/api/summary", summaryRoute);
+app.use("/api/device", deviceRoute);
 app.use("/api/event", eventRoute);
 
 app.use((err, req, res, next) => {
