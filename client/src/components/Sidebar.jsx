@@ -162,7 +162,9 @@ const Sidebar = () => {
     return (
         <Wrapper>
             <Top>
-                <Logo>Attendance</Logo>
+                <Link to='/' style={{ textDecoration: 'none' }}>
+                    <Logo>attendance</Logo>
+                </Link>
             </Top>
             <Hr/>
             <Middle>

@@ -13,7 +13,6 @@ export const searchDevice = async (req,res,next) => {
         else { 
             devices = await Device.find({endDate: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1, mac: 1});
         }; 
-        console.log('device', devices)
         res.status(200).json(devices);
     } catch (err) {
         console.log('err', err)

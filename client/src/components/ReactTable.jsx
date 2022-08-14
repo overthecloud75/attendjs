@@ -3,7 +3,6 @@ import { useTable, useSortBy, usePagination } from 'react-table';
 import styled from 'styled-components';
 import { CSVLink } from "react-csv";
 import { v } from '../variable';
-import { Link } from "react-router-dom";
 
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 
@@ -130,10 +129,18 @@ const CsvButton = styled.button`
 // useTable에다가 작성한 columns와 data를 전달한 후 아래 4개의 props를 받아온다
 // initialState https://github.com/TanStack/table/discussions/2029
 
-const Table = ({ columns, data, csvHeaders, fileName, startDate, endDate }) => {
+const Table = ({ url, columns, data, csvHeaders, fileName }) => {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,  
         page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize, state: { pageIndex, pageSize } } =
         useTable({ columns, data, initialState: { pageSize: 20 } }, useSortBy, usePagination);
+
+    const handleClick = (e, data) => {
+        e.preventDefault()
+        console.log(data)
+        if (url==='device') {
+            window.location.href = '/' + url + '/' + data._id + '?mac=' + data.mac + '&ip=' + data.ip + '&info=' + data.info
+        }
+    }
 
     return (
         <Container>
@@ -142,6 +149,7 @@ const Table = ({ columns, data, csvHeaders, fileName, startDate, endDate }) => {
                     {headerGroups.map(header => (
                     // getHeaderGroupProps를 통해 header 배열을 호출한다
                         <HeadTr {...header.getHeaderGroupProps()}>
+                            <Th>No</Th>
                             {header.headers.map(col => (
                             // getHeaderProps는 각 셀 순서에 맞게 header를 호출한다
                             <Th {...col.getHeaderProps(col.getSortByToggleProps())}>{col.render('Header')}</Th>
@@ -150,12 +158,18 @@ const Table = ({ columns, data, csvHeaders, fileName, startDate, endDate }) => {
                     ))}
                 </THead>
                 <TBody {...getTableBodyProps()}>
-                    {page.map(row => {
+                    {page.map((row, rowIndex) => {
                         prepareRow(row);
                             return (
                                 // getRowProps는 각 row data를 호출해낸다
                                 <BodyTr {...row.getRowProps()}>
-                                    {row.cells.map((cell, index) => (
+                                    <Td 
+                                        onClick={(e) => handleClick(e, row.original)}
+                                        style={{textDecoration: 'underline'}}
+                                    >
+                                        { pageIndex * pageSize + rowIndex + 1 }
+                                    </Td>
+                                    {row.cells.map(cell => (
                                         // getCellProps는 각 cell data를 호출해낸다
                                         <Td {...cell.getCellProps()}>
                                             {cell.render('Cell')}

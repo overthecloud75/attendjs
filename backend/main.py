@@ -43,7 +43,7 @@ def check_o():
                 devices.new_o_post(network)
             else:
                 devices.old_o_post(network)
-        time.sleep(3600)
+        time.sleep(7200)
 
 if __name__ == '__main__':
     devices = Device()

@@ -6,7 +6,7 @@ import datetime
 from datetime import timedelta
 from korean_lunar_calendar import KoreanLunarCalendar
 
-from config import PAGE_DEFAULT, WORKING, USE_LUNAR_NEW_YEAR, PRIVATE_IP_RANGE
+from config import WORKING, USE_LUNAR_NEW_YEAR
 try:
     from mainconfig import WIFI, SCAN_RANGE_LIST
 except Exception as e:
@@ -146,7 +146,6 @@ def check_holiday(date):
                 is_holiday = True
     return is_holiday
 
-
 def datetimeToDate(date):
     this_month = date.month
     this_day = date.day
@@ -160,7 +159,6 @@ def datetimeToDate(date):
         this_day = str(this_day)
     date = this_month + this_day
     return date
-
 
 def check_time():
     today = datetime.date.today()
@@ -180,7 +178,6 @@ def check_time():
     this_month = {'start': start, 'end': end}
     return hour, today, this_month
 
-
 def check_hour():
     today = datetime.date.today()
     today = today.strftime("%Y-%m-%d")
@@ -190,14 +187,12 @@ def check_hour():
     second = correct_time(now.second)
     return today, hour + minute + second
 
-
 def correct_time(time):
     if int(time) < 10:
         time = '0' + str(time)
     else:
         time = str(time)
     return time
-
 
 def get_delta_day(date, delta=None):
     date = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), 0, 0, 0)
@@ -209,86 +204,3 @@ def get_delta_day(date, delta=None):
             date = date - timedelta(days=delta)
     date = date.strftime("%Y-%m-%d")
     return date
-
-
-def get_date_several_months_before(date, delta=1):
-    year = int(date[0:4])
-    month = int(date[5:7])
-    month = month - delta
-    if month <= 0:
-        abs_month = abs(month)
-        year = year - abs_month // 12 - 1
-        month = 12 - abs_month % 12
-    day = int(date[8:10])
-    if day > 28:
-        day = 28
-    date = datetime.datetime(year, month, day, 0, 0, 0)
-    date = date.strftime("%Y-%m-%d")
-    return date
-
-
-# https://jsikim1.tistory.com/140
-def date_range(start, end):
-    date_list = []
-    try:
-        start = datetime.datetime.strptime(start, '%Y-%m-%d')
-        end = datetime.datetime.strptime(end, '%Y-%m-%d')
-        date_list = [(start + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((end - start).days + 1)]
-    except Exception as e:
-        print(e)
-    return date_list
-
-
-def request_get(request_data):
-    page = int(request_data.get('page', 1))
-    name = request_data.get('name', None)
-    start = request_data.get('start', '')
-
-    if start and len(start) >=5:
-        if start[4] != '-':
-            start = start[6:] + '-' + start[:2] + '-' + start[3:5]
-    end = request_data.get('end', '')
-
-    if end and len(end) >=5:
-        if end[4] != '-':
-            end = end[6:] + '-' + end[:2] + '-' + end[3:5]
-    return page, name, start, end
-
-
-def request_event(request_data):
-    title = request_data.get('title', None)
-    start = request_data.get('start', None)
-    end = request_data.get('end', None)
-    id = request_data.get('id', None)
-    if start is not None:
-        start = start[:10]
-    if end is not None:
-        end = end[:10]
-    if id is not None:
-        id = int(id)
-    return title, start, end, id
-
-
-def request_delta(request_data):
-    title = request_data.get('title', None)
-    id = request_data.get('id', None)
-    delta = request_data.get('delta', None)
-    if id is not None:
-        id = int(id)
-    if delta is not None:
-        delta = int(delta)
-    return title, id, delta
-
-
-def check_private_ip(ip):
-    ip = ip.split(':')[0]  # port 정보가 넘어오는 경우 port 정보를 빼기 위함 
-    ip = ip.split('.')
-    private_ip_range = PRIVATE_IP_RANGE.split('.')
-
-    is_private_ip = True
-    for i, table in enumerate(private_ip_range):
-        if table != '0':
-            if ip[i] != private_ip_range[i]:
-                is_private_ip = False
-                break
-    return is_private_ip

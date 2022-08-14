@@ -1,5 +1,6 @@
 # ATTENDANCE
 ### 1. Result
+![image](https://user-images.githubusercontent.com/30888482/184538879-2326eaea-7dde-48d8-ad55-58aa8a5e9de9.png)
 ### 2. How to check attendance?
 Fingerprint recognition is connected to Access file. <br>
 When a smartphone is connected to wifi-network in the company, the server can check mac-address in the wifi-network.

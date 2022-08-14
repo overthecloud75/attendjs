@@ -2,7 +2,7 @@ import pyodbc
 from collections import OrderedDict
 import random
 
-from utils import check_time, check_holiday, get_delta_day, date_range
+from utils import check_time, check_holiday, get_delta_day
 from .db import db, BasicModel
 from .mail import send_email
 from .employee import Employee
@@ -193,10 +193,6 @@ class Report(BasicModel):
                     if employee_id not in overnight_employees:
                         overnight_employees.append(employee_id)
         return attend, overnight_employees
-
-    def wifi_attend(self, page=1, start=None, end=None):
-        paging, wifi_list = self.device_on.get_date_range(page=page, start=start, end=end)
-        return paging, wifi_list
 
     def _fingerprint_or_wifi(self, attend, date):
         # wifi device

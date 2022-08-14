@@ -122,12 +122,11 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
                 </Items>
             </Wrapper>
             <Table 
+                url={page}
                 columns={columns}
                 data={tableData}
                 fileName={fileName}
                 csvHeaders={csvHeaders}
-                startDate={format(date[0].startDate, "yyyy-MM-dd")}
-                endDate={format(date[0].endDate, "yyyy-MM-dd")}
             />
         </>
     )
