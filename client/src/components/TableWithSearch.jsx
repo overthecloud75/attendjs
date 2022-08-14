@@ -9,21 +9,15 @@ import { format } from "date-fns"
 import useFetch from '../hooks/useFetch';
 import Table from './ReactTable'
 
-const Container = styled.div`
-    background-color: white;
-    display: flex;
-    flex-direction : column;
-`;
-
 const Wrapper = styled.div`
     width: 100%;
     display: flex;
-    margin: 20px 0px 20px 0px;
-    justify-content: center;
-`;
-
+    margin-left: 30px;
+    top: 0px;
+    position: absolute;
+`
 const Items = styled.div`
-    height: 30px;
+    height: 25px;
     background-color: white;
     border: 3px solid #febb02;
     display: flex;
@@ -34,28 +28,23 @@ const Items = styled.div`
     width: 70%;
     max-width: 1024px;
     position: relative;
-`;
-
+`
 const Item = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
-`;
-
+`
 const Icon = styled.div`
     color: lightgray
 `
-
 const Input = styled.input`
     border: none;
     outline: none;
-`;
-
+`
 const Text = styled.span`
     color: lightgray;
     cursor: pointer;
-`;
-
+`
 const Button = styled.button`
     background-color: #0071c2;
     color: white;
@@ -64,14 +53,12 @@ const Button = styled.button`
     padding: 10px;
     border-radius: 8px;
     cursor: pointer;
-`;
-
+`
 const Dates = styled.div`
     position: absolute;
     top: 50px;
     z-index: 9999;
-`;
-
+`
 const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) => {
     const [name, setName] = useState('')
     const [date, setDate] = useState([
@@ -100,7 +87,7 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
     const tableData = useMemo(() => data, [data])
 
     return (
-        <Container>
+        <>
             <Wrapper>
                 <Items>
                     <Item>
@@ -142,7 +129,7 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
                 startDate={format(date[0].startDate, "yyyy-MM-dd")}
                 endDate={format(date[0].endDate, "yyyy-MM-dd")}
             />
-        </Container>
+        </>
     )
 }
 

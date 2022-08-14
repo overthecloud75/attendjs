@@ -1,8 +1,12 @@
+import styled from 'styled-components'
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
-import { getColor, getEvents, addEvent, deleteEvent } from '../utils/EventUtil';
+import { getColor, getEvents, addEvent, deleteEvent } from '../utils/EventUtil'
 
+const Wrapper = styled.div`
+    padding: 30px;
+`
 const Calendar = () => {
 
     const initialEvents = (args) => {
@@ -38,17 +42,19 @@ const Calendar = () => {
     }
     
     return (
-        <FullCalendar
-            plugins={[ dayGridPlugin, interactionPlugin ]}
-            initialView='dayGridMonth'
-            editable={true}
-            selectable={true}
-            aspectRatio={2.1}
-            initialEvents={initialEvents}
-            weekends={true}
-            select={handleDateSelect}
-            eventClick={handleEventClick}
-        />
+        <Wrapper>
+            <FullCalendar
+                plugins={[ dayGridPlugin, interactionPlugin ]}
+                initialView='dayGridMonth'
+                editable={true}
+                selectable={true}
+                aspectRatio={2.2}
+                initialEvents={initialEvents}
+                weekends={true}
+                select={handleDateSelect}
+                eventClick={handleEventClick}
+            />
+        </Wrapper>
     )
 }
 

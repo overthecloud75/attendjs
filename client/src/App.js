@@ -3,8 +3,6 @@ import {
     Routes,
     Route,
 } from 'react-router-dom'
-import styled from 'styled-components'
-import Navbar from './components/Navbar'
 import Attend from './pages/Attend'
 import Wifi from './pages/Wifi'
 import Summary from './pages/Summary'
@@ -12,78 +10,19 @@ import Device from './pages/Device'
 import Schedule from './pages/Schedule'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
-import Header from './components/Header'
-import Footer from './components/Footer'
-
-const Container = styled.div`
-    display: flex;
-`;
-
-const Left = styled.div`
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    background-color: teal;
-    width: 10%;
-    height: 100%;
-    color: white;
-`;
-
-const Top = styled.div`
-    display: flex;  
-    height: 20%; 
-    justify-content: center;
-    padding: 50px 0px;
-`;
-
-const Middle = styled.div`
-    height: 70%; 
-    display: flex;
-    justify-content: center;
-`;
-
-// https://stackoverflow.com/questions/18915550/fix-footer-to-bottom-of-page
-
-const Bottom = styled.div`
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    bottom: 0px;
-    margin-bottom: 10px;
-`;
-
-const Right = styled.div`
-    margin-left: 10%;
-    width: 90%
-`;
 
 function App() {
     return (
-        <BrowserRouter>
-            <Container>
-                <Left>
-                    <Top>
-                        <Header/>
-                    </Top>
-                    <Middle>
-                        <Navbar/>
-                    </Middle>
-                    <Bottom>
-                        <Footer/>
-                    </Bottom>
-                </Left>
-                <Right>
-                    <Routes>
-                        <Route exact path='/' element={<Home/>}/>
-                        <Route exact path='/attend' element={<Attend/>}/>
-                        <Route exact path='/wifi-attend' element={<Wifi/>}/>
-                        <Route exact path='/summary' element={<Summary/>}/>
-                        <Route exact path='/device' element={<Device/>}/>
-                        <Route exact path='/schedule' element={<Schedule/>}/>
-                        <Route path='*' element={<NotFound/>} />
-                    </Routes>
-                </Right>
-            </Container>
+        <BrowserRouter>   
+            <Routes>
+                <Route exact path='/' element={<Home/>}/>
+                <Route exact path='/attend' element={<Attend/>}/>
+                <Route exact path='/wifi-attend' element={<Wifi/>}/>
+                <Route exact path='/summary' element={<Summary/>}/>
+                <Route exact path='/device' element={<Device/>}/>
+                <Route exact path='/schedule' element={<Schedule/>}/>
+                <Route path='*' element={<NotFound/>} />
+            </Routes>
         </BrowserRouter>
     );
 }

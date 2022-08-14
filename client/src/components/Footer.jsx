@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div`
+    bottom: 10px;
+    right: 10px;
     font-size: 12px;
-    margin-left: 20px;
+    position: absolute;
 `;
 
 const Footer = () => {

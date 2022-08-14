@@ -9,7 +9,7 @@ export const searchWifi = async (req,res,next) => {
         let deviceOns
         // [문제] endDate: 이름 검색시에만 실행
         if (ip && ip !== '') {
-            deviceOns = await Device.find({ip, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1})
+            deviceOns = await DeviceOn.find({ip, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1})
         }
         else { 
             deviceOns = await DeviceOn.find({date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1});

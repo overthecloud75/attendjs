@@ -5,3 +5,5 @@ __pycache__
 Scripts
 logs
 mainconfig.py
+pyvenv.cfg
+pyodbc.pyi
