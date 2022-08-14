@@ -24,7 +24,7 @@ class Scanner:
     def __init__(self):
         self.nm = nmap.PortScanner()
 
-    def check_nmap(self):
+    def nmap_sn_scan(self):
         network_list = []
         date, time = check_hour()
         for ip_range in SCAN_RANGE_LIST:
@@ -42,6 +42,24 @@ class Scanner:
                             network['vendor'] = result['scan'][ip]['vendor'][mac]
                         else:
                             network['vendor'] = ''
+                        network_list.append(network)
+        return network_list
+
+    def nmap_o_scan(self):
+        network_list = []
+        for ip_range in SCAN_RANGE_LIST:
+            result = self.nm.scan(ip_range, arguments='-O')
+            if result['scan']:
+                for ip in result['scan']:
+                    network = {}
+                    if 'mac' in result['scan'][ip]['addresses']:
+                        mac = result['scan'][ip]['addresses']['mac']
+                        network['mac'] = mac.lower()
+                        network['os'] = ''
+                        network['accuracy'] = ''
+                        if result['scan'][ip]['osmatch']:
+                            network['os'] = result['scan'][ip]['osmatch'][0]['name']
+                            network['accuracy'] = result['scan'][ip]['osmatch'][0]['accuracy'] 
                         network_list.append(network)
         return network_list
 

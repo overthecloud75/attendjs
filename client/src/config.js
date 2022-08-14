@@ -213,16 +213,24 @@ export const deviceColumnHeaders = [
         Header: 'MAC',
     },
     {
-        accessor: 'vendor',
-        Header: 'Vendor',
-    },
-    {
         accessor: 'registerDate',
         Header: '등록일',
     },
     {
         accessor: 'endDate',
         Header: '최종 확인일',
+    },
+    {
+        accessor: 'vendor',
+        Header: 'Vendor',
+    },
+    {
+        accessor: 'os',
+        Header: 'OS',
+    },
+    {
+        accessor: 'accuracy',
+        Header: 'Accuracy',
     },
     {
         accessor: 'info',
@@ -244,16 +252,24 @@ export const deviceCsvHeaders = [
         label: 'MAC',
     },
     {
-        key: 'vendor',
-        label: 'Vendor',
-    },
-    {
         key: 'registerDate',
         label: '등록일',
     },
     {
         key: 'endDate',
         label: '최종 확인일',
+    },
+    {
+        key: 'vendor',
+        label: 'Vendor',
+    },
+    {
+        key: 'os',
+        label: 'OS',
+    },
+    {
+        key: 'accuracy',
+        label: 'Accuracy',
     },
     {
         key: 'info',

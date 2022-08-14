@@ -1,6 +1,4 @@
 import styled from "styled-components"
-import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'
-import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined'
 import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlined'
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
@@ -61,16 +59,6 @@ const Navbar = () => {
                 <div>
                 </div>
                 <Items>
-                    <Item>
-                        <Icon>
-                            <LanguageOutlinedIcon/>English
-                        </Icon>
-                    </Item>
-                    <Item>
-                        <Icon>
-                            <DarkModeOutlinedIcon/>
-                        </Icon>
-                    </Item>
                     <Item>
                         <Icon>
                             <FullscreenExitOutlinedIcon/>

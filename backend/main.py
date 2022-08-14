@@ -11,41 +11,57 @@ if os.path.exists(os.path.join(BASE_DIR, LOG_DIR)):
 else:
     os.mkdir(os.path.join(BASE_DIR, LOG_DIR))
 
-
 def save_db():
     report = Report()
     report.update()
 
-def check_mac():
-    devices = Device()
-    device_on = DeviceOn()
-    scanner = Scanner()
-
-    macs = []
-    data_list = devices.get_mac_list()
-    for data in data_list:
-        macs.append(data['mac'])
+def check_sn():
     while True:
         wifi_connected = scanner.check_wifi_connected()
         if not wifi_connected:
             scanner.connect_wifi()
 
-        scan_result = scanner.check_nmap()
+        scan_result = scanner.nmap_sn_scan()
         for network in scan_result:
             if network['mac'] not in macs:
                 macs.append(network['mac'])
-                devices.new_post(network)
+                devices.new_sn_post(network)
             else:
-                devices.old_post(network)
+                devices.old_sn_post(network)
             device_on.post(network)
         time.sleep(60)
 
+def check_o():
+    while True:
+        wifi_connected = scanner.check_wifi_connected()
+        if not wifi_connected:
+            scanner.connect_wifi()
+
+        scan_result = scanner.nmap_o_scan()
+        for network in scan_result:
+            if network['mac'] not in macs:
+                devices.new_o_post(network)
+            else:
+                devices.old_o_post(network)
+        time.sleep(3600)
 
 if __name__ == '__main__':
+    devices = Device()
+    device_on = DeviceOn()
+    scanner = Scanner()
+    data_list = devices.get_mac_list()
+    macs = []
+
+    for data in data_list:
+        macs.append(data['mac'])
+
     if USE_WIFI_ATTENDANCE:
-        th = threading.Thread(target=check_mac)
-        th.daemon = True
-        th.start()
+        th1 = threading.Thread(target=check_sn)
+        th1.daemon = True
+        th1.start()
+        th2 = threading.Thread(target=check_o)
+        th2.daemon = True
+        th2.start()
 
     while True:
         save_db()

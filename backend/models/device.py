@@ -1,7 +1,5 @@
 from .db import BasicModel
 from .employee import Employee
-from utils import check_time, get_date_several_months_before
-
 
 # Device
 class Device(BasicModel):
@@ -9,26 +7,26 @@ class Device(BasicModel):
         super().__init__(model='devices')
         self.employee = Employee()
 
-    '''def get(self, page=1, date=None):
-        date = get_date_several_months_before(date, delta=2)
-        device_list = self.collection.find({'endDate': {'$gt': date}}, sort=[('ipStr', 1)])
-        get_page = Page(page)
-        return get_page.paginate(device_list)'''
-
     def get_mac_list(self, date=None):
         device_list = self.collection.find(sort=[('ipStr', 1)])
         return device_list
 
-    def new_post(self, request_data): # new device 발견인 경우
+    def new_sn_post(self, request_data): # new device 발견인 경우
         request_data = {'mac': request_data['mac'], 'registerDate': request_data['date'], 'endDate': request_data['date'],
                         'owner': None, 'ip': request_data['ip'], 'ipStr': request_data['ipStr'], 'vendor': request_data['vendor']}
         self.collection.update_one({'mac': request_data['mac']}, {'$set': request_data}, upsert=True)
 
-    def old_post(self, request_data):
+    def old_sn_post(self, request_data):
         request_data = {'mac': request_data['mac'], 'endDate': request_data['date'], 'ip': request_data['ip'],
                         'ipStr': request_data['ipStr'], 'vendor': request_data['vendor']}
         self.collection.update_one({'mac': request_data['mac']}, {'$set': request_data}, upsert=True)
 
+    def new_o_post(self, request_data): # new device 발견인 경우
+        self.collection.update_one({'mac': request_data['mac']}, {'$set': request_data}, upsert=True)
+
+    def old_o_post(self, request_data):
+        self.collection.update_one({'mac': request_data['mac']}, {'$set': request_data}, upsert=True)
+    
     def post(self, request_data):
         if 'owner' in request_data and request_data['owner'] == 'None':
             request_data['owner'] = None

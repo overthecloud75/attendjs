@@ -14,42 +14,42 @@ const Wrapper = styled.div`
     border-right: 0.5px solid rgb(230, 227, 227);
     min-height: 100vh;
     background-color: white;
-`;
+`
 
 const Top = styled.div`
     display: flex;  
     height: 50px; 
     align-items: center;
     justify-content: center;
-`;
+`
 
 const Middle = styled.div`
     padding-left: 10px;
-`;
+`
 
 const Bottom = styled.div`
     display: flex;  
     margin: 10px;
     align-items: center;
     justify-content: center;
-`;
+`
 
 const Logo = styled.span`
     font-size: 20px;
     font-weight: bold;
     color: #6439ff;
-`;
+`
 
 const Hr = styled.hr`
     height: 0;
     border: 0.5px solid rgb(230, 227, 227);
-`;
+`
 
 const Items = styled.ul`
     list-style: none;
     margin: 0;
     padding: 0;
-`;
+`
 
 const Item = styled.li`
     display: flex;
@@ -65,19 +65,19 @@ const Item = styled.li`
     border: ${props => props.active ? "1px solid white" : "none"};
     border-radius: ${props => props.active ? "20px" : "none"};
     padding: ${props => props.active ? "10px" : "none"};
-`; 
+` 
 
 const Icon = styled.div`
     font-size: 30px;
     color: #7451f8;
-`; 
+` 
 
 const Span = styled.span`
     font-size: 13px;
     font-weight: 600;
     color: #888;
     margin-left: 10px;
-`; 
+`
 
 const Color = styled.div`
     width: 20px;
@@ -97,7 +97,7 @@ const Color = styled.div`
         background-color: darkblue;
     }
 }
-`; 
+`
 
 const itemList = [
     {

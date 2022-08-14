@@ -15,14 +15,6 @@ const DeviceSchema = new mongoose.Schema(
             type: String,
             required: false,
         },
-        owner: {
-            type: String,
-            required: false,
-        },
-        employeeId: {
-            type: Number,
-            required: false,
-        },
         registerDate: {
             type: String,
             required: false,
@@ -37,6 +29,26 @@ const DeviceSchema = new mongoose.Schema(
         },
         vendor: {
             type: String,
+            required: false,
+        },
+        os: {
+            type: String,
+            required: false,
+        },
+        accuracy: {
+            type: String,
+            required: false,
+        },
+        info: {
+            type: String,
+            required: false,
+        },
+        owner: {
+            type: String,
+            required: false,
+        },
+        employeeId: {
+            type: Number,
             required: false,
         },
     },
