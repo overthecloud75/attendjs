@@ -1,13 +1,13 @@
-import express from "express";
+import express from 'express'
 import {
   updateUser,
   deleteUser,
   getUser,
   getUsers,
-} from "../controllers/user.js";
-import { verifyAdmin, verifyToken, verifyUser } from "../utils/verifyToken.js";
+} from '../controllers/user.js'
+import { verifyAdmin, verifyToken, verifyUser } from '../utils/verifyToken.js'
 
-const router = express.Router();
+const router = express.Router()
 
 // router.get("/checkauthentication", verifyToken, (req,res,next)=>{
 //   res.send("hello user, you are logged in")

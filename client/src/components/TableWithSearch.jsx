@@ -72,7 +72,7 @@ const Dates = styled.div`
     z-index: 9999;
 `;
 
-const TableWithSearch = ({page, url, columnHeaders, csvHeaders}) => {
+const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) => {
     const [name, setName] = useState('')
     const [date, setDate] = useState([
         {
@@ -93,7 +93,7 @@ const TableWithSearch = ({page, url, columnHeaders, csvHeaders}) => {
     }
 
     const { data, loading, error } = useFetch(
-        url, {name: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}, clickCount
+        url, {[searchKeyword]: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}, clickCount
     );
 
     const columns = useMemo(() => columnHeaders, [])
@@ -106,7 +106,7 @@ const TableWithSearch = ({page, url, columnHeaders, csvHeaders}) => {
                     <Item>
                         <Icon><PersonIcon/></Icon>
                         <Input 
-                            placeholder="Name" 
+                            placeholder={ searchKeyword } 
                             onChange={(e) => setName(e.target.value)}
                         />
                     </Item>

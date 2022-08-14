@@ -4,6 +4,7 @@ import { attendColumnHeaders, attendCsvHeaders } from '../config'
 const Attend = () => {
     return (       
         <TableWithSearch 
+            searchKeyword='name'
             page='attend'
             url='/attend/search'
             columnHeaders={attendColumnHeaders}

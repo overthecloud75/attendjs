@@ -1,0 +1,7 @@
+.idea
+Include
+Lib
+__pycache__
+Scripts
+logs
+mainconfig.py

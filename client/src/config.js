@@ -264,3 +264,57 @@ export const deviceCsvHeaders = [
         label: '소유자',
     },
 ]
+
+export const wifiColumnHeaders = [
+    {
+        accessor: 'ip',
+        Header: 'IP',
+    },
+    {
+        accessor: 'mac',
+        Header: 'MAC',
+    },
+    {
+        accessor: 'date',
+        Header: 'Date',
+    },
+    {
+        accessor: 'begin',
+        Header: '시작',
+    },
+    {
+        accessor: 'end',
+        Header: '종료',
+    },
+    {
+        accessor: 'owner',
+        Header: '소유자',
+    },
+]
+
+export const wifiCsvHeaders = [
+    {
+        key: 'ip',
+        label: 'IP',
+    },
+    {
+        key: 'mac',
+        label: 'MAC',
+    },
+    {
+        key: 'date',
+        label: 'Date',
+    },
+    {
+        key: 'begin',
+        label: '시작',
+    },
+    {
+        key: 'end',
+        label: '종료',
+    },
+    {
+        key: 'owner',
+        label: '소유자',
+    },
+]
