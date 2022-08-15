@@ -1,0 +1,13 @@
+22/08//15
+    - 0.5.1 (client)
+        styled Container, Wrapper -> className container, wrapper in index.css
+    - 0.5.2 (client)
+        sidebar.jsx : itemList -> itemDict with title 
+    - 0.5.3 (backend)
+        make testconfig.py to gather user modified setting in each py files
+
+    * to do list 
+        - client : Link Acitve when onclick
+        - client : when device click, update sceen appear 
+        - api : wifi-attend
+   

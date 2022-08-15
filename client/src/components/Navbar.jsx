@@ -3,6 +3,7 @@ import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlin
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
 import ListOutlinedIcon from '@mui/icons-material/ListOutlined'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 
 const Container = styled.div`
     height: 50px;
@@ -47,7 +48,7 @@ const Counter = styled.div`
     top: -5px;
     right: -5px;
 `
-const Avatar = styled.img`
+const Avatar = styled.div`
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -82,10 +83,9 @@ const Navbar = () => {
                         </Icon>
                     </Item>
                     <Item>
-                        <Avatar
-                            src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                            alt=""
-                        />
+                        <Avatar>
+                            <AccountCircleIcon/>
+                        </Avatar>
                     </Item>
                 </Items>
             </Wrapper>

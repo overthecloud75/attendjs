@@ -2,23 +2,10 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 try:
-    from mainconfig import ACCOUNT, MAIL_SERVER
+    from mainconfig import ACCOUNT, MAIL_SERVER, CC
 except Exception as e:
-    # try your own Access_DB_PWD and ACCOUNT
-    ACCOUNT = {
-        'email': 'test@test.co.kr',
-        'password': '*******',
-    }
-    MAIL_SERVER = {'host': 'smtp.office365.com', 'port': 587}
-    SERVER_URL = 'http://127.0.0.1:5000/'
-try:
-    from mainconfig import CC
-except Exception as e:
-    # CC: cc email when notice email
-    CC = None
-    # CC = 'test@test.co.kr'
-
-
+    from testconfig import ACCOUNT, MAIL_SERVER, CC
+    
 def send_email(email=None, subject=None, body=None, include_cc=False):
     mimemsg = MIMEMultipart()
     mimemsg['From'] = ACCOUNT['email']

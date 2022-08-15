@@ -135,7 +135,6 @@ const Table = ({ url, columns, data, csvHeaders, fileName }) => {
         useTable({ columns, data, initialState: { pageSize: 20 } }, useSortBy, usePagination);
 
     const handleClick = (e, data) => {
-        e.preventDefault()
         console.log(data)
         if (url==='device') {
             window.location.href = '/' + url + '/' + data._id + '?mac=' + data.mac + '&ip=' + data.ip + '&info=' + data.info

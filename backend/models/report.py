@@ -11,9 +11,7 @@ from .device import Device
 try:
     from mainconfig import ACCESS_DB_PWD, SERVER_URL
 except Exception as e:
-    # try your own Access_DB_PWD
-    ACCESS_DB_PWD = '*******'
-    SERVER_URL = 'http://127.0.0.1:5000/'
+    from testconfig import ACCESS_DB_PWD, SERVER_URL
 from config import USE_WIFI_ATTENDANCE, USE_NOTICE_EMAIL, EMAIL_NOTICE_BASE, WORKING
 
 # connect to access db

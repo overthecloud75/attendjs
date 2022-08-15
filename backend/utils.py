@@ -10,15 +10,7 @@ from config import WORKING, USE_LUNAR_NEW_YEAR
 try:
     from mainconfig import WIFI, SCAN_RANGE_LIST
 except Exception as e:
-    # use your own wifi ip and router name
-    # PSRC: server wifi ip
-    WIFI = {
-        'NET': '192.168.2.0/24',
-        'PSRC': '192.168.2.2',
-        'PDST': '192.168.2.',
-        'NAME_OF_ROUTER': 'default'
-    }
-    SCAN_RANGE_LIST = ['192.168.0.0/24']
+    from testconfig import WIFI, SCAN_RANGE_LIST
 
 class Scanner:
     def __init__(self):

@@ -44,11 +44,18 @@ const Hr = styled.hr`
     height: 0;
     border: 0.5px solid rgb(230, 227, 227);
 `
-
 const Items = styled.ul`
     list-style: none;
     margin: 0;
     padding: 0;
+`
+
+const Title = styled.div`
+    font-size: 10px;
+    font-weight: bold;
+    color: #999;
+    margin-top: 15px;
+    margin-bottom: 5px;
 `
 
 const Item = styled.li`
@@ -62,9 +69,8 @@ const Item = styled.li`
     background-color: #ece8ff;
     }
 
-    border: ${props => props.active ? "1px solid white" : "none"};
-    border-radius: ${props => props.active ? "20px" : "none"};
-    padding: ${props => props.active ? "10px" : "none"};
+    border: ${props => props.active ? '1px solid black' : 'none'};
+    border-radius: ${props => props.active ? '20px' : 'none'};
 ` 
 
 const Icon = styled.div`
@@ -99,56 +105,62 @@ const Color = styled.div`
 }
 `
 
-const itemList = [
+const itemDict = 
     {
-        to: '/attend', 
-        icon: <DirectionsRunIcon/>,
-        title: 'Attend'
-    },
-    {    
-        to: '/wifi-attend',
-        icon: <WifiFindIcon/>,
-        title: 'Wifi-Attend'
-    }, 
-    {
-        to: '/summary',
-        icon: <SummarizeIcon/>,
-        title: 'Summary'
-    },
-    {
-        to: '/device',
-        icon: <ComputerIcon/>,
-        title: 'Device'
-    },
-    {
-        to: '/schedule',
-        icon: <CalendarMonthIcon/>,
-        title: 'Schedule'
-    },
-    {
-        to: '/users',
-        icon: <PeopleIcon/>,
-        title: 'Users'
-    },
-    {
-        to: '/board',
-        icon: <NoteAltIcon/>,
-        title: 'Board'
-    },
-]
+        Attendance : [
+            {
+                to: '/attend', 
+                icon: <DirectionsRunIcon/>,
+                title: 'Attend'
+            },
+            {    
+                to: '/wifi-attend',
+                icon: <WifiFindIcon/>,
+                title: 'Wifi-Attend'
+            }, 
+            {
+                to: '/summary',
+                icon: <SummarizeIcon/>,
+                title: 'Summary'
+            },
+            {
+                to: '/schedule',
+                icon: <CalendarMonthIcon/>,
+                title: 'Schedule'
+            }
+        ],
+    Management : [
+        {
+            to: '/device',
+            icon: <ComputerIcon/>,
+            title: 'Device'
+        }
+    ],
+    Communaity : [
+        {
+            to: '/users',
+            icon: <PeopleIcon/>,
+            title: 'Users'
+        },
+        {
+            to: '/board',
+            icon: <NoteAltIcon/>,
+            title: 'Board'
+        }
+    ]
+}
 
-const SidebarItem = () => {
-    const [activeIndex, setActiveIndex] = useState(-1)
+const SidebarItems = ({itemList, titleIndex, activeTitleIndex, activeItemIndex, handleClick}) => {
     return (
-        itemList.map((item, index) => (
+        itemList.map((item, itemIndex) => (
             <Link 
                 to={item.to} 
                 style={{ textDecoration: 'none' }}
-                key={index} 
+                key={itemIndex}
                 >
-                <Item 
-                    onClick={() => setActiveIndex(index)}
-                    active={activeIndex===index?1:0}
+                <Item
+                    onClick={() => handleClick(titleIndex, itemIndex)}
+                    active={activeTitleIndex===titleIndex&activeItemIndex==itemIndex?1:0}    
                 >
                     <Icon>{item.icon}</Icon>
                     <Span>{item.title}</Span>
@@ -158,18 +170,43 @@ const SidebarItem = () => {
     )
 }
 
+const SidebarCategories = () => {
+    const [activeTitleIndex, setActiveTitleIndex] = useState(-1)
+    const [activeItemIndex, setActiveItemIndex] = useState(-1)
+    const handleClick = (titleIndex, itemIndex) => {
+        setActiveTitleIndex(titleIndex)
+        setActiveItemIndex(itemIndex)
+    }
+    return (
+        Object.keys(itemDict).map((title, titleIndex) => (
+            <div
+                key={titleIndex}
+            >
+                <Title>{title}</Title>
+                <SidebarItems
+                    itemList = {itemDict[title]}
+                    titleIndex = {titleIndex}
+                    activeTitleIndex = {activeTitleIndex} 
+                    activeItemIndex = {activeItemIndex}
+                    handleClick = {handleClick}
+                />
+            </div>
+        )
+    ) 
+    ) 
+}
+
 const Sidebar = () => {
     return (
         <Wrapper>
             <Top>
                 <Link to='/' style={{ textDecoration: 'none' }}>
-                    <Logo>attendance</Logo>
+                    <Logo>Portal</Logo>
                 </Link>
             </Top>
-            <Hr/>
             <Middle>
                 <Items>
-                    <SidebarItem/>
+                    <SidebarCategories/>
                 </Items>
             </Middle>
             <Bottom>

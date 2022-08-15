@@ -1,23 +1,14 @@
-import styled from 'styled-components'
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/TableWithSearch'
 import { deviceColumnHeaders, deviceCsvHeaders } from '../config'
 import Footer from '../components/Footer'
 
-
-const Container = styled.div`
-    display: flex;
-`
-
-const Wrapper = styled.div`
-    flex: 8;
-`
 const Device = () => {
     return (    
-        <Container>
+        <div className='container'>
             <Sidebar/>
-            <Wrapper> 
+            <div className='wrapper'> 
                 <Navbar/> 
                 <TableWithSearch 
                     searchKeyword='mac'
@@ -27,8 +18,8 @@ const Device = () => {
                     csvHeaders={deviceCsvHeaders}
                 />
                 <Footer/>
-            </Wrapper> 
-        </Container>
+            </div> 
+        </div>
     )
 }
 

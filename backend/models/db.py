@@ -5,8 +5,7 @@ from bson.objectid import ObjectId
 try:
     from mainconfig import MONGO_URL
 except Exception as e:
-    MONGO_URL = 'mongodb://localhost:27017/'
-
+    from testconfig import MONGO_URL
 
 mongoClient = MongoClient(MONGO_URL)
 db = mongoClient['report']
