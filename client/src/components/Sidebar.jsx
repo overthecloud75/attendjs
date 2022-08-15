@@ -40,10 +40,6 @@ const Logo = styled.span`
     color: #6439ff;
 `
 
-const Hr = styled.hr`
-    height: 0;
-    border: 0.5px solid rgb(230, 227, 227);
-`
 const Items = styled.ul`
     list-style: none;
     margin: 0;
@@ -160,7 +156,7 @@ const SidebarItems = ({itemList, titleIndex, activeTitleIndex, activeItemIndex, 
                 >
                 <Item
                     onClick={() => handleClick(titleIndex, itemIndex)}
-                    active={activeTitleIndex===titleIndex&activeItemIndex==itemIndex?1:0}    
+                    active={activeTitleIndex===titleIndex&activeItemIndex===itemIndex?1:0}    
                 >
                     <Icon>{item.icon}</Icon>
                     <Span>{item.title}</Span>

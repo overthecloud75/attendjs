@@ -83,7 +83,7 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
         url, {[searchKeyword]: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}, clickCount
     );
 
-    const columns = useMemo(() => columnHeaders, [])
+    const columns = useMemo(() => columnHeaders, [columnHeaders])
     const tableData = useMemo(() => data, [data])
 
     return (

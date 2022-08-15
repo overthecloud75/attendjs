@@ -1,8 +1,7 @@
-import React from 'react';
-import { useTable, useSortBy, usePagination } from 'react-table';
-import styled from 'styled-components';
-import { CSVLink } from "react-csv";
-import { v } from '../variable';
+import { useTable, useSortBy, usePagination } from 'react-table'
+import styled from 'styled-components'
+import { CSVLink } from "react-csv"
+import { v } from '../variable'
 
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 
@@ -159,23 +158,23 @@ const Table = ({ url, columns, data, csvHeaders, fileName }) => {
                 <TBody {...getTableBodyProps()}>
                     {page.map((row, rowIndex) => {
                         prepareRow(row);
-                            return (
-                                // getRowProps는 각 row data를 호출해낸다
-                                <BodyTr {...row.getRowProps()}>
-                                    <Td 
-                                        onClick={(e) => handleClick(e, row.original)}
-                                        style={{textDecoration: 'underline'}}
-                                    >
-                                        { pageIndex * pageSize + rowIndex + 1 }
-                                    </Td>
-                                    {row.cells.map(cell => (
-                                        // getCellProps는 각 cell data를 호출해낸다
-                                        <Td {...cell.getCellProps()}>
-                                            {cell.render('Cell')}
-                                        </Td>  
-                                        )   
-                                    )}
-                                </BodyTr>
+                        return (
+                            // getRowProps는 각 row data를 호출해낸다
+                            <BodyTr {...row.getRowProps()}>
+                                <Td 
+                                    onClick={(e) => handleClick(e, row.original)}
+                                    style={{textDecoration: 'underline'}}
+                                >
+                                    { pageIndex * pageSize + rowIndex + 1 }
+                                </Td>
+                                {row.cells.map(cell => (
+                                    // getCellProps는 각 cell data를 호출해낸다
+                                    <Td {...cell.getCellProps()}>
+                                        {cell.render('Cell')}
+                                    </Td>  
+                                    )   
+                                )}
+                            </BodyTr>
                         );
                     })}
                 </TBody>
@@ -227,8 +226,8 @@ const Table = ({ url, columns, data, csvHeaders, fileName }) => {
                         data={data}
                         headers={csvHeaders}
                         filename={fileName}
-                        >
-                            CSV download
+                    >
+                        CSV download
                     </CSVLink>
                 </CsvButton>
             </Pagination>
