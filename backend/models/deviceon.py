@@ -20,7 +20,7 @@ class DeviceOn(BasicModel):
                 if  end and int(end) < int(data['end']):
                     end = data['end']
                 elif not end:
-                    begin = data['end']
+                    end = data['end']
         return begin, end
 
     def get_device_list(self, date=None):

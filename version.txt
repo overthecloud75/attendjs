@@ -1,4 +1,4 @@
-22/08//15
+22/08/15
     - 0.5.1 (client)
         styled Container, Wrapper -> className container, wrapper in index.css
     - 0.5.2 (client)
@@ -6,8 +6,14 @@
     - 0.5.3 (backend)
         make testconfig.py to gather user modified setting in each py files
 
-    * to do list 
-        - client : Link Acitve when onclick
-        - client : when device click, update sceen appear 
-        - api : wifi-attend
+22/08/16
+    - 0.5.4 (api)
+        wifi-attend for wifiRange
+
+* to do list 
+    - client : Link Acitve when onclick
+    - client : when device click, update screen appear 
+    - client : timeline 
+
+
    
