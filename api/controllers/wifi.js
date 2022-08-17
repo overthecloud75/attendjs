@@ -11,7 +11,7 @@ const insertOwner = (deviceOns, deviceDict) => {
 return deviceOns 
 }
 
-export const searchWifi = async (req,res,next) => {
+export const search = async (req,res,next) => {
     try {
         const ip = req.query.ip
         const startDate = req.query.startDate
@@ -33,6 +33,7 @@ export const searchWifi = async (req,res,next) => {
         if (startDate === endDate) {
             deviceOns = insertOwner(deviceOns, deviceDict)
         }
+        console.log('deviceons', deviceOns)
         res.status(200).json(deviceOns);
     } catch (err) {
         console.log('err', err)

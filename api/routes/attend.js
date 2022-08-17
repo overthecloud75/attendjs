@@ -1,8 +1,8 @@
 import express from 'express'
-import { searchAttend } from '../controllers/attend.js'
+import { search } from '../controllers/attend.js'
 
 const router = express.Router()
 
-router.get('/search', searchAttend)
+router.get('/search', search)
 
 export default router

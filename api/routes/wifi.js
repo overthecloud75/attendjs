@@ -1,8 +1,8 @@
 import express from 'express'
-import { searchWifi } from '../controllers/wifi.js'
+import { search } from '../controllers/wifi.js'
 
 const router = express.Router()
 
-router.get('/search', searchWifi)
+router.get('/search', search)
 
 export default router

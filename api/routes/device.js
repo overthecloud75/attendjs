@@ -1,8 +1,8 @@
 import express from 'express'
-import { searchDevice } from '../controllers/device.js'
+import { search } from '../controllers/device.js'
 
 const router = express.Router();
 
-router.get('/search', searchDevice)
+router.get('/search', search)
 
 export default router;

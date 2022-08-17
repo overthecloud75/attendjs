@@ -1,7 +1,7 @@
 import Report from "../models/Report.js"
 import { WORKING, getReverseStatus } from "../config/WORKING.js"
 
-export const searchSummary = async (req,res,next)=>{
+export const search = async (req,res,next)=>{
     try {
         const name = req.query.name 
         const startDate = req.query.startDate
