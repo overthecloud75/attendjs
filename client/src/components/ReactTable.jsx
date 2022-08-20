@@ -130,8 +130,7 @@ const CsvButton = styled.button`
 // useTable에다가 작성한 columns와 data를 전달한 후 아래 4개의 props를 받아온다
 // initialState https://github.com/TanStack/table/discussions/2029
 
-const Table = ({ url, columns, data, csvHeaders, fileName }) => {
-
+const Table = ({ url, columns, data, setData, csvHeaders, fileName }) => {
     const [selectedRowData, setSelectedRowData] = useState({})
     const [open, setOpen] = useState(false)
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,  
@@ -177,7 +176,7 @@ const Table = ({ url, columns, data, csvHeaders, fileName }) => {
                                     )   
                                 )}
                             </BodyTr>
-                        );
+                        )
                     })}
                 </TBody>
             </TableSheet>
@@ -238,6 +237,8 @@ const Table = ({ url, columns, data, csvHeaders, fileName }) => {
                     <Update
                         page={url}
                         columns={columns}
+                        data={data}
+                        setData={setData}
                         open={open}
                         setOpen={setOpen}
                         rowData={selectedRowData}
@@ -245,7 +246,7 @@ const Table = ({ url, columns, data, csvHeaders, fileName }) => {
                 )
             }
         </Container>
-    );
-};
+    )
+}
 
 export default Table

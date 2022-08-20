@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios'
 
-const Update = ({page, columns, open, setOpen, rowData}) => {
+const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
 
     const [focus, setFocus] = useState('info')
     const [value, setValue] = useState(
@@ -21,14 +21,25 @@ const Update = ({page, columns, open, setOpen, rowData}) => {
         setOpen(false)
     };
 
+    const updateData = (rowData) => {
+        let tableData = []
+        data.map(prev => {
+            prev._id === rowData._id?tableData.push(rowData):tableData.push(prev)
+        })
+        setData(tableData)
+    }
+
     const handleUpdate = async () => {
         const url = '/' + page + '/update'
-        try {
-            const res = await axios.post(url, value)
-            rowData.info = value.info
-            rowData.owner = value.owner
-        } catch (err) {
-            console.log(url, err)
+        if (page==='device') {
+            try {
+                const res = await axios.post(url, value)
+                rowData.info = value.info
+                rowData.owner = value.owner
+                updateData(rowData)
+            } catch (err) {
+                console.log(url, err)
+            }
         }
         handleClose()
     }

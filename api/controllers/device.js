@@ -2,6 +2,7 @@ import Device from '../models/Device.js'
 
 export const search = async (req,res,next) => {
     try {
+        console.log('deviceSearch')
         const mac = req.query.mac
         const startDate = req.query.startDate
         const endDate = req.query.endDate

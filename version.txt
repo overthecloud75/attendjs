@@ -17,10 +17,12 @@
         Update.jsx
     - 0.5.7 (api)
         update in controllers/device.js 
+    - 0.5.8 (client)
+        table re-rendering after update
 
 * to do list 
     - client : Link Acitve when onclick
-    - client : table update after update
+    - client : cache-control 
     - client : timeline 
 
 

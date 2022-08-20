@@ -79,7 +79,7 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
         setFileName(page + '_' + format(date[0].startDate, "yyyy-MM-dd") + '_'+ format(date[0].endDate, "yyyy-MM-dd") + '_' + name)
     }
 
-    const { data, loading, error } = useFetch(
+    const {data, setData, loading, error} = useFetch(
         url, {[searchKeyword]: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}, clickCount
     );
 
@@ -125,6 +125,7 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
                 url={page}
                 columns={columns}
                 data={tableData}
+                setData={setData}
                 fileName={fileName}
                 csvHeaders={csvHeaders}
             />
