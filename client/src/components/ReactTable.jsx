@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useTable, useSortBy, usePagination } from 'react-table'
 import styled from 'styled-components'
 import { CSVLink } from "react-csv"
 import { v } from '../variable'
+import Update from './Update';
 
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 
@@ -129,15 +131,15 @@ const CsvButton = styled.button`
 // initialState https://github.com/TanStack/table/discussions/2029
 
 const Table = ({ url, columns, data, csvHeaders, fileName }) => {
+
+    const [selectedRowData, setSelectedRowData] = useState({})
+    const [open, setOpen] = useState(false)
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,  
         page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize, state: { pageIndex, pageSize } } =
         useTable({ columns, data, initialState: { pageSize: 20 } }, useSortBy, usePagination);
-
-    const handleClick = (e, data) => {
-        console.log(data)
-        if (url==='device') {
-            window.location.href = '/' + url + '/' + data._id + '?mac=' + data.mac + '&ip=' + data.ip + '&info=' + data.info
-        }
+    const handleClick = (e, rowData) => {
+        setSelectedRowData(rowData)
+        setOpen(true)
     }
 
     return (
@@ -231,6 +233,17 @@ const Table = ({ url, columns, data, csvHeaders, fileName }) => {
                     </CSVLink>
                 </CsvButton>
             </Pagination>
+            {open&&
+                (
+                    <Update
+                        page={url}
+                        columns={columns}
+                        open={open}
+                        setOpen={setOpen}
+                        rowData={selectedRowData}
+                    />
+                )
+            }
         </Container>
     );
 };

@@ -14,7 +14,6 @@ export const getEvents = async (req,res,next)=>{
 
 export const addEvent = async (req,res,next)=>{
     try {
-        console.log('req', req.body)
         const id = req.body.id
         const title = req.body.title
         const start = req.body.start
@@ -31,11 +30,9 @@ export const addEvent = async (req,res,next)=>{
 
 export const deleteEvent = async (req,res,next)=>{
     try {
-        console.log('req', req.body)
         const id = req.body.id
         const event = await Event.findOne({id}).lean()
-        const eventDelete = await Event.deleteOne({id})
-        console.log('id', id, event) 
+        const eventDelete = await Event.deleteOne({id}) 
         if (eventDelete.deletedCount) {
             await reportUpdate('delete', event.title, event.start, event.end)
             res.status(200).send("Event has been deleted.")

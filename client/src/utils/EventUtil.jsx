@@ -32,7 +32,6 @@ export const getEvents = async (args)=> {
     const params = {start: format(args.start, "yyyy-MM-dd"), end: format(args.end, "yyyy-MM-dd")}
     try { const res = await axios.get('/event', {params});
         for (let event of res.data) {
-            var title = event.title.split('/')
             event = getColor(event)
         }
         return res.data
@@ -52,7 +51,6 @@ export const addEvent = async (args)=> {
 };
 
 export const deleteEvent = async (args)=> {
-    console.log('deleteArgs', args);
     const data = {id: Number(args.id)}
     try { const res = await axios.delete('/event/delete', {data})
         console.log('res', res)

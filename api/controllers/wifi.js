@@ -33,7 +33,6 @@ export const search = async (req,res,next) => {
         if (startDate === endDate) {
             deviceOns = insertOwner(deviceOns, deviceDict)
         }
-        console.log('deviceons', deviceOns)
         res.status(200).json(deviceOns);
     } catch (err) {
         console.log('err', err)

@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import styled from "styled-components"
 import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlined'
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
 import ListOutlinedIcon from '@mui/icons-material/ListOutlined'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Avatar from '@mui/material/Avatar';
 
 const Container = styled.div`
     height: 50px;
@@ -48,12 +51,18 @@ const Counter = styled.div`
     top: -5px;
     right: -5px;
 `
-const Avatar = styled.div`
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-`
+
 const Navbar = () => {
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (e) => {
+      setAnchorEl(e.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
     return (
         <Container>
             <Wrapper>
@@ -82,13 +91,26 @@ const Navbar = () => {
                             <ListOutlinedIcon/>
                         </Icon>
                     </Item>
-                    <Item>
-                        <Avatar>
-                            <AccountCircleIcon/>
-                        </Avatar>
+                    <Item
+                        onClick={handleClick}
+                    >
+                        <Avatar/>
                     </Item>
                 </Items>
             </Wrapper>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+            >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose}>Logout</MenuItem>
+            </Menu>
         </Container>
   )
 }

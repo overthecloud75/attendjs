@@ -10,7 +10,6 @@ import Summary from './pages/Summary'
 import Device from './pages/Device'
 import Schedule from './pages/Schedule'
 import NotFound from './pages/NotFound'
-import UpdateDevice from './pages/UpdateDevice'
 
 function App() {
     return (
@@ -20,10 +19,7 @@ function App() {
                 <Route exact path='/attend' element={<Attend/>}/>
                 <Route exact path='/wifi-attend' element={<Wifi/>}/>
                 <Route exact path='/summary' element={<Summary/>}/>
-                <Route path='/device'>
-                    <Route index element={<Device/>}/>
-                    <Route path=':_id' element={<UpdateDevice/>} />
-                </Route>
+                <Route exact path='/device' element={<Device/>}/>
                 <Route exact path='/schedule' element={<Schedule/>}/>
                 <Route path='*' element={<NotFound/>} />
             </Routes>
