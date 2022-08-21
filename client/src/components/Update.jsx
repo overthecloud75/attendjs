@@ -13,7 +13,8 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
         {
             _id: rowData._id,
             owner: rowData.owner,
-            info: rowData.info
+            info: rowData.info,
+            location: rowData.location
         }
     )
     const handleClose = () => {
@@ -22,9 +23,9 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
 
     const updateData = (rowData) => {
         let tableData = []
-        data.map(prev => {
+        data.map((prev) => (
             prev._id === rowData._id?tableData.push(rowData):tableData.push(prev)
-        })
+        ))
         setData(tableData)
     }
 
@@ -34,7 +35,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
             try {
                 const res = await axios.post(url, value)
                 rowData.info = value.info
-                rowData.owner = value.owner
+                rowData.location = value.location
                 updateData(rowData)
             } catch (err) {
                 console.log(url, err)
@@ -44,7 +45,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
     }
 
     const handleChange = (e) => {
-        setFocus(e.target.id)
+        console.log(e.target.id, e.target.value)
         setValue(
            {
                 ...value,
@@ -62,7 +63,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
                 {
                     columns.map((item, index) => {
                         return (
-                            ['info', 'owner'].includes(item.accessor)?(
+                            ['info', 'location'].includes(item.accessor)?(
                                 <TextField
                                     margin='dense'
                                     id={item.accessor}

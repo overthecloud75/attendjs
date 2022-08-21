@@ -237,6 +237,10 @@ export const deviceColumnHeaders = [
         Header: 'Info',
     },
     {
+        accessor: 'location',
+        Header: '위치',
+    },
+    {
         accessor: 'owner',
         Header: '소유자',
     },
@@ -274,6 +278,10 @@ export const deviceCsvHeaders = [
     {
         key: 'info',
         label: 'Info',
+    },
+    {
+        key: 'location',
+        label: '위치',
     },
     {
         key: 'owner',

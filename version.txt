@@ -26,6 +26,8 @@
         fix update textfield 한글 입력 문제
     - 0.6.0 (api)
         reqFormat in config/winston.js
+    - 0.6.1 (api)
+        location in models/Device.js/DeviceSchema
 
 * to do list 
     - client : Link Acitve when onclick

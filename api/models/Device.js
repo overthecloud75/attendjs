@@ -43,6 +43,10 @@ const DeviceSchema = new mongoose.Schema(
             type: String,
             required: false,
         },
+        location: {
+            type: String,
+            required: false,
+        },
         owner: {
             type: String,
             required: false,
