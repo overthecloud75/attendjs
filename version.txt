@@ -20,10 +20,19 @@
     - 0.5.8 (client)
         table re-rendering after update
 
+22/08/21
+    - 0.5.9 (client)
+        fix autofocus disappear afer typing 
+        fix update textfield 한글 입력 문제
+    - 0.6.0 (api)
+        reqFormat in config/winston.js
+
 * to do list 
     - client : Link Acitve when onclick
     - client : cache-control 
     - client : timeline 
+    - client : react-table left-right scroll 
+
 
 
    

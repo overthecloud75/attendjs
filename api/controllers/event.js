@@ -1,7 +1,9 @@
+import { logger, reqFormat } from '../config/winston.js'
 import Event from "../models/Event.js"
 import { reportUpdate } from "./report.js"
 
 export const getEvents = async (req,res,next)=>{
+    logger.info(reqFormat(req))
     try {
         const start = req.query.start
         const end = req.query.end
@@ -13,6 +15,7 @@ export const getEvents = async (req,res,next)=>{
 }
 
 export const addEvent = async (req,res,next)=>{
+    logger.info(reqFormat(req))
     try {
         const id = req.body.id
         const title = req.body.title
@@ -29,6 +32,7 @@ export const addEvent = async (req,res,next)=>{
 }
 
 export const deleteEvent = async (req,res,next)=>{
+    logger.info(reqFormat(req))
     try {
         const id = req.body.id
         const event = await Event.findOne({id}).lean()

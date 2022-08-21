@@ -9,7 +9,6 @@ import axios from 'axios'
 
 const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
 
-    const [focus, setFocus] = useState('info')
     const [value, setValue] = useState(
         {
             _id: rowData._id,
@@ -53,28 +52,28 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
            }
         )    
     }
+    // autofocus disappear after typing, 한글 입력 문제 
+    // https://stackoverflow.com/questions/42573017/in-react-es6-why-does-the-input-field-lose-focus-after-typing-a-character
 
-    const RowText = () => {
-
-        return (
-            columns.map((item, index) => 
-                {   
-                    return (
-                        ['info', 'owner'].includes(item.accessor)
-                            ?(
+    return (
+        <Dialog open={open} onClose={handleClose}>
+            <DialogTitle>Update {page}</DialogTitle>
+            <DialogContent>
+                {
+                    columns.map((item, index) => {
+                        return (
+                            ['info', 'owner'].includes(item.accessor)?(
                                 <TextField
-                                    autoFocus={item.accessor===focus?true:false}
                                     margin='dense'
                                     id={item.accessor}
                                     label={item.accessor}
                                     fullWidth
-                                    variant='standard'
+                                    variant='outlined'
                                     value={value[item.accessor]?value[item.accessor]:''}
                                     key={index}
                                     onChange={handleChange}
                                 />
-                            )
-                            :(
+                            ):(
                                 <TextField
                                     margin='dense'
                                     id={item.accessor}
@@ -83,22 +82,12 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
                                     variant='standard'
                                     value={rowData[item.accessor]?rowData[item.accessor]:''}
                                     key={index}
-                                    InputProps={{
-                                        readOnly: true,
-                                    }}
+                                    InputProps={{readOnly: true}}
                                 />
                             )
-                    )
+                        )
+                    })
                 }
-            )
-        )
-    }
-
-    return (
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Update {page}</DialogTitle>
-            <DialogContent>
-                <RowText/>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>

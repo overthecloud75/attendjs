@@ -1,19 +1,24 @@
-import winston from 'winston';
-import winstonDaily from 'winston-daily-rotate-file';
+import winston from 'winston'
+import winstonDaily from 'winston-daily-rotate-file'
 
-const logDir = 'logs';  // logs 디렉토리 하위에 로그 파일 저장
-const { combine, timestamp, printf } = winston.format;
+const logDir = 'logs'  // logs 디렉토리 하위에 로그 파일 저장
+const { combine, timestamp, printf } = winston.format
 
 // Define log format
 const logFormat = printf(info => {
-    return `${info.timestamp} ${info.level}: ${info.message}`;
+    return `${info.timestamp} ${info.level}: ${info.message}`
 });
 
+export const reqFormat = (req) => {
+    const headers = req.headers
+    const info = req.method + '-' + headers['x-forwarded-for'] + '-' + headers['x-original-url'] + '-' + headers['referrer'] + '-' + headers['user-agent']
+    return info
+}
 /*
  * Log Level
  * error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
  */
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
     format: combine(
         timestamp({
             format: 'YYYY-MM-DD HH:mm:ss',
@@ -51,5 +56,3 @@ if (process.env.NODE_ENV !== 'production') {
         )
     }));
 }
-
-export { logger };

@@ -1,3 +1,4 @@
+import { logger, reqFormat } from '../config/winston.js'
 import DeviceOn from '../models/DeviceOn.js'
 import Device from '../models/Device.js'
 import { wifiRange } from '../config/process.js'
@@ -12,6 +13,7 @@ return deviceOns
 }
 
 export const search = async (req,res,next) => {
+    logger.info(reqFormat(req))
     try {
         const ip = req.query.ip
         const startDate = req.query.startDate

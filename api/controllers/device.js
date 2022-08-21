@@ -1,8 +1,9 @@
+import { logger, reqFormat } from '../config/winston.js'
 import Device from '../models/Device.js'
 
 export const search = async (req,res,next) => {
+    logger.info(reqFormat(req))
     try {
-        console.log('deviceSearch')
         const mac = req.query.mac
         const startDate = req.query.startDate
         const endDate = req.query.endDate
@@ -22,8 +23,8 @@ export const search = async (req,res,next) => {
 }
 
 export const update = async (req,res,next) => {
+    logger.info(reqFormat(req))
     try {
-        console.log('update', req.body)
         const _id = req.body._id
         const info = req.body.info
         const owner = req.body.owner

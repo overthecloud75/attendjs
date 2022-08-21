@@ -1,3 +1,4 @@
+import { logger, reqFormat } from '../config/winston.js'
 import Report from "../models/Report.js"
 import Employee from "../models/Employee.js"
 import { calculateWorkingHours } from "./report.js"
@@ -13,6 +14,7 @@ const randomAttend = (range, add) => {
 }
 
 export const search = async (req,res,next) => {
+    logger.info(reqFormat(req))
     try {
         const name = req.query.name 
         const startDate = req.query.startDate
