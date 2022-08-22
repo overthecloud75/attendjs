@@ -9,6 +9,7 @@ import axios from 'axios'
 
 const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
 
+    const [focus, setFocus] = useState('info')
     const [value, setValue] = useState(
         {
             _id: rowData._id,
@@ -45,7 +46,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
     }
 
     const handleChange = (e) => {
-        console.log(e.target.id, e.target.value)
+        setFocus(e.target.id)
         setValue(
            {
                 ...value,
@@ -65,6 +66,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
                         return (
                             ['info', 'location'].includes(item.accessor)?(
                                 <TextField
+                                    autoFocus={focus===item.accessor?true:false}
                                     margin='dense'
                                     id={item.accessor}
                                     label={item.accessor}
@@ -91,8 +93,8 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
                 }
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleUpdate}>Update</Button>
+                <Button onClick={handleClose} variant='outlined'>Cancel</Button>
+                <Button onClick={handleUpdate} variant='outlined'>Update</Button>
             </DialogActions>
         </Dialog>
     );

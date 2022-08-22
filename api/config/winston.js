@@ -11,7 +11,11 @@ const logFormat = printf(info => {
 
 export const reqFormat = (req) => {
     const headers = req.headers
-    const info = req.method + '-' + headers['x-forwarded-for'] + '-' + headers['x-original-url'] + '-' + headers['referrer'] + '-' + headers['user-agent']
+    let referrer = ' '
+    if (headers['referrer']) {
+        referrer = headers['referrer']
+    }
+    const info = req.method + '-' + headers['x-forwarded-for'] + '-' + decodeURI(headers['x-original-url']) + '-' + referrer + '-' + headers['user-agent']
     return info
 }
 /*

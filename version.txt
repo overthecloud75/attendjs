@@ -29,6 +29,10 @@
     - 0.6.1 (api)
         location in models/Device.js/DeviceSchema
 
+22/08/22
+    - 0.6.2 (api)
+        decodeURI i reqFormat
+
 * to do list 
     - client : Link Acitve when onclick
     - client : cache-control 
