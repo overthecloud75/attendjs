@@ -1,22 +1,14 @@
-import styled from 'styled-components'
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/TableWithSearch'
 import { wifiColumnHeaders, wifiCsvHeaders } from '../config'
 import Footer from '../components/Footer'
 
-const Container = styled.div`
-    display: flex;
-`
-
-const Wrapper = styled.div`
-    flex: 8;
-`
 const Wifi = () => {
     return (   
-        <Container>
+        <div className='container'>
             <Sidebar/>
-            <Wrapper> 
+            <div className='wrapper'> 
                 <Navbar/>   
                 <TableWithSearch 
                     searchKeyword='ip'
@@ -26,8 +18,8 @@ const Wifi = () => {
                     csvHeaders={wifiCsvHeaders}
                 />
                 <Footer/>
-            </Wrapper>
-        </Container>
+            </div>
+        </div>
     )
 }
 
