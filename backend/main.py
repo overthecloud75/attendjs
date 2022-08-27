@@ -1,10 +1,11 @@
 import os
 import threading
 import time
+from aiosmtpd.controller import Controller
 
 from models import Report, Device, DeviceOn
-from utils import Scanner
-from config import BASE_DIR, LOG_DIR, USE_WIFI_ATTENDANCE
+from utils import Scanner, SMTPServer
+from config import BASE_DIR, LOG_DIR, SMTP_CONFIG, USE_WIFI_ATTENDANCE
 
 if os.path.exists(os.path.join(BASE_DIR, LOG_DIR)):
     pass
@@ -15,6 +16,7 @@ def save_db():
     report = Report()
     report.update()
 
+# Arp Scan : nmap -sn 
 def check_sn():
     while True:
         wifi_connected = scanner.check_wifi_connected()
@@ -31,6 +33,7 @@ def check_sn():
             device_on.post(network)
         time.sleep(60)
 
+# Arp Scan : nmap -O
 def check_o():
     while True:
         wifi_connected = scanner.check_wifi_connected()
@@ -44,6 +47,11 @@ def check_o():
             else:
                 devices.old_o_post(network)
         time.sleep(7200)
+
+def mail_server():
+    controller = Controller(SMTPServer(), hostname=SMTP_CONFIG['host'], port=SMTP_CONFIG['port'])
+    controller.start()
+
 
 if __name__ == '__main__':
     devices = Device()
@@ -62,6 +70,10 @@ if __name__ == '__main__':
         th2 = threading.Thread(target=check_o)
         th2.daemon = True
         th2.start()
+
+    th3 = threading.Thread(target=mail_server)
+    th3.daemon = True
+    th3.start()
 
     while True:
         save_db()

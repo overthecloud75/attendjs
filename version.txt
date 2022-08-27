@@ -30,8 +30,12 @@
         location in models/Device.js/DeviceSchema
 
 22/08/22
-    - 0.6.2 (api)
+    - 0.6.3 (api)
         decodeURI in reqFormat
+
+22/08/27
+    - 0.6.2 (backend)
+        SMTP server but not operated. why? 
 
 * to do list 
     - client : Link Acitve when onclick
