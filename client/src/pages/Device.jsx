@@ -1,7 +1,7 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/TableWithSearch'
-import { deviceColumnHeaders, deviceCsvHeaders } from '../config'
+import { columnHeaders, csvHeaders } from '../configs/device'
 import Footer from '../components/Footer'
 
 const Device = () => {
@@ -14,8 +14,8 @@ const Device = () => {
                     searchKeyword='mac'
                     page ='device'
                     url='/device/search'
-                    columnHeaders={deviceColumnHeaders}
-                    csvHeaders={deviceCsvHeaders}
+                    columnHeaders={columnHeaders}
+                    csvHeaders={csvHeaders}
                 />
                 <Footer/>
             </div> 

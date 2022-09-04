@@ -5,7 +5,6 @@ import nmap
 import datetime
 from datetime import timedelta
 from korean_lunar_calendar import KoreanLunarCalendar
-import asyncio
 
 from config import WORKING, USE_LUNAR_NEW_YEAR
 try:
@@ -98,28 +97,6 @@ class Scanner:
             else:
                 ip_str = ip_str + '.' + ip_part
         return ip_str
-
-class SMTPServer:
-    '''async def handle_RCPT(self, server, session, envelope, address, rcpt_options):
-        print('handle_RCPT')
-        print('address', address)
-        print('Message from %s' % envelope.mail_from)
-        print('Message for %s' % envelope.rcpt_tos)
-        #if not address.endswith('@example.com'):
-        #    return '550 not relaying to that domain'
-        envelope.rcpt_tos.append(address)
-        return '250 OK'
-    '''
-
-    async def handle_DATA(self, server, session, envelope):
-        print('handle_DATA')
-        print('Message from %s' % envelope.mail_from)
-        print('Message for %s' % envelope.rcpt_tos)
-        #for ln in envelope.content.decode('utf8', errors='replace').splitlines():
-        #    print(f'> {ln}'.strip())
-        #    print()
-        print('End of message')
-        return '250 OK'
 
 def check_holiday(date):
     is_holiday = False

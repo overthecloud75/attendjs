@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { format } from 'date-fns'
 
-const useFetch = (url, params, clickCount) => {
+const useFetch = (page, url, params, clickCount) => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
@@ -10,7 +11,13 @@ const useFetch = (url, params, clickCount) => {
         const fetchData = async () => {
         setLoading(true)
         try {
-            const res = await axios.get(url, {params})
+            let res = await axios.get(url, {params})
+            if (page==='board') {
+                for (let board of res.data) {
+                    board.createdAt = format(new Date(board.createdAt), "yy-MM-dd HH:mm:ss")
+                    board.updatedAt = format(new Date(board.updatedAt), "yy-MM-dd HH:mm:ss")
+                }
+            }
             setData(res.data)
         } catch (err) {
             setError(err)
@@ -18,7 +25,7 @@ const useFetch = (url, params, clickCount) => {
         setLoading(false)
         }
         fetchData()
-    }, [url, clickCount])
+    }, [page, url, clickCount])
     return { data, setData, loading, error }
 }
 

@@ -1,26 +1,26 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/TableWithSearch'
-import { columnHeaders, csvHeaders } from '../configs/wifi'
+import { columnHeaders, csvHeaders } from '../configs/board'
 import Footer from '../components/Footer'
 
-const Wifi = () => {
-    return (   
+const Device = () => {
+    return (    
         <div className='container'>
             <Sidebar/>
             <div className='wrapper'> 
-                <Navbar/>   
+                <Navbar/> 
                 <TableWithSearch 
-                    searchKeyword='ip'
-                    page='wifi-attend'
-                    url='/wifi-attend/search'
+                    searchKeyword='name'
+                    page ='board'
+                    url='/board/search'
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />
                 <Footer/>
-            </div>
+            </div> 
         </div>
     )
 }
 
-export default Wifi
+export default Device

@@ -1,26 +1,21 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/TableWithSearch'
-import { columnHeaders, csvHeaders } from '../configs/summary'
+import { columnHeaders, csvHeaders } from '../configs/user'
 import Footer from '../components/Footer'
+import NotFound from './NotFound'
 
-const Summary = () => {
+const User = () => {
     return (
         <div className='container'>
             <Sidebar/>
             <div className='wrapper'>  
                 <Navbar/>   
-                <TableWithSearch 
-                    searchKeyword='name'
-                    page ='summary'
-                    url='/summary/search'
-                    columnHeaders={columnHeaders}
-                    csvHeaders={csvHeaders}
-                />
+                <NotFound/>
                 <Footer/>
             </div>
         </div>
     )
 }
 
-export default Summary
+export default User

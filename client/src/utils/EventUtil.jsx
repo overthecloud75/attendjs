@@ -1,6 +1,6 @@
-import axios from "axios";
-import { format } from "date-fns"
-import { WORKING } from '../config';
+import axios from 'axios'
+import { format } from 'date-fns'
+import { WORKING } from '../configs/working'
 
 export const getColor = (event) => {
     var title = event.title.split('/')
@@ -30,7 +30,7 @@ export const getColor = (event) => {
 
 export const getEvents = async (args)=> {
     const params = {start: format(args.start, "yyyy-MM-dd"), end: format(args.end, "yyyy-MM-dd")}
-    try { const res = await axios.get('/event', {params});
+    try { const res = await axios.get('/event', {params})
         for (let event of res.data) {
             event = getColor(event)
         }
@@ -43,7 +43,7 @@ export const getEvents = async (args)=> {
 export const addEvent = async (args)=> {
     console.log('addArgs', args)
     const data = {title: args.title, id: args.id, start: args.start, end: args.end}
-    try { const res = await axios.post('/event/add', data);
+    try { const res = await axios.post('/event/add', data)
         return res.data
     } catch (err) {
         console.log('err', err)

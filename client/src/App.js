@@ -9,6 +9,8 @@ import Wifi from './pages/Wifi'
 import Summary from './pages/Summary'
 import Device from './pages/Device'
 import Schedule from './pages/Schedule'
+import User from './pages/User'
+import Board from './pages/Board'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
                 <Route exact path='/summary' element={<Summary/>}/>
                 <Route exact path='/device' element={<Device/>}/>
                 <Route exact path='/schedule' element={<Schedule/>}/>
+                <Route exact path='/user' element={<User/>}/>
+                <Route exact path='/board' element={<Board/>}/>
                 <Route path='*' element={<NotFound/>} />
             </Routes>
         </BrowserRouter>

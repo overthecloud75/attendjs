@@ -1,4 +1,6 @@
+attrs==22.1.0
 korean-lunar-calendar==0.2.1
 pymongo==4.2.0
 pyodbc==4.0.32
 python-nmap==0.7.1
+typing-extensions==4.3.0

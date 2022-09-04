@@ -37,11 +37,29 @@
     - 0.6.3 (backend)
         SMTP server but not operated. why? 
 
+22/09/04
+    - 0.6.4 (client)
+        configs folder
+    - 0.6.5 (client)
+        pages/board
+    - 0.6.6 (api)
+        board
+    - 0.6.7 (client)
+        config.js -> configs folder
+    - 0.6.8 (client)
+        components/write
+    - 0.6.9 (api)
+        board.js/write, deleteBoard 
+    - 0.7.0 (backend)
+        delete SMTP server 
+
 * to do list 
     - client : Link Acitve when onclick
     - client : cache-control 
     - client : timeline 
     - client : react-table left-right scroll 
+    - client : redux for login management 
+    - backend : email server
 
 
 

@@ -1,12 +1,12 @@
 import {useMemo, useState} from 'react'
-import styled from "styled-components";
-import PersonIcon from '@mui/icons-material/Person';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import { DateRange } from 'react-date-range';
-import 'react-date-range/dist/styles.css'; 
-import 'react-date-range/dist/theme/default.css'; 
-import { format } from "date-fns"
-import useFetch from '../hooks/useFetch';
+import styled from 'styled-components'
+import PersonIcon from '@mui/icons-material/Person'
+import DateRangeIcon from '@mui/icons-material/DateRange'
+import { DateRange } from 'react-date-range'
+import 'react-date-range/dist/styles.css'
+import 'react-date-range/dist/theme/default.css' 
+import { format } from 'date-fns'
+import useFetch from '../hooks/useFetch'
 import Table from './ReactTable'
 
 const Wrapper = styled.div`
@@ -61,27 +61,22 @@ const Dates = styled.div`
 `
 const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) => {
     const [name, setName] = useState('')
-    const [date, setDate] = useState([
-        {
-            startDate: new Date(),
-            endDate: new Date(),
-            key: 'selection'
-        }
-      ]);
+    const [date, setDate] = useState([{startDate: new Date(), endDate: new Date(), key: 'selection'}])
+    // dateRange open 
     const [openDate, setOpenDate] = useState(false)
     const [clickCount, setClickCount] = useState(0)
-    const [fileName, setFileName] = useState("download.csv")
+    const [fileName, setFileName] = useState('download.csv')
 
     const handleSearch = (e) => {
         e.preventDefault()
         setOpenDate(false)
         setClickCount(clickCount+1)
-        setFileName(page + '_' + format(date[0].startDate, "yyyy-MM-dd") + '_'+ format(date[0].endDate, "yyyy-MM-dd") + '_' + name)
+        setFileName(page + '_' + format(date[0].startDate, 'yyyy-MM-dd') + '_'+ format(date[0].endDate, 'yyyy-MM-dd') + '_' + name)
     }
 
     const {data, setData, loading, error} = useFetch(
-        url, {[searchKeyword]: name, startDate: format(date[0].startDate, "yyyy-MM-dd"), endDate: format(date[0].endDate, "yyyy-MM-dd")}, clickCount
-    );
+        page, url, {[searchKeyword]: name, startDate: format(date[0].startDate, 'yyyy-MM-dd'), endDate: format(date[0].endDate, 'yyyy-MM-dd')}, clickCount
+    )
 
     const columns = useMemo(() => columnHeaders, [columnHeaders])
     const tableData = useMemo(() => data, [data])
@@ -100,20 +95,20 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
                     <Item>
                         <Icon onClick={() => setOpenDate(!openDate)} ><DateRangeIcon/></Icon>
                         <Text>
-                            {`${format(date[0].startDate, "yyyy-MM-dd")} to 
-                                ${format(date[0].endDate, "yyyy-MM-dd")}`
+                            {`${format(date[0].startDate, 'yyyy-MM-dd')} to 
+                                ${format(date[0].endDate, 'yyyy-MM-dd')}`
                             }
                         </Text>
                         {openDate && 
-                        <Dates>
-                            <DateRange
-                                editableDateInputs={true}
-                                onChange={item => setDate([item.selection])}
-                                moveRangeOnFirstSelection={false}
-                                ranges={date}
-                                dateDisplayFormat="yyyy-MM-dd"
-                            />
-                        </Dates>
+                            <Dates>
+                                <DateRange
+                                    editableDateInputs={true}
+                                    onChange={item => setDate([item.selection])}
+                                    moveRangeOnFirstSelection={false}
+                                    ranges={date}
+                                    dateDisplayFormat='yyyy-MM-dd'
+                                />
+                            </Dates>
                         }
                     </Item>
                     <Item>

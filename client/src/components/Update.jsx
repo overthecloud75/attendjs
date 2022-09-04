@@ -22,10 +22,10 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
         setOpen(false)
     };
 
-    const updateData = (rowData) => {
+    const updateData = () => {
         let tableData = []
         data.map((prev) => (
-            prev._id === rowData._id?tableData.push(rowData):tableData.push(prev)
+            prev._id === value._id?tableData.push(value):tableData.push(prev)
         ))
         setData(tableData)
     }
@@ -35,9 +35,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
         if (page==='device') {
             try {
                 const res = await axios.post(url, value)
-                rowData.info = value.info
-                rowData.location = value.location
-                updateData(rowData)
+                updateData()
             } catch (err) {
                 console.log(url, err)
             }
@@ -47,12 +45,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
 
     const handleChange = (e) => {
         setFocus(e.target.id)
-        setValue(
-           {
-                ...value,
-                [e.target.id]: e.target.value
-           }
-        )    
+        setValue({...value, [e.target.id]: e.target.value})    
     }
     // autofocus disappear after typing, 한글 입력 문제 
     // https://stackoverflow.com/questions/42573017/in-react-es6-why-does-the-input-field-lose-focus-after-typing-a-character
@@ -61,36 +54,34 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Update {page}</DialogTitle>
             <DialogContent>
-                {
-                    columns.map((item, index) => {
-                        return (
-                            ['info', 'location'].includes(item.accessor)?(
-                                <TextField
-                                    autoFocus={focus===item.accessor?true:false}
-                                    margin='dense'
-                                    id={item.accessor}
-                                    label={item.accessor}
-                                    fullWidth
-                                    variant='outlined'
-                                    value={value[item.accessor]?value[item.accessor]:''}
-                                    key={index}
-                                    onChange={handleChange}
-                                />
-                            ):(
-                                <TextField
-                                    margin='dense'
-                                    id={item.accessor}
-                                    label={item.accessor}
-                                    fullWidth
-                                    variant='standard'
-                                    value={rowData[item.accessor]?rowData[item.accessor]:''}
-                                    key={index}
-                                    InputProps={{readOnly: true}}
-                                />
-                            )
+                {columns.map((item, index) => {
+                    return (
+                        ['info', 'location'].includes(item.accessor)?(
+                            <TextField
+                                autoFocus={focus===item.accessor?true:false}
+                                margin='dense'
+                                id={item.accessor}
+                                label={item.accessor}
+                                fullWidth
+                                variant='outlined'
+                                value={value[item.accessor]?value[item.accessor]:''}
+                                key={index}
+                                onChange={handleChange}
+                            />
+                        ):(
+                            <TextField
+                                margin='dense'
+                                id={item.accessor}
+                                label={item.accessor}
+                                fullWidth
+                                variant='standard'
+                                value={rowData[item.accessor]?rowData[item.accessor]:''}
+                                key={index}
+                                InputProps={{readOnly: true}}
+                            />
                         )
-                    })
-                }
+                    )
+                })}
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} variant='outlined'>Cancel</Button>
