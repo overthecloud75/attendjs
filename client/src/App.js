@@ -3,7 +3,10 @@ import {
     Routes,
     Route,
 } from 'react-router-dom'
+import './style.scss'
 import Home from './pages/Home'
+import Register from './pages/Register'
+import Login from './pages/Login'
 import Attend from './pages/Attend'
 import Wifi from './pages/Wifi'
 import Summary from './pages/Summary'
@@ -18,6 +21,8 @@ function App() {
         <BrowserRouter>   
             <Routes>
                 <Route exact path='/' element={<Home/>}/>
+                <Route exact path='/register' element={<Register/>}/>
+                <Route exact path='/login' element={<Login/>}/>
                 <Route exact path='/attend' element={<Attend/>}/>
                 <Route exact path='/wifi-attend' element={<Wifi/>}/>
                 <Route exact path='/summary' element={<Summary/>}/>

@@ -1,4 +1,4 @@
-import { CSVLink } from "react-csv"
+import { CSVLink } from 'react-csv'
 
 const CsvDownload = ({data, csvHeaders, fileName}) => {
     return (
@@ -7,6 +7,7 @@ const CsvDownload = ({data, csvHeaders, fileName}) => {
                 data={data}
                 headers={csvHeaders}
                 filename={fileName}
+                style={{color: 'white', textDecoration: 'none'}}
             >
                 CSV download
             </CSVLink>

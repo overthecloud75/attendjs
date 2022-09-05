@@ -48,10 +48,17 @@
         config.js -> configs folder
     - 0.6.8 (client)
         components/write
+        webEditor = ckeditor
     - 0.6.9 (api)
         board.js/write, deleteBoard 
     - 0.7.0 (backend)
         delete SMTP server 
+
+22/09/05
+    - 0.7.1 (client)
+        style.scss
+    - 0.7.2 (client)
+        register/login page
 
 * to do list 
     - client : Link Acitve when onclick
