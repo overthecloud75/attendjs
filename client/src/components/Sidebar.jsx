@@ -134,9 +134,9 @@ const itemDict =
     ],
     Communaity : [
         {
-            to: '/user',
+            to: '/employee',
             icon: <PeopleIcon/>,
-            title: 'Users'
+            title: 'Employee'
         },
         {
             to: '/board',

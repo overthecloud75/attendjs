@@ -60,6 +60,12 @@
     - 0.7.2 (client)
         register/login page
 
+22/09/06
+    - 0.7.3 (client)
+        pages/employee
+    - 0.7.4 (api)
+        controllers/employee
+
 * to do list 
     - client : Link Acitve when onclick
     - client : cache-control 

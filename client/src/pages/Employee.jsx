@@ -1,21 +1,26 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/TableWithSearch'
-import { columnHeaders, csvHeaders } from '../configs/user'
+import { columnHeaders, csvHeaders } from '../configs/employee'
 import Footer from '../components/Footer'
-import NotFound from './NotFound'
 
-const User = () => {
+const Employee = () => {
     return (
         <div className='container'>
             <Sidebar/>
             <div className='wrapper'>  
                 <Navbar/>   
-                <NotFound/>
+                <TableWithSearch 
+                    searchKeyword='name'
+                    page ='employee'
+                    url='/employee/search'
+                    columnHeaders={columnHeaders}
+                    csvHeaders={csvHeaders}
+                />
                 <Footer/>
             </div>
         </div>
     )
 }
 
-export default User
+export default Employee

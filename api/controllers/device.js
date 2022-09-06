@@ -8,7 +8,6 @@ export const search = async (req,res,next) => {
         const startDate = req.query.startDate
         const endDate = req.query.endDate
         let devices
-        // [문제] endDate: 이름 검색시에만 실행
         if (mac && mac !== '') {
             devices = await Device.find({mac, endDate: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1})
         }

@@ -56,6 +56,6 @@ const DeviceSchema = new mongoose.Schema(
             required: false,
         },
     },
-);
+)
 
-export default mongoose.model('Device', DeviceSchema);
+export default mongoose.model('Device', DeviceSchema)

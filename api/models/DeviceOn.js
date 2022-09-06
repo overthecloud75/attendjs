@@ -24,6 +24,6 @@ const DeviceOnSchema = new mongoose.Schema(
             required: true,
         },
     },
-);
+)
 
-export default mongoose.model('DeviceOn', DeviceOnSchema);
+export default mongoose.model('DeviceOn', DeviceOnSchema)

@@ -20,6 +20,6 @@ const EventSchema = new mongoose.Schema(
             unique: true,
         },
     },
-);
+)
 
 export default mongoose.model('Event', EventSchema)

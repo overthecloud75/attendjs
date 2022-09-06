@@ -20,6 +20,6 @@ const BoardSchema = new mongoose.Schema(
         },
     },
     { timestamps: true }
-);
+)
 
 export default mongoose.model('Board', BoardSchema)

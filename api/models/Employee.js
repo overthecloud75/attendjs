@@ -20,11 +20,14 @@ const EmployeeSchema = new mongoose.Schema(
         },
         employeeId: {
             type: Number,
-            required: true
+            required: true,
+            unique: true
         },
         rank: {
-            type: Number,
-            required: true
+            type: String,
+        },
+        position: {
+            type: String,
         },
         email: {
             type: String,
@@ -40,6 +43,6 @@ const EmployeeSchema = new mongoose.Schema(
             required: true,
         },
     },
-);
+)
 
-export default mongoose.model('Employee', EmployeeSchema);
+export default mongoose.model('Employee', EmployeeSchema)

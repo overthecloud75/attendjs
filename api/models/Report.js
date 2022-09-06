@@ -33,6 +33,6 @@ const ReportSchema = new mongoose.Schema(
             type: String,
         },
     },
-);
+)
 
 export default mongoose.model('Report', ReportSchema)

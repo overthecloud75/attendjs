@@ -12,6 +12,7 @@ import attendRoute from './routes/attend.js'
 import summaryRoute from './routes/summary.js'
 import deviceRoute from './routes/device.js'
 import eventRoute from './routes/event.js'
+import employeeRoute from './routes/employee.js'
 import boardRoute from './routes/board.js'
 
 const app = express()
@@ -46,6 +47,7 @@ app.use('/api/wifi-attend', wifiRoute)
 app.use('/api/summary', summaryRoute)
 app.use('/api/device', deviceRoute)
 app.use('/api/event', eventRoute)
+app.use('/api/employee', employeeRoute)
 app.use('/api/board', boardRoute)
 
 app.use((err, req, res, next) => {
