@@ -66,12 +66,21 @@
     - 0.7.4 (api)
         controllers/employee
 
+22/09/12
+    - 0.7.5 (backend)
+        alternativa vacation for lunar '0101', '0815'
+    - 0.7.6 (client)
+        separate Search.jsx from TableWithSearch.jsx
+    - 0.7.7 (client)
+        Provider store={store}
+    - 0.7.8 (client)
+        use localStorage to save user information
+        
 * to do list 
     - client : Link Acitve when onclick
     - client : cache-control 
     - client : timeline 
     - client : react-table left-right scroll 
-    - client : redux for login management 
     - backend : email server
 
 

@@ -1,22 +1,18 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import Sidebar from '../components/Sidebar'
+import Navbar from '../components/Navbar'
+import Auth from '../components/Auth'
+import Footer from '../components/Footer'
 
-const Register = () => {
-    const [err, setErr] = useState(false)
-
+const Register = () => {   
     return (
-        <div className='formContainer'>
-            <div className='formWrapper'>
-                <span className='logo'>Attendance Chat</span>
-                <span className='title'>Register</span>
-                <form>
-                    <input type='text' placeholder='display id' />
-                    <input type='email' placeholder='email'/>
-                    <input type='password' placeholder='password'/>
-                    <button>Sign up</button>
-                    {err && <span>Something went wrong</span>}
-                </form>
-                <p>You do have an account? <Link to='/login'>Login</Link></p>
+        <div className='container'>
+            <Sidebar/>
+            <div className='wrapper'>
+                <Navbar/> 
+                <Auth
+                    mode='register'
+                />
+                <Footer/>
             </div>
         </div>
     )

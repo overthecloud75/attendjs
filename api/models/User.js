@@ -11,24 +11,10 @@ const UserSchema = new mongoose.Schema(
             required: true,
             unique: true,
         },
-        employeeId: {
-            type: Number,
-            unique: true
-        },
-        img: {
-            type: String,
-        },
-        phone: {
-            type: String,
-        },
         password: {
             type: String,
         },
         isAdmin: {
-            type: Boolean,
-            default: false,
-        },
-        emailConfirm: {
             type: Boolean,
             default: false,
         },

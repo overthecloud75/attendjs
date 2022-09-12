@@ -17,6 +17,7 @@ import Board from './pages/Board'
 import NotFound from './pages/NotFound'
 
 function App() {
+    
     return (
         <BrowserRouter>   
             <Routes>
@@ -33,7 +34,7 @@ function App() {
                 <Route path='*' element={<NotFound/>} />
             </Routes>
         </BrowserRouter>
-    );
+    )
 }
 
 export default App;

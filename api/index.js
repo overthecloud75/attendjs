@@ -27,11 +27,11 @@ const connect = async () => {
     }
 }
 
-mongoose.connection.on("disconnected", () => {
+mongoose.connection.on('disconnected', () => {
     logger.info('mongoDB disconnected!')
 })
 
-mongoose.connection.on("connected", () => {
+mongoose.connection.on('connected', () => {
     logger.info('mongoDB connected!')
 })
 
@@ -51,17 +51,17 @@ app.use('/api/employee', employeeRoute)
 app.use('/api/board', boardRoute)
 
 app.use((err, req, res, next) => {
-    const errorStatus = err.status || 500;
-    const errorMessage = err.message || "Something went wrong!";
+    const errorStatus = err.status || 500
+    const errorMessage = err.message || 'Something went wrong!'
     return res.status(errorStatus).json({
-      success: false,
-      status: errorStatus,
-      message: errorMessage,
-      stack: err.stack,
-    });
-  });
+        success: false,
+        status: errorStatus,
+        message: errorMessage,
+        stack: err.stack,
+    })
+})
 
 app.listen(8800, () => {
-  connect()
-  logger.info('Connected to backend.')
+    connect()
+    logger.info('Connected to backend.')
 });

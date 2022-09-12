@@ -10,17 +10,8 @@ import axios from 'axios'
 const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
 
     const [focus, setFocus] = useState('info')
-    const [value, setValue] = useState(
-        {
-            _id: rowData._id,
-            owner: rowData.owner,
-            info: rowData.info,
-            location: rowData.location
-        }
-    )
-    const handleClose = () => {
-        setOpen(false)
-    };
+    const [value, setValue] = useState(rowData)
+    const handleClose = () => { setOpen(false) }
 
     const updateData = () => {
         let tableData = []
@@ -32,9 +23,9 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
 
     const handleUpdate = async () => {
         const url = '/' + page + '/update'
-        if (page==='device') {
+        if (['device', 'employee'].includes(page)) {
             try {
-                const res = await axios.post(url, value)
+                await axios.post(url, value)
                 updateData()
             } catch (err) {
                 console.log(url, err)
@@ -43,9 +34,9 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
         handleClose()
     }
 
-    const handleChange = (e) => {
-        setFocus(e.target.id)
-        setValue({...value, [e.target.id]: e.target.value})    
+    const handleChange = (event) => {
+        setFocus(event.target.id)
+        setValue({...value, [event.target.id]: event.target.value})    
     }
     // autofocus disappear after typing, 한글 입력 문제 
     // https://stackoverflow.com/questions/42573017/in-react-es6-why-does-the-input-field-lose-focus-after-typing-a-character
@@ -56,7 +47,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
             <DialogContent>
                 {columns.map((item, index) => {
                     return (
-                        ['info', 'location'].includes(item.accessor)?(
+                        ['info', 'location', 'email'].includes(item.accessor)?(
                             <TextField
                                 autoFocus={focus===item.accessor?true:false}
                                 margin='dense'

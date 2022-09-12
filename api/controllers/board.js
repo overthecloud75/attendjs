@@ -14,7 +14,6 @@ export const search = async (req,res,next) => {
         else { 
             boards = await Board.find().sort({createdAt: -1});
         }
-        console.log('boards', boards)
         res.status(200).json(boards)
     } catch (err) {
         console.log('err', err)

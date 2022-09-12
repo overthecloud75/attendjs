@@ -109,8 +109,8 @@ def check_holiday(date):
 
     lunar_calendar = KoreanLunarCalendar()
     lunar_calendar.setSolarDate(int(year), int(month), int(day))
-    lunar_month_day = lunar_calendar.LunarIsoFormat()
-    lunar_month_day = lunar_month_day[5:7] + lunar_month_day[8:]
+    lunar_date = lunar_calendar.LunarIsoFormat()
+    lunar_month_day = lunar_date[5:7] + lunar_date[8:]
 
     if month_day in WORKING['holidays'] or lunar_month_day in WORKING['lunarHolidays']:
         is_holiday = True
@@ -120,20 +120,28 @@ def check_holiday(date):
         # 대체공휴일 적용
         yesterday = date - timedelta(days=1)
         yesterday = datetimeToDate(yesterday)
+        lunar_calendar.setSolarDate(int(year), int(yesterday[0:2]), int(yesterday[2:4]))
+        lunar_date = lunar_calendar.LunarIsoFormat()
+        lunar_yesterday = lunar_date[5:7] + lunar_date[8:]
         two_days_ago = date - timedelta(days=2)
         two_days_ago = datetimeToDate(two_days_ago)
+        lunar_calendar.setSolarDate(int(year), int(two_days_ago[0:2]), int(two_days_ago[2:4]))
+        lunar_date = lunar_calendar.LunarIsoFormat()
+        lunar_two_days_ago = lunar_date[5:7] + lunar_date[8:]
         if yesterday in WORKING['alternativeVacation'] or two_days_ago in WORKING['alternativeVacation']:
             is_holiday = True
-
+        if lunar_yesterday in ['0101', '0815'] or lunar_two_days_ago in ['0101', '0815']:
+            is_holiday = True
+        
     if USE_LUNAR_NEW_YEAR:
-        if not is_holiday and int(month) < 4:
+        if not is_holiday and int(month) < 3:
             # 음력 1월 1일 전날의 날짜를 특정하기 어려워서 아래의 logic을 사용
             # 12월 29일수도 있고 12월 30일일 수도 있음 윤달이 있으면 단순히 처리하기 쉽지 않음
             tomorrow = date + timedelta(days=1)
             tomorrow = datetimeToDate(tomorrow)
             lunar_calendar.setSolarDate(int(year), int(tomorrow[0:2]), int(tomorrow[2:4]))
-            lunar_month_day = lunar_calendar.LunarIsoFormat()
-            lunar_month_day = lunar_month_day[5:7] + lunar_month_day[8:]
+            lunar_date = lunar_calendar.LunarIsoFormat()
+            lunar_month_day = lunar_date[5:7] + lunar_date[8:]
             if lunar_month_day == '0101':
                 is_holiday = True
     return is_holiday

@@ -40,10 +40,10 @@ export const search = async (req,res,next) => {
             }
         }
         else { 
-            attends = await Report.find({date: {$gte: startDate, $lte: endDate}}).sort({name: 1, date: 1});
+            attends = await Report.find({date: {$gte: startDate, $lte: endDate}}).sort({name: 1, date: 1})
         }; 
-        res.status(200).json(attends);
+        res.status(200).json(attends)
     } catch (err) {
-        next(err);
+        next(err)
     }
 }

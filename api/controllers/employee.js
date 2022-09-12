@@ -14,12 +14,24 @@ export const search = async (req,res,next) => {
         }
         else { 
             employees = await Employee.find(
-                {$or:[{endDate: {$gt: endDate}}, {endDate: {$exists: false}}]}).sort({name: 1});
+                {$or:[{endDate: {$gt: endDate}}, {endDate: {$exists: false}}]}).sort({name: 1})
         }
-        console.log('employees', employees)
         res.status(200).json(employees)
     } catch (err) {
         console.log('err', err)
-        next(err);
+        next(err)
+    }
+}
+
+export const update = async (req,res,next) => {
+    logger.info(reqFormat(req))
+    try {
+        const _id = req.body._id
+        const email = req.body.email
+        const employee = await Employee.updateOne({_id}, {$set: {email}})
+        res.status(200).json(employee)
+    } catch (err) {
+        console.log('err', err)
+        next(err)
     }
 }

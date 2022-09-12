@@ -1,24 +1,21 @@
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import Sidebar from '../components/Sidebar'
+import Navbar from '../components/Navbar'
+import Auth from '../components/Auth'
+import Footer from '../components/Footer'
 
-const Login = () => {
-    const [err, setErr] = useState(false)
-
+const Login = () => {   
     return (
-        <div className='formContainer'>
-            <div className='formWrapper'>
-                <span className='logo'>Attendance Chat</span>
-                <span className='title'>Login</span>
-                <form>
-                    <input type='email' placeholder='email' />
-                    <input type='password' placeholder='password' />
-                    <button>Sign in</button>
-                    {err && <span>Something went wrong</span>}
-                </form>
-                <p>You don't have an account? <Link to='/register'>Register</Link></p>
+        <div className='container'>
+            <Sidebar/>
+            <div className='wrapper'>
+                <Navbar/> 
+                <Auth
+                    mode='login'
+                />
+                <Footer/>
             </div>
         </div>
-    );
-  };
+    )
+}
   
-  export default Login;
+export default Login;

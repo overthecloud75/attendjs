@@ -67,7 +67,7 @@ const Write = ({writeMode, page, columns, data, setData, open, setOpen, rowData}
         const url = '/' + page + '/write'
         if (['board'].includes(page)) {
             try {
-                const res = await axios.post(url, value)
+                await axios.post(url, value)
                 if (writeMode) {insertData()}
                 else {updateData()}
             } catch (err) {
@@ -81,7 +81,7 @@ const Write = ({writeMode, page, columns, data, setData, open, setOpen, rowData}
         const url = '/' + page + '/delete'
         if (['board'].includes(page)) {
             try {
-                const res = await axios.delete(url, {data: value})
+                await axios.delete(url, {data: value})
                 deleteData()
             } catch (err) {
                 console.log(url, err)

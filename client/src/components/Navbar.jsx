@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import styled from "styled-components"
+import styled from 'styled-components'
 import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlined'
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
 import ListOutlinedIcon from '@mui/icons-material/ListOutlined'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import Avatar from '@mui/material/Avatar';
+import Avatar from '@mui/material/Avatar'
+import ProfileMenu from './ProfileMenu'
 
 const Container = styled.div`
     height: 50px;
@@ -55,9 +54,7 @@ const Counter = styled.div`
 const Navbar = () => {
 
     const [anchorEl, setAnchorEl] = useState(null)
-    const open = Boolean(anchorEl)
-    const handleClick = (e) => {setAnchorEl(e.currentTarget)}
-    const handleClose = () => {setAnchorEl(null)}
+    const handleClick = (event) => {setAnchorEl(event.currentTarget)}
 
     return (
         <Container>
@@ -94,21 +91,12 @@ const Navbar = () => {
                     </Item>
                 </Items>
             </Wrapper>
-            <Menu
-                id="basic-menu"
+            <ProfileMenu 
                 anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-            >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
-            </Menu>
+                setAnchorEl={setAnchorEl}
+            />     
         </Container>
-  )
+    )
 }
 
 export default Navbar
