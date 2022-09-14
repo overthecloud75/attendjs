@@ -26,7 +26,6 @@ const Calendar = () => {
                 title,
                 start: selectInfo.startStr,
                 end: selectInfo.endStr}
-            console.log('event', event)
             addEvent(event)
             event = getColor(event)
             calendarApi.addEvent(event)
