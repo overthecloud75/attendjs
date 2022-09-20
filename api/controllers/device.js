@@ -26,9 +26,11 @@ export const update = async (req,res,next) => {
     try {
         const _id = req.body._id
         const info = req.body.info
+        const type = req.body.type
         const location = req.body.location
+        const charge = req.body.charge
         const owner = req.body.owner
-        const device = await Device.updateOne({_id}, {$set: {info, location, owner}})
+        const device = await Device.updateOne({_id}, {$set: {info, type, location, charge, owner}})
         res.status(200).json(device)
     } catch (err) {
         console.log('err', err)

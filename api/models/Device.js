@@ -43,7 +43,15 @@ const DeviceSchema = new mongoose.Schema(
             type: String,
             required: false,
         },
+        type: {
+            type: String,
+            required: false,
+        },
         location: {
+            type: String,
+            required: false,
+        },
+        charge: {
             type: String,
             required: false,
         },

@@ -32,8 +32,16 @@ export const columnHeaders = [
         Header: 'Info',
     },
     {
+        accessor: 'type',
+        Header: '유형',
+    },
+    {
         accessor: 'location',
         Header: '위치',
+    },
+    {
+        accessor: 'charge',
+        Header: '담당',
     },
     {
         accessor: 'owner',
@@ -75,8 +83,16 @@ export const csvHeaders = [
         label: 'Info',
     },
     {
+        key: 'type',
+        label: '유형',
+    },
+    {
         key: 'location',
         label: '위치',
+    },
+    {
+        key: 'charge',
+        label: '담당',
     },
     {
         key: 'owner',
