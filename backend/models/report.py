@@ -68,7 +68,7 @@ class Report(BasicModel):
                         else:
                             reason = None
                         # 같은 employee_id 인데 이름이 바뀌는 경우 발생
-                        attend[name] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 'end': None, 'reason': reason, 'regular': regular}
+                        attend[employee_id] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 'end': None, 'reason': reason, 'regular': regular}
                     # update 날짜가 오늘 날짜인 경우만 진행
                     if date == self.today:
                         # self._update_devices(date=date)
@@ -84,64 +84,65 @@ class Report(BasicModel):
             attend = self._fingerprint_or_wifi(attend, date)
 
             # attend
-            for name in attend:
+            for employee_id in attend:
+                name = attend[employee_id]['name']
                 if name in schedule_dict:
                     status = schedule_dict[name]
-                    attend[name]['status'] = None
-                    attend[name]['reason'] = status
+                    attend[employee_id]['status'] = None
+                    attend[employee_id]['reason'] = status
                     if hour >= 18:
                         if '반차' in status:  # status가 2개 이상으로 표시된 경우 ex) 반차, 정기점검
                             status = '반차'
-                            attend[name]['reason'] = status
-                        attend[name]['workingHours'] = WORKING['status'][status]
+                            attend[employee_id]['reason'] = status
+                        attend[employee_id]['workingHours'] = WORKING['status'][status]
                     else:
-                        attend[name]['workingHours'] = None
-                elif attend[name]['reason']:
-                    attend[name]['status'] = None
+                        attend[employee_id]['workingHours'] = None
+                elif attend[employee_id]['reason']:
+                    attend[employee_id]['status'] = None
                     if hour >= 18:
-                        attend[name]['workingHours'] = WORKING['status'][attend[name]['reason']]
+                        attend[employee_id]['workingHours'] = WORKING['status'][attend[employee_id]['reason']]
                     else:
-                        attend[name]['workingHours'] = None # 파견인 경우 18시 전에 workingHours에 대한 내용이 없어서 추가
-                elif attend[name]['begin']:
+                        attend[employee_id]['workingHours'] = None # 파견인 경우 18시 전에 workingHours에 대한 내용이 없어서 추가
+                elif attend[employee_id]['begin']:
                     if not is_holiday:
-                        if 'regular' in attend[name] and attend[name]['regular'] in WORKING['update'] and \
-                                int(attend[name]['begin']) > int(WORKING['time']['beginTime']):
+                        if 'regular' in attend[employee_id] and attend[employee_id]['regular'] in WORKING['update'] and \
+                                int(attend[employee_id]['begin']) > int(WORKING['time']['beginTime']):
                             # fulltime job만 지각 처리
-                            attend[name]['status'] = '지각'
+                            attend[employee_id]['status'] = '지각'
                         else:
-                            attend[name]['status'] = '정상출근'
+                            attend[employee_id]['status'] = '정상출근'
                     else:
-                        attend[name]['status'] = '정상출근'
+                        attend[employee_id]['status'] = '정상출근'
                     if hour >= 18:
-                        attend[name]['workingHours'] = self._calculate_working_hours(attend[name]['begin'], attend[name]['end'], overnight=False)
+                        attend[employee_id]['workingHours'] = self._calculate_working_hours(attend[employee_id]['begin'], attend[employee_id]['end'], overnight=False)
                     else:
-                        attend[name]['workingHours'] = None
+                        attend[employee_id]['workingHours'] = None
                 else:
                     if not is_holiday:
                         if hour >= 18:
-                            attend[name]['workingHours'] = 0
-                            attend[name]['status'] = '미출근'
+                            attend[employee_id]['workingHours'] = 0
+                            attend[employee_id]['status'] = '미출근'
                         elif hour >= int(WORKING['time']['beginTime']) / 10000:
-                            attend[name]['workingHours'] = None
-                            attend[name]['status'] = '지각'
+                            attend[employee_id]['workingHours'] = None
+                            attend[employee_id]['status'] = '지각'
                         else:
-                            attend[name]['workingHours'] = None
-                            attend[name]['status'] = '출근전'
+                            attend[employee_id]['workingHours'] = None
+                            attend[employee_id]['status'] = '출근전'
                     else:
-                        attend[name]['status'] = '정상출근'
+                        attend[employee_id]['status'] = '정상출근'
 
                 try:
-                    if 'regular' in attend[name] and attend[name]['regular'] not in WORKING['update'] and \
-                            attend[name]['status'] not in ['정상출근'] :
+                    if 'regular' in attend[employee_id] and attend[employee_id]['regular'] not in WORKING['update'] and \
+                            attend[employee_id]['status'] not in ['정상출근'] :
                         # fulltime이 아닌 직원에 대해 미출근과 출근전인 경우 기록하지 않음
                         # 주말인 경우 employee 정보 수집을 하지 않기 때문에 regular key가 없을 수 있음
                         # employee 등록이 안 된 경우 regular key가 없을 수 있음
                         pass
                     else:
-                        self.collection.update_one({'date': date, 'name': name}, {'$set': attend[name]}, upsert=True)
+                        self.collection.update_one({'date': date, 'employeeId': employee_id}, {'$set': attend[employee_id]}, upsert=True)
                 except Exception as e:
                     print('error', e)
-                    print(attend[name])
+                    print(attend[employee_id])
 
             '''
                  1. overnight 근무자에 대해서 이전 날짜 update
@@ -165,27 +166,30 @@ class Report(BasicModel):
         cursor.execute("select e_id, e_name, e_date, e_time, e_mode from tenter where e_date = ?", access_today)
 
         for row in cursor.fetchall():
-            employee_id = row[0]
+            employee_id = int(row[0])
             name = row[1]
             time = row[3]
             mode = int(row[4])
             # card 출근자 name = ''
             if name != '':
                 if int(time) > int(WORKING['time']['overNight']):  # overnight가 아닌 것에 대한 기준
-                    if name not in attend:
-                        attend[name] = {'date': date, 'name': name, 'employeeId': int(employee_id), 'begin': None,
+                    if employee_id not in attend:
+                        attend[employee_id] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None,
                                         'end': None, 'reason': None}
-                    if attend[name]['begin']:
-                        if int(time) < int(attend[name]['begin']):
-                            attend[name]['begin'] = time
+                        
+                        # employee_id가 있는데 attend에 없는 경우는 신입 사원 => 등록 
+                        self.employee.post(employee_id=employee_id, name=name, begin_date=date )
+                    if attend[employee_id]['begin']:
+                        if int(time) < int(attend[employee_id]['begin']):
+                            attend[employee_id]['begin'] = time
                         if hour >= 18:
-                            attend[name]['end'] = time
+                            attend[employee_id]['end'] = time
                     else:
-                        attend[name]['begin'] = time
+                        attend[employee_id]['begin'] = time
                         if hour >= 18:
-                            attend[name]['end'] = time
+                            attend[employee_id]['end'] = time
                         else:
-                            attend[name]['end'] = None
+                            attend[employee_id]['end'] = None
                 else:
                     print('overnight', employee_id, time)
                     if employee_id not in overnight_employees:
@@ -197,22 +201,23 @@ class Report(BasicModel):
         device_dict = self.devices.by_employees(date=date)
 
         # wifi 와 지문 인식기 근태 비교
-        for name in device_dict:
-            begin, end = self.device_on.get_attend_by_mac_list(device_dict[name], date=date)
+        for employee_id in device_dict:
+            begin, end = self.device_on.get_attend_by_mac_list(device_dict[employee_id], date=date)
             if begin:
-                if name in attend:
-                    if attend[name]['begin']:
-                        if int(begin) < int(attend[name]['begin']):
-                            attend[name]['begin'] = begin
+                if employee_id in attend:
+                    if attend[employee_id]['begin']:
+                        if int(begin) < int(attend[employee_id]['begin']):
+                            attend[employee_id]['begin'] = begin
                     else:
-                        attend[name]['begin'] = begin
-                    if attend[name]['end']:
-                        if int(end) > int(attend[name]['end']):
-                            attend[name]['end'] = end
+                        attend[employee_id]['begin'] = begin
+                    if attend[employee_id]['end']:
+                        if int(end) > int(attend[employee_id]['end']):
+                            attend[employee_id]['end'] = end
                     else:
-                        attend[name]['end'] = end
+                        attend[employee_id]['end'] = end
                 else:
-                    attend[name] = {'date': date, 'name': name, 'begin': begin, 'end': end, 'reason': None}
+                    print('error there is not this employee_id: ', employee_id)
+                    attend[employee_id] = {'date': date, 'employee_id': employee_id, 'begin': begin, 'end': end, 'reason': None}
         return attend
 
     def _calculate_working_hours(self, begin, end, overnight=False):

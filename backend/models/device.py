@@ -43,11 +43,11 @@ class Device(BasicModel):
         device_list = self.get_mac_list(date=date)
         device_dict = {}
         for device in device_list:
-            if 'owner' in device:
+            if 'employeeId' in device:
                 if device['owner']:
                     # device가 여러개 있는 경우
-                    if device['owner'] in device_dict:
-                        device_dict[device['owner']].append(device['mac'])
+                    if device['employeeId'] in device_dict:
+                        device_dict[device['employeeId']].append(device['mac'])
                     else:
-                        device_dict[device['owner']] = [device['mac']]
+                        device_dict[device['employeeId']] = [device['mac']]
         return device_dict

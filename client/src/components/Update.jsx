@@ -47,7 +47,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
             <DialogContent>
                 {columns.map((item, index) => {
                     return (
-                        ['info', 'type', 'location', 'charge', 'email'].includes(item.accessor)?(
+                        ['info', 'type', 'location', 'charge', 'email', 'department', 'rank', 'position', 'regular', 'mode'].includes(item.accessor)?(
                             <TextField
                                 autoFocus={focus===item.accessor?true:false}
                                 margin='dense'

@@ -28,7 +28,12 @@ export const update = async (req,res,next) => {
     try {
         const _id = req.body._id
         const email = req.body.email
-        const employee = await Employee.updateOne({_id}, {$set: {email}})
+        const department = req.body.department
+        const rank = req.body.rank
+        const position = req.body.position
+        const regular = req.body.regular
+        const mode = req.body.mode 
+        const employee = await Employee.updateOne({_id}, {$set: {email, department, rank, position, regular, mode}})
         res.status(200).json(employee)
     } catch (err) {
         console.log('err', err)

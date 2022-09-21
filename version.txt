@@ -79,6 +79,12 @@
 22/09/20
     - 0.7.9 (client, api)
         device: type, charge 
+
+22/09/21 
+    - 0.8.0 (backend)
+        attend['name'] -> attend['employee_id']
+    - 0.8.1 (client, api)
+        employee update ('department', 'rank', 'position', 'regular', 'mode')
         
 * to do list 
     - client : Link Acitve when onclick

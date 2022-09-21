@@ -27,3 +27,9 @@ class Employee(BasicModel):
                     if 'endDate' in employee and date and date <= employee['endDate']:
                         employees_list.append(employee_info)
         return employees_list
+
+    def post(self, employee_id=None, name=None, begin_date=None):
+        if employee_id and name and begin_date:
+            employee = self.collection.find_one({'employeeId': employee_id})
+            if not employee:
+                self.collection.insert_one({'employeeId': employee_id, 'name': name, 'beginDate': begin_date})
