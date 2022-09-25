@@ -65,7 +65,7 @@ const PageSelect = styled.select`
 `;
 
 const Pagination = ({gotoPage, canPreviousPage, previousPage, nextPage, 
-    canNextPage, pageCount, pageIndex, pageOptions, pageSize, setPageSize}) => {
+    canNextPage, pageCount, pageIndex, pageOptions, pageSize, setPageSize,}) => {
     return (
         <Paginate>
             <PageButton onClick={() => gotoPage(0)} disabled={!canPreviousPage}>

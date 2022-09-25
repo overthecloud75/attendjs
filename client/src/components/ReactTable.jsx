@@ -10,10 +10,12 @@ import Write from './Write'
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 
 const Container = styled.div`
+    position: absolute;
+    min-width: calc(100% - 40px);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 0px 30px 0px 30px;
+    margin-left: 20px;
     font-size: 14px;
 `;
 
@@ -29,7 +31,7 @@ const TableSheet = styled.table`
     border-collapse: collapse;
     text-align: center;
     border-radius: ${v.borderRadius};
-    overflow: hidden;
+    overflow: scroll;
 `;
 
 const THead = styled.thead`
@@ -67,6 +69,7 @@ const BodyTr = styled.tr`
 // initialState https://github.com/TanStack/table/discussions/2029
 
 const Table = ({ url, columns, data, setData, csvHeaders, fileName }) => {
+    // update시 page 설정
     const [selectedRowData, setSelectedRowData] = useState({})
     // Update 화면 
     const [openUpdate, setOpenUpdate] = useState(false)
@@ -105,7 +108,9 @@ const Table = ({ url, columns, data, setData, csvHeaders, fileName }) => {
                     </button>
                 )}
             </Buttons>
-            <TableSheet {...getTableProps()}>
+            <TableSheet {...getTableProps()}
+                style={url==='device'?{width:"130%"}:{width:"100%"}}
+            >
                 <THead>
                     {headerGroups.map(header => (
                     // getHeaderGroupProps를 통해 header 배열을 호출한다

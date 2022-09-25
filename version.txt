@@ -85,7 +85,11 @@
         attend['name'] -> attend['employee_id']
     - 0.8.1 (client, api)
         employee update ('department', 'rank', 'position', 'regular', 'mode')
-        
+
+22/09/25
+    - 0.8.2 (client)
+        device page: table.width = 130%
+
 * to do list 
     - client : Link Acitve when onclick
     - client : cache-control 
