@@ -17,7 +17,7 @@ const Container = styled.div`
     justify-content: center;
     margin-left: 20px;
     font-size: 14px;
-`;
+`
 
 const Buttons = styled.div`
     display: flex;
@@ -25,23 +25,23 @@ const Buttons = styled.div`
     align-items: center;
     gap: 4px;
     margin: 16px;
-`;
+`
 
 const TableSheet = styled.table`
     border-collapse: collapse;
     text-align: center;
     border-radius: ${v.borderRadius};
     overflow: scroll;
-`;
+`
 
 const THead = styled.thead`
     position: sticky;
     z-index: 100;
-`;
+`
 
 const HeadTr = styled.tr`
     background: black;
-`;
+`
 
 const Th = styled.th`
     font-weight: normal;
@@ -50,20 +50,20 @@ const Th = styled.th`
     color: white;
     text-transform: capitalize;
     font-weight: 600;
-`;
+`
 
 const Td = styled.td`
     padding: ${v.smSpacing};
     border: 1px solid ${({ theme }) => theme.bg2};  
     font-size: 14px;
-`;
+`
 
 const TBody = styled.tbody`
-`;
+`
 
 const BodyTr = styled.tr`
     background-color: transparent;
-`;
+`
 
 // useTable에다가 작성한 columns와 data를 전달한 후 아래 4개의 props를 받아온다
 // initialState https://github.com/TanStack/table/discussions/2029
@@ -73,12 +73,13 @@ const Table = ({ url, columns, data, setData, csvHeaders, fileName }) => {
     const [selectedRowData, setSelectedRowData] = useState({})
     // Update 화면 
     const [openUpdate, setOpenUpdate] = useState(false)
-    // Write 화면 
+    // Write 화면, if writeMode is true, use empty value. else use existing value 
     const [writeMode, setWriteMode] = useState(true)
     const [openWrite, setOpenWrite] = useState(false)
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,  
         page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize, state: { pageIndex, pageSize } } =
         useTable({ columns, data, initialState: { pageSize: 20 } }, useSortBy, usePagination);
+    // when url is board, open write 
     const handleUpdateClick = (e, rowData) => {
         setSelectedRowData(rowData)
         if (url!=='board') {setOpenUpdate(true)}

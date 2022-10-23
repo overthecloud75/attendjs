@@ -10,11 +10,11 @@ export const search = async (req,res,next) => {
         let employees
         if (name && name !== '') {
             employees = await Employee.find(
-                {name, $or:[{endDate: {$gt: endDate}}, {endDate: {$exists: false}}]}).sort({name: 1})
+                {name, $or:[{endDate: {$gt: endDate}}, {endDate: {$exists: false}}], regular: {$ne: '휴직'}}).sort({name: 1})
         }
         else { 
             employees = await Employee.find(
-                {$or:[{endDate: {$gt: endDate}}, {endDate: {$exists: false}}]}).sort({name: 1})
+                {$or:[{endDate: {$gt: endDate}}, {endDate: {$exists: false}}], regular: {$ne: '휴직'}}).sort({name: 1})
         }
         res.status(200).json(employees)
     } catch (err) {

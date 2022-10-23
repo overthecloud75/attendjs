@@ -6,6 +6,7 @@ import ComputerIcon from '@mui/icons-material/Computer'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import PeopleIcon from '@mui/icons-material/People'
 import NoteAltIcon from '@mui/icons-material/NoteAlt'
+import FolderIcon from '@mui/icons-material/Folder'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 
@@ -142,6 +143,11 @@ const itemDict =
             to: '/board',
             icon: <NoteAltIcon/>,
             title: 'Board'
+        },
+        {
+            to: '/report',
+            icon: <FolderIcon/>,
+            title: 'Report'
         }
     ]
 }
@@ -197,7 +203,7 @@ const Sidebar = () => {
         <Wrapper>
             <Top>
                 <Link to='/' style={{ textDecoration: 'none' }}>
-                    <Logo>Portal</Logo>
+                    <Logo>SmartWork</Logo>
                 </Link>
             </Top>
             <Middle>

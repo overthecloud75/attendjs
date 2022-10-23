@@ -79,10 +79,9 @@ class Report(BasicModel):
 
             # 지문 인식 출퇴근 기록
             attend, overnight_employees = self.fingerprint_attend(attend, date, hour)
-
             # 지문 인식기 + wifi 출퇴근 기록
             attend = self._fingerprint_or_wifi(attend, date)
-
+            
             # attend
             for employee_id in attend:
                 name = attend[employee_id]['name']

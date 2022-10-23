@@ -14,6 +14,7 @@ import Device from './pages/Device'
 import Schedule from './pages/Schedule'
 import Employee from './pages/Employee'
 import Board from './pages/Board'
+import Report from './pages/Report'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                 <Route exact path='/schedule' element={<Schedule/>}/>
                 <Route exact path='/employee' element={<Employee/>}/>
                 <Route exact path='/board' element={<Board/>}/>
+                <Route exact path='/report' element={<Report/>}/>
                 <Route path='*' element={<NotFound/>} />
             </Routes>
         </BrowserRouter>

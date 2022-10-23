@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
 import axios from 'axios'
 
 const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
@@ -79,7 +79,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
                 <Button onClick={handleUpdate} variant='outlined'>Update</Button>
             </DialogActions>
         </Dialog>
-    );
+    )
 }
 
 export default Update

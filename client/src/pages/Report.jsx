@@ -4,7 +4,7 @@ import TableWithSearch from '../components/TableWithSearch'
 import { columnHeaders, csvHeaders } from '../configs/board'
 import Footer from '../components/Footer'
 
-const Board = () => {
+const Report = () => {
     return (    
         <div className='container'>
             <Sidebar/>
@@ -12,8 +12,8 @@ const Board = () => {
                 <Navbar/> 
                 <TableWithSearch 
                     searchKeyword='name'
-                    page ='board'
-                    url='/board/search'
+                    page ='report'
+                    url='/report/search'
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />
@@ -23,4 +23,4 @@ const Board = () => {
     )
 }
 
-export default Board
+export default Report

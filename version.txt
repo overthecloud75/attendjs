@@ -90,6 +90,12 @@
     - 0.8.2 (client)
         device page: table.width = 130%
 
+22/10/22 
+    - 0.8.3 (client)
+        attendance -> SmartWork
+    - 0.8.4 (client)
+        write.jsx fix useState(rowData.content) -> useState(value.content)
+
 * to do list 
     - client : Link Acitve when onclick
     - client : cache-control 

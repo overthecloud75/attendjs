@@ -1,24 +1,24 @@
 import { useState } from 'react'
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
 import axios from 'axios'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { format } from 'date-fns'
 
 const Write = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
-
+ 
     const [focus, setFocus] = useState('name')
     const [value, setValue] = useState(
         writeMode?{id: '', name: '', title: '', content: ''
         }:rowData
     )
-    const [content, setContent] = useState(rowData.content)
-    const handleClose = () => {setOpen(false)};
+    const [content, setContent] = useState(value.content)
+    const handleClose = () => {setOpen(false)}
 
     const insertData = () => {
         let tableData = [...data]
@@ -140,7 +140,7 @@ const Write = ({writeMode, page, columns, data, setData, open, setOpen, rowData}
                 }
             </DialogActions>
         </Dialog>
-    );
+    )
 }
 
 export default Write

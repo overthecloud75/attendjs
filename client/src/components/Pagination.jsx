@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 const Paginate = styled.div`
     display: flex;
@@ -6,7 +6,7 @@ const Paginate = styled.div`
     align-items: center;
     gap: 4px;
     margin: 16px;
-`;
+`
 
 const PageButton = styled.button`
     border: none;
@@ -35,11 +35,11 @@ const PageButton = styled.button`
         cursor: revert;
         transform: revert;
     }
-`;
+`
 
 const PageSpan = styled.span`
     margin: 0px 5px;
-`;
+`
 
 const PageInput = styled.input`
     margin: 0px 5px;
@@ -49,7 +49,7 @@ const PageInput = styled.input`
     width: 50px;
     background-color: transparent;
 	}
-`;
+`
 
 const PageSelect = styled.select`
     margin: 0px 5px;
@@ -62,7 +62,7 @@ const PageSelect = styled.select`
 	&:focus {
 		border-color: red;
 	}
-`;
+`
 
 const Pagination = ({gotoPage, canPreviousPage, previousPage, nextPage, 
     canNextPage, pageCount, pageIndex, pageOptions, pageSize, setPageSize,}) => {
@@ -92,8 +92,8 @@ const Pagination = ({gotoPage, canPreviousPage, previousPage, nextPage,
                     type="number"
                     defaultValue={pageIndex + 1}
                     onChange={(e) => {
-                    const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                    gotoPage(page);
+                    const page = e.target.value ? Number(e.target.value) - 1 : 0
+                    gotoPage(page)
                     }}
                 />
             </PageSpan>{" "}
@@ -110,7 +110,7 @@ const Pagination = ({gotoPage, canPreviousPage, previousPage, nextPage,
                 ))}
             </PageSelect>
         </Paginate>
-    );
-};
+    )
+}
 
-export default Pagination;
+export default Pagination
