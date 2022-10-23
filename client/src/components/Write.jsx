@@ -10,7 +10,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { format } from 'date-fns'
 
-const Write = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
+const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
  
     const [focus, setFocus] = useState('name')
     const [value, setValue] = useState(
@@ -65,7 +65,8 @@ const Write = ({writeMode, page, columns, data, setData, open, setOpen, rowData}
 
     const handleUpdate = async () => {
         const url = '/' + page + '/write'
-        if (['board'].includes(page)) {
+        if (UpdatePages.includes(page)) {
+            if(!confirm('정말로 저장하시겠습니다.?')) return
             try {
                 await axios.post(url, value)
                 if (writeMode) {insertData()}
@@ -79,7 +80,8 @@ const Write = ({writeMode, page, columns, data, setData, open, setOpen, rowData}
 
     const handleDelete = async () => {
         const url = '/' + page + '/delete'
-        if (['board'].includes(page)) {
+        if (UpdatePages.includes(page)) {
+            if(!confirm('정말로 삭제하시겠습니다.?')) return
             try {
                 await axios.delete(url, {data: value})
                 deleteData()

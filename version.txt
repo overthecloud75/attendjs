@@ -96,12 +96,19 @@
     - 0.8.4 (client)
         write.jsx fix useState(rowData.content) -> useState(value.content)
 
+22/10/15 
+    - 0.8.5 (client, Write.jsx)
+        add confirm when delete or update 
+
+
 * to do list 
     - client : Link Acitve when onclick
     - client : cache-control 
     - client : timeline 
     - client : react-table left-right scroll 
     - backend : email server
+
+    - planning : weeky report system 
 
 
 

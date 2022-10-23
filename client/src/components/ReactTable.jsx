@@ -6,6 +6,7 @@ import CsvDownload from './CsvDownload'
 import Pagination from './Pagination'
 import Update from './Update'
 import Write from './Write'
+import { UpdatePages } from '../configs/pages'
 
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 
@@ -101,7 +102,7 @@ const Table = ({ url, columns, data, setData, csvHeaders, fileName }) => {
                     headers={csvHeaders}
                     filename={fileName}
                 />
-                {['users', 'board'].includes(url)&&(
+                {UpdatePages.includes(url)&&(
                     <button 
                         className='defaultButton'
                         onClick={handleWriteClick}
@@ -173,6 +174,7 @@ const Table = ({ url, columns, data, setData, csvHeaders, fileName }) => {
             )}
             {openWrite&&(
                 <Write
+                    UpdatePages={UpdatePages}
                     writeMode={writeMode}
                     page={url}
                     columns={columns}
