@@ -100,7 +100,11 @@
     - 0.8.5 (client, Write.jsx)
         add confirm when delete or update 
 
-
+22/10/27
+    - 0.8.6 (backend)
+        old, new_sn_post -> sn_post, ip_sn_post
+        old, new_o_post -> o_post, ip_o_post
+         
 * to do list 
     - client : Link Acitve when onclick
     - client : cache-control 

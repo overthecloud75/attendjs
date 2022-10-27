@@ -4,8 +4,7 @@ const DeviceSchema = new mongoose.Schema(
     {
         mac: {
             type: String,
-            required: true,
-            unique: true
+            required: false,
         },
         ip: {
             type: String,
