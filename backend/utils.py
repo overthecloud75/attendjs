@@ -23,18 +23,24 @@ class Scanner:
             result = self.nm.scan(ip_range, arguments='-sn')
             if result['scan']:
                 for ip in result['scan']:
+                    network = {}
                     if 'mac' in result['scan'][ip]['addresses']:
                         mac = result['scan'][ip]['addresses']['mac']
-                        ipv4 = result['scan'][ip]['addresses']['ipv4']
-                        # ip 정렬 문제로 ip_str 필요
-                        ip_str = self.make_ip_str(ip)
                         # nmap으로 하는 경우 mac 값이 대문자로 표시가 됨 -> 소문자로 변경 필요
-                        network = {'mac': mac.lower(), 'ip': ipv4, 'date': date, 'time': time, 'ipStr': ip_str}
-                        if mac in result['scan'][ip]['vendor']:
-                            network['vendor'] = result['scan'][ip]['vendor'][mac]
-                        else:
-                            network['vendor'] = ''
-                        network_list.append(network)
+                        network['mac'] = mac.lower()
+                    ipv4 = result['scan'][ip]['addresses']['ipv4']
+                    # ip 정렬 문제로 ip_str 필요
+                    ip_str = self.make_ip_str(ip)
+
+                    network['ip'] = ipv4
+                    network['ipStr'] = ip_str 
+                    network['date'] = date
+                    network['time'] = time 
+                    if mac in result['scan'][ip]['vendor']:
+                        network['vendor'] = result['scan'][ip]['vendor'][mac]
+                    else:
+                        network['vendor'] = ''
+                    network_list.append(network)
         return network_list
 
     def nmap_o_scan(self):
@@ -47,12 +53,13 @@ class Scanner:
                     if 'mac' in result['scan'][ip]['addresses']:
                         mac = result['scan'][ip]['addresses']['mac']
                         network['mac'] = mac.lower()
-                        network['os'] = ''
-                        network['accuracy'] = ''
-                        if result['scan'][ip]['osmatch']:
-                            network['os'] = result['scan'][ip]['osmatch'][0]['name']
-                            network['accuracy'] = result['scan'][ip]['osmatch'][0]['accuracy'] 
-                        network_list.append(network)
+                    network['ip'] = ip   
+                    network['os'] = ''
+                    network['accuracy'] = ''
+                    if result['scan'][ip]['osmatch']:
+                        network['os'] = result['scan'][ip]['osmatch'][0]['name']
+                        network['accuracy'] = result['scan'][ip]['osmatch'][0]['accuracy'] 
+                    network_list.append(network)
         return network_list
 
     def check_wifi_connected(self):

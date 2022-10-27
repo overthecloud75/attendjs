@@ -24,12 +24,12 @@ def check_sn():
 
         scan_result = scanner.nmap_sn_scan()
         for network in scan_result:
-            if network['mac'] not in macs:
-                macs.append(network['mac'])
-                devices.new_sn_post(network)
+            if 'mac' in network:
+                devices.sn_post(network)
+                device_on.post(network)
             else:
-                devices.old_sn_post(network)
-            device_on.post(network)
+                devices.ip_sn_post(network)
+           
         time.sleep(60)
 
 # Arp Scan : nmap -O
@@ -41,21 +41,16 @@ def check_o():
 
         scan_result = scanner.nmap_o_scan()
         for network in scan_result:
-            if network['mac'] not in macs:
-                devices.new_o_post(network)
+            if 'mac' in network:
+                devices.o_post(network)
             else:
-                devices.old_o_post(network)
+                devices.ip_o_post(network)
         time.sleep(7200)
 
 if __name__ == '__main__':
     devices = Device()
     device_on = DeviceOn()
     scanner = Scanner()
-    data_list = devices.get_mac_list()
-    macs = []
-
-    for data in data_list:
-        macs.append(data['mac'])
 
     if USE_WIFI_ATTENDANCE:
         th1 = threading.Thread(target=check_sn)

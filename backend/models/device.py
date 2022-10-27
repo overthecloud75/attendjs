@@ -11,22 +11,32 @@ class Device(BasicModel):
         device_list = self.collection.find(sort=[('ipStr', 1)])
         return device_list
 
-    def new_sn_post(self, request_data): # new device 발견인 경우
-        request_data = {'mac': request_data['mac'], 'registerDate': request_data['date'], 'endDate': request_data['date'],
+    def sn_post(self, request_data): 
+        result = self.collection.find_one({'mac': request_data['mac']})
+        if result is None:
+            request_data = {'mac': request_data['mac'], 'registerDate': request_data['date'], 'endDate': request_data['date'],
                         'owner': None, 'ip': request_data['ip'], 'ipStr': request_data['ipStr'], 'vendor': request_data['vendor']}
-        self.collection.update_one({'mac': request_data['mac']}, {'$set': request_data}, upsert=True)
-
-    def old_sn_post(self, request_data):
-        request_data = {'mac': request_data['mac'], 'endDate': request_data['date'], 'ip': request_data['ip'],
+        else:
+            request_data = {'mac': request_data['mac'], 'endDate': request_data['date'], 'ip': request_data['ip'],
                         'ipStr': request_data['ipStr'], 'vendor': request_data['vendor']}
         self.collection.update_one({'mac': request_data['mac']}, {'$set': request_data}, upsert=True)
 
-    def new_o_post(self, request_data): # new device 발견인 경우
-        self.collection.update_one({'mac': request_data['mac']}, {'$set': request_data}, upsert=True)
+    def ip_sn_post(self, request_data): 
+        result = self.collection.find_one({'ip': request_data['ip']})
+        if result is None:
+            request_data = {'registerDate': request_data['date'], 'endDate': request_data['date'],
+                        'owner': None, 'ip': request_data['ip'], 'ipStr': request_data['ipStr'], 'vendor': request_data['vendor']}
+        else:
+            request_data = {'endDate': request_data['date'], 'ip': request_data['ip'],
+                        'ipStr': request_data['ipStr'], 'vendor': request_data['vendor']}
+        self.collection.update_one({'ip': request_data['ip']}, {'$set': request_data}, upsert=True)
 
-    def old_o_post(self, request_data):
+    def o_post(self, request_data): 
         self.collection.update_one({'mac': request_data['mac']}, {'$set': request_data}, upsert=True)
     
+    def ip_o_post(self, request_data):
+        self.collection.update_one({'ip': request_data['ip']}, {'$set': request_data}, upsert=True)
+
     def post(self, request_data):
         if 'owner' in request_data and request_data['owner'] == 'None':
             request_data['owner'] = None
