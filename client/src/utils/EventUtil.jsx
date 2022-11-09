@@ -30,7 +30,7 @@ export const getColor = (event) => {
 
 export const getEvents = async (args)=> {
     const params = {start: format(args.start, "yyyy-MM-dd"), end: format(args.end, "yyyy-MM-dd")}
-    try { const res = await axios.get('/event', {params})
+    try { const res = await axios.get('/event', {params, headers: {'Cache-Control': 'no-cache'}})
         for (let event of res.data) {
             event = getColor(event)
         }

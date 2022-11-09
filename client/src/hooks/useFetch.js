@@ -11,7 +11,7 @@ const useFetch = (page, url, params, clickCount) => {
         const fetchData = async () => {
         setLoading(true)
         try {
-            let res = await axios.get(url, {params})
+            let res = await axios.get(url, {params, headers: {'Cache-Control': 'no-cache'}})
             if (page==='board') {
                 for (let board of res.data) {
                     board.createdAt = format(new Date(board.createdAt), "yy-MM-dd HH:mm:ss")

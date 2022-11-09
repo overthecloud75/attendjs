@@ -57,12 +57,13 @@ export const calculateWorkingHours = (begin, end) => {
 }
 
 export const reportUpdate = async (action, event, start, end) => {
+    // event 정보 name과 eventStatus로 parsing 
     const {name, eventStatus} = seperateEvent(action, event)
     const employee = await Employee.findOne({name}).lean()
     const today = getToday()
     if (employee) {
         const employeeId = employee.employeeId
-        const reports = await Report.find({name, employeeId, date: {$gte: start, $lt: end}}).lean()
+        const reports = await Report.find({name, employeeId, date: {$gte: start, $lt: end}}).sort({date: 1}).lean()
         let reason = null 
         if (Object.keys(WORKING.status).includes(employee.mode)) {
             reason = employee.mode 
@@ -80,8 +81,11 @@ export const reportUpdate = async (action, event, start, end) => {
                     report.workingHours = calculateWorkingHours(report.begin, report.end)
                     report.state = getState(employee.status, report.begin, report.end)
                 }
+                await Report.updateOne({name, employeeId, date}, {$set: report})
             }
-            await Report.updateOne({name, employeeId, date}, {$set: report})
+            else {
+                break
+            }    
         }
     } 
 }

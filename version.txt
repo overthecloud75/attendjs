@@ -104,16 +104,29 @@
     - 0.8.6 (backend)
         old, new_sn_post -> sn_post, ip_sn_post
         old, new_o_post -> o_post, ip_o_post
+
+22/10/29
+    - 0.8.7 (client)
+        apply Contents Security Policy : script-src 'self' 
+    
+22/11/09 
+    - 0.8.8 (api)
+        fix some problem in reportUpdate in controllers. 
+    - 0.8.9 (client)
+        apply headers: headers: {'Cache-Control': 'no-cache'} in axios.get 
+        but the issues[0] is not solved.
          
 * to do list 
     - client : Link Acitve when onclick
-    - client : cache-control 
     - client : timeline 
     - client : react-table left-right scroll 
     - backend : email server
 
     - planning : weeky report system 
 
+* issues
+    - [0] : data를 update 한 후 화면 표시는 react에 의해 바로 udpate 되지만 refresh를 
+            할 경우 이전 data가 보임. refresh를 여러번 하는 경우 예상되는 data가 반영
 
 
    
