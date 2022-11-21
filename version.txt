@@ -115,6 +115,10 @@
     - 0.8.9 (client)
         apply headers: headers: {'Cache-Control': 'no-cache'} in axios.get 
         but the issues[0] is not solved.
+
+22/11/21
+    - 0.9.0 (backend)
+        err fix: if 'regular' not in employee: employee['regular'] = '상근'
          
 * to do list 
     - client : Link Acitve when onclick

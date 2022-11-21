@@ -17,6 +17,8 @@ class Employee(BasicModel):
             else:
                 email = None
             # 퇴사하지 않은 직원만 포함하기 위해서
+            if 'regular' not in employee:
+                employee['regular'] = '상근'
             if employee['regular'] != '퇴사':
                 if not 'mode' in employee:
                     employee['mode'] = '내근'

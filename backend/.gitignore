@@ -7,3 +7,4 @@ logs
 mainconfig.py
 pyvenv.cfg
 pyodbc.pyi
+server.log
