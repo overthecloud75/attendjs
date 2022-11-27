@@ -66,7 +66,7 @@ const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setO
     const handleUpdate = async () => {
         const url = '/' + page + '/write'
         if (UpdatePages.includes(page)) {
-            if(!confirm('정말로 저장하시겠습니다.?')) return
+            if(!window.confirm('정말로 저장하시겠습니다.?')) return
             try {
                 await axios.post(url, value)
                 if (writeMode) {insertData()}
@@ -81,7 +81,7 @@ const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setO
     const handleDelete = async () => {
         const url = '/' + page + '/delete'
         if (UpdatePages.includes(page)) {
-            if(!confirm('정말로 삭제하시겠습니다.?')) return
+            if(!window.confirm('정말로 삭제하시겠습니다.?')) return
             try {
                 await axios.delete(url, {data: value})
                 deleteData()

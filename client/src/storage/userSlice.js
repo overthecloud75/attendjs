@@ -2,7 +2,23 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export const TOKEN_TIME_OUT = 600*1000
 
-const user = JSON.parse(localStorage.getItem('user')) || {}
+export const getUser = () => {
+    const userStr = localStorage.getItem('user')
+	if (!userStr) {
+		return {}
+	}
+	const userState = JSON.parse(userStr)
+	const now = new Date()
+	// compare the expiry time of the item with the current time
+	if (now.getTime() > userState.expiry) {
+		// If the item is expired, delete the item from storage
+		localStorage.removeItem('user')
+		return {}
+	}
+	return userState 
+}
+
+const user = getUser()
 
 export const userSlice = createSlice({
     name: 'user',

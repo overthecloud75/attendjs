@@ -1,14 +1,14 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { clearUser } from '../storage/userSlice.js'
+import { clearUser, getUser } from '../storage/userSlice.js'
 import { Link } from 'react-router-dom'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
 const ProfileMenu = ({anchorEl, setAnchorEl}) => {
 
-    const user = useSelector(state => state.user)
+    const user = getUser()
     const dispatch = useDispatch()
-
+    
     const open = Boolean(anchorEl)
     const handleClose = () => {setAnchorEl(null)}
     const handleLogout = () => {
