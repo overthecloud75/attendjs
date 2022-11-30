@@ -129,7 +129,11 @@
         user localStorage exiry : 86400000
     - 0.9.3 (client)
         err fix : confirm -> window.confirm in Write.jsx
-         
+
+22/11/30
+    - 0.9.4 (api)
+        email.js for email confirmation when register 
+
 * to do list 
     - client : Link Acitve when onclick
     - client : timeline 

@@ -1,28 +1,38 @@
-import User from '../models/User.js'
 import bcrypt from 'bcryptjs'
-import { createError } from '../utils/error.js'
 import jwt from 'jsonwebtoken'
+import User from '../models/User.js'
+import { createError } from '../utils/error.js'
+import { sendConfirmationEmail } from '../utils/email.js'
 
 export const register = async (req, res, next) => {
     try {
+        const token = jwt.sign({email: req.body.email}, process.env.JWT)
         const salt = bcrypt.genSaltSync(10)
         const hash = bcrypt.hashSync(req.body.password, salt)
         const userCount = await User.count()
         let newUser 
         if (userCount !== 0) {
-            newUser = new User({
-                ...req.body,
-                password: hash,
-            })
+            const user = await User.findOne({ email: req.body.email })
+            if (user) {
+                return next(createError(403, 'Something went wrong'))
+            } else {
+                newUser = new User({
+                    ...req.body,
+                    password: hash,
+                    confirmationCode: token
+                })
+            }
         } else {
             newUser = new User({
                 ...req.body,
                 password: hash,
-                isAdmin: true
+                isAdmin: true,
+                confirmationCode: token
             })
         }
         await newUser.save()
         res.status(200).send('User has been created.')
+        sendConfirmationEmail(req.body.name, req.body.email, token)
     } catch (err) {
         next(err)
     }
@@ -40,11 +50,15 @@ export const login = async (req, res, next) => {
         if (!isPasswordCorrect)
             return next(createError(400, 'Wrong password or email!'))
 
+        if (user.status != 'Active') {
+            return next(createError(401, 'Pending Account. Please Verify Your Email!'))
+        }
+
         const token = jwt.sign(
             { id: user._id, isAdmin: user.isAdmin },
             process.env.JWT
         )
-        const { password, ...otherDetails } = user._doc
+        const { password, status, confirmationCode, ...otherDetails } = user._doc
         res.cookie('access_token', token, {
             httpOnly: true,
         })

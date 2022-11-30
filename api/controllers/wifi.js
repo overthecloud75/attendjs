@@ -1,7 +1,6 @@
 import { logger, reqFormat } from '../config/winston.js'
 import DeviceOn from '../models/DeviceOn.js'
 import Device from '../models/Device.js'
-import { wifiRange } from '../config/process.js'
 
 const insertOwner = (deviceOns, deviceDict) => {
     for (let deviceOn of deviceOns) {
@@ -9,7 +8,7 @@ const insertOwner = (deviceOns, deviceDict) => {
             deviceOn['owner'] = deviceDict[deviceOn['mac']]
         }
     }
-return deviceOns 
+    return deviceOns 
 }
 
 export const search = async (req,res,next) => {
@@ -30,7 +29,7 @@ export const search = async (req,res,next) => {
             deviceOns = await DeviceOn.find({ip, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1}).lean()
         }
         else { 
-            deviceOns = await DeviceOn.find({ip: {$regex: wifiRange}, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1}).lean();
+            deviceOns = await DeviceOn.find({ip: {$regex: process.env.WIFI_RANGE}, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1}).lean();
         }; 
         if (startDate === endDate) {
             deviceOns = insertOwner(deviceOns, deviceDict)

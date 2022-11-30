@@ -1,7 +1,7 @@
-import Report from "../models/Report.js"
-import Employee from "../models/Employee.js"
-import { WORKING } from "../config/WORKING.js"
-import { getToday } from "../utils/util.js"
+import Report from '../models/Report.js'
+import Employee from '../models/Employee.js'
+import { WORKING } from '../config/WORKING.js'
+import { getToday } from '../utils/util.js'
 
 const seperateEvent = (action, event) => {
     const name = event.split('/')[0]
