@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const TOKEN_TIME_OUT = 600*1000
 
 export const getUser = () => {
-    const userStr = localStorage.getItem('user')
+    const userStr = sessionStorage.getItem('user')
 	if (!userStr) {
 		return {}
 	}
@@ -12,7 +12,7 @@ export const getUser = () => {
 	// compare the expiry time of the item with the current time
 	if (now.getTime() > userState.expiry) {
 		// If the item is expired, delete the item from storage
-		localStorage.removeItem('user')
+		sessionStorage.removeItem('user')
 		return {}
 	}
 	return userState 
@@ -39,7 +39,7 @@ export const userSlice = createSlice({
             state.isAdmin = action.payload.isAdmin
             state.isLogin = true
             state.expiry = now.getTime() + 86400000
-            localStorage.setItem('user', JSON.stringify(state))
+            sessionStorage.setItem('user', JSON.stringify(state))
             // state 변화를 알림
             return state
         },
@@ -51,7 +51,7 @@ export const userSlice = createSlice({
             state.isAdmin = false
             state.isLogin = false 
             state.expiry = 0
-            localStorage.removeItem('user')
+            sessionStorage.removeItem('user')
             // state 변화를 알림
             return state
         },

@@ -134,13 +134,21 @@
     - 0.9.4 (api)
         email.js for email confirmation when register 
 
+22/12/02
+    - 0.9.5 (client)
+        user : localStroage -> sessionStroage
+    - 0.9.6 (client)
+        pages/Confirm.jsx
+    - 0.9.7 (api)
+        confirm/token -> checkConfirm in auth.js 
+
 * to do list 
     - client : Link Acitve when onclick
     - client : timeline 
     - client : react-table left-right scroll 
     - backend : email server
 
-    - planning : weeky report system 
+    - planning : weekly report system 
 
 * issues
     - [0] : data를 update 한 후 화면 표시는 react에 의해 바로 udpate 되지만 refresh를 

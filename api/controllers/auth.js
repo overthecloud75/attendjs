@@ -1,3 +1,4 @@
+import { logger, reqFormat } from '../config/winston.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
@@ -5,6 +6,7 @@ import { createError } from '../utils/error.js'
 import { sendConfirmationEmail } from '../utils/email.js'
 
 export const register = async (req, res, next) => {
+    logger.info(reqFormat(req))
     try {
         const token = jwt.sign({email: req.body.email}, process.env.JWT)
         const salt = bcrypt.genSaltSync(10)
@@ -39,6 +41,7 @@ export const register = async (req, res, next) => {
 }
 
 export const login = async (req, res, next) => {
+    logger.info(reqFormat(req))
     try {
         const user = await User.findOne({ email: req.body.email })
         if (!user) return next(createError(404, 'User not found!'))
@@ -55,7 +58,7 @@ export const login = async (req, res, next) => {
         }
 
         const token = jwt.sign(
-            { id: user._id, isAdmin: user.isAdmin },
+            { id: user._id },
             process.env.JWT
         )
         const { password, status, confirmationCode, ...otherDetails } = user._doc
@@ -64,6 +67,23 @@ export const login = async (req, res, next) => {
         })
         .status(200)
         .json({ ...otherDetails })
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const confirmCode = async (req, res, next) => {
+    logger.info(reqFormat(req))
+    try {
+        const confirmationCode = req.params.confirmationCode
+        const user = await User.findOne({confirmationCode})
+        if (!user) return next(createError(404, 'User not found!'))
+
+        const status = 'Active'
+        await User.updateOne({confirmationCode}, {$set: {status}})
+
+        res.status(200).json({name: user.name, email: user.email, message: 'activated'})
+
     } catch (err) {
         next(err)
     }
