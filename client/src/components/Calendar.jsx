@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
@@ -8,11 +10,26 @@ const Wrapper = styled.div`
     padding: 30px;
 `
 const Calendar = () => {
+    const navigate = useNavigate();
+    const [error, setError] = useState(false)
 
-    const initialEvents = (args) => {
-        const events = getEvents(args)
-        return events
+    const initialEvents = async (args) => {
+        const events = await getEvents(args)
+        setError(events.err)
+        return events.data
     }
+
+    useEffect(() => {
+        const fetchData = () => {
+            if (error) {
+                const errorStatus = error.response.data.status
+                if (errorStatus === 401) { 
+                    navigate('/login')
+                }
+            }
+        }
+        fetchData()
+    }, [error])
 
     const handleDateSelect = (selectInfo) => {
         let title = prompt('Please enter a new title for your event')

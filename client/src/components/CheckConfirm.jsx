@@ -9,7 +9,7 @@ const CheckConfirm = ({url}) => {
 
     return (
         <dir>
-            {!error?data.email + ' is activated':'Something went wrong'}
+            {!error?data.email + ' is activated':error.response.data.status}
         </dir>
     )
 }

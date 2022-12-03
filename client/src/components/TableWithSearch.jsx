@@ -1,10 +1,13 @@
-import { useMemo, useState} from 'react'
+import { useMemo, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import useFetch from '../hooks/useFetch'
 import Table from './ReactTable'
 import Search from './Search'
 
 const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) => {
+    const navigate = useNavigate();
+
     const [name, setName] = useState('')
     const [date, setDate] = useState([{startDate: new Date(), endDate: new Date(), key: 'selection'}])
 
@@ -15,6 +18,18 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
     const {data, setData, loading, error} = useFetch(
         page, url, {[searchKeyword]: name, startDate: format(date[0].startDate, 'yyyy-MM-dd'), endDate: format(date[0].endDate, 'yyyy-MM-dd')}, clickCount
     )
+
+    useEffect(() => {
+        const fetchData = () => {
+            if (error) {
+                const errorStatus = error.response.data.status
+                if (errorStatus === 401) { 
+                    navigate('/login')
+                }
+            }
+        }
+        fetchData()
+    }, [error])
 
     const columns = useMemo(() => columnHeaders, [columnHeaders])
     const tableData = useMemo(() => data, [data])

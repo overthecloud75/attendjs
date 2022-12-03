@@ -1,6 +1,6 @@
-import { logger, reqFormat } from '../config/winston.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { logger, reqFormat } from '../config/winston.js'
 import User from '../models/User.js'
 import { createError } from '../utils/error.js'
 import { sendConfirmationEmail } from '../utils/email.js'
@@ -58,7 +58,7 @@ export const login = async (req, res, next) => {
         }
 
         const token = jwt.sign(
-            { id: user._id },
+            { id: user._id, isAdmin: user.isAdmin },
             process.env.JWT
         )
         const { password, status, confirmationCode, ...otherDetails } = user._doc

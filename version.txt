@@ -142,13 +142,20 @@
     - 0.9.7 (api)
         confirm/token -> checkConfirm in auth.js 
 
+22/12/03
+    - 0.9.8 (api)
+        verifyIP in verfiToken.js
+    - 0.9.9 (client)
+        when 401 error, redirect to login page 
+
 * to do list 
     - client : Link Acitve when onclick
     - client : timeline 
     - client : react-table left-right scroll 
     - backend : email server
 
-    - planning : weekly report system 
+    - planning : weekly reporting system 
+    - planning : 결재  
 
 * issues
     - [0] : data를 update 한 후 화면 표시는 react에 의해 바로 udpate 되지만 refresh를 

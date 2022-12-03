@@ -21,7 +21,6 @@ export const getColor = (event) => {
         else if (Object.keys(WORKING.status).includes(event_title)){ }
         else { event.color = 'green' }
     }
-
     else {
         event.color = 'red'
     }
@@ -34,9 +33,12 @@ export const getEvents = async (args)=> {
         for (let event of res.data) {
             event = getColor(event)
         }
-        return res.data
+        const data = res.data 
+        const err = false
+        return {data, err}
     } catch (err) {
-        console.log('err', err)
+        const data = []
+        return {data, err}
     }
 };
 

@@ -1,6 +1,6 @@
 import { logger, reqFormat } from '../config/winston.js'
-import Report from "../models/Report.js"
-import { WORKING, getReverseStatus } from "../config/WORKING.js"
+import Report from '../models/Report.js'
+import { WORKING, getReverseStatus } from '../config/WORKING.js'
 
 export const search = async (req,res,next)=>{
     logger.info(reqFormat(req))
