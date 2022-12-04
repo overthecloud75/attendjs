@@ -148,6 +148,22 @@
     - 0.9.9 (client)
         when 401 error, redirect to login page 
 
+22/12/04
+    - 1.0.0 (all)
+        apply codeql.yml
+    - 1.0.1 (api)
+        mongoose version 6.4.4 -> 6.7.5
+    - 1.0.2 (api)
+        missing rate limiting : apply 'express-rate-limit'
+    - 1.0.3 (api)
+        logout in auth.js for clear cookies
+    - 1.0.4 (client)
+        requestAuth in AuthUtil.jsx 
+    - 1.0.5 (api, client)
+        use CSRF-Token
+    - 1.0.6 (api)
+        login setOptions({sanitizeFilter: true}) to protect NoSQL injection
+
 * to do list 
     - client : Link Acitve when onclick
     - client : timeline 

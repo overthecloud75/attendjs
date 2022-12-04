@@ -1,18 +1,18 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { clearUser, getUser } from '../storage/userSlice.js'
-import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useNavigate, Link } from 'react-router-dom'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { requestAuth } from '../utils/AuthUtil'
+import { getUser } from '../storage/userSlice.js'
 
 const ProfileMenu = ({anchorEl, setAnchorEl}) => {
-
-    const user = getUser()
     const dispatch = useDispatch()
-    
+    const navigate = useNavigate()
+    const user = getUser()
     const open = Boolean(anchorEl)
     const handleClose = () => {setAnchorEl(null)}
-    const handleLogout = () => {
-        dispatch(clearUser(user))
+    const handleLogout = async () => {
+        requestAuth('logout', 'get', '', dispatch, navigate)
         handleClose()
     }
 

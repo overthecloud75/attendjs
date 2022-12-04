@@ -1,12 +1,12 @@
-import { useNavigate, Link } from 'react-router-dom'
-import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { loginUser } from '../storage/userSlice.js'
-import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { requestAuth } from '../utils/AuthUtil'
 
 const Auth = ({mode}) => {
     const dispatch = useDispatch()
-
+    const navigate = useNavigate()
     const [value, setValue] = useState(
         {
             name: '',
@@ -15,25 +15,19 @@ const Auth = ({mode}) => {
         }
     )
     const [err, setErr] = useState(false)
-    const navigate = useNavigate()
+
+    useEffect(() => {
+        requestAuth(mode, 'get', '', dispatch, navigate)
+    }, [])
 
     const handleChange = (event) => {
         setValue({...value, [event.target.id]: event.target.value})    
     }
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault()
-        const url = '/auth/' + mode
-        try {
-            const res = await axios.post(url, value)
-            if (mode === 'login') {
-                dispatch(loginUser(res.data)) 
-            }
-            navigate('/')
-        } catch (err) {
-            console.log(err)
-            setErr(true)
-        }
+        const error = requestAuth(mode, 'post', value, dispatch, navigate)
+        setErr(error)
     }
 
     return (
