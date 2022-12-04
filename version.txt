@@ -163,6 +163,8 @@
         use CSRF-Token
     - 1.0.6 (api)
         login setOptions({sanitizeFilter: true}) to protect NoSQL injection
+    - 1.0.7 (api)
+        sanitizeData for date, email
 
 * to do list 
     - client : Link Acitve when onclick

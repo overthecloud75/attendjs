@@ -1,12 +1,13 @@
 import { logger, reqFormat } from '../config/winston.js'
 import Event from '../models/Event.js'
 import { reportUpdate } from './report.js'
+import { sanitizeData } from '../utils/util.js'
 
 export const getEvents = async (req,res,next)=>{
     logger.info(reqFormat(req))
     try {
-        const start = req.query.start
-        const end = req.query.end
+        const start = sanitizeData(req.query.start, 'date')
+        const end = sanitizeData(req.query.end, 'date')
         const events = await Event.find({start: {$gte: start, $lt: end}}).sort({id: 1})
         res.status(200).json(events)
     } catch (err) {

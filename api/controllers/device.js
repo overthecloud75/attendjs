@@ -1,12 +1,13 @@
 import { logger, reqFormat } from '../config/winston.js'
 import Device from '../models/Device.js'
+import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const mac = req.query.mac
-        const startDate = req.query.startDate
-        const endDate = req.query.endDate
+        const startDate = sanitizeData(req.query.startDate, 'date')
+        const endDate = sanitizeData(req.query.endDate, 'date')
         let devices
         if (mac && mac !== '') {
             devices = await Device.find({mac, endDate: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1})

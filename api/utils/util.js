@@ -22,3 +22,19 @@ export const separateIP = (x_forwarded_for) => {
         return {externalIP, internalIP}
     }
 }
+
+export const sanitizeData = (data, type) => {
+    let regex 
+    if (type === 'date') {
+        regex = /^\d{4}-\d{2}-\d{2}$/
+        if (data.match(regex) === null) {
+            return getToday()
+        }
+    } else if (type === 'email') {
+        regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+        if (data.match(regex) === null) {
+            return false
+        }
+    }
+    return data 
+}

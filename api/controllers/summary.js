@@ -1,13 +1,14 @@
 import { logger, reqFormat } from '../config/winston.js'
 import Report from '../models/Report.js'
 import { WORKING, getReverseStatus } from '../config/WORKING.js'
+import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req,res,next)=>{
     logger.info(reqFormat(req))
     try {
         const name = req.query.name 
-        const startDate = req.query.startDate
-        const endDate = req.query.endDate
+        const startDate = sanitizeData(req.query.startDate, 'date')
+        const endDate = sanitizeData(req.query.endDate, 'date')
         const reverseStatus = getReverseStatus()
         let attends
         let summaryList = []

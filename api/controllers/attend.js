@@ -2,6 +2,7 @@ import { logger, reqFormat } from '../config/winston.js'
 import Report from "../models/Report.js"
 import Employee from "../models/Employee.js"
 import { calculateWorkingHours } from "./report.js"
+import { sanitizeData } from '../utils/util.js'
 
 const randomAttend = (range, add) => {
     let time = Math.floor(range * Math.random() + add)
@@ -17,8 +18,8 @@ export const search = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const name = req.query.name 
-        const startDate = req.query.startDate
-        const endDate = req.query.endDate
+        const startDate = sanitizeData(req.query.startDate, 'date')
+        const endDate = sanitizeData(req.query.endDate, 'date')
         let attends
         // [문제] endDate: 이름 검색시에만 실행
         if (name && name !== '') {

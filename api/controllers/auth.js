@@ -5,6 +5,7 @@ import User from '../models/User.js'
 import Employee from '../models/Employee.js'
 import { createError } from '../utils/error.js'
 import { sendConfirmationEmail } from '../utils/email.js'
+import { sanitizeData } from '../utils/util.js'
 
 export const register = async (req, res, next) => {
     logger.info(reqFormat(req))
@@ -13,9 +14,10 @@ export const register = async (req, res, next) => {
         const salt = bcrypt.genSaltSync(10)
         const hash = bcrypt.hashSync(req.body.password, salt)
         const userCount = await User.count()
+        const email = sanitizeData(req.body.email, 'email')
         let newUser 
         if (userCount !== 0) {
-            const user = await User.findOne({ email: req.body.email })
+            const user = await User.findOne({email})
             if (user) {
                 return next(createError(403, 'Fobidden'))
             } else {
@@ -26,7 +28,7 @@ export const register = async (req, res, next) => {
                 })
             }
         } else {
-            const employee = await Employee.findOne({ email: req.body.email })
+            const employee = await Employee.findOne({email})
             if (employee) {
                 newUser = new User({
                     ...req.body,
@@ -40,7 +42,7 @@ export const register = async (req, res, next) => {
         }
         await newUser.save()
         res.status(200).send('User has been created.')
-        sendConfirmationEmail(req.body.name, req.body.email, token)
+        sendConfirmationEmail(req.body.name, email, token)
     } catch (err) {
         next(err)
     }
@@ -48,8 +50,9 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
     logger.info(reqFormat(req))
+    const email = sanitizeData(req.body.email, 'email')
     try {
-        const user = await User.findOne({ email: req.body.email }).setOptions({sanitizeFilter: true})
+        const user = await User.findOne({email}).setOptions({sanitizeFilter: true})
         if (!user) return next(createError(404, 'User not found!'))
 
         const isPasswordCorrect = await bcrypt.compare(
