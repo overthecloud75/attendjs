@@ -4,6 +4,8 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import rateLimit from 'express-rate-limit'
+import csrf from 'csurf'
 
 import authRoute from './routes/auth.js'
 import usersRoute from './routes/users.js'
@@ -36,10 +38,19 @@ mongoose.connection.on('connected', () => {
     logger.info('mongoDB connected!')
 })
 
-//middlewares
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
+
+// middlewares
+app.use(limiter) // Apply the rate limiting middleware to all requests
 app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
+app.use(csrf({ cookie: true }))
 
 app.use('/api/auth', authRoute)
 app.use('/api/users', usersRoute)

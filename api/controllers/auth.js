@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { logger, reqFormat } from '../config/winston.js'
 import User from '../models/User.js'
+import Employee from '../models/Employee.js'
 import { createError } from '../utils/error.js'
 import { sendConfirmationEmail } from '../utils/email.js'
 
@@ -16,7 +17,7 @@ export const register = async (req, res, next) => {
         if (userCount !== 0) {
             const user = await User.findOne({ email: req.body.email })
             if (user) {
-                return next(createError(403, 'Something went wrong'))
+                return next(createError(403, 'Fobidden'))
             } else {
                 newUser = new User({
                     ...req.body,
@@ -25,12 +26,17 @@ export const register = async (req, res, next) => {
                 })
             }
         } else {
-            newUser = new User({
-                ...req.body,
-                password: hash,
-                isAdmin: true,
-                confirmationCode: token
-            })
+            const employee = await Employee.findOne({ email: req.body.email })
+            if (employee) {
+                newUser = new User({
+                    ...req.body,
+                    password: hash,
+                    isAdmin: true,
+                    confirmationCode: token
+                })
+            } else {
+                return next(createError(403, 'Fobidden'))
+            }
         }
         await newUser.save()
         res.status(200).send('User has been created.')
@@ -43,7 +49,7 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
     logger.info(reqFormat(req))
     try {
-        const user = await User.findOne({ email: req.body.email })
+        const user = await User.findOne({ email: req.body.email }).setOptions({sanitizeFilter: true})
         if (!user) return next(createError(404, 'User not found!'))
 
         const isPasswordCorrect = await bcrypt.compare(
@@ -67,6 +73,15 @@ export const login = async (req, res, next) => {
         })
         .status(200)
         .json({ ...otherDetails })
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const logout = async (req, res, next) => {
+    logger.info(reqFormat(req))
+    try {
+        res.clearCookie('access_token').status(200).json([])
     } catch (err) {
         next(err)
     }

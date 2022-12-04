@@ -9,6 +9,10 @@ export const search = async (req,res,next) => {
         // const endDate = req.query.endDate
         let boards
         if (name && name !== '') {
+            // to test NoSQL injection name = {$ne: null}
+            // console.log({name}) = { name: '{$ne: null}'}
+            // boards = await Board.find({name : {$ne: null}}).sort({createdAt: -1})  NoSQL Success
+            // boards = await Board.find({name : '{$ne: '1'}'}).sort({createdAt: -1}) Not NoSQL Success
             boards = await Board.find({name}).sort({createdAt: -1})
         }
         else { 
