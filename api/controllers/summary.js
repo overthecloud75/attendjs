@@ -54,7 +54,7 @@ export const search = async (req,res,next)=>{
             summary[id].workingDays = Math.round(summary[id].workingDays * 100) / 100
             summaryList.push(summary[id])
         }
-        res.status(200).json(summaryList);
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json(summaryList);
     } catch (err) {
         console.log('err', err)
         next(err);

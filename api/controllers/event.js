@@ -9,7 +9,7 @@ export const getEvents = async (req,res,next)=>{
         const start = sanitizeData(req.query.start, 'date')
         const end = sanitizeData(req.query.end, 'date')
         const events = await Event.find({start: {$gte: start, $lt: end}}).sort({id: 1})
-        res.status(200).json(events)
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json(events)
     } catch (err) {
         next(err)
     }

@@ -14,6 +14,7 @@ const Calendar = () => {
     const [error, setError] = useState(false)
 
     const initialEvents = async (args) => {
+        // const 
         const events = await getEvents(args)
         setError(events.err)
         return events.data
@@ -26,7 +27,7 @@ const Calendar = () => {
                 if (errorStatus === 401) { 
                     navigate('/login')
                 }
-            }
+            } 
         }
         fetchData()
     }, [error])

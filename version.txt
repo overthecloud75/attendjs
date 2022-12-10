@@ -136,7 +136,7 @@
 
 22/12/02
     - 0.9.5 (client)
-        user : localStroage -> sessionStroage
+        user : localStroage -> sessionStorage
     - 0.9.6 (client)
         pages/Confirm.jsx
     - 0.9.7 (api)
@@ -159,12 +159,17 @@
         logout in auth.js for clear cookies
     - 1.0.4 (client)
         requestAuth in AuthUtil.jsx 
-    - 1.0.5 (api, client)
+    - 1.0.5 (client, api)
         use CSRF-Token
     - 1.0.6 (api)
         login setOptions({sanitizeFilter: true}) to protect NoSQL injection
     - 1.0.7 (api)
         sanitizeData for date, email
+
+22/12/10
+    - 1.0.8 (client, api)
+        client : axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken, 
+        api : setHeader('csrftoken', req.csrfToken())
 
 * to do list 
     - client : Link Acitve when onclick

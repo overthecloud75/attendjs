@@ -35,12 +35,14 @@ export const getEvents = async (args)=> {
         }
         const data = res.data 
         const err = false
+        axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
+        axios.defaults.headers.delete['X-CSRF-Token'] = res.headers.csrftoken
         return {data, err}
     } catch (err) {
         const data = []
         return {data, err}
     }
-};
+}
 
 export const addEvent = async (args)=> {
     console.log('addArgs', args)
@@ -50,9 +52,9 @@ export const addEvent = async (args)=> {
     } catch (err) {
         console.log('err', err)
     }
-};
+}
 
-export const deleteEvent = async (args)=> {
+export const deleteEvent = async (args) => {
     const data = {id: Number(args.id)}
     try { const res = await axios.delete('/event/delete', {data})
         console.log('res', res)
@@ -60,4 +62,4 @@ export const deleteEvent = async (args)=> {
     } catch (err) {
         console.log('err', err)
     }
-};
+}

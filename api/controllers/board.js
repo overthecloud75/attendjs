@@ -18,7 +18,7 @@ export const search = async (req,res,next) => {
         else { 
             boards = await Board.find().sort({createdAt: -1});
         }
-        res.status(200).json(boards)
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json(boards)
     } catch (err) {
         console.log('err', err)
         next(err);

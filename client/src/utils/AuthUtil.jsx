@@ -19,7 +19,7 @@ export const requestAuth = async (mode, method, value, dispatch, navigate) => {
                 dispatch(clearUser())
                 navigate('/')
             } else {
-                axios.defaults.headers.post['X-CSRF-Token'] = res.data.CSRFToken
+                axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
             }
         }
     } catch (err) {

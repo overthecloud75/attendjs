@@ -17,7 +17,7 @@ export const search = async (req,res,next) => {
             employees = await Employee.find(
                 {$or:[{endDate: {$gt: endDate}}, {endDate: {$exists: false}}], regular: {$ne: '휴직'}}).sort({name: 1})
         }
-        res.status(200).json(employees)
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json(employees)
     } catch (err) {
         console.log('err', err)
         next(err)

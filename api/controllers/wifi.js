@@ -35,7 +35,7 @@ export const search = async (req,res,next) => {
         if (startDate === endDate) {
             deviceOns = insertOwner(deviceOns, deviceDict)
         }
-        res.status(200).json(deviceOns);
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json(deviceOns);
     } catch (err) {
         console.log('err', err)
         next(err);
