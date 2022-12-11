@@ -18,7 +18,7 @@ const Auth = ({mode}) => {
 
     useEffect(() => {
         requestAuth(mode, 'get', '', dispatch, navigate)
-    }, [])
+    }, [mode])
 
     const handleChange = (event) => {
         setValue({...value, [event.target.id]: event.target.value})    

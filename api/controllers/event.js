@@ -23,9 +23,13 @@ export const addEvent = async (req,res,next)=>{
         const start = req.body.start
         const end = req.body.end
         const newEvent = new Event({id, title, start, end})
-        await newEvent.save({id, title, start, end})
-        await reportUpdate('add', title, start, end)
-        res.status(200).send("Event has been created.")
+        if (title.includes('/')) {
+            await newEvent.save({id, title, start, end})
+            await reportUpdate('add', title, start, end)
+            res.status(200).send('Event has been created.')
+        } else {
+            next({status: 500, message: '/ is not included'})
+        }
     } catch (err) {
         console.log('err', err)
         next(err);
@@ -40,10 +44,10 @@ export const deleteEvent = async (req,res,next)=>{
         const eventDelete = await Event.deleteOne({id}) 
         if (eventDelete.deletedCount) {
             await reportUpdate('delete', event.title, event.start, event.end)
-            res.status(200).send("Event has been deleted.")
+            res.status(200).send('Event has been deleted.')
         }
         else {
-            res.status(400).send("not deleted")
+            res.status(400).send('not deleted')
         }
     } catch (err) {
         console.log('err', err)

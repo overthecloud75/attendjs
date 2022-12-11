@@ -14,7 +14,6 @@ const Calendar = () => {
     const [error, setError] = useState(false)
 
     const initialEvents = async (args) => {
-        // const 
         const events = await getEvents(args)
         setError(events.err)
         return events.data
@@ -32,7 +31,7 @@ const Calendar = () => {
         fetchData()
     }, [error])
 
-    const handleDateSelect = (selectInfo) => {
+    const handleDateSelect = async (selectInfo) => {
         let title = prompt('Please enter a new title for your event')
         let calendarApi = selectInfo.view.calendar
     
@@ -44,16 +43,21 @@ const Calendar = () => {
                 title,
                 start: selectInfo.startStr,
                 end: selectInfo.endStr}
-            addEvent(event)
-            event = getColor(event)
-            calendarApi.addEvent(event)
+            const result = await addEvent(event)
+            console.log('result', result)
+            if (!result.err) {
+                event = getColor(event)
+                calendarApi.addEvent(event)
+            }
         }
     }
     
-    const handleEventClick = (clickInfo) => {
+    const handleEventClick = async (clickInfo) => {
         if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-            deleteEvent(clickInfo.event)
-            clickInfo.event.remove()
+            const result = await deleteEvent(clickInfo.event)
+            if (!result.err) {
+                clickInfo.event.remove()
+            }
         }
     }
     
