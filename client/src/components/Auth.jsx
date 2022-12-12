@@ -18,6 +18,7 @@ const Auth = ({mode}) => {
 
     useEffect(() => {
         requestAuth(mode, 'get', '', dispatch, navigate)
+    // eslint-disable-next-line
     }, [mode])
 
     const handleChange = (event) => {

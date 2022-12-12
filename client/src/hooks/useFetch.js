@@ -26,6 +26,7 @@ const useFetch = (page, url, params, clickCount) => {
         setLoading(false)
         }
         fetchData()
+    // eslint-disable-next-line
     }, [page, url, clickCount])
     return { data, setData, loading, error }
 }

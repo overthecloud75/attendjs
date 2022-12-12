@@ -29,6 +29,7 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
             }
         }
         fetchData()
+    // eslint-disable-next-line
     }, [error])
 
     const columns = useMemo(() => columnHeaders, [columnHeaders])

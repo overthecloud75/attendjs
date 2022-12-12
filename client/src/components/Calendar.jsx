@@ -29,6 +29,7 @@ const Calendar = () => {
             } 
         }
         fetchData()
+    // eslint-disable-next-line
     }, [error])
 
     const handleDateSelect = async (selectInfo) => {
