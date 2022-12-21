@@ -26,5 +26,6 @@ WIFI = {
 MAIL_SERVER = {'host': 'smtp.office365.com', 'port': 587}
 
 # server_url
-SERVER_URL = 'https://127.0.0.1:5000/'
+INTERNAL_URL = 'https://127.0.0.1:5000/'
+SITE_URL = 'https://127.0.0.1:5000/'
 MONGO_URL = 'mongodb://localhost:27017/'

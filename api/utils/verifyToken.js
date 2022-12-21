@@ -37,7 +37,9 @@ export const verifyAdmin = (req, res, next) => {
 
 export const verifyIP = (req, res, next) => {
     const {externalIP, internalIP} = separateIP(req.headers['x-forwarded-for'])
-    if (process.env.ACCESS_CONTROL === 'true' && externalIP != internalIP) { return verifyToken(req, res, next) }
+    if (process.env.ACCESS_CONTROL === 'true' && externalIP != internalIP && internalIP != '127.0.0.1') { 
+        return verifyToken(req, res, next) 
+    }
     // dotenv does not support boolean
     next()
 }

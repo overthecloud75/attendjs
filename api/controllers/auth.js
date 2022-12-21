@@ -17,8 +17,11 @@ export const register = async (req, res, next) => {
         const email = sanitizeData(req.body.email, 'email')
         let newUser 
         if (userCount !== 0) {
+            const employee = await Employee.findOne({email})
             const user = await User.findOne({email})
             if (user) {
+                return next(createError(403, 'Fobidden'))
+            } else if (!employee){
                 return next(createError(403, 'Fobidden'))
             } else {
                 newUser = new User({

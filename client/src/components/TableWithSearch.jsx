@@ -23,7 +23,9 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
         const fetchData = () => {
             if (error) {
                 const errorStatus = error.response.data.status
-                if (errorStatus === 401) { 
+                if (errorStatus === 401 || errorStatus === 429) { 
+                    // 401 Unauthorized
+                    // 429 too many requests
                     navigate('/login')
                 }
             }

@@ -6,6 +6,14 @@
     - planning : weekly reporting system 
     - planning : 결재 
 
+* 22/12/21
+    - 1.1.3 (api) <br>
+        only employee can make id in auth.js<br>
+
+* 22/12/17
+    - 1.1.2 (api) <br>
+        fix verifyIP logic 
+
 * 22/12/12
     - 1.1.1 (client) <br>
         remove <React.StrictMode> in index.js <br>
@@ -24,7 +32,7 @@
 
 * 22/12/10
     - 1.0.8 (client, api) <br>
-        client : axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken, 
+        client : axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken <br>
         api : setHeader('csrftoken', req.csrfToken())
      
         
