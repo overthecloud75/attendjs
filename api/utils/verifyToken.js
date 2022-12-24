@@ -37,9 +37,25 @@ export const verifyAdmin = (req, res, next) => {
 
 export const verifyIP = (req, res, next) => {
     const {externalIP, internalIP} = separateIP(req.headers['x-forwarded-for'])
-    if (process.env.ACCESS_CONTROL === 'true' && externalIP != internalIP && internalIP != '127.0.0.1') { 
-        return verifyToken(req, res, next) 
-    }
     // dotenv does not support boolean
+    if (process.env.ACCESS_CONTROL === 'true') {
+        const isExternalIP = checkExternalIP(externalIP, internalIP)
+        if (isExternalIP) {return verifyToken(req, res, next)}
+    }
     next()
+}
+
+const checkExternalIP = (externalIP, internalIP) => {
+    let isExternalIP = false
+    if (['127.0.0.1', 'localhost'].includes(internalIP)) { 
+        return isExternalIP
+    }
+    const splittedInternalIPRange = process.env.INTERNAL_IP_RANGE.split('.')
+    const splittedExteranlIP = externalIP.split('.')
+    for (let x of splittedInternalIPRange.keys()) { 
+        if (splittedInternalIPRange[x] === 0) { }
+        else if (splittedInternalIPRange[x] !== splittedExteranlIP[x]) 
+        { isExternalIP = true }
+    }
+    return isExternalIP 
 }
