@@ -9,9 +9,9 @@ from .employee import Employee
 from .deviceon import DeviceOn
 from .device import Device
 try:
-    from mainconfig import ACCESS_DB_PWD, INTERNAL_URL, SITE_URL
+    from mainconfig import ACCESS_DB_PWD, SITE_URL
 except Exception as e:
-    from testconfig import ACCESS_DB_PWD, INTERNAL_URL, SITE_URL
+    from testconfig import ACCESS_DB_PWD, SITE_URL
 from config import USE_WIFI_ATTENDANCE, USE_NOTICE_EMAIL, EMAIL_NOTICE_BASE, WORKING
 
 # connect to access db
@@ -317,8 +317,8 @@ class Report(BasicModel):
                    '- 근무 시간: %s \n' \
                    '- 사유: %s \n' \
                    '\n' \
-                   '연차, 외근 등의 사유가 있는 경우 %s, %s 에 기록을 하시면 근태가 정정이 됩니다. ' \
-                   %(name, name, report_date, begin, working_hours, str(status), INTERNAL_URL + 'schedule', SITE_URL + 'schedule')
+                   '연차, 외근 등의 사유가 있는 경우 %s 에 기록을 하시면 근태가 정정이 됩니다. ' \
+                   %(name, name, report_date, begin, working_hours, str(status), SITE_URL + 'schedule')
 
             subject = '[근태 관리] ' + report_date + ' ' + name + ' ' + str(status)
             sent = send_email(email=email, subject=subject, body=body, include_cc=True)
