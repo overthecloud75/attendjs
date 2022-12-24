@@ -1,7 +1,7 @@
 import { logger, reqFormat } from '../config/winston.js'
 import Report from "../models/Report.js"
 import Employee from "../models/Employee.js"
-import { calculateWorkingHours } from "./report.js"
+import { calculateWorkingHours } from "./eventReport.js"
 import { sanitizeData } from '../utils/util.js'
 
 const randomAttend = (range, add) => {

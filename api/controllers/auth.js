@@ -14,27 +14,34 @@ export const register = async (req, res, next) => {
         const salt = bcrypt.genSaltSync(10)
         const hash = bcrypt.hashSync(req.body.password, salt)
         const userCount = await User.count()
+        const name = req.body.name 
         const email = sanitizeData(req.body.email, 'email')
         let newUser 
         if (userCount !== 0) {
             const employee = await Employee.findOne({email})
-            const user = await User.findOne({email})
-            if (user) {
+            if (!employee) {
                 return next(createError(403, 'Fobidden'))
-            } else if (!employee){
+            } else if (employee.name !== name) {
                 return next(createError(403, 'Fobidden'))
             } else {
-                newUser = new User({
-                    ...req.body,
-                    password: hash,
-                    confirmationCode: token
-                })
+                const user = await User.findOne({email})
+                if (user) {
+                    return next(createError(403, 'Fobidden'))
+                } else {
+                    newUser = new User({
+                        name, 
+                        email, 
+                        password: hash,
+                        confirmationCode: token
+                    })
+                }
             }
         } else {
             const employee = await Employee.findOne({email})
             if (employee) {
                 newUser = new User({
-                    ...req.body,
+                    name, 
+                    email, 
                     password: hash,
                     isAdmin: true,
                     confirmationCode: token

@@ -16,6 +16,7 @@ import deviceRoute from './routes/device.js'
 import eventRoute from './routes/event.js'
 import employeeRoute from './routes/employee.js'
 import boardRoute from './routes/board.js'
+import reportRoute from './routes/report.js'
 import confirmRoute from './routes/confirm.js'
 
 const app = express()
@@ -61,7 +62,9 @@ app.use('/api/device', deviceRoute)
 app.use('/api/event', eventRoute)
 app.use('/api/employee', employeeRoute)
 app.use('/api/board', boardRoute)
+app.use('/api/report', reportRoute)
 app.use('/api/confirm', confirmRoute)
+
 
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500

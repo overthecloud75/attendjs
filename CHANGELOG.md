@@ -6,6 +6,11 @@
     - planning : weekly reporting system 
     - planning : 결재 
 
+* 22/12/24
+    - 1.1.4 (api) <br>
+        employee name and user name have to be the same <br>
+        post only necessary field in register in auth.js 
+
 * 22/12/21
     - 1.1.3 (api) <br>
         only employee can make id in auth.js<br>

@@ -1,6 +1,6 @@
 import { logger, reqFormat } from '../config/winston.js'
 import Event from '../models/Event.js'
-import { reportUpdate } from './report.js'
+import { reportUpdate } from './eventReport.js'
 import { sanitizeData } from '../utils/util.js'
 
 export const getEvents = async (req,res,next)=>{
