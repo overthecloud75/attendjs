@@ -6,6 +6,6 @@ const router = express.Router()
 
 router.get('/search', verifyIP, search)
 router.post('/write', verifyIP, write)
-router.delete('/delete', verifyIP, deleteBoard)
+router.post('/delete', verifyIP, deleteBoard)
 
 export default router

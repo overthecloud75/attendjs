@@ -22,10 +22,10 @@ const router = express.Router()
 // })
 
 //UPDATE
-router.put("/:id", verifyUser, updateUser);
+router.post("/update/:id", verifyUser, updateUser);
 
 //DELETE
-router.delete("/:id", verifyUser, deleteUser);
+router.post("/delete/:id", verifyUser, deleteUser);
 
 //GET
 router.get("/:id", verifyUser, getUser);

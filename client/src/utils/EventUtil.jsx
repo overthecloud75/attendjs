@@ -62,7 +62,7 @@ export const addEvent = async (args)=> {
 
 export const deleteEvent = async (args) => {
     const data = {id: Number(args.id)}
-    try { const res = await axios.delete('/event/delete', {data})
+    try { const res = await axios.post('/event/delete', data)
         const resData = res.data
         const err = false
         return {resData, err}

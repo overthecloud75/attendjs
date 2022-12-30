@@ -83,7 +83,7 @@ const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setO
         if (UpdatePages.includes(page)) {
             if(!window.confirm('정말로 삭제하시겠습니다.?')) return
             try {
-                await axios.delete(url, {data: value})
+                await axios.post(url, value)
                 deleteData()
             } catch (err) {
                 console.log(url, err)

@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get('/', verifyIP, getEvents)
 router.post('/add', verifyIP, addEvent)
-router.delete('/delete', verifyIP, deleteEvent)
+router.post('/delete', verifyIP, deleteEvent)
 
 export default router;
