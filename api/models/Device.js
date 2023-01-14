@@ -26,10 +26,6 @@ const DeviceSchema = new mongoose.Schema(
             type: String,
             required: false,
         },
-        vendor: {
-            type: String,
-            required: false,
-        },
         os: {
             type: String,
             required: false,

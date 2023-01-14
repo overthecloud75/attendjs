@@ -1,8 +1,10 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { formatToTimeZone } from 'date-fns-timezone'
 import { logger, reqFormat } from '../config/winston.js'
 import User from '../models/User.js'
 import Employee from '../models/Employee.js'
+import Login from '../models/Login.js'
 import { createError } from '../utils/error.js'
 import { sendConfirmationEmail } from '../utils/email.js'
 import { sanitizeData } from '../utils/util.js'
@@ -81,6 +83,12 @@ export const login = async (req, res, next) => {
             process.env.JWT
         )
         const { password, status, confirmationCode, ...otherDetails } = user._doc
+        const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
+        const user_agent = req.headers['user-agent']
+        const date = new Date()
+        const output = formatToTimeZone(date, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })    
+        const newLogin = new Login({ip, user_agent, name: user.name, email: user.email, date: output.split(' ')[0], time: output.split(' ')[1]})
+        await newLogin.save()
         res.cookie('access_token', token, {
             httpOnly: true,
         })

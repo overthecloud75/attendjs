@@ -6,9 +6,15 @@
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
 
+* 22/01/14
+    - 1.1.8 (api) <br>
+        save login record in database <br>
+    - 1.1.7 (client) <br>
+        remove sidebar in login, register page <br>
+
 * 22/12/28
     - 1.1.6 (api) <br>
-        router.delete for router.post because of WAF prevention <br>
+        router.delete -> router.post because of WAF prevention <br>
 
 * 22/12/24
     - 1.1.5 (api) <br>

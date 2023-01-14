@@ -40,9 +40,7 @@ export const deleteEvent = async (req,res,next)=>{
     logger.info(reqFormat(req))
     try {
         const id = req.body.id
-        console.log(id)
         const event = await Event.findOne({id}).lean()
-        console.log(event)
         const eventDelete = await Event.deleteOne({id}) 
         if (eventDelete.deletedCount) {
             await reportUpdate('delete', event.title, event.start, event.end)

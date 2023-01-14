@@ -12,10 +12,6 @@ export const columnHeaders = [
         Header: '입사일',
     },
     {
-        accessor: 'endDate',
-        Header: '퇴사일',
-    },
-    {
         accessor: 'email',
         Header: 'email',
     },
@@ -53,10 +49,6 @@ export const csvHeaders = [
     {
         key: 'beginDate',
         label: '입사일',
-    },
-    {
-        key: 'endDate',
-        label: '퇴사일',
     },
     {
         key: 'email',
