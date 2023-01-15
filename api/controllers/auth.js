@@ -65,7 +65,7 @@ export const login = async (req, res, next) => {
     const email = sanitizeData(req.body.email, 'email')
     try {
         const user = await User.findOne({email}).setOptions({sanitizeFilter: true})
-        if (!user) return next(createError(404, 'User not found!'))
+        if (!user) return next(createError(403, 'User not found!'))
 
         const isPasswordCorrect = await bcrypt.compare(
             req.body.password,
@@ -85,9 +85,10 @@ export const login = async (req, res, next) => {
         const { password, status, confirmationCode, ...otherDetails } = user._doc
         const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
         const user_agent = req.headers['user-agent']
+        const location = req.body.location
         const date = new Date()
-        const output = formatToTimeZone(date, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })    
-        const newLogin = new Login({ip, user_agent, name: user.name, email: user.email, date: output.split(' ')[0], time: output.split(' ')[1]})
+        const output = formatToTimeZone(date, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })  
+        const newLogin = new Login({ip, user_agent, name: user.name, email, location, date: output.split(' ')[0], time: output.split(' ')[1]})
         await newLogin.save()
         res.cookie('access_token', token, {
             httpOnly: true,

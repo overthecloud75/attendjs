@@ -18,6 +18,10 @@ const LoginSchema = new mongoose.Schema(
             type: String,
             required: false,
         },
+        location: {
+            type: Object,
+            required: true,
+        },
         date: {
             type: String,
             required: true,

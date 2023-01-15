@@ -14,9 +14,17 @@ const Wrapper = styled.div`
 `
 
 const Title = styled.h1`
+    margin: 15px 0px 0px 7px;
+    @media screen and (max-width: 500px) {
+        font-size: 20px;
+    }
 `
 
 const TitleDesc = styled.div`
+    margin: 5px 0px 0px 7px;
+    @media screen and (max-width: 500px) {
+        font-size: 15px;
+    }
 `
 
 const Advertisement = () => {
@@ -24,7 +32,7 @@ const Advertisement = () => {
         <Container>
             <Wrapper>
                 <Title>
-                    공정한 SmartWork의 시작
+                    진정한 SmartWork의 시작
                 </Title>
                 <TitleDesc>
                     사람과 사람, 그 관계를 만드는

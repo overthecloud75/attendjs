@@ -6,6 +6,12 @@
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
 
+* 22/01/15
+    - 1.2.0 (client) <br>
+        apply media-query in styled-components for mobile <br> 
+    - 1.1.9 (client, api) <br>
+        post geoLocation when login <br>
+
 * 22/01/14
     - 1.1.8 (api) <br>
         save login record in database <br>

@@ -15,7 +15,6 @@ export const requestAuth = async (mode, method, value, dispatch, navigate) => {
         else {
             const res = await axios.get(url)
             if (mode === 'logout') {
-                console.log('logout')
                 dispatch(clearUser())
                 navigate('/')
             } else {
