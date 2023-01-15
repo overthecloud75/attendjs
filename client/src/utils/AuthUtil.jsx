@@ -10,7 +10,7 @@ export const requestAuth = async (mode, method, value, dispatch, navigate) => {
             if (mode === 'login') {
                 dispatch(loginUser(res.data)) 
             }
-            navigate('/')
+            navigate('/', {state : {latitude: value.location.latitude, longitude: value.location.longitude}})
         }
         else {
             const res = await axios.get(url)
