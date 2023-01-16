@@ -12,8 +12,9 @@ import usersRoute from './routes/users.js'
 import wifiRoute from './routes/wifi.js'
 import attendRoute from './routes/attend.js'
 import summaryRoute from './routes/summary.js'
-import deviceRoute from './routes/device.js'
 import eventRoute from './routes/event.js'
+import deviceRoute from './routes/device.js'
+import locationRoute from './routes/location.js'
 import employeeRoute from './routes/employee.js'
 import boardRoute from './routes/board.js'
 import reportRoute from './routes/report.js'
@@ -58,8 +59,9 @@ app.use('/api/users', usersRoute)
 app.use('/api/attend', attendRoute)
 app.use('/api/wifi-attend', wifiRoute)
 app.use('/api/summary', summaryRoute)
-app.use('/api/device', deviceRoute)
 app.use('/api/event', eventRoute)
+app.use('/api/location', locationRoute)
+app.use('/api/device', deviceRoute)
 app.use('/api/employee', employeeRoute)
 app.use('/api/board', boardRoute)
 app.use('/api/report', reportRoute)

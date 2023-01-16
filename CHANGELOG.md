@@ -6,6 +6,10 @@
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
 
+* 22/01/16
+    - 1.2.2 (client, api) <br>
+        location <br>
+
 * 22/01/15
     - 1.2.1 (client) <br>
         use google map api <br>

@@ -17,7 +17,7 @@ export const sendConfirmationEmail = async (name, email, confirmationCode) => {
         await transport.sendMail({
             from: process.env.ACCOUNT_EMAIL,
             to: email,
-            subject: '[SMART WORK] Please confirm your account',
+            subject: '[Smart Work] Please confirm your account',
             html: `<h2>Hello ${name}</h2>
                 <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
                 <a href=${process.env.DOMAIN}/confirm/${confirmationCode}> Click here</a>

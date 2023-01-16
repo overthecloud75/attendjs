@@ -2,8 +2,9 @@ import styled from 'styled-components'
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'
 import WifiFindIcon from '@mui/icons-material/WifiFind'
 import SummarizeIcon from '@mui/icons-material/Summarize'
-import ComputerIcon from '@mui/icons-material/Computer'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+import PlaceIcon from '@mui/icons-material/Place'
+import ComputerIcon from '@mui/icons-material/Computer'
 import PeopleIcon from '@mui/icons-material/People'
 import NoteAltIcon from '@mui/icons-material/NoteAlt'
 import FolderIcon from '@mui/icons-material/Folder'
@@ -134,6 +135,11 @@ const itemDict =
                 to: '/schedule',
                 icon: <CalendarMonthIcon/>,
                 title: 'Schedule'
+            },
+            {
+                to: '/location',
+                icon: <PlaceIcon/>,
+                title: 'Location'
             }
         ],
     Management : [

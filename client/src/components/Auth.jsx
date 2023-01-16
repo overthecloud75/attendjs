@@ -57,8 +57,6 @@ const Auth = ({mode}) => {
     // check gps location 
     const { location, geoError } = useCurrentLocation()
 
-    console.log(location, geoError)
-
     useEffect(() => {
         requestAuth(mode, 'get', '', dispatch, navigate)
     // eslint-disable-next-line
