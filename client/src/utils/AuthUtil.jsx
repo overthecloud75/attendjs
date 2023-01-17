@@ -9,8 +9,10 @@ export const requestAuth = async (mode, method, value, dispatch, navigate) => {
             const res = await axios.post(url, value)
             if (mode === 'login') {
                 dispatch(loginUser(res.data)) 
-            }
-            navigate('/', {state : {latitude: value.location.latitude, longitude: value.location.longitude}})
+                navigate('/', {state : {latitude: value.location.latitude, longitude: value.location.longitude}})
+            } else if (mode === 'register') {
+                navigate('/check-email')
+            }  
         }
         else {
             const res = await axios.get(url)

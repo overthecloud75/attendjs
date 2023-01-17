@@ -6,6 +6,10 @@
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
 
+* 22/01/17
+    - 1.2.3 (client) <br>
+        check-email page to activate accout <br>
+
 * 22/01/16
     - 1.2.2 (client, api) <br>
         location <br>

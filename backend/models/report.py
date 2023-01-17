@@ -297,37 +297,38 @@ class Report(BasicModel):
         regular = employee['regular']
 
         report = self.collection.find_one({'name': name, 'employeeId': employee_id, 'date': {"$lt": self.today}}, sort=[('date', -1)])
-        report_date = report['date']
-        begin = report['begin']
-        if begin is not None:
-            begin = begin[0:2] + ':' + begin[2:4] + ':' + begin[4:6]
-        status = report['status']
-        working_hours = report['workingHours']
-        if status in EMAIL_NOTICE_BASE and regular in WORKING['update']:
-            print('send_notice_email', self.today, name)
-            # https://techexpert.tips/ko/python-ko/파이썬-office-365를-사용하여-이메일-보내기
-            # https://nowonbun.tistory.com/684 (참조자)
-            body = '\n' \
-                   ' 안녕하세요 %s님 \n' \
-                   '근태 관련하여 다음의 사유가 있어 메일을 송부합니다. \n ' \
-                   '\n' \
-                   '- 이름: %s \n' \
-                   '- 날짜: %s \n' \
-                   '- 출근 시각: %s \n' \
-                   '- 근무 시간: %s \n' \
-                   '- 사유: %s \n' \
-                   '\n' \
-                   '연차, 외근 등의 사유가 있는 경우 %s 에 기록을 하시면 근태가 정정이 됩니다. ' \
-                   %(name, name, report_date, begin, working_hours, str(status), SITE_URL + 'schedule')
+        if report:
+            report_date = report['date']
+            begin = report['begin']
+            if begin:
+                begin = begin[0:2] + ':' + begin[2:4] + ':' + begin[4:6]
+            status = report['status']
+            working_hours = report['workingHours']
+            if status in EMAIL_NOTICE_BASE and regular in WORKING['update']:
+                print('send_notice_email', self.today, name)
+                # https://techexpert.tips/ko/python-ko/파이썬-office-365를-사용하여-이메일-보내기
+                # https://nowonbun.tistory.com/684 (참조자)
+                body = '\n' \
+                    ' 안녕하세요 %s님 \n' \
+                    '근태 관련하여 다음의 사유가 있어 메일을 송부합니다. \n ' \
+                    '\n' \
+                    '- 이름: %s \n' \
+                    '- 날짜: %s \n' \
+                    '- 출근 시각: %s \n' \
+                    '- 근무 시간: %s \n' \
+                    '- 사유: %s \n' \
+                    '\n' \
+                    '연차, 외근 등의 사유가 있는 경우 %s 에 기록을 하시면 근태가 정정이 됩니다. ' \
+                    %(name, name, report_date, begin, working_hours, str(status), SITE_URL + 'schedule')
 
-            subject = '[근태 관리] ' + report_date + ' ' + name + ' ' + str(status)
-            sent = send_email(email=email, subject=subject, body=body, include_cc=True)
-            if sent:
-                return {'date': self.today, 'name': name, 'email': email, 'reportDate': report_date, 'status': status}
+                subject = '[근태 관리] ' + report_date + ' ' + name + ' ' + str(status)
+                sent = send_email(email=email, subject=subject, body=body, include_cc=True)
+                if sent:
+                    return {'date': self.today, 'name': name, 'email': email, 'reportDate': report_date, 'status': status}
+                else:
+                    return sent
             else:
-                return sent
-        else:
-            return False
+                return False
 
     def _update_devices(self, date=None):
         mac_list = self.device_on.get_device_list(date=date)
