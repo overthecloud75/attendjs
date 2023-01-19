@@ -9,6 +9,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import Attend from './pages/Attend'
 import Wifi from './pages/Wifi'
+import GPS from './pages/GPS'
 import Location from './pages/Location'
 import Summary from './pages/Summary'
 import Device from './pages/Device'
@@ -29,6 +30,7 @@ function App() {
                 <Route exact path='/login' element={<Login/>}/>
                 <Route exact path='/attend' element={<Attend/>}/>
                 <Route exact path='/wifi-attend' element={<Wifi/>}/>
+                <Route exact path='/gps-attend' element={<GPS/>}/>
                 <Route exact path='/summary' element={<Summary/>}/>
                 <Route exact path='/schedule' element={<Schedule/>}/>
                 <Route exact path='/location' element={<Location/>}/>

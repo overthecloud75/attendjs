@@ -30,14 +30,14 @@ export const search = async (req,res,next) => {
             deviceOns = await DeviceOn.find({ip, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1}).lean()
         }
         else { 
-            deviceOns = await DeviceOn.find({ip: {$regex: process.env.WIFI_RANGE}, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1}).lean();
-        }; 
+            deviceOns = await DeviceOn.find({ip: {$regex: process.env.WIFI_RANGE}, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1}).lean()
+        }
         if (startDate === endDate) {
             deviceOns = insertOwner(deviceOns, deviceDict)
         }
-        res.status(200).setHeader('csrftoken', req.csrfToken()).json(deviceOns);
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json(deviceOns)
     } catch (err) {
         console.log('err', err)
-        next(err);
+        next(err)
     }
 }

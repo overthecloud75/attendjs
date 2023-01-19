@@ -6,6 +6,10 @@
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
 
+* 22/01/19
+    - 1.2.4 (client, api) <br>
+        apply gps attend <br>
+
 * 22/01/17
     - 1.2.3 (client) <br>
         check-email page to activate accout <br>

@@ -1,6 +1,5 @@
 import { logger, reqFormat } from '../config/winston.js'
 import Location from '../models/Location.js'
-import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
     logger.info(reqFormat(req))

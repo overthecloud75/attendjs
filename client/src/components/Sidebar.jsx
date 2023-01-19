@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'
 import WifiFindIcon from '@mui/icons-material/WifiFind'
+import GpsFixedIcon from '@mui/icons-material/GpsFixed'
 import SummarizeIcon from '@mui/icons-material/Summarize'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import PlaceIcon from '@mui/icons-material/Place'
@@ -125,6 +126,11 @@ const itemDict =
                 to: '/wifi-attend',
                 icon: <WifiFindIcon/>,
                 title: 'Wifi-Attend'
+            }, 
+            {    
+                to: '/gps-attend',
+                icon: <GpsFixedIcon/>,
+                title: 'GPS-Attend'
             }, 
             {
                 to: '/summary',

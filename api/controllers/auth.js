@@ -5,6 +5,7 @@ import { logger, reqFormat } from '../config/winston.js'
 import User from '../models/User.js'
 import Employee from '../models/Employee.js'
 import Login from '../models/Login.js'
+import Location from '../models/Location.js'
 import { createError } from '../utils/error.js'
 import { sendConfirmationEmail } from '../utils/email.js'
 import { sanitizeData } from '../utils/util.js'
@@ -86,10 +87,18 @@ export const login = async (req, res, next) => {
         const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
         const user_agent = req.headers['user-agent']
         const location = req.body.location
-        const date = new Date()
-        const output = formatToTimeZone(date, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })  
-        const newLogin = new Login({ip, user_agent, name: user.name, email, location, date: output.split(' ')[0], time: output.split(' ')[1]})
-        await newLogin.save()
+        const where = await whereIs(location, ip, user_agent)
+        if (where.attend) {
+            const date = new Date()
+            const data = {ip, user_agent, location}
+            const output = formatToTimeZone(date, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })  
+            const login = await Login.findOne({date: output.split(' ')[0], email})
+            if (login) {
+                    await Login.updateOne({date: output.split(' ')[0], email, name: user.name}, {$set: {endData: data, end: output.split(' ')[1]}, endPlace: where.place},  {upsert: true})
+            } else {
+                    await Login.updateOne({date: output.split(' ')[0], email, name: user.name}, {$set: {email, name:user.name, beginData: data, date: output.split(' ')[0], begin: output.split(' ')[1], beginPlace: where.place}}, {upsert: true})
+            }
+        }
         res.cookie('access_token', token, {
             httpOnly: true,
         })
@@ -124,4 +133,19 @@ export const confirmCode = async (req, res, next) => {
     } catch (err) {
         next(err)
     }
+}
+
+const whereIs = async (location, ip, user_agent) => {
+    let attend = false 
+    let place = ''
+    const locations = await Location.find()
+    for (let loc of locations) {
+        const latDev = loc.latitude - location.latitude
+        const logDev = loc.longitude - location.longitude
+        if ((latDev < loc.dev) && (latDev > -1 * loc.dev) && (logDev < loc.dev) && (logDev > -1 * loc.dev)) {
+            attend = true
+            place = loc.location  
+        }
+    }
+    return {attend, place}
 }

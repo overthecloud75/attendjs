@@ -16,7 +16,7 @@ const LocationSchema = new mongoose.Schema(
             required: true
         },
         dev: {
-            type: String,
+            type: Number,
             required: true,
         },
     },

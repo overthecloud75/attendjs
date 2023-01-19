@@ -10,6 +10,7 @@ import csrf from 'csurf'
 import authRoute from './routes/auth.js'
 import usersRoute from './routes/users.js'
 import wifiRoute from './routes/wifi.js'
+import gpsRoute from './routes/gps.js'
 import attendRoute from './routes/attend.js'
 import summaryRoute from './routes/summary.js'
 import eventRoute from './routes/event.js'
@@ -58,6 +59,7 @@ app.use('/api/auth', authRoute)
 app.use('/api/users', usersRoute)
 app.use('/api/attend', attendRoute)
 app.use('/api/wifi-attend', wifiRoute)
+app.use('/api/gps-attend', gpsRoute)
 app.use('/api/summary', summaryRoute)
 app.use('/api/event', eventRoute)
 app.use('/api/location', locationRoute)
