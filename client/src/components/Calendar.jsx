@@ -43,7 +43,8 @@ const Calendar = () => {
                 id: Date.now(),
                 title,
                 start: selectInfo.startStr,
-                end: selectInfo.endStr}
+                end: selectInfo.endStr
+            }
             const result = await addEvent(event)
             console.log('result', result)
             if (!result.err) {
@@ -69,11 +70,11 @@ const Calendar = () => {
                 initialView='dayGridMonth'
                 editable={true}
                 selectable={true}
-                aspectRatio={2.2}
                 initialEvents={initialEvents}
                 weekends={true}
                 select={handleDateSelect}
                 eventClick={handleEventClick}
+                contentHeight='auto'
             />
         </Wrapper>
     )

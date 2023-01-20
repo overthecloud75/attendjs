@@ -13,6 +13,9 @@ const Wrapper = styled.div`
     margin-left: 30px;
     top: 0px;
     position: absolute;
+    @media screen and (max-width: 500px) {
+        display: none;
+    }
 `
 
 const Items = styled.div`

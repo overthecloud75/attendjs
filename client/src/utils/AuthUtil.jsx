@@ -1,9 +1,8 @@
 import axios from 'axios'
 import { loginUser, clearUser } from '../storage/userSlice.js'
 
-export const requestAuth = async (mode, method, value, dispatch, navigate) => {
-    const url = '/auth/' + mode
-    let error = false 
+export const requestAuth = async (mode, method, value, dispatch, navigate, setErrorMsg, setLoading) => {
+    const url = '/auth/' + mode 
     try {
         if (method === 'post') {
             const res = await axios.post(url, value)
@@ -23,9 +22,9 @@ export const requestAuth = async (mode, method, value, dispatch, navigate) => {
                 axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
             }
         }
+        setLoading(false)
     } catch (err) {
-        console.log(err)
-        error = true 
+        setErrorMsg(err.request.statusText)
+        setLoading(false)
     } 
-    return error 
 }

@@ -11,6 +11,7 @@ import NoteAltIcon from '@mui/icons-material/NoteAlt'
 import FolderIcon from '@mui/icons-material/Folder'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import { getUser } from '../storage/userSlice.js'
 
 const Wrapper = styled.div`
     flex: 1;
@@ -42,7 +43,7 @@ const Logo = styled.span`
     font-weight: bold;
     color: #6439ff;
     @media screen and (max-width: 500px) {
-        font-size: 12px;
+        font-size: 10px;
     }
 `
 
@@ -58,6 +59,9 @@ const Title = styled.div`
     color: #999;
     margin-top: 15px;
     margin-bottom: 5px;
+    @media screen and (max-width: 500px) {
+        display: none;
+    }
 `
 
 const Item = styled.li`
@@ -120,61 +124,72 @@ const itemDict =
             {
                 to: '/attend', 
                 icon: <DirectionsRunIcon/>,
-                title: 'Attend'
+                title: 'Attend',
+                auth: true
             },
             {    
                 to: '/wifi-attend',
                 icon: <WifiFindIcon/>,
-                title: 'Wifi-Attend'
+                title: 'Wifi-Attend',
+                auth: false
             }, 
             {    
                 to: '/gps-attend',
                 icon: <GpsFixedIcon/>,
-                title: 'GPS-Attend'
+                title: 'GPS-Attend',
+                auth: true
             }, 
             {
                 to: '/summary',
                 icon: <SummarizeIcon/>,
-                title: 'Summary'
+                title: 'Summary',
+                auth: true
             },
             {
                 to: '/schedule',
                 icon: <CalendarMonthIcon/>,
-                title: 'Schedule'
+                title: 'Schedule',
+                auth: true
             },
             {
                 to: '/location',
                 icon: <PlaceIcon/>,
-                title: 'Location'
+                title: 'Location',
+                auth: false
             }
         ],
     Management : [
         {
             to: '/device',
             icon: <ComputerIcon/>,
-            title: 'Device'
+            title: 'Device',
+            auth: true
         }
     ],
     Communaity : [
         {
             to: '/employee',
             icon: <PeopleIcon/>,
-            title: 'Employee'
+            title: 'Employee',
+            auth: true
         },
         {
             to: '/board',
             icon: <NoteAltIcon/>,
-            title: 'Board'
+            title: 'Board',
+            auth: true
         },
         {
             to: '/report',
             icon: <FolderIcon/>,
-            title: 'Report'
+            title: 'Report',
+            auth: false
         }
     ]
 }
 
 const SidebarItems = ({itemList, titleIndex, activeTitleIndex, activeItemIndex, handleClick}) => {
+    const user = getUser()
     return (
         itemList.map((item, itemIndex) => (
             <Link 
@@ -182,13 +197,15 @@ const SidebarItems = ({itemList, titleIndex, activeTitleIndex, activeItemIndex, 
                 style={{ textDecoration: 'none' }}
                 key={itemIndex}
                 >
-                <Item
-                    onClick={() => handleClick(titleIndex, itemIndex)}
-                    active={activeTitleIndex===titleIndex&activeItemIndex===itemIndex?1:0}    
-                >
-                    <Icon>{item.icon}</Icon>
-                    <Span>{item.title}</Span>
-                </Item>
+                {(item.auth || user.isAdmin) &&
+                    <Item
+                        onClick={() => handleClick(titleIndex, itemIndex)}
+                        active={activeTitleIndex===titleIndex&activeItemIndex===itemIndex?1:0}    
+                    >
+                        <Icon>{item.icon}</Icon>
+                        <Span>{item.title}</Span>
+                    </Item>
+                }
             </Link>
         ))
     )

@@ -6,13 +6,17 @@
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
 
+* 22/01/20
+    - 1.2.5 (client) <br>
+        setLoading in Auth.jsx <br>
+
 * 22/01/19
     - 1.2.4 (client, api) <br>
         apply gps attend <br>
 
 * 22/01/17
     - 1.2.3 (client) <br>
-        check-email page to activate accout <br>
+        check-email page to activate account <br>
 
 * 22/01/16
     - 1.2.2 (client, api) <br>

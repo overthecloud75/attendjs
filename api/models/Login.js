@@ -10,35 +10,26 @@ const LoginSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        // ip, user_agent, location
-        beginData: {
-            type: Object,
-            required: true
-        },
-        endData: {
-            type: Object,
-            required: true,
-        },
         date: {
             type: String,
             required: true,
         },
-        begin: {
+        time: {
             type: String,
             required: true,
         },
-        beginPlace: {
-            type: String,
-            required: true  
+        ip: {
+            type: String, 
+            required: true,
         },
-        end: {
+        user_agent: {
             type: String,
-            required: false,
+            requried: true,
         },
-        endPlace: {
-            type: String,
-            required: false  
-        },
+        location: {
+            type: Object,
+            requried: true, 
+        }      
     },
 )
 

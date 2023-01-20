@@ -9,7 +9,7 @@ const useCurrentLocation = (options = {}) => {
     const [location, setLocation] = useState()
     // 에러 메세지 저장
     const [error, setError] = useState()
-  
+
     // Geolocation의 `getCurrentPosition` 메소드에 대한 성공 callback 핸들러
     const handleSuccess = (pos) => {
         const { latitude, longitude } = pos.coords
@@ -52,13 +52,14 @@ const Auth = ({mode}) => {
             location: {latitude: -1, longitude: -1}
         }
     )
-    const [err, setErr] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [errorMsg, setErrorMsg] = useState('')
 
     // check gps location 
     const { location, geoError } = useCurrentLocation()
 
     useEffect(() => {
-        requestAuth(mode, 'get', '', dispatch, navigate)
+        requestAuth(mode, 'get', '', dispatch, navigate, setErrorMsg, setLoading)
     // eslint-disable-next-line
     }, [mode])
 
@@ -68,8 +69,8 @@ const Auth = ({mode}) => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        const error = requestAuth(mode, 'post', value, dispatch, navigate)
-        setErr(error)
+        setLoading(true)
+        requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading)
     }
 
     return (
@@ -82,7 +83,8 @@ const Auth = ({mode}) => {
                     <input id='email' type='email' placeholder='email' onChange={handleChange}/>
                     <input id='password' type='password' placeholder='password' onChange={handleChange}/>
                     <button>{mode==='login'?'Sign in':'Sign up'}</button>
-                    {err && <span>Something went wrong</span>}
+                    {loading && <span>...Loading</span>}
+                    {!loading && errorMsg && <span>{errorMsg}</span>}
                 </form>
                 {mode==='login'?
                     (<p>You don't have an account? <Link to='/register'>Register</Link></p>):
