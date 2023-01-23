@@ -18,6 +18,9 @@ PAGE_DEFAULT = {
 # wift attend
 USE_WIFI_ATTENDANCE = True
 
+# gps attend
+USE_GPS_ATTENDANCE = True
+
 # email setting
 USE_NOTICE_EMAIL = True
 EMAIL_NOTICE_BASE = ['미출근', '지각']

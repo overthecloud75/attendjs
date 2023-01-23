@@ -2,8 +2,8 @@ import mongoose from 'mongoose'
 
 const LoginSchema = new mongoose.Schema(
     {
-        email: {
-            type: String,
+        employeeId: {
+            type: Number,
             required: true,
         },
         name: {
@@ -28,7 +28,7 @@ const LoginSchema = new mongoose.Schema(
         },
         location: {
             type: Object,
-            requried: true, 
+            requried: false, 
         }      
     },
 )

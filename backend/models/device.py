@@ -8,7 +8,7 @@ class Device(BasicModel):
         self.employee = Employee()
 
     def get_mac_list(self, date=None):
-        device_list = self.collection.find(sort=[('ipStr', 1)])
+        device_list = self.collection.find({'endDate': date, 'owner': {'$exists': True}, 'owner': {'$ne': None}}, sort=[('ipStr', 1)])
         return device_list
 
     def sn_post(self, request_data): 
@@ -59,5 +59,5 @@ class Device(BasicModel):
                     if device['employeeId'] in device_dict:
                         device_dict[device['employeeId']].append(device['mac'])
                     else:
-                        device_dict[device['employeeId']] = [device['mac']]
+                        device_dict[device['employeeId']] = [device['owner'], device['mac']]
         return device_dict

@@ -6,6 +6,14 @@
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
 
+* 22/01/23
+    - 1.2.8 (backend) <br>
+        _legacy_or_gps <br>
+    - 1.2.7 (api) <br>
+        remove err.stack when error for security <br>
+    - 1.2.6 (client) <br>
+        use /api in url to remove proxy between client and api<br>
+
 * 22/01/20
     - 1.2.5 (client) <br>
         setLoading in Auth.jsx <br>

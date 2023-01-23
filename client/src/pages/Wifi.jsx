@@ -13,7 +13,7 @@ const Wifi = () => {
                 <TableWithSearch 
                     searchKeyword='ip'
                     page='wifi-attend'
-                    url='/wifi-attend/search'
+                    url='/api/wifi-attend/search'
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />

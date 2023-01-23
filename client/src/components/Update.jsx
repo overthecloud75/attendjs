@@ -22,7 +22,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
     }
 
     const handleUpdate = async () => {
-        const url = '/' + page + '/update'
+        const url = '/api/' + page + '/update'
         if (['location', 'device', 'employee'].includes(page)) {
             try {
                 await axios.post(url, value)

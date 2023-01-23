@@ -64,7 +64,7 @@ const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setO
     }
 
     const handleUpdate = async () => {
-        const url = '/' + page + '/write'
+        const url = '/api/' + page + '/write'
         if (UpdatePages.includes(page)) {
             if(!window.confirm('정말로 저장하시겠습니다.?')) return
             try {
@@ -79,7 +79,7 @@ const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setO
     }
 
     const handleDelete = async () => {
-        const url = '/' + page + '/delete'
+        const url = '/api/' + page + '/delete'
         if (UpdatePages.includes(page)) {
             if(!window.confirm('정말로 삭제하시겠습니다.?')) return
             try {

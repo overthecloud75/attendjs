@@ -36,7 +36,8 @@ const useCurrentLocation = (options = {}) => {
   
         // Geolocation API 호출
         geolocation.getCurrentPosition(handleSuccess, handleError, options)
-    }, [options])
+        // eslint-disable-next-line
+    }, [])
 
     return { location, error }
 }
@@ -56,6 +57,7 @@ const Auth = ({mode}) => {
     const [errorMsg, setErrorMsg] = useState('')
 
     // check gps location 
+    // eslint-disable-next-line
     const { location, geoError } = useCurrentLocation()
 
     useEffect(() => {
@@ -68,8 +70,7 @@ const Auth = ({mode}) => {
     }
 
     const handleSubmit = (event) => {
-        event.preventDefault()
-        setLoading(true)
+        event.preventDefault() 
         requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading)
     }
 

@@ -13,7 +13,7 @@ const Attend = () => {
                 <TableWithSearch 
                     searchKeyword='name'
                     page='attend'
-                    url='/attend/search'
+                    url='/api/attend/search'
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />

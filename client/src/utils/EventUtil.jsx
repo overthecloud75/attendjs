@@ -28,10 +28,8 @@ export const getColor = (event) => {
 }
 
 export const getEvents = async (args)=> {
-    console.log('getEvents', args)
     const params = {start: format(args.start, "yyyy-MM-dd"), end: format(args.end, "yyyy-MM-dd")}
-    try { const res = await axios.get('/event', {params, headers: {'Cache-Control': 'no-cache'}})
-        console.log('getArgs', res.data)
+    try { const res = await axios.get('/api/event', {params, headers: {'Cache-Control': 'no-cache'}})
         for (let event of res.data) {
             event = getColor(event)
         }
@@ -47,9 +45,8 @@ export const getEvents = async (args)=> {
 }
 
 export const addEvent = async (args)=> {
-    console.log('addArgs', args)
     const data = {title: args.title, id: args.id, start: args.start, end: args.end}
-    try { const res = await axios.post('/event/add', data)
+    try { const res = await axios.post('/api/event/add', data)
         const resData = res.data
         const err = false
         return {resData, err}
@@ -62,7 +59,7 @@ export const addEvent = async (args)=> {
 
 export const deleteEvent = async (args) => {
     const data = {id: Number(args.id)}
-    try { const res = await axios.post('/event/delete', data)
+    try { const res = await axios.post('/api/event/delete', data)
         const resData = res.data
         const err = false
         return {resData, err}

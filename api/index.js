@@ -69,19 +69,20 @@ app.use('/api/board', boardRoute)
 app.use('/api/report', reportRoute)
 app.use('/api/confirm', confirmRoute)
 
-
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500
     const errorMessage = err.message || 'Something went wrong!'
+    if (err.status === 500) {
+        console.log(err.stack)
+    }
     return res.status(errorStatus).json({
         success: false,
         status: errorStatus,
-        message: errorMessage,
-        stack: err.stack,
+        message: errorMessage
     })
 })
 
-app.listen(8800, () => {
+app.listen(8888, () => {
     connect()
     logger.info('Connected to backend.')
-});
+})

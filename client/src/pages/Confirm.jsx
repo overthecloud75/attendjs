@@ -15,7 +15,7 @@ const Confirm = () => {
             <div className='wrapper'>
                 <Navbar/>
                 <CheckConfirm 
-                    url={ '/confirm/token/' + confirmationCode } 
+                    url={ '/api/confirm/token/' + confirmationCode } 
                 />
                 <Footer/>
             </div>

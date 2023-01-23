@@ -13,7 +13,7 @@ const GPS = () => {
                 <TableWithSearch 
                     searchKeyword='name'
                     page='gps-attend'
-                    url='/gps-attend/search'
+                    url='/api/gps-attend/search'
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />

@@ -1,6 +1,7 @@
 from .device import Device
 from .report import Report
 from .deviceon import DeviceOn
+from .gpson import GPSOn
 
 try:
     from mainconfig import ACCOUNT

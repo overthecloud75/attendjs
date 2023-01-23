@@ -1,7 +1,7 @@
 export const columnHeaders = [
     {
-        accessor: 'email',
-        Header: 'Email',
+        accessor: 'employeeId',
+        Header: 'ID',
     },
     {
         accessor: 'name',
@@ -30,6 +30,10 @@ export const columnHeaders = [
 ]
 
 export const csvHeaders = [
+    {
+        key: 'employeeId',
+        label: 'ID',
+    },
     {
         key: 'name',
         label: 'Name',

@@ -13,7 +13,7 @@ const Report = () => {
                 <TableWithSearch 
                     searchKeyword='name'
                     page ='report'
-                    url='/report/search'
+                    url='/api/report/search'
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />

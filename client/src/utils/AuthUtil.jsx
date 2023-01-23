@@ -2,13 +2,18 @@ import axios from 'axios'
 import { loginUser, clearUser } from '../storage/userSlice.js'
 
 export const requestAuth = async (mode, method, value, dispatch, navigate, setErrorMsg, setLoading) => {
-    const url = '/auth/' + mode 
+    const url = '/api/auth/' + mode 
+    setLoading(true)
     try {
         if (method === 'post') {
             const res = await axios.post(url, value)
             if (mode === 'login') {
                 dispatch(loginUser(res.data)) 
-                navigate('/', {state : {latitude: value.location.latitude, longitude: value.location.longitude}})
+                if (value.location) {
+                    navigate('/', {state : {latitude: value.location.latitude, longitude: value.location.longitude}})
+                } else {
+                    navigate('/')
+                }
             } else if (mode === 'register') {
                 navigate('/check-email')
             }  
@@ -24,7 +29,7 @@ export const requestAuth = async (mode, method, value, dispatch, navigate, setEr
         }
         setLoading(false)
     } catch (err) {
-        setErrorMsg(err.request.statusText)
+        setErrorMsg(err.response.data.message)
         setLoading(false)
     } 
 }

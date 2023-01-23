@@ -39,7 +39,7 @@ export const register = async (req, res, next) => {
         } else {
             isAdmin = true
         }
-        const newUser = User({name, email, password: hash, isAdmin, confirmationCode: token})
+        const newUser = User({name, email, employeeId: employee.employeeId, password: hash, isAdmin, confirmationCode: token})
         await newUser.save()
         res.status(200).send('User has been created.')
         sendConfirmationEmail(req.body.name, email, token)
@@ -70,14 +70,15 @@ export const login = async (req, res, next) => {
             { id: user._id, isAdmin: user.isAdmin },
             process.env.JWT
         )
-        const { password, status, confirmationCode, ...otherDetails } = user._doc
+        
         const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
         const user_agent = req.headers['user-agent']
         const location = req.body.location
 
         const where = await whereIs(location, ip, user_agent)
-        await updateLogin(email, user.name, ip, user_agent, location, where)
+        await updateLogin(user.employeeId, user.name, ip, user_agent, location, where)
         
+        const { employeeId, password, status, confirmationCode, ...otherDetails } = user._doc
         res.cookie('access_token', token, {
             httpOnly: true,
         })
@@ -117,33 +118,38 @@ const whereIs = async (location, ip, user_agent) => {
     let attend = false 
     let place = ''
     const locations = await Location.find()
-    for (let loc of locations) {
-        const latDev = loc.latitude - location.latitude
-        const logDev = loc.longitude - location.longitude
-        if ((latDev < loc.dev) && (latDev > -1 * loc.dev) && (logDev < loc.dev) && (logDev > -1 * loc.dev)) {
-            attend = true
-            place = loc.location  
+    if (location) {
+        for (let loc of locations) {
+            const latDev = loc.latitude - location.latitude
+            const logDev = loc.longitude - location.longitude
+            if ((latDev < loc.dev) && (latDev > -1 * loc.dev) && (logDev < loc.dev) && (logDev > -1 * loc.dev)) {
+                attend = true
+                place = loc.location  
+            }
         }
     }
     return {attend, place}
 }
 
-const updateLogin = async (email, name, ip, user_agent, location, where) => {
+const updateLogin = async (employeeId, name, ip, user_agent, location, where) => {
     const dateTime = new Date()
     const data = {ip, user_agent, location}
     const output = formatToTimeZone(dateTime, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })
     const date = output.split(' ')[0]
     const time = output.split(' ')[1]
-    if (where.attend) { 
-        const gpsOn = await GPSOn.findOne({date, email})
+    if (location && where.attend) { 
+        const gpsOn = await GPSOn.findOne({date, employeeId})
         if (gpsOn) {
-            await GPSOn.updateOne({date, email, name}, {$set: {endData: data, end: time, endPlace: where.place}})
+            await GPSOn.updateOne({date, employeeId, name}, {$set: {endData: data, end: time, endPlace: where.place}})
         } else {
-            const newGPSOn = new GPSOn({email, name, beginData: data, date, begin: time, beginPlace: where.place})
+            const newGPSOn = new GPSOn({employeeId, name, date, beginData: data, begin: time, beginPlace: where.place, endData: data, end: time, endPlace: where.place})
             await newGPSOn.save()
         }
+    } else if (location) {
+        const login = new Login({employeeId, name, date, time, ip, user_agent, location})
+        await login.save()
     } else {
-        const login = new Login({email, name, date, time, ip, user_agent, location})
+        const login = new Login({employeeId, name, date, time, ip, user_agent})
         await login.save()
     }
 }

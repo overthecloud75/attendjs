@@ -13,7 +13,7 @@ const Device = () => {
                 <TableWithSearch 
                     searchKeyword='mac'
                     page ='device'
-                    url='/device/search'
+                    url='/api/device/search'
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />

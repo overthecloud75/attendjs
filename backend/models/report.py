@@ -7,12 +7,13 @@ from .db import db, BasicModel
 from .mail import send_email
 from .employee import Employee
 from .deviceon import DeviceOn
+from .gpson import GPSOn
 from .device import Device
 try:
     from mainconfig import ACCESS_DB_PWD, SITE_URL
 except Exception as e:
     from testconfig import ACCESS_DB_PWD, SITE_URL
-from config import USE_WIFI_ATTENDANCE, USE_NOTICE_EMAIL, EMAIL_NOTICE_BASE, WORKING
+from config import USE_WIFI_ATTENDANCE, USE_GPS_ATTENDANCE, USE_NOTICE_EMAIL, EMAIL_NOTICE_BASE, WORKING
 
 # connect to access db
 # https://stackoverflow.com/questions/50757873/connect-to-ms-access-in-python
@@ -28,6 +29,7 @@ class Report(BasicModel):
         self.employee = Employee()
         self.devices = Device()
         self.device_on = DeviceOn()
+        self.gps_on = GPSOn()
 
         self.hour, self.today, self.this_month = check_time()
 
@@ -80,7 +82,10 @@ class Report(BasicModel):
             # 지문 인식 출퇴근 기록
             attend, overnight_employees = self.fingerprint_attend(attend, date, hour)
             # 지문 인식기 + wifi 출퇴근 기록
-            attend = self._fingerprint_or_wifi(attend, date)
+            if USE_WIFI_ATTENDANCE:
+                attend = self._fingerprint_or_wifi(attend, date)
+            # Add GPS attend 
+                attend = self._legacy_or_gps(attend, date)
             
             # attend
             for employee_id in attend:
@@ -201,23 +206,36 @@ class Report(BasicModel):
 
         # wifi 와 지문 인식기 근태 비교
         for employee_id in device_dict:
-            begin, end = self.device_on.get_attend_by_mac_list(device_dict[employee_id], date=date)
+            name = device_dict[employee_id][0]
+            begin, end = self.device_on.get_attend_by_mac_list(device_dict[employee_id][1: ], date=date)
             if begin:
-                if employee_id in attend:
-                    if attend[employee_id]['begin']:
-                        if int(begin) < int(attend[employee_id]['begin']):
-                            attend[employee_id]['begin'] = begin
-                    else:
-                        attend[employee_id]['begin'] = begin
-                    if attend[employee_id]['end']:
-                        if int(end) > int(attend[employee_id]['end']):
-                            attend[employee_id]['end'] = end
-                    else:
-                        attend[employee_id]['end'] = end
-                else:
-                    print('error there is not this employee_id: ', employee_id)
-                    attend[employee_id] = {'date': date, 'employee_id': employee_id, 'begin': begin, 'end': end, 'reason': None}
+                attend = self._compare_time(attend, date, employee_id, name, begin, end)
         return attend
+
+    def _legacy_or_gps(self, attend, date):
+        # GPS device
+        gps_on_list = self.gps_on.get_attend(date=date)
+
+        # gps 와 legacy 근태 비교
+        for gps_on in gps_on_list:
+            attend = self._compare_time(attend, date, gps_on['employeeId'], gps_on['name'], gps_on['begin'], gps_on['end'])
+        return attend
+
+    def _compare_time(self, attend, date, employee_id, name, begin, end):
+        if employee_id in attend:
+            if attend[employee_id]['begin']:
+                if int(begin) < int(attend[employee_id]['begin']):
+                    attend[employee_id]['begin'] = begin
+            else:
+                attend[employee_id]['begin'] = begin
+            if attend[employee_id]['end']:
+                if int(end) > int(attend[employee_id]['end']):
+                    attend[employee_id]['end'] = end
+            else:
+                attend[employee_id]['end'] = end
+        else:
+            attend[employee_id] = {'date': date, 'employee_id': employee_id, 'name':name, 'begin': begin, 'end': end, 'reason': None}
+        return attend 
 
     def _calculate_working_hours(self, begin, end, overnight=False):
         working_hours = (int(end[0:2]) - int(begin[0:2])) + \

@@ -2,8 +2,8 @@ import mongoose from 'mongoose'
 
 const GPSOnSchema = new mongoose.Schema(
     {
-        email: {
-            type: String,
+        employeeId: {
+            type: Number,
             required: true,
         },
         name: {
@@ -33,11 +33,11 @@ const GPSOnSchema = new mongoose.Schema(
         },
         end: {
             type: String,
-            required: false,
+            required: true,
         },
         endPlace: {
             type: String,
-            required: false  
+            required: true  
         },
     },
 )

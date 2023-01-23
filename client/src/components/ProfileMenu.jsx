@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import Menu from '@mui/material/Menu'
@@ -6,13 +7,17 @@ import { requestAuth } from '../utils/AuthUtil'
 import { getUser } from '../storage/userSlice.js'
 
 const ProfileMenu = ({anchorEl, setAnchorEl}) => {
+    // eslint-disable-next-line
+    const [loading, setLoading] = useState(false)
+    // eslint-disable-next-line
+    const [errorMsg, setErrorMsg] = useState('')
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const user = getUser()
     const open = Boolean(anchorEl)
     const handleClose = () => {setAnchorEl(null)}
     const handleLogout = async () => {
-        requestAuth('logout', 'get', '', dispatch, navigate)
+        requestAuth('logout', 'get', '', dispatch, navigate, setErrorMsg, setLoading)
         handleClose()
     }
 
