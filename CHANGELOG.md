@@ -6,6 +6,10 @@
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
 
+ * 22/01/24
+    - 1.2.9 (client, api, backend) <br>   
+        insert 명절 in special holidays in WORKING
+ 
 * 22/01/23
     - 1.2.8 (backend) <br>
         _legacy_or_gps <br>

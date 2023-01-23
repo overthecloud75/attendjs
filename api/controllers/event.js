@@ -1,4 +1,5 @@
 import { logger, reqFormat } from '../config/winston.js'
+import { WORKING } from '../config/working.js'
 import Event from '../models/Event.js'
 import { reportUpdate } from './eventReport.js'
 import { sanitizeData } from '../utils/util.js'
@@ -23,8 +24,11 @@ export const addEvent = async (req,res,next)=>{
         const start = req.body.start
         const end = req.body.end
         const newEvent = new Event({id, title, start, end})
-        if (title.includes('/')) {
-            await newEvent.save({id, title, start, end})
+        if (WORKING.specialHolidays.includes(title)) {
+            await newEvent.save()
+            res.status(200).send('Event has been created.')
+        } else if (title.includes('/')) {
+            await newEvent.save()
             await reportUpdate('add', title, start, end)
             res.status(200).send('Event has been created.')
         } else {
