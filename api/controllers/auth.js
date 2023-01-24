@@ -78,9 +78,7 @@ export const login = async (req, res, next) => {
         const location = req.body.location
 
         const where = await whereIs(location, ip, user_agent)
-        console.log('where', where)
         await updateLogin(user.employeeId, user.name, ip, user_agent, location, where)
-        console.log('update')
         
         res.cookie('access_token', token, {
             httpOnly: true, secure: true
@@ -127,7 +125,6 @@ const whereIs = async (location, ip, user_agent) => {
     if (location) {
         for (let loc of locations) {
             distanceResult = Math.round(distance(loc.latitude, loc.longitude, location.latitude, location.longitude)*1000)/1000
-            console.log(distanceResult)
             if (distanceResult < minDistance) {
                 place = loc.location 
                 minDistance = distanceResult
@@ -142,7 +139,6 @@ const whereIs = async (location, ip, user_agent) => {
 }
 
 const updateLogin = async (employeeId, name, ip, user_agent, location, where) => {
-    console.log('where2', where)
     const dateTime = new Date()
     const data = {ip, user_agent, location}
     const output = formatToTimeZone(dateTime, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })
