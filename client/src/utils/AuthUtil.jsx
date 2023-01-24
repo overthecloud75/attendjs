@@ -10,7 +10,7 @@ export const requestAuth = async (mode, method, value, dispatch, navigate, setEr
             if (mode === 'login') {
                 dispatch(loginUser(res.data)) 
                 if (value.location) {
-                    navigate('/', {state : {latitude: value.location.latitude, longitude: value.location.longitude}})
+                    navigate('/', {state : {location: value.location, where: res.data.where}})
                 } else {
                     navigate('/')
                 }

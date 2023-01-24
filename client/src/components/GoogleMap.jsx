@@ -3,6 +3,16 @@ import GoogleMapReact from 'google-map-react'
 import { googleMapAPIKey } from '../configs/apiKey'
 
 const Container = styled.div`
+`
+
+const Title= styled.div`
+    font-weight: bold;
+    display: flex;
+    margin: 10px;
+    justify-content: center;
+`
+
+const Wrapper = styled.div`
     background-color: white;
     display: flex;
     margin: auto;
@@ -26,22 +36,45 @@ const Marker = styled.div`
       z-index: 1;
     }
 `
+const Place = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    background-color: red;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    user-select: none;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    &:hover {
+      z-index: 1;
+    }
+`
 
-const GMap = ({location}) => {
+const GMap = ({state}) => {
     return (
-        // Important! Always set the container height explicitly
         <Container>
-            <GoogleMapReact
-                bootstrapURLKeys={{ key: googleMapAPIKey }}
-                defaultCenter={{lat: location.latitude, lng: location.longitude}}
-                defaultZoom={16}
-            >
-                <Marker
-                    lat={location.latitude}
-                    lng={location.longitude}
-                    title='Your Location'
-                />
-            </GoogleMapReact>
+            <Title>Your location is {state.where.minDistance * 1000}m distant from {state.where.place}</Title>
+            <Wrapper>
+                <GoogleMapReact
+                    bootstrapURLKeys={{ key: googleMapAPIKey }}
+                    defaultCenter={{lat: state.location.latitude, lng: state.location.longitude}}
+                    defaultZoom={16}
+                >
+                    <Marker
+                        lat={state.location.latitude}
+                        lng={state.location.longitude}
+                        title='Your Location'
+                    />
+                    <Place
+                        lat={state.where.placeLocation.latitude}
+                        lng={state.where.placeLocation.longitude}
+                        title={state.where.place}
+                    />
+                </GoogleMapReact>
+            </Wrapper>
         </Container>
     );
 }

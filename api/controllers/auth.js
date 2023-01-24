@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { formatToTimeZone } from 'date-fns-timezone'
+import distance from 'gps-distance'
 import { logger, reqFormat } from '../config/winston.js'
 import User from '../models/User.js'
 import Employee from '../models/Employee.js'
@@ -10,6 +11,7 @@ import Location from '../models/Location.js'
 import { createError } from '../utils/error.js'
 import { sendConfirmationEmail } from '../utils/email.js'
 import { sanitizeData } from '../utils/util.js'
+
 
 export const register = async (req, res, next) => {
     logger.info(reqFormat(req))
@@ -76,14 +78,15 @@ export const login = async (req, res, next) => {
         const location = req.body.location
 
         const where = await whereIs(location, ip, user_agent)
+        console.log('where', where)
         await updateLogin(user.employeeId, user.name, ip, user_agent, location, where)
+        console.log('update')
         
-        const { employeeId, password, status, confirmationCode, ...otherDetails } = user._doc
         res.cookie('access_token', token, {
-            httpOnly: true,
+            httpOnly: true, secure: true
         })
         .status(200)
-        .json({ ...otherDetails })
+        .json({ name: user.name, email, isAdmin: user.isAdmin, where })
     } catch (err) {
         next(err)
     }
@@ -115,23 +118,31 @@ export const confirmCode = async (req, res, next) => {
 }
 
 const whereIs = async (location, ip, user_agent) => {
+    const locations = await Location.find()
     let attend = false 
     let place = ''
-    const locations = await Location.find()
+    let distanceResult = 0 
+    let minDistance = 10000
+    let placeLocation = {latituce: -1, longitude: -1}
     if (location) {
         for (let loc of locations) {
-            const latDev = loc.latitude - location.latitude
-            const logDev = loc.longitude - location.longitude
-            if ((latDev < loc.dev) && (latDev > -1 * loc.dev) && (logDev < loc.dev) && (logDev > -1 * loc.dev)) {
-                attend = true
-                place = loc.location  
+            distanceResult = Math.round(distance(loc.latitude, loc.longitude, location.latitude, location.longitude)*1000)/1000
+            console.log(distanceResult)
+            if (distanceResult < minDistance) {
+                place = loc.location 
+                minDistance = distanceResult
+                placeLocation = {latitude: loc.latitude, longitude: loc.longitude}
+                if (distanceResult < loc.dev) {
+                    attend = true        
+                }
             }
         }
     }
-    return {attend, place}
+    return {attend, place, minDistance, placeLocation}
 }
 
 const updateLogin = async (employeeId, name, ip, user_agent, location, where) => {
+    console.log('where2', where)
     const dateTime = new Date()
     const data = {ip, user_agent, location}
     const output = formatToTimeZone(dateTime, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })

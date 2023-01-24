@@ -7,8 +7,10 @@
     - planning : 결재 <br>
 
  * 22/01/24
+    - 1.3.0 (client, api) <br>
+        show current distance from the attend place <br> 
     - 1.2.9 (client, api, backend) <br>   
-        insert 명절 in special holidays in WORKING
+        insert 명절 in special holidays in WORKING <br>
  
 * 22/01/23
     - 1.2.8 (backend) <br>

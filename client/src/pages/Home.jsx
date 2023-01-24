@@ -17,7 +17,7 @@ const Home = () => {
                 <Navbar/> 
                 {state ? 
                     <GMap
-                       location={{latitude: state.latitude, longitude: state.longitude}}
+                       state={state}
                     />:
                     <>
                         <Advertisement/>
