@@ -6,6 +6,16 @@
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
 
+ * 22/01/27
+    - 1.3.3 (api) <br>
+        cors(domain) for security <br>
+    - 1.3.2 (client, api) <br>
+        loginHistory <br> 
+
+ * 22/01/26
+    - 1.3.1 (client) <br>
+        Geolocation Error under login form <br> 
+
  * 22/01/24
     - 1.3.0 (client, api) <br>
         show current distance from the attend place <br> 

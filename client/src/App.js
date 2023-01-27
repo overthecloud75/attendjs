@@ -15,10 +15,12 @@ import Summary from './pages/Summary'
 import Device from './pages/Device'
 import Schedule from './pages/Schedule'
 import Employee from './pages/Employee'
+import LoginHistory from './pages/LoginHistory'
 import Board from './pages/Board'
 import Report from './pages/Report'
 import CheckEmail from './pages/CheckEmail'
 import Confirm from './pages/Confirm'
+import TooManyRequests from './pages/TooManyRequests'
 import NotFound from './pages/NotFound'
 
 function App() { 
@@ -36,10 +38,12 @@ function App() {
                 <Route exact path='/location' element={<Location/>}/>
                 <Route exact path='/device' element={<Device/>}/>
                 <Route exact path='/employee' element={<Employee/>}/>
+                <Route exact path='/loginhistory' element={<LoginHistory/>}/>
                 <Route exact path='/board' element={<Board/>}/>
                 <Route exact path='/report' element={<Report/>}/>
                 <Route exact path='/check-email' element={<CheckEmail/>}/>
                 <Route exact path='/confirm/:confirmationCode' element={<Confirm/>}/>
+                <Route exact path='/too-many-requests' element={<TooManyRequests/>}/>
                 <Route path='*' element={<NotFound/>} />
             </Routes>
         </BrowserRouter>

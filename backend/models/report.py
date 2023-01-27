@@ -75,6 +75,8 @@ class Report(BasicModel):
                     if date == self.today:
                         # self._update_devices(date=date)
                         self._notice_email(employees_list=employees_list)
+                else:
+                    is_holiday = True
             
             if date == self.today:
                 self._update_devices(date=date)

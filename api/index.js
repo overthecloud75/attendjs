@@ -54,6 +54,11 @@ app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
 app.use(csrf({ cookie: true }))
+app.use(cors({ origin: [
+    'http://localhost:3000',
+    process.env.DOMAIN
+    ]}
+));
 
 app.use('/api/auth', authRoute)
 app.use('/api/users', usersRoute)
@@ -73,7 +78,7 @@ app.use((err, req, res, next) => {
     const errorStatus = err.status || 500
     const errorMessage = err.message || 'Something went wrong!'
     if (err.status === 500) {
-        console.log(err.stack)
+        logger.error(err.stack)
     }
     return res.status(errorStatus).json({
         success: false,

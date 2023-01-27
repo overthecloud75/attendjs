@@ -140,23 +140,41 @@ const whereIs = async (location, ip, user_agent) => {
 
 const updateLogin = async (employeeId, name, ip, user_agent, location, where) => {
     const dateTime = new Date()
-    const data = {ip, user_agent, location}
     const output = formatToTimeZone(dateTime, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })
     const date = output.split(' ')[0]
     const time = output.split(' ')[1]
+    let login 
     if (location && where.attend) { 
         const gpsOn = await GPSOn.findOne({date, employeeId})
+        login = new Login({employeeId, name, date, time, ip, user_agent, latitude: location.latitude, longitude: location.longitude})
         if (gpsOn) {
-            await GPSOn.updateOne({date, employeeId, name}, {$set: {endData: data, end: time, endPlace: where.place}})
+            await GPSOn.updateOne({date, employeeId, name}, {$set: {end: time, endPlace: where.place}})
         } else {
-            const newGPSOn = new GPSOn({employeeId, name, date, beginData: data, begin: time, beginPlace: where.place, endData: data, end: time, endPlace: where.place})
+            const newGPSOn = new GPSOn({employeeId, name, date, begin: time, beginPlace: where.place, end: time, endPlace: where.place})
             await newGPSOn.save()
         }
     } else if (location) {
-        const login = new Login({employeeId, name, date, time, ip, user_agent, location})
-        await login.save()
+        login = new Login({employeeId, name, date, time, ip, user_agent, latitude: location.latitude, longitude: location.longitude})
     } else {
-        const login = new Login({employeeId, name, date, time, ip, user_agent})
-        await login.save()
+        login = new Login({employeeId, name, date, time, ip, user_agent})
+    }
+    await login.save()
+}
+
+export const search = async (req,res,next) => {
+    logger.info(reqFormat(req))
+    try {
+        const name = req.query.name 
+        const startDate = sanitizeData(req.query.startDate, 'date')
+        const endDate = sanitizeData(req.query.endDate, 'date')
+        let logins 
+        if (name && name !== '') {
+            logins = await Login.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: 1})}
+        else { 
+            logins = await Login.find({date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: 1, name: 1})
+        }
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json(logins)
+    } catch (err) {
+        next(err)
     }
 }

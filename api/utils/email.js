@@ -1,7 +1,8 @@
 import nodemailer from 'nodemailer'
+import { logger } from '../config/winston.js'
 
 export const sendConfirmationEmail = async (name, email, confirmationCode) => {
-    console.log('check send email')  
+    logger.info('check send email')  
 
     try {
         const transport = nodemailer.createTransport({
@@ -24,5 +25,5 @@ export const sendConfirmationEmail = async (name, email, confirmationCode) => {
                 </div>`,
         })
     }
-    catch(err) {console.log('err', err)}
+    catch(err) {logger.error(err)}
 }

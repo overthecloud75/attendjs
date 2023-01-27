@@ -10,15 +10,6 @@ const GPSOnSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        // ip, user_agent, location
-        beginData: {
-            type: Object,
-            required: true
-        },
-        endData: {
-            type: Object,
-            required: true,
-        },
         date: {
             type: String,
             required: true,

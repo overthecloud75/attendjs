@@ -42,7 +42,7 @@ export const search = async (req,res,next) => {
         }
         else { 
             attends = await Report.find({date: {$gte: startDate, $lte: endDate}}).sort({name: 1, date: 1})
-        }; 
+        }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(attends)
     } catch (err) {
         next(err)

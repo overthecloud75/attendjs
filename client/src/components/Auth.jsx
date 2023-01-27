@@ -6,9 +6,9 @@ import { requestAuth } from '../utils/AuthUtil'
 
 const useCurrentLocation = (options = {}) => {
     // location 정보 저장
-    const [location, setLocation] = useState()
+    const [location, setLocation] = useState({latitude: -1, longitude: -1})
     // 에러 메세지 저장
-    const [error, setError] = useState()
+    const [error, setError] = useState('')
 
     // Geolocation의 `getCurrentPosition` 메소드에 대한 성공 callback 핸들러
     const handleSuccess = (pos) => {
@@ -38,7 +38,6 @@ const useCurrentLocation = (options = {}) => {
         geolocation.getCurrentPosition(handleSuccess, handleError, options)
         // eslint-disable-next-line
     }, [])
-
     return { location, error }
 }
 
@@ -57,8 +56,7 @@ const Auth = ({mode}) => {
     const [errorMsg, setErrorMsg] = useState('')
 
     // check gps location 
-    // eslint-disable-next-line
-    const { location, geoError } = useCurrentLocation()
+    const { location, error} = useCurrentLocation()
 
     useEffect(() => {
         requestAuth(mode, 'get', '', dispatch, navigate, setErrorMsg, setLoading)
@@ -70,8 +68,12 @@ const Auth = ({mode}) => {
     }
 
     const handleSubmit = (event) => {
-        event.preventDefault() 
-        requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading)
+        event.preventDefault()
+        if (error) {
+            setErrorMsg(error)
+        } else {
+            requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading)
+        }
     }
 
     return (

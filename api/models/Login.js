@@ -26,10 +26,14 @@ const LoginSchema = new mongoose.Schema(
             type: String,
             requried: true,
         },
-        location: {
-            type: Object,
+        latitude: {
+            type: Number,
             requried: false, 
-        }      
+        },
+        longitude: {
+            type: Number,
+            requried: false, 
+        }     
     },
 )
 
