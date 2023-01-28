@@ -18,6 +18,9 @@ export const WORKING = {
     lunarHolidays: ['0101', '0102', '0408', '0814', '0815', '0816'],
     alternativeVacation: ['0301', '0505', '0815', '1003', '1009']
 }
+// 통신사 IP 
+// https://namu.wiki/w/%ED%86%B5%EC%8B%A0%EC%82%AC%20IP
+export const MOBILE_IP_LIST = [ '223.33', '223.38', '223.39', '223.62', '39.7', '110.70', '118.235', '175.223', '211.246', '106.101', '106.102', '117.111', '211.36']
 
 export const getReverseStatus = () => {
     let reverseStatus = {}

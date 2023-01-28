@@ -22,6 +22,10 @@ const LoginSchema = new mongoose.Schema(
             type: String, 
             required: true,
         },
+        isMobile: {
+            type: String, 
+            required: true,
+        },
         user_agent: {
             type: String,
             requried: true,
@@ -35,7 +39,7 @@ const LoginSchema = new mongoose.Schema(
             requried: false, 
         },
         attend: {
-            type: Boolean,
+            type: String,
             requried: true, 
         }       
     },

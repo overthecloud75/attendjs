@@ -3,7 +3,6 @@ import { logger } from '../config/winston.js'
 
 export const sendConfirmationEmail = async (name, email, confirmationCode) => {
     logger.info('check send email')  
-
     try {
         const transport = nodemailer.createTransport({
             host: process.env.MAIL_HOST,

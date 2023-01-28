@@ -20,6 +20,10 @@ export const columnHeaders = [
         Header: 'IP',
     },
     {
+        accessor: 'isMobile',
+        Header: 'Mobile',
+    },
+    {
         accessor: 'user_agent',
         Header: 'USER_AGENT',
     },
@@ -53,6 +57,10 @@ export const csvHeaders = [
     {
         key: 'ip',
         label: 'IP',
+    },
+    {
+        key: 'isMobile',
+        label: 'Mobile',
     },
     {
         key: 'user_agent',

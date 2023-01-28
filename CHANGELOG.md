@@ -7,6 +7,10 @@
     - planning : 결재 <br>
 
 * 22/01/28
+    - 1.3.6 (api) <br>
+        check isMobile with ip info <br>
+    - 1.3.5 (api) <br>
+        fix verifyAdmin not working <br>
     - 1.3.4 (client) <br>
         sidebar disappear with clicking hambuger menu <br>
 

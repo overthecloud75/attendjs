@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 import { formatToTimeZone } from 'date-fns-timezone'
 import distance from 'gps-distance'
 import { logger, reqFormat } from '../config/winston.js'
+import { MOBILE_IP_LIST } from '../config/working.js'
 import User from '../models/User.js'
 import Employee from '../models/Employee.js'
 import GPSOn from '../models/GPSOn.js'
@@ -143,11 +144,22 @@ const updateLogin = async (employeeId, name, ip, user_agent, location, where) =>
     const output = formatToTimeZone(dateTime, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })
     const date = output.split(' ')[0]
     const time = output.split(' ')[1]
-    const attend = where.attend
+    let attend
+    if (where.attend) {attend = 'O'
+    } else {attend = 'X'
+    }
+    const ip_split = ip.split('.')
+    const ip16 = ip_split[0] + '.' + ip_split[1]
+
+    let isMobile = 'X' 
+    if (MOBILE_IP_LIST.includes(ip16)) {
+        isMobile = 'O'
+    }
+
     let login 
     if (location && attend) { 
         const gpsOn = await GPSOn.findOne({date, employeeId})
-        login = new Login({employeeId, name, date, time, ip, user_agent, latitude: location.latitude, longitude: location.longitude, attend})
+        login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, attend})
         if (gpsOn) {
             await GPSOn.updateOne({date, employeeId, name}, {$set: {end: time, endPlace: where.place}})
         } else {
@@ -155,9 +167,9 @@ const updateLogin = async (employeeId, name, ip, user_agent, location, where) =>
             await newGPSOn.save()
         }
     } else if (location) {
-        login = new Login({employeeId, name, date, time, ip, user_agent, latitude: location.latitude, longitude: location.longitude, attend})
+        login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, attend})
     } else {
-        login = new Login({employeeId, name, date, time, ip, user_agent, attend})
+        login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, attend})
     }
     await login.save()
 }

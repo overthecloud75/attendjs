@@ -2,37 +2,31 @@ import jwt from 'jsonwebtoken'
 import { createError } from '../utils/error.js'
 import { separateIP } from '../utils/util.js'
 
-export const verifyToken = (req, res, next) => {
+// https://stackoverflow.com/questions/73162583/verification-of-user-and-admin-not-working-properly-in-following-code
+export const verifyToken = (req) => {
     const token = req.cookies.access_token
     if (!token) {
-        return next(createError(401, 'You are not authenticated!'))
+        return { status: 401, message: 'You are not authenticated!' }
     }
-
-    jwt.verify(token, process.env.JWT, (err, user) => {
-        if (err) return next(createError(403, 'Token is not valid!'))
-        req.user = user
-        next()
-    })
+    try {
+        const user = jwt.verify(token, process.env.JWT)
+        return { status: 200, user }
+    } catch (e) {
+        return { status: 403, message: 'Token is not valid!' }
+    }
 }
 
 export const verifyUser = (req, res, next) => {
-    verifyToken(req, res, next, () => {
-        if (req.user._id === req.params._id || req.user.isAdmin) {
-            next()
-        } else {
-            return next(createError(403, 'You are not authorized!'))
-        }
-    })
+    const tokenStatus = verifyToken(req)
+    if (tokenStatus.status !== 200) return next(createError(tokenStatus.status, tokenStatus.message))
+    next()
 }
 
 export const verifyAdmin = (req, res, next) => {
-    verifyToken(req, res, next, () => {
-        if (req.user.isAdmin) {
-            next();
-        } else {
-            return next(createError(403, 'You are not authorized!'))
-        }
-    })
+    const tokenStatus = verifyToken(req)
+    if (tokenStatus.status !== 200) return next(createError(tokenStatus.status, tokenStatus.message))
+    if (tokenStatus.user.isAdmin) return next()
+    return next(createError(403, 'You are not authorized!'));
 }
 
 export const verifyIP = (req, res, next) => {
@@ -40,7 +34,7 @@ export const verifyIP = (req, res, next) => {
     // dotenv does not support boolean
     if (process.env.ACCESS_CONTROL === 'true') {
         const isExternalIP = checkExternalIP(externalIP, internalIP)
-        if (isExternalIP) {return verifyToken(req, res, next)}
+        if (isExternalIP) {return verifyUser(req, res, next)}
     }
     next()
 }
