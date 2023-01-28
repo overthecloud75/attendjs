@@ -43,7 +43,7 @@ const Logo = styled.span`
     font-size: 20px;
     font-weight: bold;
     color: #6439ff;
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 800px) {
         font-size: 10px;
     }
 `
@@ -60,7 +60,7 @@ const Title = styled.div`
     color: #999;
     margin-top: 15px;
     margin-bottom: 5px;
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 800px) {
         display: none;
     }
 `
@@ -79,7 +79,7 @@ const Item = styled.li`
     border: ${props => props.active ? '1px solid black' : 'none'};
     border-radius: ${props => props.active ? '20px' : 'none'};
 
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 800px) {
         height: 30px;
     }
 ` 
@@ -94,7 +94,7 @@ const Span = styled.span`
     font-weight: 600;
     color: #888;
     margin-left: 10px;
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 800px) {
         display: none;
     }
 `

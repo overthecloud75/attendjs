@@ -4,12 +4,12 @@ import TableWithSearch from '../components/TableWithSearch'
 import { columnHeaders, csvHeaders } from '../configs/board'
 import Footer from '../components/Footer'
 
-const Report = () => {
+const Report = ({menu, setMenu}) => {
     return (    
         <div className='container'>
-            <Sidebar/>
-            <div className='wrapper'> 
-                <Navbar/> 
+            {menu && <Sidebar/>}
+            <div className='wrapper'>
+                <Navbar menu={menu} setMenu={setMenu}/> 
                 <TableWithSearch 
                     searchKeyword='name'
                     page ='report'
@@ -17,7 +17,7 @@ const Report = () => {
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />
-                <Footer/>
+                {menu && <Footer/>}
             </div> 
         </div>
     )

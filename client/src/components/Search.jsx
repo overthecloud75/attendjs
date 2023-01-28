@@ -10,10 +10,10 @@ import { DateRange } from 'react-date-range'
 const Wrapper = styled.div`
     width: 80%;
     display: flex;
-    margin-left: 30px;
+    margin-left: 50px;
     top: 0px;
     position: absolute;
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 800px) {
         display: none;
     }
 `

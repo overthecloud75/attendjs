@@ -5,6 +5,9 @@ const Wrapper = styled.div`
     right: 10px;
     font-size: 12px;
     position: absolute;
+    @media screen and (max-height: 800px) {
+        display: none;
+    }
 `
 
 const Footer = () => {

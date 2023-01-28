@@ -4,12 +4,12 @@ import TableWithSearch from '../components/TableWithSearch'
 import { columnHeaders, csvHeaders } from '../configs/gps'
 import Footer from '../components/Footer'
 
-const GPS = () => {
+const GPS = ({menu, setMenu}) => {
     return (   
         <div className='container'>
-            <Sidebar/>
-            <div className='wrapper'> 
-                <Navbar/>   
+            {menu && <Sidebar/>}
+            <div className='wrapper'>
+                <Navbar menu={menu} setMenu={setMenu}/> 
                 <TableWithSearch 
                     searchKeyword='name'
                     page='gps-attend'
@@ -17,7 +17,7 @@ const GPS = () => {
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />
-                <Footer/>
+                {menu && <Footer/>}
             </div>
         </div>
     )

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import styled from 'styled-components'
+import MenuIcon from '@mui/icons-material/Menu'
 import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlined'
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
@@ -51,16 +52,24 @@ const Counter = styled.div`
     right: -5px;
 `
 
-const Navbar = () => {
+const Navbar = ({menu, setMenu}) => {
 
     const [anchorEl, setAnchorEl] = useState(null)
-    const handleClick = (event) => {setAnchorEl(event.currentTarget)}
+    const handleMenu = () => {
+        setMenu(!menu)
+    }
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget)
+    }
 
     return (
         <Container>
             <Wrapper>
-                <div>
-                </div>
+                <Icon
+                    onClick={handleMenu}
+                >
+                    <MenuIcon/>
+                </Icon>
                 <Items>
                     <Item>
                         <Icon>

@@ -6,6 +6,10 @@
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
 
+* 22/01/28
+    - 1.3.4 (client) <br>
+        sidebar disappear with clicking hambuger menu <br>
+
  * 22/01/27
     - 1.3.3 (api) <br>
         cors(domain) for security <br>

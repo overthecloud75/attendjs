@@ -31,6 +31,10 @@ export const columnHeaders = [
         accessor: 'longitude',
         Header: 'Longitude',
     },
+    {
+        accessor: 'attend',
+        Header: 'Attend',
+    },
 ]
 
 export const csvHeaders = [
@@ -65,5 +69,9 @@ export const csvHeaders = [
     {
         key: 'longitude',
         label: 'Longitude',
+    },
+    {
+        key: 'attend',
+        label: 'Attend',
     },
 ]

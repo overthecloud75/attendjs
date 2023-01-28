@@ -4,20 +4,20 @@ import Navbar from '../components/Navbar'
 import CheckConfirm from '../components/CheckConfirm'
 import Footer from '../components/Footer'
 
-const Confirm = () => {
+const Confirm = ({menu, setMenu}) => {
 
     let { confirmationCode } = useParams();
     console.log('code', confirmationCode)
 
     return (     
         <div className='container'>
-            <Sidebar/>
+            {menu && <Sidebar/>}
             <div className='wrapper'>
-                <Navbar/>
+                <Navbar menu={menu} setMenu={setMenu}/> 
                 <CheckConfirm 
                     url={ '/api/confirm/token/' + confirmationCode } 
                 />
-                <Footer/>
+                {menu && <Footer/>}
             </div>
         </div>  
     )

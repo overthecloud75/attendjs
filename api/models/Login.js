@@ -33,7 +33,11 @@ const LoginSchema = new mongoose.Schema(
         longitude: {
             type: Number,
             requried: false, 
-        }     
+        },
+        attend: {
+            type: Boolean,
+            requried: true, 
+        }       
     },
 )
 

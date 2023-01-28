@@ -4,12 +4,12 @@ import TableWithSearch from '../components/TableWithSearch'
 import { columnHeaders, csvHeaders } from '../configs/loginhistory'
 import Footer from '../components/Footer'
 
-const LoginHistory = () => {
+const LoginHistory = ({menu, setMenu}) => {
     return (     
         <div className='container'>
-            <Sidebar/>
+            {menu && <Sidebar/>}
             <div className='wrapper'>
-                <Navbar/>
+                <Navbar menu={menu} setMenu={setMenu}/> 
                 <TableWithSearch 
                     searchKeyword='name'
                     page='loginhistory'
@@ -17,7 +17,7 @@ const LoginHistory = () => {
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />
-                <Footer/>
+                {menu && <Footer/>}
             </div>
         </div>  
     )

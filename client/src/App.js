@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
     BrowserRouter,
     Routes,
@@ -24,25 +25,26 @@ import TooManyRequests from './pages/TooManyRequests'
 import NotFound from './pages/NotFound'
 
 function App() { 
+    const [menu, setMenu] = useState(false)
     return (
         <BrowserRouter>   
             <Routes>
-                <Route exact path='/' element={<Home/>}/>
+                <Route exact path='/' element={<Home menu={menu} setMenu={setMenu}/>}/>
                 <Route exact path='/register' element={<Register/>}/>
                 <Route exact path='/login' element={<Login/>}/>
-                <Route exact path='/attend' element={<Attend/>}/>
-                <Route exact path='/wifi-attend' element={<Wifi/>}/>
-                <Route exact path='/gps-attend' element={<GPS/>}/>
-                <Route exact path='/summary' element={<Summary/>}/>
-                <Route exact path='/schedule' element={<Schedule/>}/>
-                <Route exact path='/location' element={<Location/>}/>
-                <Route exact path='/device' element={<Device/>}/>
-                <Route exact path='/employee' element={<Employee/>}/>
-                <Route exact path='/loginhistory' element={<LoginHistory/>}/>
-                <Route exact path='/board' element={<Board/>}/>
-                <Route exact path='/report' element={<Report/>}/>
+                <Route exact path='/attend' element={<Attend menu={menu} setMenu={setMenu}/>}/>
+                <Route exact path='/wifi-attend' element={<Wifi menu={menu} setMenu={setMenu}/>}/>
+                <Route exact path='/gps-attend' element={<GPS menu={menu} setMenu={setMenu}/>}/>
+                <Route exact path='/summary' element={<Summary menu={menu} setMenu={setMenu}/>}/>
+                <Route exact path='/schedule' element={<Schedule menu={menu} setMenu={setMenu}/>}/>
+                <Route exact path='/location' element={<Location menu={menu} setMenu={setMenu}/>}/>
+                <Route exact path='/device' element={<Device menu={menu} setMenu={setMenu}/>}/>
+                <Route exact path='/employee' element={<Employee menu={menu} setMenu={setMenu}/>}/>
+                <Route exact path='/loginhistory' element={<LoginHistory menu={menu} setMenu={setMenu}/>}/>
+                <Route exact path='/board' element={<Board menu={menu} setMenu={setMenu}/>}/>
+                <Route exact path='/report' element={<Report menu={menu} setMenu={setMenu}/>}/>
                 <Route exact path='/check-email' element={<CheckEmail/>}/>
-                <Route exact path='/confirm/:confirmationCode' element={<Confirm/>}/>
+                <Route exact path='/confirm/:confirmationCode' element={<Confirm menu={menu} setMenu={setMenu}/>}/>
                 <Route exact path='/too-many-requests' element={<TooManyRequests/>}/>
                 <Route path='*' element={<NotFound/>} />
             </Routes>

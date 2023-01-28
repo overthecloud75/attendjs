@@ -4,12 +4,12 @@ import TableWithSearch from '../components/TableWithSearch'
 import { columnHeaders, csvHeaders } from '../configs/attend'
 import Footer from '../components/Footer'
 
-const Attend = () => {
+const Attend = ({menu, setMenu}) => {
     return (     
         <div className='container'>
-            <Sidebar/>
+            {menu && <Sidebar/>}
             <div className='wrapper'>
-                <Navbar/>
+                <Navbar menu={menu} setMenu={setMenu}/> 
                 <TableWithSearch 
                     searchKeyword='name'
                     page='attend'
@@ -17,7 +17,7 @@ const Attend = () => {
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />
-                <Footer/>
+                {menu && <Footer/>}
             </div>
         </div>  
     )

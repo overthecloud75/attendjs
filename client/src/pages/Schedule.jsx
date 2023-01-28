@@ -3,14 +3,14 @@ import Navbar from '../components/Navbar'
 import Calendar from '../components/Calendar'
 import Footer from '../components/Footer'
 
-const Schedule = () => {
+const Schedule = ({menu, setMenu}) => {
     return (
         <div className='container'>
-            <Sidebar/>
+            {menu && <Sidebar/>}
             <div className='wrapper'>
-                <Navbar/>
+                <Navbar menu={menu} setMenu={setMenu}/> 
                 <Calendar/>
-                <Footer/>
+                {menu && <Footer/>}
             </div>
         </div>
     )

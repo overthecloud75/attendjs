@@ -143,10 +143,11 @@ const updateLogin = async (employeeId, name, ip, user_agent, location, where) =>
     const output = formatToTimeZone(dateTime, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })
     const date = output.split(' ')[0]
     const time = output.split(' ')[1]
+    const attend = where.attend
     let login 
-    if (location && where.attend) { 
+    if (location && attend) { 
         const gpsOn = await GPSOn.findOne({date, employeeId})
-        login = new Login({employeeId, name, date, time, ip, user_agent, latitude: location.latitude, longitude: location.longitude})
+        login = new Login({employeeId, name, date, time, ip, user_agent, latitude: location.latitude, longitude: location.longitude, attend})
         if (gpsOn) {
             await GPSOn.updateOne({date, employeeId, name}, {$set: {end: time, endPlace: where.place}})
         } else {
@@ -154,9 +155,9 @@ const updateLogin = async (employeeId, name, ip, user_agent, location, where) =>
             await newGPSOn.save()
         }
     } else if (location) {
-        login = new Login({employeeId, name, date, time, ip, user_agent, latitude: location.latitude, longitude: location.longitude})
+        login = new Login({employeeId, name, date, time, ip, user_agent, latitude: location.latitude, longitude: location.longitude, attend})
     } else {
-        login = new Login({employeeId, name, date, time, ip, user_agent})
+        login = new Login({employeeId, name, date, time, ip, user_agent, attend})
     }
     await login.save()
 }

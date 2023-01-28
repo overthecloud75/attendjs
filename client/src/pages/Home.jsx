@@ -6,15 +6,15 @@ import Feature from '../components/Feature'
 import Footer from '../components/Footer'
 import GMap from '../components/GoogleMap'
 
-const Home = () => {
+const Home = ({menu, setMenu}) => {
 
     const { state } = useLocation()
 
     return (
         <div className='container'>
-            <Sidebar/>
+            {menu && <Sidebar/> }
             <div className='wrapper'>
-                <Navbar/> 
+                <Navbar menu={menu} setMenu={setMenu}/> 
                 {state ? 
                     <GMap
                        state={state}
@@ -24,7 +24,7 @@ const Home = () => {
                         <Feature/>
                     </>
                 }
-                <Footer/>
+                {menu && <Footer/>}
             </div>
         </div>
     )

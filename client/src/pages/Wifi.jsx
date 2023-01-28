@@ -4,12 +4,12 @@ import TableWithSearch from '../components/TableWithSearch'
 import { columnHeaders, csvHeaders } from '../configs/wifi'
 import Footer from '../components/Footer'
 
-const Wifi = () => {
+const Wifi = ({menu, setMenu}) => {
     return (   
         <div className='container'>
-            <Sidebar/>
-            <div className='wrapper'> 
-                <Navbar/>   
+            {menu && <Sidebar/>}
+            <div className='wrapper'>
+                <Navbar menu={menu} setMenu={setMenu}/>  
                 <TableWithSearch 
                     searchKeyword='ip'
                     page='wifi-attend'
@@ -17,7 +17,7 @@ const Wifi = () => {
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />
-                <Footer/>
+                {menu && <Footer/>}
             </div>
         </div>
     )
