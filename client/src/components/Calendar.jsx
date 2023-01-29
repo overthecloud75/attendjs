@@ -1,18 +1,35 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
-import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
+import FullCalendar from '@fullcalendar/react' 
+import dayGridPlugin from '@fullcalendar/daygrid' 
+import interactionPlugin from '@fullcalendar/interaction' 
 import { getColor, getEvents, addEvent, deleteEvent } from '../utils/EventUtil'
 
 const Wrapper = styled.div`
     padding: 30px;
 `
-const Calendar = () => {
-    const navigate = useNavigate();
-    const [error, setError] = useState(false)
 
+const getWindowDimensions = () => {
+    const { innerWidth: width, innerHeight: height } = window
+    return {
+        width,
+        height
+    }
+}
+
+const Calendar = () => {
+    const navigate = useNavigate()
+
+    const mobileSize = 800
+    const [weekends, setWeekends] = useState(true)
+    const [headerToolbar, setHeaderToolbar] = useState({
+        start: 'title', 
+        center: '',
+        end: 'today prev,next'
+    })
+    const [error, setError] = useState(false)
+   
     const initialEvents = async (args) => {
         const events = await getEvents(args)
         setError(events.err)
@@ -26,7 +43,14 @@ const Calendar = () => {
                 if (errorStatus === 401) { 
                     navigate('/login')
                 }
-            } 
+            } else {
+                // eslint-disable-next-line
+                const {width, height} = getWindowDimensions()
+                if (width < mobileSize) {
+                    setWeekends(false)
+                    setHeaderToolbar({start: '', center: '', end: 'today prev,next'})
+                }
+            }
         }
         fetchData()
     // eslint-disable-next-line
@@ -68,10 +92,11 @@ const Calendar = () => {
             <FullCalendar
                 plugins={[ dayGridPlugin, interactionPlugin ]}
                 initialView='dayGridMonth'
+                headerToolbar={headerToolbar}
                 editable={true}
                 selectable={true}
                 initialEvents={initialEvents}
-                weekends={true}
+                weekends={weekends}
                 select={handleDateSelect}
                 eventClick={handleEventClick}
                 contentHeight='auto'

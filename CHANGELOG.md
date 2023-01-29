@@ -6,6 +6,10 @@
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
 
+* 22/01/29
+    - 1.3.7 (client) <br>
+        control weekends, headerToolbar option in Calendar.jsx according to window size <br>
+        
 * 22/01/28
     - 1.3.6 (api) <br>
         check isMobile with ip info <br>
@@ -36,7 +40,7 @@
     - 1.2.7 (api) <br>
         remove err.stack when error for security <br>
     - 1.2.6 (client) <br>
-        use /api in url to remove proxy between client and api<br>
+        use /api in url to remove proxy between client and api <br>
 
 * 22/01/20
     - 1.2.5 (client) <br>
@@ -82,7 +86,7 @@
 
 * 22/12/21
     - 1.1.3 (api) <br>
-        only employee can make id in auth.js<br>
+        only employee can make id in auth.js <br>
 
 * 22/12/17
     - 1.1.2 (api) <br>

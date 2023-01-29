@@ -157,7 +157,7 @@ const updateLogin = async (employeeId, name, ip, user_agent, location, where) =>
     }
 
     let login 
-    if (location && attend) { 
+    if (location && where.attend) { 
         const gpsOn = await GPSOn.findOne({date, employeeId})
         login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, attend})
         if (gpsOn) {

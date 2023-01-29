@@ -1,10 +1,10 @@
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-const CheckEmail = () => {   
+const CheckEmail = ({menu, setMenu}) => {   
     return (
         <div>
-            <Navbar/> 
+            <Navbar menu={menu} setMenu={setMenu}/> 
             <div>Plz Check Your Email to activate your account!</div>
             <Footer/>
         </div>
