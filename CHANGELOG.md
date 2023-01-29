@@ -1,12 +1,14 @@
 * to do list 
     - client : Link Acitve when onclick <br>
     - client : react-table left-right scroll <br>
-    - backend : email server <br>
       <br>
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
+    - planning : 연차 관리 <br>
 
 * 22/01/29
+    - 1.3.8 (client) <br>
+        apply the latest fullcalendar and ckeditor <br>
     - 1.3.7 (client) <br>
         control weekends, headerToolbar option in Calendar.jsx according to window size <br>
         
