@@ -6,6 +6,10 @@
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
 
+* 22/01/30
+    - 1.3.9 (client, api) <br>
+        apply crpyto.js to prevent abusing GPS info
+
 * 22/01/29
     - 1.3.8 (client) <br>
         apply the latest fullcalendar and ckeditor <br>

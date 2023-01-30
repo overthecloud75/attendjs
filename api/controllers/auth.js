@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import CryptoJS from 'crypto-js'
 import { formatToTimeZone } from 'date-fns-timezone'
 import distance from 'gps-distance'
 import { logger, reqFormat } from '../config/winston.js'
@@ -78,7 +79,7 @@ export const login = async (req, res, next) => {
         const user_agent = req.headers['user-agent']
         const location = req.body.location
 
-        const where = await whereIs(location, ip, user_agent)
+        const where = await whereIs(location, req.body.hash, ip, user_agent)
         await updateLogin(user.employeeId, user.name, ip, user_agent, location, where)
         
         res.cookie('access_token', token, {
@@ -116,8 +117,11 @@ export const confirmCode = async (req, res, next) => {
     }
 }
 
-const whereIs = async (location, ip, user_agent) => {
+const whereIs = async (location, hash, ip, user_agent) => {
     const locations = await Location.find()
+    const dateHash = decryptHash(hash)
+    console.log('hash', dateHash)
+
     let attend = false 
     let place = ''
     let distanceResult = 0 
@@ -130,7 +134,7 @@ const whereIs = async (location, ip, user_agent) => {
                 place = loc.location 
                 minDistance = distanceResult
                 placeLocation = {latitude: loc.latitude, longitude: loc.longitude}
-                if (distanceResult < loc.dev) {
+                if (distanceResult < loc.dev && dateHash) {
                     attend = true        
                 }
             }
@@ -140,10 +144,7 @@ const whereIs = async (location, ip, user_agent) => {
 }
 
 const updateLogin = async (employeeId, name, ip, user_agent, location, where) => {
-    const dateTime = new Date()
-    const output = formatToTimeZone(dateTime, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })
-    const date = output.split(' ')[0]
-    const time = output.split(' ')[1]
+    const {date, time} = dateAndTime()
     let attend
     if (where.attend) {attend = 'O'
     } else {attend = 'X'
@@ -172,6 +173,22 @@ const updateLogin = async (employeeId, name, ip, user_agent, location, where) =>
         login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, attend})
     }
     await login.save()
+}
+
+const dateAndTime = () => {
+    const dateTime = new Date()
+    const output = formatToTimeZone(dateTime, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })
+    const date = output.split(' ')[0]
+    const time = output.split(' ')[1]
+    return {date, time}
+}
+
+const decryptHash = (hash) => {
+    const decrypted = CryptoJS.AES.decrypt(hash, process.env.TITLE).toString(CryptoJS.enc.Utf8)
+    const {date, time} = dateAndTime()
+    console.log(decrypted, date)
+    if (date===decrypted) {return true}
+    return false
 }
 
 export const search = async (req,res,next) => {

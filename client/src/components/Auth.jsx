@@ -2,7 +2,10 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import CryptoJS from 'crypto-js'
+import { format } from 'date-fns'
 import { requestAuth } from '../utils/AuthUtil'
+import { TITLE } from '../configs/working'
 
 const useCurrentLocation = (options = {}) => {
     // location 정보 저장
@@ -41,6 +44,16 @@ const useCurrentLocation = (options = {}) => {
     return { location, error }
 }
 
+const useHash = () => {
+    const [hash, setHash] = useState('')
+    useEffect(() => {
+        const date = new Date()
+        const encrypted = CryptoJS.AES.encrypt(format(date, 'yyyy-MM-dd'), TITLE).toString()
+        setHash(encrypted)
+    }, [])
+    return { hash }
+}
+
 const Auth = ({mode}) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -49,7 +62,8 @@ const Auth = ({mode}) => {
             name: '',
             email: '',
             password: '',
-            location: {latitude: -1, longitude: -1}
+            location: {latitude: -1, longitude: -1},
+            hash: ''
         }
     )
     const [loading, setLoading] = useState(false)
@@ -57,6 +71,7 @@ const Auth = ({mode}) => {
 
     // check gps location 
     const { location, error} = useCurrentLocation()
+    const { hash } = useHash()
 
     useEffect(() => {
         requestAuth(mode, 'get', '', dispatch, navigate, setErrorMsg, setLoading)
@@ -64,7 +79,7 @@ const Auth = ({mode}) => {
     }, [mode])
 
     const handleChange = (event) => {
-        setValue({...value, [event.target.id]: event.target.value, location})    
+        setValue({...value, [event.target.id]: event.target.value, location, hash})    
     }
 
     const handleSubmit = (event) => {

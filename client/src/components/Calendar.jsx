@@ -70,7 +70,6 @@ const Calendar = () => {
                 end: selectInfo.endStr
             }
             const result = await addEvent(event)
-            console.log('result', result)
             if (!result.err) {
                 event = getColor(event)
                 calendarApi.addEvent(event)
