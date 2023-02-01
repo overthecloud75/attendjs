@@ -6,8 +6,8 @@ const Container = styled.div`
 `
 
 const Title= styled.div`
-    font-weight: bold;
     display: flex;
+    font-weight: bold;
     margin: 10px;
     justify-content: center;
 `
@@ -57,6 +57,11 @@ const GMap = ({state}) => {
     return (
         <Container>
             <Title>Your location is {state.where.minDistance * 1000}m distant from {state.where.place}</Title>
+            {state.where.attend?
+                (<Title>Don't worry. you are checked</Title>):
+                (<Title>Unchecked. plz login again in a right place</Title>)
+            }
+            {state.where.minDistance < 1 &&
             <Wrapper>
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: googleMapAPIKey }}
@@ -75,8 +80,9 @@ const GMap = ({state}) => {
                     />
                 </GoogleMapReact>
             </Wrapper>
+            }
         </Container>
-    );
+    )
 }
 
 export default GMap

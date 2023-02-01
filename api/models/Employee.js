@@ -41,6 +41,11 @@ const EmployeeSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        attendMode: {
+            type: String,
+            enum: ['O', 'X'],
+            default: 'O',
+        }
     },
 )
 

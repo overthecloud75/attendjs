@@ -77,10 +77,16 @@ export const login = async (req, res, next) => {
         
         const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
         const user_agent = req.headers['user-agent']
+        const hash = req.body.hash
         const location = req.body.location
+        const encryptedLocation = req.body.encryptedLocation
 
-        const where = await whereIs(location, req.body.hash, ip, user_agent)
-        await updateLogin(user.employeeId, user.name, ip, user_agent, location, where)
+        const decryptedLocation = decryptLocation(encryptedLocation, hash)
+        console.log(location, decryptLocation)
+        const abuse = validateCheck(location, decryptedLocation, hash)
+        const {isMobile, isRemotePlace} = checkMobile(ip)
+        const where = await whereIs(location, isMobile, isRemotePlace)
+        await updateLogin(user.employeeId, user.name, ip, isMobile, user_agent, location, where, abuse)
         
         res.cookie('access_token', token, {
             httpOnly: true, secure: true
@@ -117,61 +123,68 @@ export const confirmCode = async (req, res, next) => {
     }
 }
 
-const whereIs = async (location, hash, ip, user_agent) => {
-    const locations = await Location.find()
-    const dateHash = decryptHash(hash)
-    console.log('hash', dateHash)
+const checkMobile = (ip) => {
+    const ip_split = ip.split('.')
+    const ip16 = ip_split[0] + '.' + ip_split[1]
 
+    let isMobile = 'X' 
+    let isRemotePlace = false
+    if (MOBILE_IP_LIST.includes(ip16)) {
+        isMobile = 'O'
+    }
+    if (process.env.REMOTE_IP===ip16) {
+        isRemotePlace = true
+    }
+    return {isMobile, isRemotePlace}
+}
+
+const whereIs = async (location, isMobile, isRemotePlace) => {
+    
     let attend = false 
     let place = ''
     let distanceResult = 0 
     let minDistance = 10000
-    let placeLocation = {latituce: -1, longitude: -1}
-    if (location) {
+    let placeLocation = {latitude: -1, longitude: -1}
+    if (isRemotePlace) {
+        attend = true
+        place = process.env.REMOTE_PLACE
+        minDistance = 0 
+    } else if (isMobile==='X') {
+        attend = false
+    } else if (location) {
+        const locations = await Location.find()
         for (let loc of locations) {
             distanceResult = Math.round(distance(loc.latitude, loc.longitude, location.latitude, location.longitude)*1000)/1000
             if (distanceResult < minDistance) {
                 place = loc.location 
                 minDistance = distanceResult
                 placeLocation = {latitude: loc.latitude, longitude: loc.longitude}
-                if (distanceResult < loc.dev && dateHash) {
+                if (distanceResult < loc.dev) {
                     attend = true        
                 }
             }
         }
     }
-    return {attend, place, minDistance, placeLocation}
+    return {attend, place, minDistance, placeLocation, isMobile}
 }
 
-const updateLogin = async (employeeId, name, ip, user_agent, location, where) => {
+const updateLogin = async (employeeId, name, ip, isMobile, user_agent, location, where, abuse) => {
     const {date, time} = dateAndTime()
     let attend
     if (where.attend) {attend = 'O'
     } else {attend = 'X'
     }
-    const ip_split = ip.split('.')
-    const ip16 = ip_split[0] + '.' + ip_split[1]
 
-    let isMobile = 'X' 
-    if (MOBILE_IP_LIST.includes(ip16)) {
-        isMobile = 'O'
-    }
-
-    let login 
-    if (location && where.attend) { 
+    const login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, attend, abuse})
+    if (where.attend) { 
         const gpsOn = await GPSOn.findOne({date, employeeId})
-        login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, attend})
         if (gpsOn) {
             await GPSOn.updateOne({date, employeeId, name}, {$set: {end: time, endPlace: where.place}})
         } else {
             const newGPSOn = new GPSOn({employeeId, name, date, begin: time, beginPlace: where.place, end: time, endPlace: where.place})
             await newGPSOn.save()
         }
-    } else if (location) {
-        login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, attend})
-    } else {
-        login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, attend})
-    }
+    } 
     await login.save()
 }
 
@@ -183,12 +196,19 @@ const dateAndTime = () => {
     return {date, time}
 }
 
-const decryptHash = (hash) => {
-    const decrypted = CryptoJS.AES.decrypt(hash, process.env.TITLE).toString(CryptoJS.enc.Utf8)
-    const {date, time} = dateAndTime()
-    console.log(decrypted, date)
-    if (date===decrypted) {return true}
-    return false
+const decryptLocation = (encryptedLocation, hash) => {
+    const latitude = Number(CryptoJS.AES.decrypt(encryptedLocation.latitude, hash.toString()).toString(CryptoJS.enc.Utf8))
+    const longitude = Number(CryptoJS.AES.decrypt(encryptedLocation.longitude, hash.toString()).toString(CryptoJS.enc.Utf8))
+    return {latitude, longitude}
+}
+
+const validateCheck = (location, decpytedLocation, hash) => {
+    let abuse = 'O'
+    const time = Date.now()
+    if (Math.abs(location.latitude - decpytedLocation.latitude) < 0.001 && Math.abs(location.longitude - decpytedLocation.longitude) < 0.001 && Math.abs(hash-time) < 30000) {
+        abuse = 'X' 
+    } 
+    return abuse
 }
 
 export const search = async (req,res,next) => {

@@ -24,7 +24,8 @@ const LoginSchema = new mongoose.Schema(
         },
         isMobile: {
             type: String, 
-            required: true,
+            enum: ['O', 'X'],
+            default: 'X', 
         },
         user_agent: {
             type: String,
@@ -40,7 +41,13 @@ const LoginSchema = new mongoose.Schema(
         },
         attend: {
             type: String,
-            requried: true, 
+            enum: ['O', 'X'],
+            default: 'X', 
+        },
+        abuse: {
+            type: String,
+            enum: ['O', 'X'],
+            default: 'X',
         }       
     },
 )

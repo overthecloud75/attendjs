@@ -39,6 +39,10 @@ export const columnHeaders = [
         accessor: 'attend',
         Header: 'Attend',
     },
+    {
+        accessor: 'abuse',
+        Header: 'Abuse',
+    },
 ]
 
 export const csvHeaders = [
@@ -81,5 +85,9 @@ export const csvHeaders = [
     {
         key: 'attend',
         label: 'Attend',
+    },
+    {
+        key: 'abuse',
+        label: 'Abuse',
     },
 ]

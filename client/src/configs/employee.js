@@ -35,6 +35,10 @@ export const columnHeaders = [
         accessor: 'mode',
         Header: 'mode',
     },
+    {
+        accessor: 'attendMode',
+        Header: '근태적용',
+    },
 ]
 
 export const csvHeaders = [
@@ -73,5 +77,9 @@ export const csvHeaders = [
     {
         key: 'mode',
         label: 'mode',
+    },
+    {
+        key: 'attendMode',
+        label: '근태적용',
     },
 ]

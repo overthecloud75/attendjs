@@ -65,7 +65,7 @@ class Report(BasicModel):
                         name = employee['name']
                         employee_id = employee['employeeId']
                         regular = employee['regular']
-                        if employee['mode'] in WORKING['status']:
+                        if employee['mode'] in WORKING['status'] and employee['attendMode'] == 'X':
                             reason = employee['mode']
                         else:
                             reason = None

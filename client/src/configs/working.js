@@ -18,5 +18,3 @@ export const WORKING = {
     lunarHolidays: ['0101', '0102', '0408', '0814', '0815', '0816'],
     alternativeVacation: ['0301', '0505', '0815', '1003', '1009']
 }
-
-export const TITLE = 'SmartWork'

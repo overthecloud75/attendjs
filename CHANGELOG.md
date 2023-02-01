@@ -6,9 +6,15 @@
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
 
+* 22/02/01
+    - 1.4.1 (client, api) <br>
+        apply remotePlace, checkMobile <br>
+    - 1.4.0 (client, api, backend) <br>
+        apply attendMode <br>
+
 * 22/01/30
     - 1.3.9 (client, api) <br>
-        apply crpyto.js to prevent abusing GPS info
+        apply crpyto.js to prevent abusing GPS info <br>
 
 * 22/01/29
     - 1.3.8 (client) <br>
