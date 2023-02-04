@@ -6,6 +6,10 @@
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
 
+* 22/02/02
+    - 1.4.2 (client) <br>
+        apply lazy loading and jpg -> webp<br>
+
 * 22/02/01
     - 1.4.1 (client, api) <br>
         apply remotePlace, checkMobile <br>

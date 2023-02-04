@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import FullCalendar from '@fullcalendar/react' 
 import dayGridPlugin from '@fullcalendar/daygrid' 
-import interactionPlugin from '@fullcalendar/interaction' 
+import interactionPlugin from '@fullcalendar/interaction'
 import { getColor, getEvents, addEvent, deleteEvent } from '../utils/EventUtil'
 
 const Wrapper = styled.div`

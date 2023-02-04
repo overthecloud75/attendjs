@@ -5,9 +5,9 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
-import axios from 'axios'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import axios from 'axios'
 import { format } from 'date-fns'
 
 const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setOpen, rowData}) => {

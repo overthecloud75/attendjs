@@ -82,9 +82,10 @@ export const login = async (req, res, next) => {
         const encryptedLocation = req.body.encryptedLocation
 
         const decryptedLocation = decryptLocation(encryptedLocation, hash)
-        console.log(location, decryptLocation)
-        const abuse = validateCheck(location, decryptedLocation, hash)
+        console.log(location, decryptedLocation)
+        
         const {isMobile, isRemotePlace} = checkMobile(ip)
+        const abuse = validateCheck(isMobile, location, decryptedLocation, hash)
         const where = await whereIs(location, isMobile, isRemotePlace)
         await updateLogin(user.employeeId, user.name, ip, isMobile, user_agent, location, where, abuse)
         
@@ -202,12 +203,17 @@ const decryptLocation = (encryptedLocation, hash) => {
     return {latitude, longitude}
 }
 
-const validateCheck = (location, decpytedLocation, hash) => {
+const validateCheck = (isMobile, location, decryptedLocation, hash) => {
     let abuse = 'O'
-    const time = Date.now()
-    if (Math.abs(location.latitude - decpytedLocation.latitude) < 0.001 && Math.abs(location.longitude - decpytedLocation.longitude) < 0.001 && Math.abs(hash-time) < 30000) {
-        abuse = 'X' 
-    } 
+    let time = 0 
+    if (isMobile === 'X') { abuse = 'X'}
+    else {
+        time = Date.now()
+        if (Math.abs(location.latitude - decryptedLocation.latitude) < 0.001 && Math.abs(location.longitude - decryptedLocation.longitude) < 0.001 &&   Math.abs(hash-time) < 30000) {
+            abuse = 'X' 
+        }
+    }
+    if (abuse === 'O') { console.log(location, decryptedLocation, hash, time) }
     return abuse
 }
 

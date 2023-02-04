@@ -6,6 +6,7 @@ import CryptoJS from 'crypto-js'
 import { requestAuth } from '../utils/AuthUtil'
 
 const useCurrentLocation = (options = {}) => {
+    // eslint-disable-next-line
     const [time, setTime] = useState(Date.now())
     // location 정보 저장
     const [location, setLocation] = useState({latitude: -1, longitude: -1})

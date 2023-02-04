@@ -1,9 +1,10 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, Suspense, lazy } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import useFetch from '../hooks/useFetch'
-import Table from './ReactTable'
 import Search from './Search'
+
+const Table = lazy(() => import('./ReactTable'))
 
 const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) => {
     const navigate = useNavigate();
@@ -52,14 +53,16 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
                 setClickCount={setClickCount}
                 setFileName={setFileName}
             />
-            <Table 
-                url={page}
-                columns={columns}
-                data={tableData}
-                setData={setData}
-                fileName={fileName}
-                csvHeaders={csvHeaders}
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+                <Table 
+                    url={page}
+                    columns={columns}
+                    data={tableData}
+                    setData={setData}
+                    fileName={fileName}
+                    csvHeaders={csvHeaders}
+                />
+            </Suspense>
         </>
     )
 }
