@@ -2,37 +2,27 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import CryptoJS from 'crypto-js'
 import { requestAuth } from '../utils/AuthUtil'
 
 const useCurrentLocation = (options = {}) => {
-    // eslint-disable-next-line
-    const [time, setTime] = useState(Date.now())
     // location 정보 저장
     const [location, setLocation] = useState({latitude: -1, longitude: -1})
-    const [encryptedLocation, setEncryptedLocation] = useState({latitude: -1, longitude: -1})
     // 에러 메세지 저장
     const [error, setError] = useState('')
 
     // Geolocation의 `getCurrentPosition` 메소드에 대한 성공 callback 핸들러
     const handleSuccess = (pos) => {
-        const { latitude, longitude } = pos.coords
-        const encryptedLatitude = makeHash(latitude, time)
-        const encryptedLongitude = makeHash(longitude, time)
-        setLocation({ latitude, longitude})
-        setEncryptedLocation({
-            latitude: encryptedLatitude,
-            longitude: encryptedLongitude,
-        })
-    };
+        const {latitude, longitude} = pos.coords
+        setLocation({latitude, longitude})
+    }
   
     // Geolocation의 `getCurrentPosition` 메소드에 대한 실패 callback 핸들러
     const handleError = (error) => {
         setError(error.message)
-    };
+    }
   
     useEffect(() => {
-        const { geolocation } = navigator
+        const {geolocation} = navigator
     
         // 사용된 브라우저에서 지리적 위치(Geolocation)가 정의되지 않은 경우 오류로 처리합니다.
         if (!geolocation) {
@@ -44,12 +34,7 @@ const useCurrentLocation = (options = {}) => {
         geolocation.getCurrentPosition(handleSuccess, handleError, options)
         // eslint-disable-next-line
     }, [])
-    return { location, encryptedLocation, time, error }
-}
-
-const makeHash = (data, time) => {
-    const encrypted = CryptoJS.AES.encrypt(data.toString(), time.toString()).toString()
-    return encrypted
+    return {location, error}
 }
 
 const Auth = ({mode}) => {
@@ -61,14 +46,13 @@ const Auth = ({mode}) => {
             email: '',
             password: '',
             location: {latitude: -1, longitude: -1},
-            hash: ''
         }
     )
     const [loading, setLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
 
     // check gps location 
-    const { location, encryptedLocation, time, error} = useCurrentLocation()
+    const { location, error } = useCurrentLocation()
 
     useEffect(() => {
         requestAuth(mode, 'get', '', dispatch, navigate, setErrorMsg, setLoading)
@@ -76,7 +60,7 @@ const Auth = ({mode}) => {
     }, [mode])
 
     const handleChange = (event) => {
-        setValue({...value, [event.target.id]: event.target.value, location, encryptedLocation, hash: time})    
+        setValue({...value, [event.target.id]: event.target.value, location})    
     }
 
     const handleSubmit = (event) => {

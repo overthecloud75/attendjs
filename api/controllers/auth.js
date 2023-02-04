@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import CryptoJS from 'crypto-js'
 import { formatToTimeZone } from 'date-fns-timezone'
 import distance from 'gps-distance'
 import { logger, reqFormat } from '../config/winston.js'
@@ -77,23 +76,22 @@ export const login = async (req, res, next) => {
         
         const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
         const user_agent = req.headers['user-agent']
-        const hash = req.body.hash
-        const location = req.body.location
-        const encryptedLocation = req.body.encryptedLocation
-
-        const decryptedLocation = decryptLocation(encryptedLocation, hash)
-        console.log(location, decryptedLocation)
-        
+        let location = req.body.location
+        location = {
+            latitude: Math.round(location.latitude*100000)/100000,
+            longitude: Math.round(location.longitude*100000)/100000,
+        }
         const {isMobile, isRemotePlace} = checkMobile(ip)
-        const abuse = validateCheck(isMobile, location, decryptedLocation, hash)
-        const where = await whereIs(location, isMobile, isRemotePlace)
-        await updateLogin(user.employeeId, user.name, ip, isMobile, user_agent, location, where, abuse)
+        const abuse = 'X'
+        const where = attendRemotePlace(isRemotePlace, isMobile)
+        const hash = getRandomInt()
+        await updateLogin(user.employeeId, user.name, ip, isMobile, user_agent, location, where, abuse, hash)
         
         res.cookie('access_token', token, {
             httpOnly: true, secure: true
         })
         .status(200)
-        .json({ name: user.name, email, isAdmin: user.isAdmin, where })
+        .json({name: user.name, email, isAdmin: user.isAdmin, where, hash})
     } catch (err) {
         next(err)
     }
@@ -124,6 +122,46 @@ export const confirmCode = async (req, res, next) => {
     }
 }
 
+export const setAttend = async (req, res, next) => {
+    logger.info(reqFormat(req))
+    try {
+        const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
+        const user_agent = req.headers['user-agent']
+        const hashLocation = req.body.location
+        
+        const {isMobile, isRemotePlace} = checkMobile(ip)
+
+        const {date, time} = dateAndTime()
+        const user = await User.findOne({_id: req.user.id})
+        const lastLogin = await Login.findOne({id:user.employeeId, date}).sort({time: -1})
+        const {location, abuse} = validateCheck(lastLogin, hashLocation, isMobile)
+        const where = await whereIs(location, abuse)
+
+        await updateLogin(user.employeeId, user.name, ip, isMobile, user_agent, location, where, abuse)
+        res.status(200).json({where})
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const search = async (req, res, next) => {
+    logger.info(reqFormat(req))
+    try {
+        const name = req.query.name 
+        const startDate = sanitizeData(req.query.startDate, 'date')
+        const endDate = sanitizeData(req.query.endDate, 'date')
+        let logins 
+        if (name && name !== '') {
+            logins = await Login.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: 1})}
+        else { 
+            logins = await Login.find({date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: 1, name: 1})
+        }
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json(logins)
+    } catch (err) {
+        next(err)
+    }
+}
+
 const checkMobile = (ip) => {
     const ip_split = ip.split('.')
     const ip16 = ip_split[0] + '.' + ip_split[1]
@@ -139,20 +177,26 @@ const checkMobile = (ip) => {
     return {isMobile, isRemotePlace}
 }
 
-const whereIs = async (location, isMobile, isRemotePlace) => {
-    
+const attendRemotePlace = (isRemotePlace, isMobile) => {
+    let attend = false 
+    let place = ''
+    let minDistance = 10000
+    const placeLocation = {latitude: -1, longitude: -1}
+    if (isRemotePlace) {
+        attend = true
+        place = process.env.REMOTE_PLACE
+        minDistance = 0 
+    }
+    return {attend, place, minDistance, placeLocation, isMobile}
+}
+
+const whereIs = async (location, abuse) => {
     let attend = false 
     let place = ''
     let distanceResult = 0 
     let minDistance = 10000
     let placeLocation = {latitude: -1, longitude: -1}
-    if (isRemotePlace) {
-        attend = true
-        place = process.env.REMOTE_PLACE
-        minDistance = 0 
-    } else if (isMobile==='X') {
-        attend = false
-    } else if (location) {
+    if (location && abuse==='X') {
         const locations = await Location.find()
         for (let loc of locations) {
             distanceResult = Math.round(distance(loc.latitude, loc.longitude, location.latitude, location.longitude)*1000)/1000
@@ -166,17 +210,17 @@ const whereIs = async (location, isMobile, isRemotePlace) => {
             }
         }
     }
-    return {attend, place, minDistance, placeLocation, isMobile}
+    return {attend, place, minDistance, placeLocation}
 }
 
-const updateLogin = async (employeeId, name, ip, isMobile, user_agent, location, where, abuse) => {
+const updateLogin = async (employeeId, name, ip, isMobile, user_agent, location, where, abuse, hash=0) => {
     const {date, time} = dateAndTime()
     let attend
     if (where.attend) {attend = 'O'
     } else {attend = 'X'
     }
 
-    const login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, attend, abuse})
+    const login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, attend, abuse, hash, timestamp: Date.now()})
     if (where.attend) { 
         const gpsOn = await GPSOn.findOne({date, employeeId})
         if (gpsOn) {
@@ -197,40 +241,24 @@ const dateAndTime = () => {
     return {date, time}
 }
 
-const decryptLocation = (encryptedLocation, hash) => {
-    const latitude = Number(CryptoJS.AES.decrypt(encryptedLocation.latitude, hash.toString()).toString(CryptoJS.enc.Utf8))
-    const longitude = Number(CryptoJS.AES.decrypt(encryptedLocation.longitude, hash.toString()).toString(CryptoJS.enc.Utf8))
-    return {latitude, longitude}
-}
-
-const validateCheck = (isMobile, location, decryptedLocation, hash) => {
+const validateCheck = (lastLogin, hashLocation, isMobile) => {
     let abuse = 'O'
-    let time = 0 
-    if (isMobile === 'X') { abuse = 'X'}
-    else {
-        time = Date.now()
-        if (Math.abs(location.latitude - decryptedLocation.latitude) < 0.001 && Math.abs(location.longitude - decryptedLocation.longitude) < 0.001 &&   Math.abs(hash-time) < 30000) {
-            abuse = 'X' 
-        }
+    const location = {
+        latitude: Math.round((hashLocation.latitude - lastLogin.hash)*100000)/100000, 
+        longitude: Math.round((hashLocation.longitude + lastLogin.hash)*100000)/100000
     }
-    if (abuse === 'O') { console.log(location, decryptedLocation, hash, time) }
-    return abuse
+    if (isMobile === 'X') {abuse = 'X'}
+    else if ((Date.now() - lastLogin.timestamp) < 1000) {
+        if (lastLogin.latitude===location.latitude && lastLogin.longitude===location.longitude) {abuse = 'X'}
+    }
+    return {location, abuse}
 }
 
-export const search = async (req,res,next) => {
-    logger.info(reqFormat(req))
-    try {
-        const name = req.query.name 
-        const startDate = sanitizeData(req.query.startDate, 'date')
-        const endDate = sanitizeData(req.query.endDate, 'date')
-        let logins 
-        if (name && name !== '') {
-            logins = await Login.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: 1})}
-        else { 
-            logins = await Login.find({date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: 1, name: 1})
-        }
-        res.status(200).setHeader('csrftoken', req.csrfToken()).json(logins)
-    } catch (err) {
-        next(err)
-    }
+const getRandomInt = (min=1, max=1000) => {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min)) + min //최댓값은 제외, 최솟값은 포함
 }
+
+
+

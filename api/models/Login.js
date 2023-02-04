@@ -48,8 +48,16 @@ const LoginSchema = new mongoose.Schema(
             type: String,
             enum: ['O', 'X'],
             default: 'X',
-        }       
-    },
+        },
+        hash: {
+            type: Number, 
+            required: false, 
+        },
+        timestamp: {
+            type: Number, 
+            required: false, 
+        }         
+    }, 
 )
 
 export default mongoose.model('Login', LoginSchema)

@@ -6,7 +6,11 @@
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
 
-* 22/02/02
+* 22/02/05
+    - 1.4.3 (client, api) <br>
+        validateCheck for GPS data<br>
+
+* 22/02/04
     - 1.4.2 (client) <br>
         apply lazy loading and jpg -> webp<br>
 

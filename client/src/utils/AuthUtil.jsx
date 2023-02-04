@@ -9,8 +9,11 @@ export const requestAuth = async (mode, method, value, dispatch, navigate, setEr
             const res = await axios.post(url, value)
             if (mode === 'login') {
                 dispatch(loginUser(res.data)) 
-                if (res.data.where.attend || res.data.where.isMobile === 'O') {
-                    navigate('/', {state : {location: value.location, where: res.data.where}})
+                if (res.data.where.attend) {
+                    navigate('/', {state : {location: value.location, where: res.data.where}}) }
+                else if (res.data.where.isMobile === 'O') {
+                    const resAttend = await axios.post('/api/auth/setAttend', {location: {latitude: value.location.latitude + res.data.hash, longitude: value.location.longitude - res.data.hash}})
+                    navigate('/', {state : {location: value.location, where: resAttend.data.where}})
                 } else {
                     navigate('/attend')
                 }

@@ -8,6 +8,18 @@ export const columnHeaders = [
         Header: 'Name',
     },
     {
+        accessor: 'attend',
+        Header: 'Attend',
+    },
+    {
+        accessor: 'isMobile',
+        Header: 'Mobile',
+    },
+    {
+        accessor: 'abuse',
+        Header: 'Abuse',
+    },
+    {
         accessor: 'date',
         Header: 'Date',
     },
@@ -18,10 +30,6 @@ export const columnHeaders = [
     {
         accessor: 'ip',
         Header: 'IP',
-    },
-    {
-        accessor: 'isMobile',
-        Header: 'Mobile',
     },
     {
         accessor: 'user_agent',
@@ -36,12 +44,12 @@ export const columnHeaders = [
         Header: 'Longitude',
     },
     {
-        accessor: 'attend',
-        Header: 'Attend',
+        accessor: 'hash',
+        Header: 'Hash',
     },
     {
-        accessor: 'abuse',
-        Header: 'Abuse',
+        accessor: 'timestamp',
+        Header: 'Timestamp',
     },
 ]
 
@@ -49,6 +57,18 @@ export const csvHeaders = [
     {
         key: 'name',
         label: 'Name',
+    },
+    {
+        key: 'attend',
+        label: 'Attend',
+    },
+    {
+        key: 'isMobile',
+        label: 'Mobile',
+    },
+    {
+        key: 'abuse',
+        label: 'Abuse',
     },
     {
         key: 'date',
@@ -61,10 +81,6 @@ export const csvHeaders = [
     {
         key: 'ip',
         label: 'IP',
-    },
-    {
-        key: 'isMobile',
-        label: 'Mobile',
     },
     {
         key: 'user_agent',
@@ -83,11 +99,11 @@ export const csvHeaders = [
         label: 'Longitude',
     },
     {
-        key: 'attend',
-        label: 'Attend',
+        key: 'hash',
+        label: 'Hash',
     },
     {
-        key: 'abuse',
-        label: 'Abuse',
+        key: 'timestamp',
+        label: 'Timestamp',
     },
 ]
