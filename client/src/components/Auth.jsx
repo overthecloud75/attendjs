@@ -3,37 +3,29 @@ import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { requestAuth } from '../utils/AuthUtil'
+import { getWindowDimension } from '../utils/EventUtil'
 
-const useCurrentLocation = (options = {}) => {
+const getLocation = async () => {
     // location 정보 저장
-    const [location, setLocation] = useState({latitude: -1, longitude: -1})
-    // 에러 메세지 저장
-    const [error, setError] = useState('')
+    let error = ''
+    let location = {latitude: -1, longitude: -1, accuracy: 1, timestamp: 0}
+    const {geolocation} = navigator
 
-    // Geolocation의 `getCurrentPosition` 메소드에 대한 성공 callback 핸들러
-    const handleSuccess = (pos) => {
-        const {latitude, longitude} = pos.coords
-        setLocation({latitude, longitude})
-    }
-  
-    // Geolocation의 `getCurrentPosition` 메소드에 대한 실패 callback 핸들러
-    const handleError = (error) => {
-        setError(error.message)
-    }
-  
-    useEffect(() => {
-        const {geolocation} = navigator
-    
-        // 사용된 브라우저에서 지리적 위치(Geolocation)가 정의되지 않은 경우 오류로 처리합니다.
-        if (!geolocation) {
-            setError('Geolocation is not supported.')
-            return
-        }
-  
+    // 사용된 브라우저에서 지리적 위치(Geolocation)가 정의되지 않은 경우 오류로 처리합니다.
+    if (!geolocation) {
+        error = 'Geolocation is not supported.'
+    } else {
         // Geolocation API 호출
-        geolocation.getCurrentPosition(handleSuccess, handleError, options)
-        // eslint-disable-next-line
-    }, [])
+        const pos = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(
+                position => resolve(position),
+                error => reject(error), 
+                {enableHighAccuracy: true, maximumAge: 0}
+            )}
+        )
+        const {latitude, longitude, accuracy} = pos.coords
+        location = {latitude, longitude, accuracy, timestamp: pos.timestamp}
+    }
     return {location, error}
 }
 
@@ -45,30 +37,42 @@ const Auth = ({mode}) => {
             name: '',
             email: '',
             password: '',
-            location: {latitude: -1, longitude: -1},
+            width: 0, 
+            height: 0
         }
     )
     const [loading, setLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
 
-    // check gps location 
-    const { location, error } = useCurrentLocation()
-
     useEffect(() => {
+        const {width, height} = getWindowDimension()
+        setValue({...value, width, height})
         requestAuth(mode, 'get', '', dispatch, navigate, setErrorMsg, setLoading)
     // eslint-disable-next-line
     }, [mode])
 
     const handleChange = (event) => {
-        setValue({...value, [event.target.id]: event.target.value, location})    
+        setValue({...value, [event.target.id]: event.target.value})    
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
-        if (error) {
-            setErrorMsg(error)
-        } else {
-            requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading)
+        var locations = []
+        try {
+            let loc0 = await getLocation()
+            locations.push(loc0.location)
+            if (loc0.error) {
+                setErrorMsg(loc0.error)
+            } else {
+                let loc1 = await getLocation()
+                locations.push(loc1.location)
+                if (loc1.error) {
+                    setErrorMsg(loc1.error)
+                } else {
+                    requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, locations)
+                }
+            }
+        } catch(err) {setErrorMsg(err)
         }
     }
 

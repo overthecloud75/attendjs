@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const LoginSchema = new mongoose.Schema(
+const OutsideAttendSchema = new mongoose.Schema(
     {
         employeeId: {
             type: Number,
@@ -31,14 +31,6 @@ const LoginSchema = new mongoose.Schema(
             type: String,
             requried: true,
         },
-        width: {
-            type: Number,
-            requried: true,
-        },
-        height: {
-            type: Number,
-            requried: true,
-        },
         latitude: {
             type: Number,
             requried: false, 
@@ -46,14 +38,6 @@ const LoginSchema = new mongoose.Schema(
         longitude: {
             type: Number,
             requried: false, 
-        },
-        accuracy: {
-            type: Number, 
-            required: true,
-        },
-        delta: {
-            type: String, 
-            required: false,
         },
         attend: {
             type: String,
@@ -66,14 +50,11 @@ const LoginSchema = new mongoose.Schema(
             default: 'X',
         },
         hash: {
-            type: Number, 
-            required: true, 
-        },
-        timestamp: {
-            type: Number, 
-            required: false, 
-        }         
+            type: Number,
+            requried: false, 
+        },          
     }, 
+    { timestamps: true }
 )
 
-export default mongoose.model('Login', LoginSchema)
+export default mongoose.model('OutsideAttend', OutsideAttendSchema)

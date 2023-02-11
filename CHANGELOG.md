@@ -6,6 +6,17 @@
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
 
+* 22/02/11
+    - 1.4.6 (client, api) <br>
+        to detect fakelocation, getCurrentLocation twice
+
+    - 1.4.5 (client, api) <br>
+        to detect if it mobile, apply width and height
+
+* 22/02/06
+    - 1.4.4 (client, api) <br>
+        check mobile with user_agent<br>
+
 * 22/02/05
     - 1.4.3 (client, api) <br>
         validateCheck for GPS data<br>

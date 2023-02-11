@@ -61,7 +61,7 @@ const GMap = ({state}) => {
                 (<Title>Don't worry. you are checked</Title>):
                 (<Title>Unchecked. plz login again in a right place</Title>)
             }
-            {state.where.minDistance < 1 && state.where.isMobile &&
+            {state.where.isMobile ==='O' && state.where.minDistance < 0.5 &&
             <Wrapper>
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: googleMapAPIKey }}

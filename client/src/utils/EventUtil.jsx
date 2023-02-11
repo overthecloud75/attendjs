@@ -69,3 +69,11 @@ export const deleteEvent = async (args) => {
         return {resData, err}
     }
 }
+
+export const getWindowDimension = () => {
+    const { innerWidth: width, innerHeight: height } = window
+    return {
+        width,
+        height
+    }
+}

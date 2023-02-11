@@ -36,6 +36,14 @@ export const columnHeaders = [
         Header: 'USER_AGENT',
     },
     {
+        accessor: 'width',
+        Header: 'Width',
+    },
+    {
+        accessor: 'height',
+        Header: 'Height',
+    },
+    {
         accessor: 'latitude',
         Header: 'Latitude',
     },
@@ -44,8 +52,12 @@ export const columnHeaders = [
         Header: 'Longitude',
     },
     {
-        accessor: 'hash',
-        Header: 'Hash',
+        accessor: 'accuracy',
+        Header: 'Accuracy',
+    },
+    {
+        accessor: 'delta',
+        Header: 'Delta',
     },
     {
         accessor: 'timestamp',
@@ -87,6 +99,14 @@ export const csvHeaders = [
         label: 'USER_AGENT',
     },
     {
+        key: 'width',
+        label: 'Width',
+    },
+    {
+        key: 'height',
+        label: 'Height',
+    },
+    {
         key: 'location',
         label: 'Location',
     },
@@ -95,12 +115,16 @@ export const csvHeaders = [
         label: 'Latitude',
     },
     {
-        key: 'longitude',
-        label: 'Longitude',
+        key: 'accuracy',
+        label: 'Accuracy',
     },
     {
-        key: 'hash',
-        label: 'Hash',
+        key: 'delta',
+        label: 'Delta',
+    },
+    {
+        key: 'longitude',
+        label: 'Longitude',
     },
     {
         key: 'timestamp',

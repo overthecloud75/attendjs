@@ -4,19 +4,11 @@ import styled from 'styled-components'
 import FullCalendar from '@fullcalendar/react' 
 import dayGridPlugin from '@fullcalendar/daygrid' 
 import interactionPlugin from '@fullcalendar/interaction'
-import { getColor, getEvents, addEvent, deleteEvent } from '../utils/EventUtil'
+import { getColor, getEvents, addEvent, deleteEvent, getWindowDimension } from '../utils/EventUtil'
 
 const Wrapper = styled.div`
     padding: 30px;
 `
-
-const getWindowDimensions = () => {
-    const { innerWidth: width, innerHeight: height } = window
-    return {
-        width,
-        height
-    }
-}
 
 const Calendar = () => {
     const navigate = useNavigate()
@@ -45,7 +37,7 @@ const Calendar = () => {
                 }
             } else {
                 // eslint-disable-next-line
-                const {width, height} = getWindowDimensions()
+                const {width, height} = getWindowDimension()
                 if (width < mobileSize) {
                     setWeekends(false)
                     setHeaderToolbar({start: '', center: '', end: 'today prev,next'})

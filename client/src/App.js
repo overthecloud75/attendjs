@@ -13,6 +13,7 @@ import Summary from './pages/Summary'
 import Device from './pages/Device'
 import Schedule from './pages/Schedule'
 import Employee from './pages/Employee'
+import LoginHistory from './pages/LoginHistory'
 import CheckEmail from './pages/CheckEmail'
 import Confirm from './pages/Confirm'
 import TooManyRequests from './pages/TooManyRequests'
@@ -20,7 +21,6 @@ import TooManyRequests from './pages/TooManyRequests'
 const Home = lazy(() => import('./pages/Home'))
 const Register = lazy(() => import('./pages/Register'))
 const Login = lazy(() => import('./pages/Login'))
-const LoginHistory = lazy(() => import('./pages/LoginHistory'))
 const Board = lazy(() => import('./pages/Board'))
 const Report = lazy(() => import('./pages/Report'))
 const NotFound = lazy(() => import('./pages/NotFound'))
