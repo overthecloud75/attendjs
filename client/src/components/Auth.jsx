@@ -38,18 +38,21 @@ const Auth = ({mode}) => {
             email: '',
             password: '',
             width: 0, 
-            height: 0
+            height: 0,
+            platform: ''
         }
     )
     const [loading, setLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
+    const [platform, setPlatform] = useState('')
 
     useEffect(() => {
         const {width, height} = getWindowDimension()
-        setValue({...value, width, height})
+        setPlatform(navigator.userAgentData.platform)
+        setValue({...value, width, height, platform})
         requestAuth(mode, 'get', '', dispatch, navigate, setErrorMsg, setLoading)
     // eslint-disable-next-line
-    }, [mode])
+    }, [mode, platform])
 
     const handleChange = (event) => {
         setValue({...value, [event.target.id]: event.target.value})    
@@ -58,21 +61,26 @@ const Auth = ({mode}) => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         var locations = []
-        try {
-            let loc0 = await getLocation()
-            locations.push(loc0.location)
-            if (loc0.error) {
-                setErrorMsg(loc0.error)
-            } else {
-                let loc1 = await getLocation()
-                locations.push(loc1.location)
-                if (loc1.error) {
-                    setErrorMsg(loc1.error)
+        if (['Windows'].includes(platform)){
+            requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, locations)
+        } else {
+            try {
+                let loc0 = await getLocation()
+                locations.push(loc0.location)
+                if (loc0.error) {
+                    setErrorMsg(loc0.error)
                 } else {
-                    requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, locations)
+                    let loc1 = await getLocation()
+                    locations.push(loc1.location)
+                    if (loc1.error) {
+                        setErrorMsg(loc1.error)
+                    } else {
+                        requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, locations)
+                    }
                 }
+            } catch(err) {
+                setErrorMsg(err)
             }
-        } catch(err) {setErrorMsg(err)
         }
     }
 

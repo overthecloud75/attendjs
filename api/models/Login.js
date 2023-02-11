@@ -27,6 +27,10 @@ const LoginSchema = new mongoose.Schema(
             enum: ['O', 'X'],
             default: 'X', 
         },
+        platform: {
+            type: String,
+            requried: true,
+        },
         user_agent: {
             type: String,
             requried: true,

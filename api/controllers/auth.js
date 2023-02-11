@@ -80,13 +80,14 @@ export const login = async (req, res, next) => {
         )
         
         const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
+        const platform = req.body.platform
         const user_agent = req.headers['user-agent']
         const width = req.body.width
         const height = req.body.height 
         const {isMobile, isRemotePlace} = checkMobile(ip, user_agent)
         const where = attendRemotePlace(isRemotePlace, isMobile)
         const hash = getRandomInt()
-        await saveLogin(user.employeeId, user.name, ip, isMobile, user_agent, width, height, where, hash)
+        await saveLogin(user.employeeId, user.name, ip, isMobile, platform, user_agent, width, height, where, hash)
         
         res.cookie('access_token', token, {
             httpOnly: true, secure: true
@@ -213,13 +214,13 @@ const whereIs = async (location, abuse, isMobile) => {
     return {attend, place, minDistance, placeLocation, isMobile}
 }
 
-const saveLogin = async (employeeId, name, ip, isMobile, user_agent, width, height, where, hash) => {
+const saveLogin = async (employeeId, name, ip, isMobile, platform, user_agent, width, height, where, hash) => {
     const {date, time} = dateAndTime()
     let attend
     if (where.attend) {attend = 'O'
     } else {attend = 'X'
     }
-    const login = new Login({employeeId, name, date, time, ip, isMobile, user_agent, width, height, latitude: -1, longitude: -1, accuracy: 1, attend, abuse: 'X', hash, timestamp: Date.now()})
+    const login = new Login({employeeId, name, date, time, ip, isMobile, platform, user_agent, width, height, latitude: -1, longitude: -1, accuracy: 1, attend, abuse: 'X', hash, timestamp: Date.now()})
     await setGpsOn(employeeId, name, date, time, where)
     await login.save()
 }
