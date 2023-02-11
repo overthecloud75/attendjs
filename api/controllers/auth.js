@@ -264,6 +264,7 @@ const validateCheck = (lastLogin, hashLocation, isMobile) => {
 
     if (isMobile === 'X') {abuse = 'X'}
     else if (lastLogin.width > 1000 || lastLogin.height > 1000) {}
+    else if (delta.timestamp < 1000) {}
     else if ((Date.now() - lastLogin.timestamp) < 1000) {abuse = 'X'}
     return {delta, location, abuse}
 }

@@ -29,6 +29,11 @@ const getLocation = async () => {
     return {location, error}
 }
 
+const sleep = (ms) => {
+    const wakeUpTime = Date.now() + ms
+    while (Date.now() < wakeUpTime) {}
+}
+
 const Auth = ({mode}) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -70,6 +75,7 @@ const Auth = ({mode}) => {
                 if (loc0.error) {
                     setErrorMsg(loc0.error)
                 } else {
+                    sleep(1000)
                     let loc1 = await getLocation()
                     locations.push(loc1.location)
                     if (loc1.error) {
