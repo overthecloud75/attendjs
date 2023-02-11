@@ -28,6 +28,8 @@ export const register = async (req, res, next) => {
             return next(createError(403, 'Fobidden'))
         } else if (employee.name !== name) {
             return next(createError(403, 'User not found!'))
+        } else if (employee.regular==='퇴사') {
+            return next(createError(403, 'Employee not found!'))
         }
     
         const user = await User.findOne({email})
