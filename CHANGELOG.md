@@ -6,6 +6,11 @@
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
 
+* 22/02/15
+    - 1.4.8 (client) <br>
+        error fix : userAgentData is not operated in firefox <br>
+        error fix : apply buttonClickd to avoid to login more than once <br>
+
 * 22/02/12
     - 1.4.7 (client, api) <br>
         apply platform info <br>
@@ -15,7 +20,7 @@
         to detect fakelocation, getCurrentLocation twice <br>
 
     - 1.4.5 (client, api) <br>
-        to detect if it mobile, apply width and height <br>
+        to detect if it is mobile, apply width and height <br>
 
 * 22/02/06
     - 1.4.4 (client, api) <br>

@@ -6,6 +6,8 @@ import {
 } from 'react-router-dom'
 import './style.scss'
 import Attend from './pages/Attend'
+import Register from './pages/Register'
+import Login from './pages/Login'
 import Wifi from './pages/Wifi'
 import GPS from './pages/GPS'
 import Location from './pages/Location'
@@ -17,13 +19,11 @@ import LoginHistory from './pages/LoginHistory'
 import CheckEmail from './pages/CheckEmail'
 import Confirm from './pages/Confirm'
 import TooManyRequests from './pages/TooManyRequests'
+import NotFound from './pages/NotFound'
 
 const Home = lazy(() => import('./pages/Home'))
-const Register = lazy(() => import('./pages/Register'))
-const Login = lazy(() => import('./pages/Login'))
 const Board = lazy(() => import('./pages/Board'))
 const Report = lazy(() => import('./pages/Report'))
-const NotFound = lazy(() => import('./pages/NotFound'))
 
 function App() { 
     const [menu, setMenu] = useState(false)

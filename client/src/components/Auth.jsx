@@ -50,10 +50,11 @@ const Auth = ({mode}) => {
     const [loading, setLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
     const [platform, setPlatform] = useState('')
+    const [buttonClicked, setButtonClicked] = useState(false)
 
     useEffect(() => {
         const {width, height} = getWindowDimension()
-        setPlatform(navigator.userAgentData.platform)
+        if (navigator.userAgentData) {setPlatform(navigator.userAgentData.platform)}
         setValue({...value, width, height, platform})
         requestAuth(mode, 'get', '', dispatch, navigate, setErrorMsg, setLoading)
     // eslint-disable-next-line
@@ -65,28 +66,32 @@ const Auth = ({mode}) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        var locations = []
-        if (['Windows'].includes(platform)){
-            requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, locations)
-        } else {
-            try {
-                let loc0 = await getLocation()
-                locations.push(loc0.location)
-                if (loc0.error) {
-                    setErrorMsg(loc0.error)
-                } else {
-                    sleep(1000)
-                    let loc1 = await getLocation()
-                    locations.push(loc1.location)
-                    if (loc1.error) {
-                        setErrorMsg(loc1.error)
+        if (!buttonClicked) {
+            setButtonClicked((click) => !click)
+            var locations = []
+            if (['Windows'].includes(platform)){
+                requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, locations)
+            } else {
+                try {
+                    let loc0 = await getLocation()
+                    locations.push(loc0.location)
+                    if (loc0.error) {
+                        setErrorMsg(loc0.error)
                     } else {
-                        requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, locations)
+                        sleep(1000)
+                        let loc1 = await getLocation()
+                        locations.push(loc1.location)
+                        if (loc1.error) {
+                            setErrorMsg(loc1.error)
+                        } else {
+                            requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, locations)
+                        }
                     }
+                } catch(err) {
+                    setErrorMsg(err)
                 }
-            } catch(err) {
-                setErrorMsg(err)
             }
+            setButtonClicked((click) => !click)
         }
     }
 

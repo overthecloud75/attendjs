@@ -164,15 +164,15 @@ export const search = async (req, res, next) => {
 
 const checkMobile = (ip, user_agent) => {
     const ip_split = ip.split('.')
-    const ip16 = ip_split[0] + '.' + ip_split[1]
+    const ip24 = ip_split[0] + '.' + ip_split[1] + '.' + ip_split[2]
 
     let isMobile = 'X' 
     let isRemotePlace = false
-    if (MOBILE_IP_LIST.includes(ip16)) {
+    if (MOBILE_IP_LIST.includes(ip24)) {
         if (user_agent.includes('iPhone')) {isMobile = 'O'}
         else if (user_agent.includes('Android')) {isMobile = 'O'}
     }
-    if (process.env.REMOTE_IP===ip16) {
+    if (process.env.REMOTE_IP===ip24) {
         isRemotePlace = true
     }
     return {isMobile, isRemotePlace}
