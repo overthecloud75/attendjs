@@ -11,8 +11,7 @@ if os.path.exists(os.path.join(BASE_DIR, LOG_DIR)):
 else:
     os.mkdir(os.path.join(BASE_DIR, LOG_DIR))
 
-def save_db():
-    report = Report()
+def save_db(report):
     report.update()
 
 # Arp Scan : nmap -sn 
@@ -51,6 +50,7 @@ if __name__ == '__main__':
     devices = Device()
     device_on = DeviceOn()
     scanner = Scanner()
+    report = Report()
 
     if USE_WIFI_ATTENDANCE:
         th1 = threading.Thread(target=check_sn)
@@ -61,8 +61,7 @@ if __name__ == '__main__':
         th2.start()
 
     while True:
-        save_db()
-        print('save_db')
+        save_db(report)
         time.sleep(1800)
 
         

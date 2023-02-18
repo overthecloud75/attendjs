@@ -6,6 +6,10 @@
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
 
+* 22/02/18
+    - 1.4.9 (backend) <br>
+        fix the attend issue between 23:30 and 24:00 <br>
+
 * 22/02/15
     - 1.4.8 (client) <br>
         error fix : userAgentData is not operated in firefox <br>

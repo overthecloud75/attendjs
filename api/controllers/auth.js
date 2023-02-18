@@ -152,9 +152,9 @@ export const search = async (req, res, next) => {
         const endDate = sanitizeData(req.query.endDate, 'date')
         let logins 
         if (name && name !== '') {
-            logins = await Login.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: 1})}
+            logins = await Login.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: -1})}
         else { 
-            logins = await Login.find({date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: 1, name: 1})
+            logins = await Login.find({date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: -1, name: 1})
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(logins)
     } catch (err) {
@@ -164,11 +164,12 @@ export const search = async (req, res, next) => {
 
 const checkMobile = (ip, user_agent) => {
     const ip_split = ip.split('.')
+    const ip16 = ip_split[0] + '.' + ip_split[1]
     const ip24 = ip_split[0] + '.' + ip_split[1] + '.' + ip_split[2]
 
     let isMobile = 'X' 
     let isRemotePlace = false
-    if (MOBILE_IP_LIST.includes(ip24)) {
+    if (MOBILE_IP_LIST.includes(ip16)) {
         if (user_agent.includes('iPhone')) {isMobile = 'O'}
         else if (user_agent.includes('Android')) {isMobile = 'O'}
     }

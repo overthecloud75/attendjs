@@ -1,6 +1,7 @@
 import pyodbc
 from collections import OrderedDict
 import random
+import datetime
 
 from utils import check_time, check_holiday, get_delta_day
 from .db import db, BasicModel
@@ -31,8 +32,6 @@ class Report(BasicModel):
         self.device_on = DeviceOn()
         self.gps_on = GPSOn()
 
-        self.hour, self.today, self.this_month = check_time()
-
     def update(self, date=None):
         '''
             1. device 정보 update (오늘 날짜인 경우만 update)
@@ -41,129 +40,141 @@ class Report(BasicModel):
             4. wifi 근태 기록 확인
             5. overnight 근무가 확인 되는 경우 이전 날짜 근태 기록 update
         '''
+        hour, today, this_month = check_time()
+
+        self.today = today 
+
         if date is not None:
-            if date != self.today:
+            if date != today:
                 hour = 23
-            else:
-                hour = self.hour
         else:
-            date = self.today
-            hour = self.hour
+            date = today
 
-        is_holiday = check_holiday(date)
-        if hour > 6:
-            # attend 초기화
-            attend = {}
-            schedule_dict = {}
+        overNight_time = int(WORKING['time']['overNight'][:2])
 
-            if not is_holiday:
-                employees_list = self.employee.get(date=date)
-                schedule_dict = self._schedule(employees_list, date=date)
-                # special holiday가 있는 경우 제외
-                if 'holiday' not in schedule_dict:
-                    for employee in employees_list:
-                        name = employee['name']
-                        employee_id = employee['employeeId']
-                        regular = employee['regular']
-                        if employee['mode'] in WORKING['status'] and employee['attendMode'] == 'X':
-                            reason = employee['mode']
-                        else:
-                            reason = None
-                        # 같은 employee_id 인데 이름이 바뀌는 경우 발생
-                        attend[employee_id] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 'end': None, 'reason': reason, 'regular': regular}
-                    # update 날짜가 오늘 날짜인 경우만 진행
-                    if date == self.today:
-                        # self._update_devices(date=date)
-                        self._notice_email(employees_list=employees_list)
-                else:
-                    is_holiday = True
-            
-            if date == self.today:
-                self._update_devices(date=date)
+        if hour > overNight_time - 1 and hour <= overNight_time:
+            yesterday = get_delta_day(date, delta=-1)
+            overnight_employees = self._check_attend(yesterday, 23)
+            '''
+                 1. overnight 근무자에 대해서 이전 날짜 update
+            '''
+            if overnight_employees:
+                self._update_overnight(overnight_employees, date=yesterday)
 
-            # 지문 인식 출퇴근 기록
-            attend, overnight_employees = self.fingerprint_attend(attend, date, hour)
-            # 지문 인식기 + wifi 출퇴근 기록
-            if USE_WIFI_ATTENDANCE:
-                attend = self._fingerprint_or_wifi(attend, date)
-            # Add GPS attend 
-                attend = self._legacy_or_gps(attend, date)
-            
-            # attend
-            for employee_id in attend:
-                name = attend[employee_id]['name']
-                if name in schedule_dict:
-                    status = schedule_dict[name]
-                    attend[employee_id]['status'] = None
-                    attend[employee_id]['reason'] = status
-                    if hour >= 18:
-                        if '반차' in status:  # status가 2개 이상으로 표시된 경우 ex) 반차, 정기점검
-                            status = '반차'
-                            attend[employee_id]['reason'] = status
-                        attend[employee_id]['workingHours'] = WORKING['status'][status]
-                    else:
-                        attend[employee_id]['workingHours'] = None
-                elif attend[employee_id]['reason']:
-                    attend[employee_id]['status'] = None
-                    if hour >= 18:
-                        attend[employee_id]['workingHours'] = WORKING['status'][attend[employee_id]['reason']]
-                    else:
-                        attend[employee_id]['workingHours'] = None # 파견인 경우 18시 전에 workingHours에 대한 내용이 없어서 추가
-                elif attend[employee_id]['begin']:
-                    if not is_holiday:
-                        if 'regular' in attend[employee_id] and attend[employee_id]['regular'] in WORKING['update'] and \
-                                int(attend[employee_id]['begin']) > int(WORKING['time']['beginTime']):
-                            # fulltime job만 지각 처리
-                            attend[employee_id]['status'] = '지각'
-                        else:
-                            attend[employee_id]['status'] = '정상출근'
-                    else:
-                        attend[employee_id]['status'] = '정상출근'
-                    if hour >= 18:
-                        attend[employee_id]['workingHours'] = self._calculate_working_hours(attend[employee_id]['begin'], attend[employee_id]['end'], overnight=False)
-                    else:
-                        attend[employee_id]['workingHours'] = None
-                else:
-                    if not is_holiday:
-                        if hour >= 18:
-                            attend[employee_id]['workingHours'] = 0
-                            attend[employee_id]['status'] = '미출근'
-                        elif hour >= int(WORKING['time']['beginTime']) / 10000:
-                            attend[employee_id]['workingHours'] = None
-                            attend[employee_id]['status'] = '지각'
-                        else:
-                            attend[employee_id]['workingHours'] = None
-                            attend[employee_id]['status'] = '출근전'
-                    else:
-                        attend[employee_id]['status'] = '정상출근'
-
-                try:
-                    if 'regular' in attend[employee_id] and attend[employee_id]['regular'] not in WORKING['update'] and \
-                            attend[employee_id]['status'] not in ['정상출근'] :
-                        # fulltime이 아닌 직원에 대해 미출근과 출근전인 경우 기록하지 않음
-                        # 주말인 경우 employee 정보 수집을 하지 않기 때문에 regular key가 없을 수 있음
-                        # employee 등록이 안 된 경우 regular key가 없을 수 있음
-                        pass
-                    else:
-                        self.collection.update_one({'date': date, 'employeeId': employee_id}, {'$set': attend[employee_id]}, upsert=True)
-                except Exception as e:
-                    print('error', e)
-                    print(attend[employee_id])
-
+        elif hour > overNight_time and hour <= overNight_time + 1:
+            overnight_employees = self._check_attend(date, hour)
             '''
                  1. overnight 근무자에 대해서 이전 날짜 update
             '''
             if overnight_employees:
                 self._update_overnight(overnight_employees, date=date)
 
-    def update_date(self, start=None, end=None):
-        data_list = self.collection.find({'date': {"$gte": start, "$lt": end}})
-        date_list = []
-        for data in data_list:
-            if data['date'] not in date_list:
-                date_list.append(data['date'])
-        for date in date_list:
-            self.update(date=date)
+        elif hour > overNight_time + 2:
+            overnight_employees = self._check_attend(date, hour)
+
+    def _check_attend(self, date, hour):
+        print('update', datetime.datetime.now())
+        # attend 초기화
+        attend = {}
+        schedule_dict = {}
+
+        is_holiday = check_holiday(date)
+
+        if not is_holiday:
+            employees_list = self.employee.get(date=date)
+            schedule_dict = self._schedule(employees_list, date=date)
+            # special holiday가 있는 경우 제외
+            if 'holiday' not in schedule_dict:
+                for employee in employees_list:
+                    name = employee['name']
+                    employee_id = employee['employeeId']
+                    regular = employee['regular']
+                    if employee['mode'] in WORKING['status'] and employee['attendMode'] == 'X':
+                        reason = employee['mode']
+                    else:
+                        reason = None
+                    # 같은 employee_id 인데 이름이 바뀌는 경우 발생
+                    attend[employee_id] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 'end': None, 'reason': reason, 'regular': regular}
+                # update 날짜가 오늘 날짜인 경우만 진행
+                if date == self.today:
+                    # self._update_devices(date=date)
+                    self._notice_email(employees_list=employees_list)
+            else:
+                is_holiday = True
+        
+        if date == self.today:
+            self._update_devices(date=date)
+
+        # 지문 인식 출퇴근 기록
+        attend, overnight_employees = self.fingerprint_attend(attend, date, hour)
+        # 지문 인식기 + wifi 출퇴근 기록
+        if USE_WIFI_ATTENDANCE:
+            attend = self._fingerprint_or_wifi(attend, date)
+        # Add GPS attend 
+            attend = self._legacy_or_gps(attend, date)
+        
+        # attend
+        for employee_id in attend:
+            name = attend[employee_id]['name']
+            if name in schedule_dict:
+                status = schedule_dict[name]
+                attend[employee_id]['status'] = None
+                attend[employee_id]['reason'] = status
+                if hour >= 18:
+                    if '반차' in status:  # status가 2개 이상으로 표시된 경우 ex) 반차, 정기점검
+                        status = '반차'
+                        attend[employee_id]['reason'] = status
+                    attend[employee_id]['workingHours'] = WORKING['status'][status]
+                else:
+                    attend[employee_id]['workingHours'] = None
+            elif attend[employee_id]['reason']:
+                attend[employee_id]['status'] = None
+                if hour >= 18:
+                    attend[employee_id]['workingHours'] = WORKING['status'][attend[employee_id]['reason']]
+                else:
+                    attend[employee_id]['workingHours'] = None # 파견인 경우 18시 전에 workingHours에 대한 내용이 없어서 추가
+            elif attend[employee_id]['begin']:
+                if not is_holiday:
+                    if 'regular' in attend[employee_id] and attend[employee_id]['regular'] in WORKING['update'] and \
+                            int(attend[employee_id]['begin']) > int(WORKING['time']['beginTime']):
+                        # fulltime job만 지각 처리
+                        attend[employee_id]['status'] = '지각'
+                    else:
+                        attend[employee_id]['status'] = '정상출근'
+                else:
+                    attend[employee_id]['status'] = '정상출근'
+                if hour >= 18:
+                    attend[employee_id]['workingHours'] = self._calculate_working_hours(attend[employee_id]['begin'], attend[employee_id]['end'], overnight=False)
+                else:
+                    attend[employee_id]['workingHours'] = None
+            else:
+                if not is_holiday:
+                    if hour >= 18:
+                        attend[employee_id]['workingHours'] = 0
+                        attend[employee_id]['status'] = '미출근'
+                    elif hour >= int(WORKING['time']['beginTime']) / 10000:
+                        attend[employee_id]['workingHours'] = None
+                        attend[employee_id]['status'] = '지각'
+                    else:
+                        attend[employee_id]['workingHours'] = None
+                        attend[employee_id]['status'] = '출근전'
+                else:
+                    attend[employee_id]['status'] = '정상출근'
+
+            try:
+                if 'regular' in attend[employee_id] and attend[employee_id]['regular'] not in WORKING['update'] and \
+                        attend[employee_id]['status'] not in ['정상출근'] :
+                    # fulltime이 아닌 직원에 대해 미출근과 출근전인 경우 기록하지 않음
+                    # 주말인 경우 employee 정보 수집을 하지 않기 때문에 regular key가 없을 수 있음
+                    # employee 등록이 안 된 경우 regular key가 없을 수 있음
+                    pass
+                else:
+                    self.collection.update_one({'date': date, 'employeeId': employee_id}, {'$set': attend[employee_id]}, upsert=True)
+            except Exception as e:
+                print('error', e)
+                print(attend[employee_id])
+
+        return overnight_employees
 
     def fingerprint_attend(self, attend, date, hour):
         overnight_employees = []
