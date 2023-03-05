@@ -63,10 +63,6 @@ export const columnHeaders = [
         accessor: 'delta',
         Header: 'Delta',
     },
-    {
-        accessor: 'timestamp',
-        Header: 'Timestamp',
-    },
 ]
 
 export const csvHeaders = [
@@ -133,9 +129,5 @@ export const csvHeaders = [
     {
         key: 'longitude',
         label: 'Longitude',
-    },
-    {
-        key: 'timestamp',
-        label: 'Timestamp',
-    },
+    }
 ]

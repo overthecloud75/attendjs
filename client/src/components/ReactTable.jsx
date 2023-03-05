@@ -11,12 +11,11 @@ import { UpdatePages } from '../configs/pages'
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 
 const Container = styled.div`
-    position: absolute;
     min-width: calc(100% - 40px);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-left: 20px;
+    margin: 0 5px 0 5px;
     font-size: 14px;
 `
 

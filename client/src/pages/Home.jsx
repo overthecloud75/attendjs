@@ -15,15 +15,17 @@ const Home = ({menu, setMenu}) => {
             {menu && <Sidebar/> }
             <div className='wrapper'>
                 <Navbar menu={menu} setMenu={setMenu}/> 
-                {state ? 
-                    <GMap
-                       state={state}
-                    />:
-                    <>
-                        <Advertisement/>
-                        <Feature/>
-                    </>
-                }
+                <div className='wrap'>
+                    {state ? 
+                        <GMap
+                        state={state}
+                        />:
+                        <>
+                            <Advertisement/>
+                            <Feature/>
+                        </>
+                    }
+                </div>
                 {menu && <Footer/>}
             </div>
         </div>

@@ -22,7 +22,7 @@
     "express-rate-limit": "^6.7.0",
     "gps-distance": "^0.0.4",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.7.5",
+    "mongoose": "^6.10.0",
     "nodemailer": "^6.8.0",
     "nodemon": "^2.0.19",
     "winston": "^3.8.1",

@@ -21,8 +21,17 @@ a:link {
 }
 
 .wrapper {
-    flex: 8;
     position: relative;
+    display: flex;
+    flex: 8;
+    flex-direction: column;
+}
+
+.wrap {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
 }
 
 .defaultButton {

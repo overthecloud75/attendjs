@@ -6,55 +6,61 @@
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
 
-* 22/02/18
+* 23/03/05
+    - 1.5.0 <br>
+        node.js 16.16.0 -> 18.14.2 <br>
+        mongodb 4.4.4 -> 6.0.4 <br>
+        fullcalendar 5.11.4 -> 6.1.4 <br>
+
+* 23/02/18
     - 1.4.9 (backend) <br>
         fix the attend issue between 23:30 and 24:00 <br>
 
-* 22/02/15
+* 23/02/15
     - 1.4.8 (client) <br>
         error fix : userAgentData is not operated in firefox <br>
         error fix : apply buttonClickd to avoid to login more than once <br>
 
-* 22/02/12
+* 23/02/12
     - 1.4.7 (client, api) <br>
         apply platform info <br>
 
-* 22/02/11
+* 23/02/11
     - 1.4.6 (client, api) <br>
         to detect fakelocation, getCurrentLocation twice <br>
 
     - 1.4.5 (client, api) <br>
         to detect if it is mobile, apply width and height <br>
 
-* 22/02/06
+* 23/02/06
     - 1.4.4 (client, api) <br>
         check mobile with user_agent<br>
 
-* 22/02/05
+* 23/02/05
     - 1.4.3 (client, api) <br>
         validateCheck for GPS data<br>
 
-* 22/02/04
+* 23/02/04
     - 1.4.2 (client) <br>
         apply lazy loading and jpg -> webp<br>
 
-* 22/02/01
+* 23/02/01
     - 1.4.1 (client, api) <br>
         apply remotePlace, checkMobile <br>
     - 1.4.0 (client, api, backend) <br>
         apply attendMode <br>
 
-* 22/01/30
+* 23/01/30
     - 1.3.9 (client, api) <br>
         apply crpyto.js to prevent abusing GPS info <br>
 
-* 22/01/29
+* 23/01/29
     - 1.3.8 (client) <br>
         apply the latest fullcalendar and ckeditor <br>
     - 1.3.7 (client) <br>
         control weekends, headerToolbar option in Calendar.jsx according to window size <br>
         
-* 22/01/28
+* 23/01/28
     - 1.3.6 (api) <br>
         check isMobile with ip info <br>
     - 1.3.5 (api) <br>
@@ -62,23 +68,23 @@
     - 1.3.4 (client) <br>
         sidebar disappear with clicking hambuger menu <br>
 
- * 22/01/27
+ * 23/01/27
     - 1.3.3 (api) <br>
         cors(domain) for security <br>
     - 1.3.2 (client, api) <br>
         loginHistory <br> 
 
- * 22/01/26
+ * 23/01/26
     - 1.3.1 (client) <br>
         Geolocation Error under login form <br> 
 
- * 22/01/24
+ * 23/01/24
     - 1.3.0 (client, api) <br>
         show current distance from the attend place <br> 
     - 1.2.9 (client, api, backend) <br>   
         insert 명절 in special holidays in WORKING <br>
  
-* 22/01/23
+* 23/01/23
     - 1.2.8 (backend) <br>
         _legacy_or_gps <br>
     - 1.2.7 (api) <br>
@@ -86,23 +92,23 @@
     - 1.2.6 (client) <br>
         use /api in url to remove proxy between client and api <br>
 
-* 22/01/20
+* 23/01/20
     - 1.2.5 (client) <br>
         setLoading in Auth.jsx <br>
 
-* 22/01/19
+* 23/01/19
     - 1.2.4 (client, api) <br>
         apply gps attend <br>
 
-* 22/01/17
+* 23/01/17
     - 1.2.3 (client) <br>
         check-email page to activate account <br>
 
-* 22/01/16
+* 23/01/16
     - 1.2.2 (client, api) <br>
         location <br>
 
-* 22/01/15
+* 23/01/15
     - 1.2.1 (client) <br>
         use google map api <br>
     - 1.2.0 (client) <br>
@@ -110,7 +116,7 @@
     - 1.1.9 (client, api) <br>
         post geoLocation when login <br>
 
-* 22/01/14
+* 23/01/14
     - 1.1.8 (api) <br>
         save login record in database <br>
     - 1.1.7 (client) <br>
