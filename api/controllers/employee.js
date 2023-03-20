@@ -10,12 +10,10 @@ export const search = async (req,res,next) => {
         const endDate = sanitizeData(req.query.endDate, 'date')
         let employees
         if (name && name !== '') {
-            employees = await Employee.find(
-                {name, $or:[{endDate: {$gt: endDate}}, {endDate: {$exists: false}}], regular: {$ne: '휴직'}}).sort({name: 1})
+            employees = await Employee.find({name, regular: {$ne: '퇴사'}}).sort({name: 1})
         }
         else { 
-            employees = await Employee.find(
-                {$or:[{endDate: {$gt: endDate}}, {endDate: {$exists: false}}], regular: {$ne: '휴직'}}).sort({name: 1})
+            employees = await Employee.find({regular: {$ne: '퇴사'}}).sort({name: 1})
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(employees)
     } catch (err) {
