@@ -3,12 +3,12 @@ import { format } from 'date-fns'
 import { WORKING } from '../configs/working'
 
 export const getColor = (event) => {
-    var title = event.title.split('/')
+    let title = event.title.split('/')
     if (title.length === 1) {
         title = title[0].split(' ')
     }
     if (title.length > 1) {
-        var event_title = title[1]
+        let event_title = title[1]
         for (const s of Object.keys(WORKING.status)) { 
             if (title[1].includes(s)) {
                 event_title = s

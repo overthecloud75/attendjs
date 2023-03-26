@@ -8,7 +8,7 @@ class Device(BasicModel):
         self.employee = Employee()
 
     def get_mac_list(self, date=None):
-        device_list = self.collection.find({'endDate': date, 'owner': {'$exists': True}, 'owner': {'$ne': None}}, sort=[('ipStr', 1)])
+        device_list = self.collection.find({'endDate': date, 'owner': {'$and' : [{'$exists': True}, {'$ne': None}]}}, sort=[('ipStr', 1)])
         return device_list
 
     def sn_post(self, request_data): 
@@ -53,11 +53,10 @@ class Device(BasicModel):
         device_list = self.get_mac_list(date=date)
         device_dict = {}
         for device in device_list:
-            if 'employeeId' in device:
-                if device['owner']:
-                    # device가 여러개 있는 경우
-                    if device['employeeId'] in device_dict:
-                        device_dict[device['employeeId']].append(device['mac'])
-                    else:
-                        device_dict[device['employeeId']] = [device['owner'], device['mac']]
+            if 'employeeId' in device and device['owner']:
+                # device가 여러개 있는 경우
+                if device['employeeId'] in device_dict:
+                    device_dict[device['employeeId']].append(device['mac'])
+                else:
+                    device_dict[device['employeeId']] = [device['owner'], device['mac']]
         return device_dict

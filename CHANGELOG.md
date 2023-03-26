@@ -1,10 +1,17 @@
 * to do list 
-    - client : Link Acitve when onclick <br>
     - client : react-table left-right scroll <br>
       <br>
     - planning : weekly reporting system <br>
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
+
+* 23/03/26
+    - 1.5.3 (api) <br>
+        fix decodeURI error <br>
+
+* 23/03/20
+    - 1.5.2 (client) <br>
+        bug fix & -> && in Sidebar.jsx <br>
 
 * 23/03/15 
     - 1.5.1 <br>

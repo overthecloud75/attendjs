@@ -76,14 +76,12 @@ export const reportUpdate = async (action, event, start, end) => {
                 if (reason) {
                     report.workingHours = WORKING.status[reason]
                     report.status = null 
-                }
-                else {
+                } else {
                     report.workingHours = calculateWorkingHours(report.begin, report.end)
                     report.state = getState(employee.status, report.begin, report.end)
                 }
                 await Report.updateOne({name, employeeId, date}, {$set: report})
-            }
-            else {
+            } else {
                 break
             }    
         }

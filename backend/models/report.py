@@ -70,7 +70,7 @@ class Report(BasicModel):
                 self._update_overnight(overnight_employees, date=date)
 
         elif hour > overNight_time + 2:
-            overnight_employees = self._check_attend(date, hour)
+            self._check_attend(date, hour)
 
     def _check_attend(self, date, hour):
         print('update', datetime.datetime.now())

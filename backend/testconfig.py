@@ -5,7 +5,9 @@ ACCESS_DB_PWD = 'your password'
 # account
 ACCOUNT = {
     'email': 'example@email.com',
-    'password': 'your password'}
+    'password': 'your password'
+}
+
 # CC = 'test@email.com'
 CC = None 
 

@@ -48,7 +48,7 @@ const checkExternalIP = (externalIP, internalIP) => {
     const splittedInternalIPRange = process.env.INTERNAL_IP_RANGE.split('.')
     const splittedExteranlIP = externalIP.split('.')
     for (let x of splittedInternalIPRange.keys()) { 
-        if (splittedInternalIPRange[x] === '0') { }
+        if (splittedInternalIPRange[x] === '0') {}
         else if (splittedInternalIPRange[x] !== splittedExteranlIP[x]) 
         { isExternalIP = true }
     }

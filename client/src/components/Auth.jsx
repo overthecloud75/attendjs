@@ -68,7 +68,7 @@ const Auth = ({mode}) => {
         event.preventDefault()
         if (!buttonClicked) {
             setButtonClicked((click) => !click)
-            var locations = []
+            let locations = []
             if (['Windows'].includes(platform)){
                 requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, locations)
             } else {

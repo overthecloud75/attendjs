@@ -207,7 +207,7 @@ const SidebarItems = ({itemList, titleIndex, activeTitleIndex, activeItemIndex, 
                 {(item.auth || user.isAdmin) &&
                     <Item
                         onClick={() => handleClick(titleIndex, itemIndex)}
-                        active={activeTitleIndex===titleIndex&activeItemIndex===itemIndex?1:0}    
+                        active={activeTitleIndex===titleIndex&&activeItemIndex===itemIndex?1:0}    
                     >
                         <Icon>{item.icon}</Icon>
                         <Span>{item.title}</Span>

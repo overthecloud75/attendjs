@@ -84,9 +84,8 @@ class Scanner:
 
         connected = False
         for status, interface in zip(status_list, interface_list):
-            if interface == 'wi-fi':
-                if status == '연결됨' or status == 'connected':
-                    connected = True
+            if interface == 'wi-fi' and (status == '연결됨' or status == 'connected'):
+                connected = True
 
         return connected
 

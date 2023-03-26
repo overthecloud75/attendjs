@@ -14,5 +14,5 @@ try:
     from mainconfig import CC
 except Exception as e:
     # CC: cc email when notice email
-    CC = None
     # CC = 'test@test.co.kr'
+    CC = None

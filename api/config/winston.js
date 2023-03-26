@@ -16,7 +16,13 @@ export const reqFormat = (req) => {
         referer = headers.referer
     }
     const x_forwarded_for = headers['x-forwarded-for'].split(',')[0].split(':')[0]
-    const info = x_forwarded_for + '-' + req.method + '-' + decodeURI(req.originalUrl) + '-' + referer + '-' + headers['user-agent']
+    let info
+    try {
+        info = x_forwarded_for + '-' + req.method + '-' + decodeURI(req.originalUrl) + '-' + referer + '-' + headers['user-agent']
+    } catch (err) {
+        info = x_forwarded_for + '-' + req.method + '-' + req.originalUrl + '-' + referer + '-' + headers['user-agent']
+        logger.error(err + ' ' + info)
+    }
     return info
 }
 /*
