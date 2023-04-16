@@ -5,6 +5,10 @@
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
 
+* 23/04/16
+    - 1.5.4 (api, client) <br>
+        problem fix with sonarlint <br>
+
 * 23/03/26
     - 1.5.3 (api) <br>
         fix decodeURI error <br>
