@@ -1,6 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { requestAuth } from '../utils/AuthUtil'
 import { getWindowDimension } from '../utils/EventUtil'
@@ -101,7 +100,7 @@ const Auth = ({mode}) => {
                 <span className='logo'>SmartWork</span>
                 <span className='title'>{mode}</span>
                 <form onSubmit={handleSubmit}>
-                    {!(mode==='login')&&(<input id='name' type='text' placeholder='name' onChange={handleChange}/>)}
+                    {(mode!=='login')&&(<input id='name' type='text' placeholder='name' onChange={handleChange}/>)}
                     <input id='email' type='email' placeholder='email' onChange={handleChange}/>
                     <input id='password' type='password' placeholder='password' onChange={handleChange}/>
                     <button>{mode==='login'?'Sign in':'Sign up'}</button>
