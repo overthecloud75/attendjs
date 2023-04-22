@@ -4,7 +4,8 @@ import Navbar from '../components/Navbar'
 import Advertisement from '../components/Advertisement'
 import Feature from '../components/Feature'
 import Footer from '../components/Footer'
-import GMap from '../components/GoogleMap'
+//import GMap from '../components/GoogleMap'
+import NMap from '../components/NaverMap'
 
 const Home = ({menu, setMenu}) => {
 
@@ -17,9 +18,8 @@ const Home = ({menu, setMenu}) => {
                 <Navbar menu={menu} setMenu={setMenu}/> 
                 <div className='wrap'>
                     {state ? 
-                        <GMap
-                        state={state}
-                        />:
+                        <NMap state={state}/>
+                        :
                         <>
                             <Advertisement/>
                             <Feature/>

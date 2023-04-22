@@ -12,7 +12,7 @@ export const requestAuth = async (mode, method, value, dispatch, navigate, setEr
                 dispatch(loginUser(res.data)) 
                 if (res.data.where.attend) {
                     navigate('/', {state : {location: locations[1], where: res.data.where}})
-                } else if (res.data.where.isMobile === 'O') {
+                } else if (res.data.where.isMobile === 'O' || res.data.where.isMobile === 'X') {
                     const ciphertext = CryptoJS.AES.encrypt(JSON.stringify(locations), res.data.hash.toString()).toString()
                     const resAttend = await axios.post('/api/auth/setAttend', {locations: ciphertext})
                     navigate('/', {state : {location: locations[1], where: resAttend.data.where}})
