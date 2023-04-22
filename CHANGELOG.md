@@ -6,7 +6,7 @@
     - planning : 연차 관리 <br>
 
 * 23/04/23
-    - 1.5.5 (api, client) <br>
+    - 1.5.5 (client) <br>
         google map -> naver map <br>
 
 * 23/04/16
