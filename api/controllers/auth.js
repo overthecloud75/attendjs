@@ -75,7 +75,7 @@ export const login = async (req, res, next) => {
             return next(createError(403, 'Employee not found!'))
         }
         const token = jwt.sign(
-            { id: user._id, isAdmin: user.isAdmin },
+            { id: user._id, isAdmin: user.isAdmin, department: employee.department },
             process.env.JWT
         )
         

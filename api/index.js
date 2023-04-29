@@ -1,5 +1,4 @@
 import express from 'express'
-import { logger } from './config/winston.js'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
@@ -7,6 +6,7 @@ import cors from 'cors'
 import rateLimit from 'express-rate-limit'
 import csrf from 'csurf'
 
+import { logger } from './config/winston.js'
 import authRoute from './routes/auth.js'
 import usersRoute from './routes/users.js'
 import wifiRoute from './routes/wifi.js'
@@ -20,6 +20,7 @@ import employeeRoute from './routes/employee.js'
 import boardRoute from './routes/board.js'
 import reportRoute from './routes/report.js'
 import confirmRoute from './routes/confirm.js'
+import swaggerRoute from './routes/swagger.js'
 
 const app = express()
 dotenv.config()
@@ -73,6 +74,7 @@ app.use('/api/employee', employeeRoute)
 app.use('/api/board', boardRoute)
 app.use('/api/report', reportRoute)
 app.use('/api/confirm', confirmRoute)
+app.use('/swagger', swaggerRoute)
 
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500

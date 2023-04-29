@@ -37,6 +37,12 @@ export const sanitizeData = (data, type) => {
                 return false
             }
         }
+    } else {
+        if (type === 'date') {
+            return getToday()
+        } else if (type === 'email') {
+            return false
+        }
     }
     return data 
 }

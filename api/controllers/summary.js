@@ -3,7 +3,8 @@ import Report from '../models/Report.js'
 import { WORKING, getReverseStatus } from '../config/WORKING.js'
 import { sanitizeData } from '../utils/util.js'
 
-export const search = async (req,res,next)=>{
+export const search = async (req,res,next) => {
+    console.log(req, req)
     logger.info(reqFormat(req))
     try {
         const name = req.query.name 
@@ -18,7 +19,7 @@ export const search = async (req,res,next)=>{
         }
         else { 
             attends = await Report.find({date: {$gte: startDate, $lte: endDate}}).sort({name: 1, date: 1}).lean();
-        }; 
+        }
         for (const attend of attends) {
             if (!Object.keys(summary).includes(String(attend.employeeId))) {
                 summary[attend.employeeId] = {

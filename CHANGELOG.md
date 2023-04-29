@@ -5,6 +5,10 @@
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
 
+* 23/04/29
+    - 1.5.6 (api) <br>
+        apply swagger API documentation <br>
+
 * 23/04/23
     - 1.5.5 (client) <br>
         google map -> naver map <br>
