@@ -6,7 +6,6 @@ const options = {
         info: {
             title: 'SmartWork API',
             version: '1.5.6',
-            description: 'SMARTWORK API with express',
         },
         basePath: '/api'
     },

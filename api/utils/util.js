@@ -1,12 +1,63 @@
+const getSeparateDay = () => {
+    let today = new Date()
+    const thisYear = today.getFullYear()
+    const month = ('0' + (today.getMonth() + 1)).slice(-2)
+    const day = ('0' + today.getDate()).slice(-2)
+    const monthDay = month + '-' + day
+    //const dateString = year + '-' + month  + '-' + day
+    return {thisYear, monthDay}
+}
+
+const getEmployeementPeriod = (beginDate) => {
+    const {thisYear, monthDay} = getSeparateDay()
+    const thisMonth = Number(monthDay.split('-')[0])
+    let baseYear = thisYear
+
+    const beginDateSplit = beginDate.split('-')
+    const beginYear = Number(beginDateSplit[0])
+    const beginMonthDay = beginDateSplit[1] + '-' + beginDateSplit[2]
+    const beginMonth = Number(beginDateSplit[1])
+
+    let baseMonth = 0 
+    console.log(thisMonth, beginMonth)
+    if (thisMonth > beginMonth) { baseMonth = thisMonth - beginMonth}
+    else if (thisMonth < beginMonth) { baseMonth = 12 + thisMonth - beginMonth}
+
+    let employeementPeriod = 0
+    if (beginYear < thisYear) {
+        baseYear = thisYear - 1
+        employeementPeriod = thisYear - beginYear
+        if (monthDay < beginMonthDay) {
+            employeementPeriod = employeementPeriod - 1
+        } else {
+            baseYear = baseYear + 1
+        }
+    }
+    const baseDate = String(baseYear) + '-' + beginMonthDay
+    return {employeementPeriod, baseDate, baseMonth}
+}
+
 export const getToday = () => {
     let today = new Date()
 
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
-    const dateString = year + '-' + month  + '-' + day;
-
+    const year = today.getFullYear()
+    const month = ('0' + (today.getMonth() + 1)).slice(-2)
+    const day = ('0' + today.getDate()).slice(-2)
+    const dateString = year + '-' + month  + '-' + day
     return dateString 
+}
+
+export const getDefaultAnnualLeave = (beginDate) => {
+    const {employeementPeriod, baseDate, baseMonth} = getEmployeementPeriod(beginDate)
+    let defaultAnnualLeave = 15
+    if (employeementPeriod == 0) {
+        defaultAnnualLeave = baseMonth
+    } else if (employeementPeriod > 1 ) {
+        defaultAnnualLeave = defaultAnnualLeave + parseInt(employeementPeriod / 2)
+        if (employeementPeriod % 2 == 0) {defaultAnnualLeave = defaultAnnualLeave - 1}
+    }
+    if (defaultAnnualLeave > 25) {defaultAnnualLeave = 25}
+    return {defaultAnnualLeave, baseDate, baseMonth} 
 }
 
 export const separateIP = (x_forwarded_for) => {

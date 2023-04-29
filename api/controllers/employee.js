@@ -1,13 +1,13 @@
 import { logger, reqFormat } from '../config/winston.js'
 import Employee from '../models/Employee.js'
-import { sanitizeData } from '../utils/util.js'
+// import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const name = req.query.name
-        const startDate = sanitizeData(req.query.startDate, 'date')
-        const endDate = sanitizeData(req.query.endDate, 'date')
+        // const startDate = sanitizeData(req.query.startDate, 'date')
+        // const endDate = sanitizeData(req.query.endDate, 'date')
         let employees
         if (name && name !== '') {
             employees = await Employee.find({name, regular: {$ne: '퇴사'}}).sort({name: 1})

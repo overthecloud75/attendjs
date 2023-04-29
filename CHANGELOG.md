@@ -6,6 +6,9 @@
     - planning : 연차 관리 <br>
 
 * 23/04/29
+    - 1.5.7 (api) <br>
+        apply leftLeave <br>
+
     - 1.5.6 (api) <br>
         apply swagger API documentation <br>
 

@@ -1,13 +1,13 @@
 import express from 'express'
-import { search } from '../controllers/summary.js'
-import { verifyIP } from '../utils/verifyToken.js'
+import { search, getLeftLeave, getLeftLeaveList } from '../controllers/summary.js'
+import { verifyIP, verifyUser } from '../utils/verifyToken.js'
 
 const router = express.Router()
 
 /**
  * @swagger
  * paths:
- *  /api/summary/search:
+ *  /summary/search:
  *   get:
  *      tags: [Summary]
  *      summary: 
@@ -31,9 +31,47 @@ const router = express.Router()
  *                      properties:
  *                          status:
  *                              type: string
- *
  */
-
 router.get('/search', verifyIP, search)
+
+/**
+ * @swagger
+ * paths:
+ *  /summary/leftleave:
+ *   get:
+ *      tags: [Summary]
+ *      summary: 
+ *      responses:
+ *          200:
+ *           description: succ
+ *           content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          status:
+ *                              type: string
+ */
+router.get('/leftleave', verifyUser, getLeftLeave)
+
+/**
+ * @swagger
+ * paths:
+ *  /summary/leftleavelist:
+ *   get:
+ *      tags: [Summary]
+ *      summary: 
+ *      responses:
+ *          200:
+ *           description: succ
+ *           content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          status:
+ *                              type: string
+ */
+router.get('/leftleavelist', verifyUser, getLeftLeaveList)
 
 export default router
