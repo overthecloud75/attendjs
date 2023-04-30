@@ -1,10 +1,11 @@
 import { logger, reqFormat } from '../config/winston.js'
 import { WORKING } from '../config/working.js'
 import Event from '../models/Event.js'
+import Employee from '../models/Employee.js'
 import { reportUpdate } from './eventReport.js'
 import { sanitizeData } from '../utils/util.js'
 
-export const getEvents = async (req,res,next)=>{
+export const getEvents = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const start = sanitizeData(req.query.start, 'date')
@@ -16,7 +17,7 @@ export const getEvents = async (req,res,next)=>{
     }
 }
 
-export const addEvent = async (req,res,next)=>{
+export const addEvent = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const id = req.body.id
@@ -36,11 +37,11 @@ export const addEvent = async (req,res,next)=>{
         }
     } catch (err) {
         console.log('err', err)
-        next(err);
+        next(err)
     }
 }
 
-export const deleteEvent = async (req,res,next)=>{
+export const deleteEvent = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const id = req.body.id
@@ -58,5 +59,42 @@ export const deleteEvent = async (req,res,next)=>{
         next(err)
     }
 }
+
+export const getApprove = async (req,res,next) => {
+    logger.info(reqFormat(req))
+    try {
+        const approver = await getApprover(req)
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json(approver)
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const postApprove = async (req,res,next) => {
+    logger.info(reqFormat(req))
+    try {
+        const approver = await getApprover(req)
+        res.status(200).send('Event has been created.')
+    } catch (err) {
+        next(err)
+    }
+}
+
+const getApprover = async (req) => {
+    const employee = await Employee.findOne({email: req.user.email})
+    let baseApprover = {name: '', department: ''}
+    let approver = baseApprover
+    if (employee.position === '팀원') {
+        approver = await Employee.findOne({position: '팀장', department: employee.department})
+        if (!approver) {
+            approver = await Employee.findOne({position: '본부장'})
+        }
+    } else if (employee.position === '팀장') {
+        approver = await Employee.findOne({position: '대표이사'})
+    } 
+    baseApprover = {name: approver.name, department: approver.department}
+    return baseApprover
+}
+
 
 

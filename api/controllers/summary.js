@@ -4,33 +4,6 @@ import Employee from '../models/Employee.js'
 import { WORKING, getReverseStatus } from '../config/WORKING.js'
 import { getToday, getDefaultAnnualLeave } from '../utils/util.js'
 
-const getLeftLeaveSummary = async (employee) => {
-    const reverseStatus = getReverseStatus()
-    let summary 
-    if (employee.beginDate) {
-        const {defaultAnnualLeave, baseDate, baseMonth} = getDefaultAnnualLeave(employee.beginDate)
-        summary = {name: employee.name, beginDate: employee.beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave}
-        for (const inStatus of WORKING.inStatus){
-            if (Object.keys(WORKING.offDay).includes(inStatus)) {summary[inStatus] = 0} 
-        }
-        for (const outStatus of Object.keys(WORKING.outStatus)){
-            if (Object.keys(WORKING.offDay).includes(outStatus)) {summary[outStatus] = 0}
-        }
-        const attends = await Report.find({employeeId: employee.employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1}).lean()
-        for (const attend of attends) {
-            if (attend.status && Object.keys(WORKING.offDay).includes(attend.status)) {
-                summary[attend.status] = summary[attend.status] + 1
-                summary.leftAnnualLeave = summary.leftAnnualLeave - WORKING.offDay[attend.status]
-            }
-            if (attend.reason && Object.keys(WORKING.offDay).includes(attend.reason)) {
-                summary[reverseStatus[attend.reason]] = summary[reverseStatus[attend.reason]] + 1
-                summary.leftAnnualLeave = summary.leftAnnualLeave - WORKING.offDay[attend.reason]
-            }
-        }
-    }
-    return summary
-}
-
 export const search = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
@@ -128,5 +101,30 @@ export const getLeftLeaveList = async (req,res,next) => {
     }
 }
 
-
+const getLeftLeaveSummary = async (employee) => {
+    const reverseStatus = getReverseStatus()
+    let summary 
+    if (employee.beginDate) {
+        const {defaultAnnualLeave, baseDate, baseMonth} = getDefaultAnnualLeave(employee.beginDate)
+        summary = {name: employee.name, beginDate: employee.beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave}
+        for (const inStatus of WORKING.inStatus){
+            if (Object.keys(WORKING.offDay).includes(inStatus)) {summary[inStatus] = 0} 
+        }
+        for (const outStatus of Object.keys(WORKING.outStatus)){
+            if (Object.keys(WORKING.offDay).includes(outStatus)) {summary[outStatus] = 0}
+        }
+        const attends = await Report.find({employeeId: employee.employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1}).lean()
+        for (const attend of attends) {
+            if (attend.status && Object.keys(WORKING.offDay).includes(attend.status)) {
+                summary[attend.status] = summary[attend.status] + 1
+                summary.leftAnnualLeave = summary.leftAnnualLeave - WORKING.offDay[attend.status]
+            }
+            if (attend.reason && Object.keys(WORKING.offDay).includes(attend.reason)) {
+                summary[reverseStatus[attend.reason]] = summary[reverseStatus[attend.reason]] + 1
+                summary.leftAnnualLeave = summary.leftAnnualLeave - WORKING.offDay[attend.reason]
+            }
+        }
+    }
+    return summary
+}
 

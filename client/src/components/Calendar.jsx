@@ -1,19 +1,38 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import FullCalendar from '@fullcalendar/react' 
 import dayGridPlugin from '@fullcalendar/daygrid' 
 import interactionPlugin from '@fullcalendar/interaction'
+import Box from '@mui/material/Box'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
 import { getColor, getEvents, addEvent, deleteEvent, getWindowDimension } from '../utils/EventUtil'
+import Approval from './Approval'
+
+const mobileSize = 800
 
 const Wrapper = styled.div`
-    padding: 30px;
+    padding: 10px;
+`
+
+const Button = styled.button`
+    background-color: #0071c2;
+    color: white;
+    font-weight: 500;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
 `
 
 const Calendar = () => {
+
     const navigate = useNavigate()
 
-    const mobileSize = 800
+    const calendarRef = useRef()
+
+    const [tapValue, setTapValue] = useState('team')
     const [weekends, setWeekends] = useState(true)
     const [headerToolbar, setHeaderToolbar] = useState({
         start: 'title', 
@@ -21,9 +40,24 @@ const Calendar = () => {
         end: 'today prev,next'
     })
     const [error, setError] = useState(false)
-   
+    const [openApproval, setOpenApproval] = useState(false)
+
+    const handleTapChange = (event, newTapValue) => {
+        if (tapValue !== newTapValue) {
+            setTapValue(newTapValue)
+            let calendarApi = calendarRef.current.getApi()
+            calendarApi.refetchEvents()
+        }
+    }
+
+    const handleApprovalClick = () => {
+        setOpenApproval(true)
+    }
+    
     const initialEvents = async (args) => {
-        const events = await getEvents(args)
+        // To Do 
+        // tapValue is not changed. why? 
+        const events = await getEvents(args, tapValue)
         setError(events.err)
         return events.data
     }
@@ -80,7 +114,29 @@ const Calendar = () => {
     
     return (
         <Wrapper>
+            {openApproval&&(
+                <Approval
+                    open={openApproval}
+                    setOpen={setOpenApproval}
+                />
+            )}
+            <Box sx={{ display: 'flex', width: '100%', justifyContent: 'right', alignItems: 'center' }}>
+                {weekends && (
+                    <Tabs
+                        value={tapValue}
+                        onChange={handleTapChange}
+                        textColor='secondary'
+                        indicatorColor='secondary'
+                    >
+                        <Tab value='private' label='Private' />
+                        <Tab value='team' label='Team' />
+                        <Tab value='company' label='Company' />        
+                    </Tabs>)
+                }
+                <Button onClick={handleApprovalClick}>APPROVAL</Button>
+            </Box>
             <FullCalendar
+                ref={calendarRef}
                 plugins={[ dayGridPlugin, interactionPlugin ]}
                 initialView='dayGridMonth'
                 headerToolbar={headerToolbar}

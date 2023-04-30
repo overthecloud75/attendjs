@@ -5,6 +5,11 @@
     - planning : 결재 <br>
     - planning : 연차 관리 <br>
 
+* 23/04/30
+    - 1.5.8 (api, client) <br>
+        getApprove, postApprove in event.js <br> 
+        Approval.jsx <br>
+
 * 23/04/29
     - 1.5.7 (api) <br>
         apply leftLeave <br>

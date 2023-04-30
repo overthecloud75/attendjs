@@ -90,7 +90,7 @@ export const login = async (req, res, next) => {
         await saveLogin(user.employeeId, user.name, ip, isMobile, platform, user_agent, width, height, where, hash)
         
         res.cookie('access_token', token, {
-            httpOnly: true, secure: true
+            httpOnly: true, secure: true, sameSite: 'Strict'
         })
         .status(200)
         .json({name: user.name, email, isAdmin: user.isAdmin, where, hash})

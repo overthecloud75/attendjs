@@ -1,6 +1,8 @@
 import { useDispatch } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
 import { requestAuth } from '../utils/AuthUtil'
 import { getWindowDimension } from '../utils/EventUtil'
 
@@ -104,7 +106,12 @@ const Auth = ({mode}) => {
                     <input id='email' type='email' placeholder='email' onChange={handleChange}/>
                     <input id='password' type='password' placeholder='password' onChange={handleChange}/>
                     <button>{mode==='login'?'Sign in':'Sign up'}</button>
-                    {loading && <span>...Loading</span>}
+                    {loading && 
+                        <span>
+                            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <CircularProgress/>
+                            </Box>
+                        </span>}
                     {!loading && errorMsg && <span>{errorMsg}</span>}
                 </form>
                 {mode==='login'?
