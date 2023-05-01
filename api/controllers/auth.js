@@ -11,7 +11,7 @@ import GPSOn from '../models/GPSOn.js'
 import Login from '../models/Login.js'
 import Location from '../models/Location.js'
 import { createError } from '../utils/error.js'
-import { sendConfirmationEmail } from '../utils/email.js'
+import { registerConfirmationEmail } from '../utils/email.js'
 import { sanitizeData } from '../utils/util.js'
 
 export const register = async (req, res, next) => {
@@ -47,7 +47,7 @@ export const register = async (req, res, next) => {
         const newUser = User({name, email, employeeId: employee.employeeId, password: hash, isAdmin, confirmationCode: token})
         await newUser.save()
         res.status(200).send('User has been created.')
-        sendConfirmationEmail(req.body.name, email, token)
+        registerConfirmationEmail(req.body.name, email, token)
     } catch (err) {
         next(err)
     }

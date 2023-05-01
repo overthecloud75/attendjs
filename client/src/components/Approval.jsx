@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import styled from 'styled-components'
 import dayjs from 'dayjs'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -16,6 +17,12 @@ import { getApprove, postApprove } from '../utils/EventUtil'
 import { WORKING } from '../configs/working'
 
 const options = Object.keys(WORKING.outStatus)
+
+const DatePickWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    position: relative;
+`
 
 const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, setEtcOpen, ...other}) => {
     
@@ -84,8 +91,8 @@ const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, s
 const Approval = ({open, setOpen}) => {
     const [value, setValue] = useState({
         approver: '', 
-        startDate: dayjs(new Date()).format('YYYY-MM-DD'), 
-        endDate: dayjs(new Date()).format('YYYY-MM-DD'), 
+        start: dayjs(new Date()).format('YYYY-MM-DD'), 
+        end: dayjs(new Date()).format('YYYY-MM-DD'), 
         reason: '휴가', 
         etc: ''
     })
@@ -118,7 +125,7 @@ const Approval = ({open, setOpen}) => {
 
     return (
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Approval</DialogTitle>
+            <DialogTitle>근태 결재</DialogTitle>
             <DialogContent>
                 <TextField 
                     margin='dense'
@@ -129,16 +136,18 @@ const Approval = ({open, setOpen}) => {
                     value={value.approver?value.approver:''}
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker 
-                        label='시작일' 
-                        format={'YYYY-MM-DD'}
-                        onChange={(newValue) => setValue({...value, startDate: newValue.format('YYYY-MM-DD')})}
-                    />
-                    <DatePicker 
-                        label='종료일' 
-                        format={'YYYY-MM-DD'}
-                        onChange={(newValue) => setValue({...value, endDate: newValue.format('YYYY-MM-DD')})}
-                    />
+                    <DatePickWrapper>
+                        <DatePicker 
+                            label='시작일' 
+                            format={'YYYY-MM-DD'}
+                            onChange={(newValue) => setValue({...value, start: newValue.format('YYYY-MM-DD')})}
+                        />
+                        <DatePicker 
+                            label='종료일' 
+                            format={'YYYY-MM-DD'}
+                            onChange={(newValue) => setValue({...value, end: newValue.format('YYYY-MM-DD')})}
+                        />
+                    </DatePickWrapper>
                 </LocalizationProvider>
                 <TextField 
                     margin='dense'

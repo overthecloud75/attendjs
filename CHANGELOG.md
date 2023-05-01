@@ -2,8 +2,11 @@
     - client : react-table left-right scroll <br>
       <br>
     - planning : weekly reporting system <br>
-    - planning : 결재 <br>
     - planning : 연차 관리 <br>
+
+* 23/05/01
+    - 1.5.9 (api, client) <br>
+        email confirm after attend approval <br>
 
 * 23/04/30
     - 1.5.8 (api, client) <br>

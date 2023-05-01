@@ -133,7 +133,7 @@ const Calendar = () => {
                         <Tab value='company' label='Company' />        
                     </Tabs>)
                 }
-                <Button onClick={handleApprovalClick}>APPROVAL</Button>
+                <Button onClick={handleApprovalClick}>근태 결재</Button>
             </Box>
             <FullCalendar
                 ref={calendarRef}

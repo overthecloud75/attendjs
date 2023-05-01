@@ -5,7 +5,7 @@ const options = {
     swaggerDefinition: {
         info: {
             title: 'SmartWork API',
-            version: '1.5.6',
+            version: '1.5.9',
         },
         basePath: '/api'
     },
