@@ -8,7 +8,9 @@ class Device(BasicModel):
         self.employee = Employee()
 
     def get_mac_list(self, date=None):
-        device_list = self.collection.find({'endDate': date, 'owner': {'$and' : [{'$exists': True}, {'$ne': None}]}}, sort=[('ipStr', 1)])
+        # https://www.mongodb.com/docs/manual/reference/operator/query/and/
+        # db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
+        device_list = self.collection.find({'endDate': date, '$and' : [{'owner': {'$exists': True}}, {'owner': {'$ne': None}}]}, sort=[('ipStr', 1)])
         return device_list
 
     def sn_post(self, request_data): 

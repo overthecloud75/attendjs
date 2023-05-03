@@ -81,10 +81,15 @@ export const postApprove = async (req,res,next) => {
         const employee = await Employee.findOne({email: req.user.email})
         const approver = await getApprover(req)
         const confirmationCode = CryptoJS.lib.WordArray.random(20).toString()
-        const approval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason: req.body.reason, 'etc': req.body.etc, approverName: approver.name, approverEmail: approver.email, confirmationCode})
-        await approval.save()
-        await attendRequestEmail(employee.name, employee.department, start, end, req.body.reason, req.body.etc, approver.name, approver.email, confirmationCode)
-        res.status(200).send('Event has been created.')
+        const checkTheSameApproval = await Approval.findOne({email: req.user.email, start, end, reason: req.body.reason})
+        if (checkTheSameApproval && checkTheSameApproval.status === 'Pending') {
+            res.status(200).send('결재가 진행중에 있습니다.')
+        } else {
+            const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason: req.body.reason, 'etc': req.body.etc, approverName: approver.name, approverEmail: approver.email, confirmationCode})
+            await newApproval.save()
+            await attendRequestEmail(employee.name, employee.department, start, end, req.body.reason, req.body.etc, approver.name, approver.email, confirmationCode)
+            res.status(200).send('Event has been created.')
+        }
     } catch (err) {
         next(err)
         console.log(err)
@@ -121,7 +126,7 @@ export const confirmApprove = async (req, res, next) => {
             }
             if (approval.end >= approval.start) {
                 const end = getNextDate(approval.end)
-                const newEvent = new Event({id: Date.now(), title, start: approval.start, end, department: approval.department})
+                const newEvent = new Event({id: Date.now(), title, start: approval.start, end, department: approval.department, employeeId: approval.employeeId})
                 await newEvent.save()
                 status = 'Active'
                 await Approval.updateOne({confirmationCode}, {$set: {status}})

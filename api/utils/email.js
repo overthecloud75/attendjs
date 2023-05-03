@@ -1,19 +1,24 @@
 import nodemailer from 'nodemailer'
 import { logger } from '../config/winston.js'
 
+const makeTransport = () => {
+    const transport = nodemailer.createTransport({
+        host: process.env.MAIL_HOST,
+        port: process.env.MAIL_PORT, 
+        auth: {
+            user: process.env.ACCOUNT_EMAIL,
+            pass: process.env.ACCOUNT_PASSWORD,
+        },
+        secureConnection: false,
+        tls: { ciphers: 'SSLv3' }
+    })
+    return transport
+}
+
 export const registerConfirmationEmail = async (name, email, confirmationCode) => {
     logger.info('send register confirmaition email')  
     try {
-        const transport = nodemailer.createTransport({
-            host: process.env.MAIL_HOST,
-            port: process.env.MAIL_PORT, 
-            auth: {
-                user: process.env.ACCOUNT_EMAIL,
-                pass: process.env.ACCOUNT_PASSWORD,
-            },
-            secureConnection: false,
-            tls: { ciphers: 'SSLv3' }
-        })
+        const transport = makeTransport()
         await transport.sendMail({
             from: process.env.ACCOUNT_EMAIL,
             to: email,
@@ -23,22 +28,16 @@ export const registerConfirmationEmail = async (name, email, confirmationCode) =
                 <a href=${process.env.DOMAIN}/confirm/${confirmationCode}> Click here</a>`,
         })
     }
-    catch(err) {logger.error(err)}
+    catch(err) {
+        logger.error(err)
+        console.log(err)
+    }
 }
 
 export const attendRequestEmail = async (name, department, start, end, reason, etc, approverName, approverEmail, confirmationCode) => {
     logger.info('send attend request email')  
     try {
-        const transport = nodemailer.createTransport({
-            host: process.env.MAIL_HOST,
-            port: process.env.MAIL_PORT, 
-            auth: {
-                user: process.env.ACCOUNT_EMAIL,
-                pass: process.env.ACCOUNT_PASSWORD,
-            },
-            secureConnection: false,
-            tls: { ciphers: 'SSLv3' }
-        })
+        const transport = makeTransport()
         await transport.sendMail({
             from: process.env.ACCOUNT_EMAIL,
             to: approverEmail,
@@ -54,13 +53,13 @@ export const attendRequestEmail = async (name, department, start, end, reason, e
         })
     }
     catch(err) {
-        logger.error(err) 
+        logger.error(err)
+        console.log(err)
     }
 }
 
 export const attendConfirmationEmail = async (name, email, department, start, end, reason, etc, status) => {
     logger.info('send attend confirmation email')  
-    console.log(process.env.CC_email)
     let action
     let cc = ''
     if (status==='Active') {
@@ -69,16 +68,7 @@ export const attendConfirmationEmail = async (name, email, department, start, en
     } else if (status==='Cancel') {action = '반려'}
     else {action = '취소'}
     try {
-        const transport = nodemailer.createTransport({
-            host: process.env.MAIL_HOST,
-            port: process.env.MAIL_PORT, 
-            auth: {
-                user: process.env.ACCOUNT_EMAIL,
-                pass: process.env.ACCOUNT_PASSWORD,
-            },
-            secureConnection: false,
-            tls: { ciphers: 'SSLv3' }
-        })
+        const transport = makeTransport()
         await transport.sendMail({
             from: process.env.ACCOUNT_EMAIL,
             to: email,

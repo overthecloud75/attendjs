@@ -4,6 +4,12 @@
     - planning : weekly reporting system <br>
     - planning : 연차 관리 <br>
 
+* 23/05/03 
+    - 1.6.1 (backend) <br>
+        fix pymongo unknown operator: $and error <br>
+    - 1.6.0 (api) <br>
+        fix the same several confirm email issue <br> 
+
 * 23/05/01
     - 1.5.9 (api, client) <br>
         email confirm after attend approval <br>

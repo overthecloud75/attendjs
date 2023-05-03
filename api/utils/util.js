@@ -19,7 +19,6 @@ const getEmployeementPeriod = (beginDate) => {
     const beginMonth = Number(beginDateSplit[1])
 
     let baseMonth = 0 
-    console.log(thisMonth, beginMonth)
     if (thisMonth > beginMonth) { baseMonth = thisMonth - beginMonth}
     else if (thisMonth < beginMonth) { baseMonth = 12 + thisMonth - beginMonth}
     else if ((thisYear - beginYear) === 1 && monthDay <= beginMonthDay) { baseMonth = 12}
