@@ -132,8 +132,8 @@ export const setAttend = async (req, res, next) => {
         const {isMobile, isRemotePlace} = checkMobile(ip, user_agent)
 
         const {date, time} = dateAndTime()
-        const user = await User.findOne({_id: req.user.id})
-        const lastLogin = await Login.findOne({id:user.employeeId, date}).sort({time: -1})
+        const user = await User.findOne({email: req.user.email})
+        const lastLogin = await Login.findOne({employeeId: user.employeeId, date}).sort({time: -1})
         const {delta, location, abuse} = validateCheck(lastLogin, req.body.locations, isMobile)
         const where = await whereIs(location, abuse, isMobile)
 
@@ -218,8 +218,7 @@ const saveLogin = async (employeeId, name, ip, isMobile, platform, user_agent, w
     const {date, time} = dateAndTime()
     let attend
     if (where.attend) {attend = 'O'
-    } else {attend = 'X'
-    }
+    } else {attend = 'X'}
     const login = new Login({employeeId, name, date, time, ip, isMobile, platform, user_agent, width, height, latitude: -1, longitude: -1, accuracy: 1, attend, abuse: 'X', hash, timestamp: Date.now()})
     await setGpsOn(employeeId, name, date, time, where)
     await login.save()
@@ -228,8 +227,7 @@ const saveLogin = async (employeeId, name, ip, isMobile, platform, user_agent, w
 const updateLogin = async (date, time, timestamp, employeeId, name, ip, isMobile, user_agent, where, abuse, location, delta) => {
     let attend
     if (where.attend) {attend = 'O'
-    } else {attend = 'X'
-    }
+    } else {attend = 'X'}
     await Login.updateOne({timestamp, employeeId, name}, {$set: {ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, accuracy: location.accuracy, attend, abuse, delta: JSON.stringify(delta)}}, {upsert: false})
     await setGpsOn(employeeId, name, date, time, where)
 }
