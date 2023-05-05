@@ -70,8 +70,8 @@ export const deleteEvent = async (args) => {
     }
 }
 
-export const getApprove = async () => {
-    try { const res = await axios.get('/api/event/approve')
+export const getApproval = async () => {
+    try { const res = await axios.get('/api/event/approval')
         const resData = res.data
         const err = false
         axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
@@ -83,8 +83,8 @@ export const getApprove = async () => {
     }
 }
 
-export const postApprove = async (data) => {
-    try { const res = await axios.post('/api/event/approve', data)
+export const postApproval = async (data) => {
+    try { const res = await axios.post('/api/event/approval', data)
         const resData = res.data
         const err = false
         return {resData, err}

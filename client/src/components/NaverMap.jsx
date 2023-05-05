@@ -19,34 +19,36 @@ const NMap = ({state}) => {
 
     useEffect(() => { 
         let script = document.querySelector(`script[src="${src}"]`)
-        if (!script) {
+        if (state.isMobile && !script) {
             script = document.createElement('script')
             script.src = src
             script.async = true
             document.head.appendChild(script)
         }
-        const handleLoad = () => {
-            setScriptLoading(false)
-            let map = new window.naver.maps.Map('map', {
-                center: new window.naver.maps.LatLng(state.where.placeLocation.latitude, state.where.placeLocation.longitude),
-                zoom: 16
-            })
-            // eslint-disable-next-line
-            const marker1 = new window.naver.maps.Marker({
-                position: new window.naver.maps.LatLng(state.where.placeLocation.latitude, state.where.placeLocation.longitude),
-                map: map,
-                title: state.where.place
-            })
-            // eslint-disable-next-line
-            const marker2 = new window.naver.maps.Marker({
-                position: new window.naver.maps.LatLng(state.location.latitude, state.location.longitude),
-                map: map
-            })
-        }
-        script.addEventListener('load', handleLoad)
-        return function cleanup() {
-            script.removeEventListener('load', handleLoad)
-            script.parentNode.removeChild(script)
+        if (state.isMobile) {
+            const handleLoad = () => {
+                setScriptLoading(false)
+                let map = new window.naver.maps.Map('map', {
+                    center: new window.naver.maps.LatLng(state.where.placeLocation.latitude, state.where.placeLocation.longitude),
+                    zoom: 16
+                })
+                // eslint-disable-next-line
+                const marker1 = new window.naver.maps.Marker({
+                    position: new window.naver.maps.LatLng(state.where.placeLocation.latitude, state.where.placeLocation.longitude),
+                    map: map,
+                    title: state.where.place
+                })
+                // eslint-disable-next-line
+                const marker2 = new window.naver.maps.Marker({
+                    position: new window.naver.maps.LatLng(state.location.latitude, state.location.longitude),
+                    map: map
+                })
+            }
+            script.addEventListener('load', handleLoad)
+            return function cleanup() {
+                script.removeEventListener('load', handleLoad)
+                script.parentNode.removeChild(script)
+            }
         }
     // eslint-disable-next-line
     }, [scriptLoading])
@@ -58,7 +60,10 @@ const NMap = ({state}) => {
             (<Title>Don't worry. you are checked</Title>):
             (<Title>Unchecked. plz login again in a right place</Title>)
         }
-            {scriptLoading?<div id='map' style={{display:'none'}}/>:(<div id='map' style={{width:'100%', height:'400px'}}/>)}
+            {scriptLoading?
+                <div id='map' style={{display:'none'}}/>:
+                (<div id='map' style={{width:'100%', height:'400px'}}/>
+            )}
         </Container>
     )
 }

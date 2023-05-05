@@ -1,6 +1,8 @@
 import { useMemo, useState, useEffect, Suspense, lazy } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 import useFetch from '../hooks/useFetch'
 import Search from './Search'
 
@@ -53,7 +55,13 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
                 setClickCount={setClickCount}
                 setFileName={setFileName}
             />
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense 
+                fallback={
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <CircularProgress/>
+                    </Box>
+                }
+            >
                 <Table 
                     url={page}
                     columns={columns}

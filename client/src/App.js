@@ -4,6 +4,8 @@ import {
     Routes,
     Route,
 } from 'react-router-dom'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 import './style.scss'
 import Attend from './pages/Attend'
 import Register from './pages/Register'
@@ -16,6 +18,7 @@ import Device from './pages/Device'
 import Schedule from './pages/Schedule'
 import Employee from './pages/Employee'
 import LoginHistory from './pages/LoginHistory'
+import ApprovalHistory from './pages/ApprovalHistory'
 import CheckEmail from './pages/CheckEmail'
 import Confirm from './pages/Confirm'
 import TooManyRequests from './pages/TooManyRequests'
@@ -29,7 +32,13 @@ function App() {
     const [menu, setMenu] = useState(false)
     return (
         <BrowserRouter>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense 
+                fallback={                            
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <CircularProgress/>
+                    </Box>
+                }
+            >
                 <Routes>
                     <Route exact path='/' element={<Home menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/register' element={<Register menu={menu} setMenu={setMenu}/>}/>
@@ -43,6 +52,7 @@ function App() {
                     <Route exact path='/device' element={<Device menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/employee' element={<Employee menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/loginhistory' element={<LoginHistory menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/approvalhistory' element={<ApprovalHistory menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/board' element={<Board menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/report' element={<Report menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/check-email' element={<CheckEmail menu={menu} setMenu={setMenu}/>}/>

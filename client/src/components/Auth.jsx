@@ -1,8 +1,8 @@
 import { useDispatch } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 import { requestAuth } from '../utils/AuthUtil'
 import { getWindowDimension } from '../utils/EventUtil'
 

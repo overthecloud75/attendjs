@@ -37,7 +37,7 @@ WORKING = {
     'specialHolidays': ['선거', '명절', '휴일'],
     'lunarHolidays': ['0101', '0102', '0408', '0814', '0815', '0816'],
     'alternativeVacation': ['0301', '0505', '0815', '1003', '1009']
-    }
+}
 
 # holiday
 USE_LUNAR_NEW_YEAR = True

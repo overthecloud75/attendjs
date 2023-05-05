@@ -13,10 +13,10 @@ const useFetch = (page, url, params, clickCount) => {
         try {
             let res = await axios.get(url, {params, headers: {'Cache-Control': 'no-cache'}})
             axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
-            if (page==='board') {
-                for (let board of res.data) {
-                    board.createdAt = format(new Date(board.createdAt), "yy-MM-dd HH:mm:ss")
-                    board.updatedAt = format(new Date(board.updatedAt), "yy-MM-dd HH:mm:ss")
+            if (page==='board' || page==='approvalhistory') {
+                for (let data of res.data) {
+                    data.createdAt = format(new Date(data.createdAt), 'yy-MM-dd HH:mm:ss')
+                    data.updatedAt = format(new Date(data.updatedAt), 'yy-MM-dd HH:mm:ss')
                 }
             }
             setData(res.data)

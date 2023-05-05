@@ -24,7 +24,7 @@ const Buttons = styled.div`
     justify-content: right;
     align-items: center;
     gap: 4px;
-    margin: 16px;
+    margin: 12px;
 `
 
 const TableSheet = styled.table`
@@ -40,13 +40,13 @@ const THead = styled.thead`
 `
 
 const HeadTr = styled.tr`
-    background: black;
+    background: #007AFF;
 `
 
 const Th = styled.th`
     font-weight: normal;
     padding: ${v.smSpacing};
-    border: 1px solid ${({ theme }) => theme.bg2};
+    border: 1px solid;
     color: white;
     text-transform: capitalize;
     font-weight: 600;
@@ -54,7 +54,9 @@ const Th = styled.th`
 
 const Td = styled.td`
     padding: ${v.smSpacing};
-    border: 1px solid ${({ theme }) => theme.bg2};  
+    border-bottom: 1px solid #F2F2F2; 
+    color #2E2E2E; 
+    font-weight: 400;
     font-size: 14px;
 `
 

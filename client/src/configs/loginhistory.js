@@ -67,6 +67,10 @@ export const columnHeaders = [
 
 export const csvHeaders = [
     {
+        key: 'employeeId',
+        label: 'ID',
+    },
+    {
         key: 'name',
         label: 'Name',
     },

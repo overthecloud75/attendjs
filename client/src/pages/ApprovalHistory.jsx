@@ -1,10 +1,10 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/TableWithSearch'
-import { columnHeaders, csvHeaders } from '../configs/loginHistory'
+import { columnHeaders, csvHeaders } from '../configs/approvalHistory'
 import Footer from '../components/Footer'
 
-const LoginHistory = ({menu, setMenu}) => {
+const ApprovalHistory = ({menu, setMenu}) => {
     return (     
         <div className='container'>
             {menu && <Sidebar/>}
@@ -12,8 +12,8 @@ const LoginHistory = ({menu, setMenu}) => {
                 <Navbar menu={menu} setMenu={setMenu}/> 
                 <TableWithSearch 
                     searchKeyword='name'
-                    page='loginhistory'
-                    url='/api/auth/search'
+                    page='approvalhistory'
+                    url='/api/approval/search'
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}
                 />
@@ -23,4 +23,4 @@ const LoginHistory = ({menu, setMenu}) => {
     )
 }
 
-export default LoginHistory
+export default ApprovalHistory

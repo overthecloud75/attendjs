@@ -8,6 +8,7 @@ import PlaceIcon from '@mui/icons-material/Place'
 import ComputerIcon from '@mui/icons-material/Computer'
 import PeopleIcon from '@mui/icons-material/People'
 import BookIcon from '@mui/icons-material/Book'
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 import NoteAltIcon from '@mui/icons-material/NoteAlt'
 import FolderIcon from '@mui/icons-material/Folder'
 import { Link } from 'react-router-dom'
@@ -179,6 +180,12 @@ const itemDict =
             icon: <BookIcon/>,
             title: 'LoginHistory',
             auth: false
+        },
+        {
+            to: '/approvalhistory',
+            icon: <AssignmentTurnedInIcon/>,
+            title: 'ApprovalHistory',
+            auth: true
         },
         {
             to: '/board',

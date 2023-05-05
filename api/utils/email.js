@@ -48,7 +48,7 @@ export const attendRequestEmail = async (name, department, start, end, reason, e
                 <p>기간 : ${start}~${end}</p>
                 <p>사유 : ${reason}</p>
                 <p>기타 : ${etc}</p>
-                <a href=${process.env.DOMAIN}/api/event/confirm/approve/${confirmationCode} class="button" style="background-color: #0071c2; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">승인</a>
+                <a href=${process.env.DOMAIN}/api/event/confirm/approval/${confirmationCode} class="button" style="background-color: #0071c2; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">승인</a>
                 <a href=${process.env.DOMAIN}/api/event/confirm/cancel/${confirmationCode} class="button" style="background-color: #dc3545; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">취소</a>`    
         })
     }

@@ -13,12 +13,12 @@ const PageButton = styled.button`
     border-radius: 8px;
     padding: 8px;
     margin: 0;
-    background: black;
+    background: #2E2E2E;
     color: white;
     font-size: 1rem;
 
     &:hover {
-        background: tomato;
+        background: #007AFF;
         cursor: pointer;
         transform: translateY(-2px);
     }

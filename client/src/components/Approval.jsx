@@ -13,7 +13,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { getApprove, postApprove } from '../utils/EventUtil'
+import { getApproval, postApproval } from '../utils/EventUtil'
 import { WORKING } from '../configs/working'
 
 const options = Object.keys(WORKING.outStatus)
@@ -88,7 +88,7 @@ const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, s
     )
 }
 
-const Approval = ({open, setOpen}) => {
+const Approval = ({navigate, open, setOpen}) => {
     const [value, setValue] = useState({
         approver: '', 
         start: dayjs(new Date()).format('YYYY-MM-DD'), 
@@ -102,7 +102,7 @@ const Approval = ({open, setOpen}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await getApprove()
+            const result = await getApproval()
             if (!result.err) {setValue({...value, approver: result.resData.name})}
         }
         fetchData()
@@ -115,8 +115,10 @@ const Approval = ({open, setOpen}) => {
     }
 
     const handleUpdate = async () => {
-        await postApprove(value)
+        if(!window.confirm('정말로 상신하시겠습니다.?')) return
+        await postApproval(value)
         setOpen(false)
+        navigate('/approvalhistory')
     }
 
     const handleChange = (event) => {

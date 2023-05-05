@@ -63,7 +63,7 @@ export const deleteEvent = async (req,res,next) => {
     }
 }
 
-export const getApprove = async (req,res,next) => {
+export const getApproval = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const approver = await getApprover(req)
@@ -73,7 +73,7 @@ export const getApprove = async (req,res,next) => {
     }
 }
 
-export const postApprove = async (req,res,next) => {
+export const postApproval = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const start = sanitizeData(req.body.start, 'date')
@@ -112,7 +112,7 @@ const getApprover = async (req) => {
     return baseApprover
 }
 
-export const confirmApprove = async (req, res, next) => {
+export const confirmApproval = async (req, res, next) => {
     logger.info(reqFormat(req))
     try {
         const confirmationCode = req.params.confirmationCode

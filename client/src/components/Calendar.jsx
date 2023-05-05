@@ -9,6 +9,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { getColor, getEvents, addEvent, deleteEvent, getWindowDimension } from '../utils/EventUtil'
 import Approval from './Approval'
+import { getUser } from '../storage/userSlice.js'
 
 const mobileSize = 800
 
@@ -28,8 +29,9 @@ const Button = styled.button`
 
 const Calendar = () => {
 
-    const navigate = useNavigate()
+    const user = getUser()
 
+    const navigate = useNavigate()
     const calendarRef = useRef()
 
     const [tapValue, setTapValue] = useState('team')
@@ -116,6 +118,7 @@ const Calendar = () => {
         <Wrapper>
             {openApproval&&(
                 <Approval
+                    navigate={navigate}
                     open={openApproval}
                     setOpen={setOpenApproval}
                 />
@@ -140,12 +143,12 @@ const Calendar = () => {
                 plugins={[ dayGridPlugin, interactionPlugin ]}
                 initialView='dayGridMonth'
                 headerToolbar={headerToolbar}
-                editable={true}
-                selectable={true}
+                editable={user.isAdmin?true:false}
+                selectable={user.isAdmin?true:false}
                 initialEvents={initialEvents}
                 weekends={weekends}
-                select={handleDateSelect}
-                eventClick={handleEventClick}
+                select={user.isAdmin?handleDateSelect:false}
+                eventClick={user.isAdmin?handleEventClick:false}
                 contentHeight='auto'
             />
         </Wrapper>

@@ -4,6 +4,10 @@
     - planning : weekly reporting system <br>
     - planning : 연차 관리 <br>
 
+* 23/05/05
+    - 1.6.2 (client) <br>
+        approvalhistory <br>
+
 * 23/05/03 
     - 1.6.1 (backend) <br>
         fix pymongo unknown operator: $and error <br>
