@@ -9,7 +9,7 @@ import Search from './Search'
 const Table = lazy(() => import('./ReactTable'))
 
 const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const [name, setName] = useState('')
     const [date, setDate] = useState([{startDate: new Date(), endDate: new Date(), key: 'selection'}])

@@ -4,6 +4,10 @@
     - planning : weekly reporting system <br>
     - planning : 연차 관리 <br>
 
+* 23/05/16
+    - 1.6.3 (api) <br>
+        approval/update <br>
+
 * 23/05/05
     - 1.6.2 (client) <br>
         approvalhistory <br>

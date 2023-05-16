@@ -6,6 +6,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import axios from 'axios'
+import { EditablePages, EditableTitles } from '../configs/pages'
 
 const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
 
@@ -23,7 +24,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
 
     const handleUpdate = async () => {
         const url = '/api/' + page + '/update'
-        if (['location', 'device', 'employee'].includes(page)) {
+        if (EditablePages.includes(page)) {
             try {
                 await axios.post(url, value)
                 updateData()
@@ -47,7 +48,7 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
             <DialogContent>
                 {columns.map((item, index) => {
                     return (
-                        ['info', 'type', 'location', 'charge', 'email', 'department', 'rank', 'position', 'regular', 'mode', 'attendMode', 'latitude', 'longitude', 'dev'].includes(item.accessor)?(
+                        EditableTitles.includes(item.accessor)?(
                             <TextField
                                 autoFocus={focus===item.accessor?true:false}
                                 margin='dense'

@@ -10,7 +10,7 @@ import NMap from '../components/NaverMap'
 const Home = ({menu, setMenu}) => {
 
     const { state } = useLocation()
-
+    
     return (
         <div className='container'>
             {menu && <Sidebar/> }

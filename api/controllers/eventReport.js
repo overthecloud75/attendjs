@@ -17,8 +17,7 @@ const seperateEvent = (action, event) => {
                 }
             }
         }
-    }
-    else {
+    } else {
         eventStatus = null
     }
     return {name, eventStatus}
@@ -65,9 +64,6 @@ export const reportUpdate = async (action, event, start, end) => {
         const employeeId = employee.employeeId
         const reports = await Report.find({name, employeeId, date: {$gte: start, $lt: end}}).sort({date: 1}).lean()
         let reason = null 
-        if (Object.keys(WORKING.status).includes(employee.mode)) {
-            reason = employee.mode 
-        }
         if (eventStatus) {reason = eventStatus}
         for (let report of reports) {
             const date = report.date 

@@ -64,7 +64,9 @@ export const attendConfirmationEmail = async (name, email, department, start, en
     let cc = ''
     if (status==='Active') {
         action = '승인'
-        cc = cc + process.env.CC_email
+        if (['휴가', '반차'].includes(reason)) {
+            cc = cc + process.env.CC_email
+        }
     } else if (status==='Cancel') {action = '반려'}
     else {action = '취소'}
     try {

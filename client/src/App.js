@@ -37,7 +37,7 @@ function App() {
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <CircularProgress/>
                     </Box>
-                }
+            }
             >
                 <Routes>
                     <Route exact path='/' element={<Home menu={menu} setMenu={setMenu}/>}/>

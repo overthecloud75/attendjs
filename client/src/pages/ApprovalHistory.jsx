@@ -12,7 +12,7 @@ const ApprovalHistory = ({menu, setMenu}) => {
                 <Navbar menu={menu} setMenu={setMenu}/> 
                 <TableWithSearch 
                     searchKeyword='name'
-                    page='approvalhistory'
+                    page='approval'
                     url='/api/approval/search'
                     columnHeaders={columnHeaders}
                     csvHeaders={csvHeaders}

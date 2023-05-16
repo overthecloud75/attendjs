@@ -114,6 +114,10 @@ const getApprover = async (req) => {
 
 export const confirmApproval = async (req, res, next) => {
     logger.info(reqFormat(req))
+    /* 
+        1. confirmationCode 확인
+        2. status가 pending이면서 기간에 문제가 없으면 status를 Active로 바꾸고 달력에 저장하고 confirm email 송부 
+    */
     try {
         const confirmationCode = req.params.confirmationCode
         const approval = await Approval.findOne({confirmationCode})
@@ -125,9 +129,7 @@ export const confirmApproval = async (req, res, next) => {
                 title = approval.name + '/' + approval.etc  
             }
             if (approval.end >= approval.start) {
-                const end = getNextDate(approval.end)
-                const newEvent = new Event({id: Date.now(), title, start: approval.start, end, department: approval.department, employeeId: approval.employeeId})
-                await newEvent.save()
+                await makeEvent(title, approval)
                 status = 'Active'
                 await Approval.updateOne({confirmationCode}, {$set: {status}})
                 await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, status)
@@ -179,6 +181,16 @@ export const getNextDate = (date) => {
     day = String(nextDate.getDate()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`
     return formattedDate
+}
+
+const makeEvent = async (title, approval) => {
+    // reason이 출근인 경우 calendar에 기록 안 함 
+    const end = getNextDate(approval.end)
+    if (approval.reason!=='출근') {
+        const newEvent = new Event({id: Date.now(), title, start: approval.start, end, department: approval.department, employeeId: approval.employeeId})
+        await newEvent.save()
+    }
+    await reportUpdate('add', title, approval.start, end)
 }
 
 
