@@ -13,6 +13,8 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 import { getApproval, postApproval } from '../utils/EventUtil'
 import { WORKING } from '../configs/working'
 
@@ -42,7 +44,6 @@ const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, s
         setRadioValue('휴가')
         onClose()
     }
-    
     const handleOk = () => {
         setValue({...value, reason: radioValue})
         onClose()
@@ -96,6 +97,7 @@ const Approval = ({navigate, open, setOpen}) => {
         reason: '휴가', 
         etc: ''
     })
+    const [leftLeave, setLeftLeave] = useState('')
     const [radioValue, setRadioValue] = useState('휴가')
     const [radioOpen, setRadioOpen] = useState(false)
     const [etcOpen, setEtcOpen] = useState(false)
@@ -103,7 +105,11 @@ const Approval = ({navigate, open, setOpen}) => {
     useEffect(() => {
         const fetchData = async () => {
             const result = await getApproval()
-            if (!result.err) {setValue({...value, approver: result.resData.name})}
+            if (!result.err) {
+                const summary = result.resData.summary 
+                setValue({...value, approver: result.resData.approver.name})
+                setLeftLeave('남은연차: ' + summary.leftAnnualLeave + ', 미출근: ' + summary['미출근'] + ', 지각: ' + summary['지각'] + ', 휴가: ' + summary['휴가'])
+            }
         }
         fetchData()
     // eslint-disable-next-line
@@ -129,13 +135,26 @@ const Approval = ({navigate, open, setOpen}) => {
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>근태 결재</DialogTitle>
             <DialogContent>
+                {leftLeave===''? 
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <CircularProgress/>
+                    </Box>:
+                    <TextField 
+                        margin='dense'
+                        id='attendance'
+                        label='근태현황'
+                        fullWidth
+                        variant='standard'
+                        value={leftLeave}
+                    />
+                }
                 <TextField 
                     margin='dense'
                     id='approver'
                     label='결재자'
                     fullWidth
-                    variant='outlined'
-                    value={value.approver?value.approver:''}
+                    variant='standard'
+                    value={value.approver}
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePickWrapper>
@@ -178,7 +197,7 @@ const Approval = ({navigate, open, setOpen}) => {
                         label='etc'
                         fullWidth
                         variant='outlined'
-                        value={value.etc?value.dates:''}
+                        value={value.etc}
                         onChange={handleChange}
                     />
                 }

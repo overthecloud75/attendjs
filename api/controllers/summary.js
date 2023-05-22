@@ -101,7 +101,7 @@ export const getLeftLeaveList = async (req,res,next) => {
     }
 }
 
-const getLeftLeaveSummary = async (employee) => {
+export const getLeftLeaveSummary = async (employee) => {
     const reverseStatus = getReverseStatus()
     let summary 
     if (employee.beginDate) {

@@ -7,6 +7,7 @@ import Approval from '../models/Approval.js'
 import { reportUpdate } from './eventReport.js'
 import { sanitizeData } from '../utils/util.js'
 import { attendRequestEmail, attendConfirmationEmail } from '../utils/email.js'
+import { getLeftLeaveSummary } from './summary.js'
 
 export const getEvents = async (req,res,next) => {
     logger.info(reqFormat(req))
@@ -53,8 +54,7 @@ export const deleteEvent = async (req,res,next) => {
         if (eventDelete.deletedCount) {
             await reportUpdate('delete', event.title, event.start, event.end)
             res.status(200).send('Event has been deleted.')
-        }
-        else {
+        } else {
             res.status(400).send('not deleted')
         }
     } catch (err) {
@@ -65,9 +65,15 @@ export const deleteEvent = async (req,res,next) => {
 
 export const getApproval = async (req,res,next) => {
     logger.info(reqFormat(req))
+    /* 
+        1. apporover 확인 
+        2. 연차 기록 확인 
+    */
     try {
-        const approver = await getApprover(req)
-        res.status(200).setHeader('csrftoken', req.csrfToken()).json(approver)
+        const employee = await Employee.findOne({email: req.user.email})
+        const approver = await getApprover(employee)
+        const summary = await getLeftLeaveSummary(employee)
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json({approver, summary})
     } catch (err) {
         next(err)
     }
@@ -79,13 +85,13 @@ export const postApproval = async (req,res,next) => {
         const start = sanitizeData(req.body.start, 'date')
         const end = sanitizeData(req.body.end, 'date')
         const employee = await Employee.findOne({email: req.user.email})
-        const approver = await getApprover(req)
+        const approver = await getApprover(employee)
         const confirmationCode = CryptoJS.lib.WordArray.random(20).toString()
         const checkTheSameApproval = await Approval.findOne({email: req.user.email, start, end, reason: req.body.reason})
         if (checkTheSameApproval && checkTheSameApproval.status === 'Pending') {
             res.status(200).send('결재가 진행중에 있습니다.')
         } else {
-            const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason: req.body.reason, 'etc': req.body.etc, approverName: approver.name, approverEmail: approver.email, confirmationCode})
+            const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason: req.body.reason, etc: req.body.etc, approverName: approver.name, approverEmail: approver.email, confirmationCode})
             await newApproval.save()
             await attendRequestEmail(employee.name, employee.department, start, end, req.body.reason, req.body.etc, approver.name, approver.email, confirmationCode)
             res.status(200).send('Event has been created.')
@@ -96,8 +102,7 @@ export const postApproval = async (req,res,next) => {
     }
 }
 
-const getApprover = async (req) => {
-    const employee = await Employee.findOne({email: req.user.email})
+const getApprover = async (employee) => {
     let baseApprover = {name: '', department: '', email: ''}
     let approver = baseApprover
     if (employee.position === '팀원') {
@@ -106,8 +111,10 @@ const getApprover = async (req) => {
             approver = await Employee.findOne({position: '본부장'})
         }
     } else if (employee.position === '팀장') {
+        approver = await Employee.findOne({position: '본부장'})
+    } else if (employee.position === '본부장') {
         approver = await Employee.findOne({position: '대표이사'})
-    } 
+    }
     baseApprover = {name: approver.name, department: approver.department, email: approver.email}
     return baseApprover
 }

@@ -1,5 +1,6 @@
 import { logger, reqFormat } from '../config/winston.js'
 import Approval from '../models/Approval.js'
+// import { deleteEvent } from './event.js'
 // import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
