@@ -9,21 +9,21 @@ const useFetch = (page, url, params, clickCount) => {
 
     useEffect(() => {
         const fetchData = async () => {
-        setLoading(true)
-        try {
-            let res = await axios.get(url, {params, headers: {'Cache-Control': 'no-cache'}})
-            axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
-            for (let data of res.data) {
-                if (data.createdAt) {
-                    data.createdAt = format(new Date(data.createdAt), 'yy-MM-dd HH:mm:ss')
-                    data.updatedAt = format(new Date(data.updatedAt), 'yy-MM-dd HH:mm:ss')
+            setLoading(true)
+            try {
+                let res = await axios.get(url, {params, headers: {'Cache-Control': 'no-cache'}})
+                axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
+                for (let data of res.data) {
+                    if (data.createdAt) {
+                        data.createdAt = format(new Date(data.createdAt), 'yy-MM-dd HH:mm:ss')
+                        data.updatedAt = format(new Date(data.updatedAt), 'yy-MM-dd HH:mm:ss')
+                    }
                 }
+                setData(res.data)
+            } catch (err) {
+                setError(err)
             }
-            setData(res.data)
-        } catch (err) {
-            setError(err)
-        }
-        setLoading(false)
+            setLoading(false)
         }
         fetchData()
     // eslint-disable-next-line
