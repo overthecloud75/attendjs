@@ -2,16 +2,22 @@ import nodemailer from 'nodemailer'
 import { logger } from '../config/winston.js'
 
 const makeTransport = () => {
-    const transport = nodemailer.createTransport({
-        host: process.env.MAIL_HOST,
-        port: process.env.MAIL_PORT, 
+    const host = process.env.MAIL_HOST
+    let options = {
+        host,
+        port: process.env.MAIL_PORT,
         auth: {
             user: process.env.ACCOUNT_EMAIL,
             pass: process.env.ACCOUNT_PASSWORD,
         },
-        secureConnection: false,
-        tls: { ciphers: 'SSLv3' }
-    })
+    }
+    if (host==='smtp.gmail.com') {
+        options.secure = true
+    } else {
+        options.secureConnection = false
+        options.tls = { ciphers: 'SSLv3' }
+    }
+    const transport = nodemailer.createTransport(options)
     return transport
 }
 

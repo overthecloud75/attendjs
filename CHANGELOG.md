@@ -1,4 +1,6 @@
 * 23/06/04
+    - 1.6.6 (api) <br>
+        apply smtp.gmail.com for email in email.js <br> 
     - 1.6.5 (api, client) <br>
         add attend status in email confirm <br>
         view calendar data by private, team, company <br>

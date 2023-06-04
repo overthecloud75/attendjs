@@ -16,7 +16,6 @@ export const search = async (req,res,next) => {
 
 export const update = async (req,res,next) => {
     logger.info(reqFormat(req))
-    console.log('req')
     try {
         const confirmationCode = req.body.confirmationCode
         const status = req.body.status
