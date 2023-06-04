@@ -6,12 +6,7 @@ import Approval from '../models/Approval.js'
 export const search = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
-        let approvalHistory
-        if (req.user.isAdmin) {
-            approvalHistory = await Approval.find({}).sort({createdAt: -1})
-        } else { 
-            approvalHistory = await Approval.find({email: req.user.email}).sort({createdAt: -1})
-        }
+        const approvalHistory = await getApprovalHistory(req)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(approvalHistory)
     } catch (err) {
         console.log('err', err)
@@ -21,6 +16,7 @@ export const search = async (req,res,next) => {
 
 export const update = async (req,res,next) => {
     logger.info(reqFormat(req))
+    console.log('req')
     try {
         const confirmationCode = req.body.confirmationCode
         const status = req.body.status
@@ -31,8 +27,19 @@ export const update = async (req,res,next) => {
                 // To Do 
             }
         }
+        res.status(200).json('updated')
     } catch (err) {
         console.log('err', err)
         next(err)
     }
+}
+
+const getApprovalHistory = async (req) => {
+    let approvalHistory
+    if (req.user.isAdmin) {
+        approvalHistory = await Approval.find({}).sort({createdAt: -1})
+    } else { 
+        approvalHistory = await Approval.find({email: req.user.email}).sort({createdAt: -1})
+    }
+    return approvalHistory
 }

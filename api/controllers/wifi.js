@@ -27,10 +27,9 @@ export const search = async (req,res,next) => {
 
         let deviceOns
         if (ip && ip !== '') {
-            deviceOns = await DeviceOn.find({ip, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1}).lean()
-        }
-        else { 
-            deviceOns = await DeviceOn.find({ip: {$regex: process.env.WIFI_RANGE}, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1}).lean()
+            deviceOns = await DeviceOn.find({ip, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1})
+        } else { 
+            deviceOns = await DeviceOn.find({ip: {$regex: process.env.WIFI_RANGE}, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1})
         }
         if (startDate === endDate) {
             deviceOns = insertOwner(deviceOns, deviceDict)

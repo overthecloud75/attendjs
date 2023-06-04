@@ -1,8 +1,7 @@
-* to do list 
-    - client : react-table left-right scroll <br>
-      <br>
-    - planning : weekly reporting system <br>
-    - planning : 연차 관리 <br>
+* 23/06/04
+    - 1.6.5 (api, client) <br>
+        add attend status in email confirm <br>
+        view calendar data by private, team, company <br>
 
 * 23/05/22
     - 1.6.4 (api, client) <br>

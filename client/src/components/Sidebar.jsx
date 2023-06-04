@@ -246,8 +246,7 @@ const SidebarCategories = () => {
                     handleClick = {handleClick}
                 />
             </div>
-        )
-    ) 
+        )) 
     ) 
 }
 

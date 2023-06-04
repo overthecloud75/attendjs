@@ -6,10 +6,10 @@ import CryptoJS from 'crypto-js'
 import { logger, reqFormat } from '../config/winston.js'
 import { MOBILE_IP_LIST } from '../config/working.js'
 import User from '../models/User.js'
-import Employee from '../models/Employee.js'
 import GPSOn from '../models/GPSOn.js'
 import Login from '../models/Login.js'
 import Location from '../models/Location.js'
+import { getEmployeeByEmail } from './employee.js'
 import { createError } from '../utils/error.js'
 import { registerConfirmationEmail } from '../utils/email.js'
 import { sanitizeData } from '../utils/util.js'
@@ -17,13 +17,14 @@ import { sanitizeData } from '../utils/util.js'
 export const register = async (req, res, next) => {
     logger.info(reqFormat(req))
     try {
-        const token = jwt.sign({email: req.body.email}, process.env.JWT)
-        const salt = bcrypt.genSaltSync(10)
-        const hash = bcrypt.hashSync(req.body.password, salt)
-        
         const name = req.body.name 
         const email = sanitizeData(req.body.email, 'email')
-        const employee = await Employee.findOne({email})
+
+        const token = jwt.sign({email}, process.env.JWT)
+        const salt = bcrypt.genSaltSync(10)
+        const hash = bcrypt.hashSync(req.body.password, salt)
+
+        const employee = await getEmployeeByEmail(email)
         if (!employee) {
             return next(createError(403, 'Fobidden'))
         } else if (employee.name !== name) {
@@ -32,7 +33,7 @@ export const register = async (req, res, next) => {
             return next(createError(403, 'Employee not found!'))
         }
     
-        const user = await User.findOne({email})
+        const user = await getUserByEmail(email)
         if (user) {
             return next(createError(403, 'The User is already created'))
         }
@@ -57,7 +58,7 @@ export const login = async (req, res, next) => {
     logger.info(reqFormat(req))
     const email = sanitizeData(req.body.email, 'email')
     try {
-        const user = await User.findOne({email}).setOptions({sanitizeFilter: true})
+        const user = await getUserByEmail(email)
         if (!user) return next(createError(403, 'User not found!'))
 
         const isPasswordCorrect = await bcrypt.compare(
@@ -70,7 +71,7 @@ export const login = async (req, res, next) => {
         if (user.status != 'Active') {
             return next(createError(401, 'Pending Account. Please Verify Your Email!'))
         }
-        const employee = await Employee.findOne({email}).setOptions({sanitizeFilter: true})
+        const employee = await getEmployeeByEmail(email)
         if (employee.regular==='퇴사') {
             return next(createError(403, 'Employee not found!'))
         }
@@ -271,6 +272,11 @@ const getRandomInt = (min=1, max=1000) => {
     min = Math.ceil(min)
     max = Math.floor(max)
     return Math.floor(Math.random() * (max - min)) + min //최댓값은 제외, 최솟값은 포함
+}
+
+const getUserByEmail = async (email) => {
+    const user = await User.findOne({email})
+    return user
 }
 
 

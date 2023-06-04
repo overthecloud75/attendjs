@@ -6,9 +6,7 @@ from models import Report, Device, DeviceOn
 from utils import Scanner
 from config import BASE_DIR, LOG_DIR, SMTP_CONFIG, USE_WIFI_ATTENDANCE
 
-if os.path.exists(os.path.join(BASE_DIR, LOG_DIR)):
-    pass
-else:
+if not os.path.exists(os.path.join(BASE_DIR, LOG_DIR)):
     os.mkdir(os.path.join(BASE_DIR, LOG_DIR))
 
 def save_db(report):

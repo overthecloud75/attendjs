@@ -1,11 +1,12 @@
 import swaggerUi from 'swagger-ui-express'
 import swaggereJsdoc from 'swagger-jsdoc'
+import { projectVersion } from '../config/working.js'
 
 const options = {
     swaggerDefinition: {
         info: {
             title: 'SmartWork API',
-            version: '1.5.9',
+            version: projectVersion,
         },
         basePath: '/api'
     },

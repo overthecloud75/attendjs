@@ -1,10 +1,10 @@
 import express from "express";
 import { getEvents, addEvent, deleteEvent, getApproval, postApproval, confirmApproval, confirmCancel } from "../controllers/event.js";
-import { verifyUser, verifyAdmin, verifyIP } from '../utils/verifyToken.js'
+import { verifyUser, verifyAdmin } from '../utils/verifyToken.js'
 
 const router = express.Router();
 
-router.get('/', verifyIP, getEvents)
+router.get('/', verifyUser, getEvents)
 router.post('/add', verifyAdmin, addEvent)
 router.post('/delete', verifyAdmin, deleteEvent)
 router.get('/approval', verifyUser, getApproval)

@@ -29,8 +29,7 @@ const getState = (employeeStatus, begin, end) => {
         if (begin) {
             if (begin <= WORKING.time.beginTime) { state = '정상출근' }
             else { state = '지각' }
-        }
-        else { state = '미출근' }
+        } else { state = '미출근' }
     }  
     return state 
 }
@@ -44,8 +43,7 @@ export const calculateWorkingHours = (begin, end) => {
             if (Number(WORKING.time.lunchTime) > Number(begin)) {
                 workingHours = workingHours - 1
             }
-        }
-        else {
+        } else {
             if (Number(end) > Number(WORKING.time.lunchFinishTime) && Number(WORKING.time.lunchFinishTime) > Number(begin)) {
                 workingHours = workingHours - 1
             }

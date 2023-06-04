@@ -1,6 +1,6 @@
 import express from 'express'
 import { search, getLeftLeave, getLeftLeaveList } from '../controllers/summary.js'
-import { verifyIP, verifyUser } from '../utils/verifyToken.js'
+import { verifyUser } from '../utils/verifyToken.js'
 
 const router = express.Router()
 
@@ -32,7 +32,7 @@ const router = express.Router()
  *                          status:
  *                              type: string
  */
-router.get('/search', verifyIP, search)
+router.get('/search', verifyUser, search)
 
 /**
  * @swagger

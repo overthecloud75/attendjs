@@ -27,51 +27,31 @@ const Button = styled.button`
     cursor: pointer;
 `
 
-const Calendar = () => {
+const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
 
-    const user = getUser()
-
-    const navigate = useNavigate()
     const calendarRef = useRef()
-
-    const [tapValue, setTapValue] = useState('team')
-    const [weekends, setWeekends] = useState(true)
     const [headerToolbar, setHeaderToolbar] = useState({
         start: 'title', 
         center: '',
         end: 'today prev,next'
     })
-    const [error, setError] = useState(false)
-    const [openApproval, setOpenApproval] = useState(false)
-
-    const handleTapChange = (event, newTapValue) => {
-        if (tapValue !== newTapValue) {
-            setTapValue(newTapValue)
-            let calendarApi = calendarRef.current.getApi()
-            calendarApi.refetchEvents()
-        }
-    }
-
-    const handleApprovalClick = () => {
-        setOpenApproval(true)
-    }
-    
-    const initialEvents = async (args) => {
-        // To Do 
-        // tapValue is not changed. why? 
-        const events = await getEvents(args, tapValue)
-        setError(events.err)
-        return events.data
-    }
+    const [eventsData, setEventsData] = useState([])
+    const [thisMonth, setThisMonth] = useState('')
+    const user = getUser()
 
     useEffect(() => {
-        const fetchData = () => {
-            if (error) {
-                const errorStatus = error.response.data.status
+        const calendarApiView = calendarRef.current.getApi().view
+        const args = {start: calendarApiView.activeStart, end: calendarApiView.activeEnd}
+        
+        const fetchData = async () => {
+            const events = await getEvents(args, tapValue)
+            if (events.err) {
+                const errorStatus = events.err.response.data.status
                 if (errorStatus === 401) { 
                     navigate('/login')
                 }
             } else {
+                setEventsData(events.data)
                 // eslint-disable-next-line
                 const {width, height} = getWindowDimension()
                 if (width < mobileSize) {
@@ -80,9 +60,9 @@ const Calendar = () => {
                 }
             }
         }
-        fetchData()
+        if (thisMonth!=='') {fetchData()}
     // eslint-disable-next-line
-    }, [error])
+    }, [thisMonth, tapValue])
 
     const handleDateSelect = async (selectInfo) => {
         let title = prompt('Please enter a new title for your event')
@@ -113,7 +93,47 @@ const Calendar = () => {
             }
         }
     }
+
+    const handleDates = async (datesInfo) => {
+        setThisMonth(datesInfo.view.title)
+    }
     
+    return (
+        <FullCalendar
+            ref={calendarRef}
+            plugins={[ dayGridPlugin, interactionPlugin ]}
+            initialView='dayGridMonth'
+            headerToolbar={headerToolbar}
+            editable={user.isAdmin?true:false}
+            selectable={user.isAdmin?true:false}
+            events={eventsData}
+            weekends={weekends}
+            select={user.isAdmin?handleDateSelect:false}
+            eventClick={user.isAdmin?handleEventClick:false}
+            datesSet={handleDates}
+            contentHeight='auto'
+        />
+    )
+}
+
+const Calendar = () => {
+
+    const navigate = useNavigate()
+
+    const [weekends, setWeekends] = useState(true)
+    const [tapValue, setTapValue] = useState('team')
+    const [openApproval, setOpenApproval] = useState(false)
+
+    const handleTapChange = (event, newTapValue) => {
+        if (tapValue !== newTapValue) {
+            setTapValue(newTapValue)
+        }
+    }
+
+    const handleApprovalClick = () => {
+        setOpenApproval(true)
+    }
+
     return (
         <Wrapper>
             {openApproval&&(
@@ -123,7 +143,7 @@ const Calendar = () => {
                     setOpen={setOpenApproval}
                 />
             )}
-            <Box sx={{ display: 'flex', width: '100%', justifyContent: 'right', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', width: '100%', justifyContent: 'right', alignItems: 'center', marginBottom: '10px' }}>
                 {weekends && (
                     <Tabs
                         value={tapValue}
@@ -138,18 +158,11 @@ const Calendar = () => {
                 }
                 <Button onClick={handleApprovalClick}>근태 결재</Button>
             </Box>
-            <FullCalendar
-                ref={calendarRef}
-                plugins={[ dayGridPlugin, interactionPlugin ]}
-                initialView='dayGridMonth'
-                headerToolbar={headerToolbar}
-                editable={user.isAdmin?true:false}
-                selectable={user.isAdmin?true:false}
-                initialEvents={initialEvents}
+            <GetCalendar
+                navigate={navigate}
                 weekends={weekends}
-                select={user.isAdmin?handleDateSelect:false}
-                eventClick={user.isAdmin?handleEventClick:false}
-                contentHeight='auto'
+                setWeekends={setWeekends}
+                tapValue={tapValue}
             />
         </Wrapper>
     )

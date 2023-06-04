@@ -22,9 +22,10 @@ export const registerConfirmationEmail = async (name, email, confirmationCode) =
         await transport.sendMail({
             from: process.env.ACCOUNT_EMAIL,
             to: email,
-            subject: '[Smart Work] Please confirm your account',
+            subject: '[SmartWork] Please confirm your account',
             html: `<h2>Hello ${name}</h2>
-                <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
+                <p>Thank you for subscribing.</p>
+                <P>Please confirm your email by clicking on the following link</p>
                 <a href=${process.env.DOMAIN}/confirm/${confirmationCode}> Click here</a>`,
         })
     }
@@ -34,7 +35,7 @@ export const registerConfirmationEmail = async (name, email, confirmationCode) =
     }
 }
 
-export const attendRequestEmail = async (name, department, start, end, reason, etc, approverName, approverEmail, confirmationCode) => {
+export const attendRequestEmail = async (name, department, start, end, reason, etc, approverName, approverEmail, confirmationCode, summary) => {
     logger.info('send attend request email')  
     try {
         const transport = makeTransport()
@@ -46,6 +47,7 @@ export const attendRequestEmail = async (name, department, start, end, reason, e
                 <p>${name}님이 다음과 같이 근태 신청을 하였습니다.</p>
                 <p>이름 : ${name}</p>
                 <p>기간 : ${start}~${end}</p>
+                <p>근태현황 : 남은연차 ${summary.leftAnnualLeave}, 미출근 ${summary['미출근']}, 지각 ${summary['지각']}, 휴가 ${summary['휴가']}</p>
                 <p>사유 : ${reason}</p>
                 <p>기타 : ${etc}</p>
                 <a href=${process.env.DOMAIN}/api/event/confirm/approval/${confirmationCode} class="button" style="background-color: #0071c2; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">승인</a>

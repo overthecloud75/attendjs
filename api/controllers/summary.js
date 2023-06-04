@@ -1,24 +1,19 @@
 import { logger, reqFormat } from '../config/winston.js'
+import { getAttends } from './attend.js'
 import Report from '../models/Report.js'
 import Employee from '../models/Employee.js'
 import { WORKING, getReverseStatus } from '../config/WORKING.js'
-import { sanitizeData, getToday, getDefaultAnnualLeave } from '../utils/util.js'
+import { getToday, getDefaultAnnualLeave } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
-        const name = req.query.name 
-        const startDate = sanitizeData(req.query.startDate, 'date')
-        const endDate = sanitizeData(req.query.endDate, 'date')
         const reverseStatus = getReverseStatus()
-        let attends
+
         let summaryList = []
         let summary = {}
-        if (name && name !== '') {
-            attends = await Report.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({name: 1, date: 1}).lean()
-        } else { 
-            attends = await Report.find({date: {$gte: startDate, $lte: endDate}}).sort({name: 1, date: 1}).lean();
-        }
+        const attends = await getAttends(req)
+
         for (const attend of attends) {
             if (!Object.keys(summary).includes(String(attend.employeeId))) {
                 summary[attend.employeeId] = {
@@ -113,7 +108,7 @@ export const getLeftLeaveSummary = async (employee) => {
         for (const outStatus of Object.keys(WORKING.outStatus)){
             if (Object.keys(WORKING.offDay).includes(outStatus)) {summary[outStatus] = 0}
         }
-        const attends = await Report.find({employeeId: employee.employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1}).lean()
+        const attends = await Report.find({employeeId: employee.employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1})
         for (const attend of attends) {
             if (attend.status && Object.keys(WORKING.offDay).includes(attend.status)) {
                 summary[attend.status] = summary[attend.status] + 1

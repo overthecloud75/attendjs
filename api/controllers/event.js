@@ -4,19 +4,37 @@ import { WORKING } from '../config/working.js'
 import Event from '../models/Event.js'
 import Employee from '../models/Employee.js'
 import Approval from '../models/Approval.js'
+import { getEmployeeByEmail } from './employee.js'
 import { reportUpdate } from './eventReport.js'
 import { sanitizeData } from '../utils/util.js'
 import { attendRequestEmail, attendConfirmationEmail } from '../utils/email.js'
 import { getLeftLeaveSummary } from './summary.js'
 
+const makeHtml = (event) => {
+    return `<h1 style=
+                "text-align:center;"
+            >
+                ${event}
+            </h1>`
+}
+
 export const getEvents = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const start = sanitizeData(req.query.start, 'date')
-        const end = sanitizeData(req.query.end, 'date')
-        const events = await Event.find({start: {$gte: start, $lt: end}}).sort({id: 1})
+        const end = sanitizeData(req.query.end, 'date')    
+        const option = req.query.option
+        let events = []
+        if (option==='private') {
+            events = await Event.find({start: {$gte: start, $lt: end}, employeeId: {$exists: true, $eq: req.user.employeeId}}).sort({id: 1})
+        } else if (option==='company') {
+            events = await Event.find({start: {$gte: start, $lt: end}}).sort({id: 1})
+        } else {
+            events = await Event.find({start: {$gte: start, $lt: end}, department: req.user.department}).sort({id: 1})
+        }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(events)
     } catch (err) {
+        console.log('err', err)
         next(err)
     }
 }
@@ -70,7 +88,7 @@ export const getApproval = async (req,res,next) => {
         2. 연차 기록 확인 
     */
     try {
-        const employee = await Employee.findOne({email: req.user.email})
+        const employee = await getEmployeeByEmail(req.user.email)
         const approver = await getApprover(employee)
         const summary = await getLeftLeaveSummary(employee)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json({approver, summary})
@@ -84,7 +102,7 @@ export const postApproval = async (req,res,next) => {
     try {
         const start = sanitizeData(req.body.start, 'date')
         const end = sanitizeData(req.body.end, 'date')
-        const employee = await Employee.findOne({email: req.user.email})
+        const employee = await getEmployeeByEmail(req.user.email)
         const approver = await getApprover(employee)
         const confirmationCode = CryptoJS.lib.WordArray.random(20).toString()
         const checkTheSameApproval = await Approval.findOne({email: req.user.email, start, end, reason: req.body.reason})
@@ -93,7 +111,8 @@ export const postApproval = async (req,res,next) => {
         } else {
             const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason: req.body.reason, etc: req.body.etc, approverName: approver.name, approverEmail: approver.email, confirmationCode})
             await newApproval.save()
-            await attendRequestEmail(employee.name, employee.department, start, end, req.body.reason, req.body.etc, approver.name, approver.email, confirmationCode)
+            const summary = await getLeftLeaveSummary(employee)
+            await attendRequestEmail(employee.name, employee.department, start, end, req.body.reason, req.body.etc, approver.name, approver.email, confirmationCode, summary)
             res.status(200).send('Event has been created.')
         }
     } catch (err) {
@@ -140,15 +159,15 @@ export const confirmApproval = async (req, res, next) => {
                 status = 'Active'
                 await Approval.updateOne({confirmationCode}, {$set: {status}})
                 await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, status)
-                res.status(200).send('승인하였습니다.')
+                res.status(200).send(makeHtml('승인하였습니다.'))
             } else {
                 status = 'Wrong'
                 await Approval.updateOne({confirmationCode}, {$set: {status}})
                 await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, status)
-                res.status(200).send('기간에 문제가 있습니다.')
+                res.status(200).send(makeHtml('기간에 문제가 있습니다.'))
             }
         } else {
-            res.status(200).send('이미 처리 하였습니다.')
+            res.status(200).send(makeHtml('이미 처리하였습니다.'))
         }
     } catch (err) {
         next(err)
@@ -165,9 +184,9 @@ export const confirmCancel = async (req, res, next) => {
             const status = 'Cancel'
             await Approval.updateOne({confirmationCode}, {$set: {status}})
             await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, status)
-            res.status(200).send('취소하였습니다.')
+            res.status(200).send(makeHtml('취소하였습니다.'))
         } else {
-            res.status(200).send('이미 처리 하였습니다.')
+            res.status(200).send(makeHtml('이미 처리하였습니다.'))
         }
 
     } catch (err) {
@@ -199,6 +218,7 @@ const makeEvent = async (title, approval) => {
     }
     await reportUpdate('add', title, approval.start, end)
 }
+
 
 
 
