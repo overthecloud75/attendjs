@@ -1,3 +1,7 @@
+* 23/06/08
+    - 1.6.7 (api) <br>
+        apply postfix for email in email.js <br> 
+
 * 23/06/04
     - 1.6.6 (api) <br>
         apply smtp.gmail.com for email in email.js <br> 

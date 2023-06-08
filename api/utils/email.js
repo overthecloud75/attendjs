@@ -13,9 +13,12 @@ const makeTransport = () => {
     }
     if (host==='smtp.gmail.com') {
         options.secure = true
-    } else {
+    } else if (host==='smtp.office365.com') {
         options.secureConnection = false
         options.tls = { ciphers: 'SSLv3' }
+    } else {
+        options.secure = false
+        options.ignoreTLS = true 
     }
     const transport = nodemailer.createTransport(options)
     return transport
@@ -26,7 +29,7 @@ export const registerConfirmationEmail = async (name, email, confirmationCode) =
     try {
         const transport = makeTransport()
         await transport.sendMail({
-            from: process.env.ACCOUNT_EMAIL,
+            from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
             to: email,
             subject: '[SmartWork] Please confirm your account',
             html: `<h2>Hello ${name}</h2>
@@ -46,7 +49,7 @@ export const attendRequestEmail = async (name, department, start, end, reason, e
     try {
         const transport = makeTransport()
         await transport.sendMail({
-            from: process.env.ACCOUNT_EMAIL,
+            from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
             to: approverEmail,
             subject: `[근태 결재] ${department}팀 ${name} ${reason} 신청. 기간: ${start}~${end}`,
             html: `<h3>안녕하세요. ${approverName}님</h3>
@@ -80,7 +83,7 @@ export const attendConfirmationEmail = async (name, email, department, start, en
     try {
         const transport = makeTransport()
         await transport.sendMail({
-            from: process.env.ACCOUNT_EMAIL,
+            from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
             to: email,
             cc: cc,
             subject: `[결재 ${action}] ${department}팀 ${name} ${reason} 신청. 기간: ${start}~${end}`,
