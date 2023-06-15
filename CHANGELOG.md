@@ -1,3 +1,7 @@
+* 23/06/13 
+    - 1.6.8 (backend) <br>
+        apply postfix for mail <br>
+
 * 23/06/08
     - 1.6.7 (api) <br>
         apply postfix for email in email.js <br> 

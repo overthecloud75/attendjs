@@ -9,7 +9,7 @@ except Exception as e:
     
 def send_email(email=None, subject=None, body=None, include_cc=False):
     mimemsg = MIMEMultipart()
-    mimemsg['From'] = ACCOUNT['email']
+    mimemsg['From'] = 'HR_MANAGER' + '<' + ACCOUNT['email'] + '>'
     mimemsg['To'] = email
     if include_cc and CC is not None:
         mimemsg['Cc'] = CC
@@ -18,7 +18,8 @@ def send_email(email=None, subject=None, body=None, include_cc=False):
     try:
         connection = smtplib.SMTP(host=MAIL_SERVER['host'], port=MAIL_SERVER['port'])
         connection.starttls()
-        connection.login(ACCOUNT['email'], ACCOUNT['password'])
+        if MAIL_SERVER['host'] == 'smtp.office365.com':
+            connection.login(ACCOUNT['email'], ACCOUNT['password'])
         connection.send_message(mimemsg)
         connection.quit()
         return True
