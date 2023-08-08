@@ -173,7 +173,7 @@ const checkMobile = (ip, user_agent) => {
     if (MOBILE_IP_LIST.includes(ip16)) {
         if (user_agent.includes('iPhone') || user_agent.includes('Android')) {isMobile = 'O'}
     }
-    if (process.env.REMOTE_IP===ip24) {
+    if (process.env.REMOTE_IP===ip16) {
         isRemotePlace = true
     }
     return {isMobile, isRemotePlace}

@@ -1,3 +1,12 @@
+* 23/08/08 
+    - 1.7.0 (client, api) <br>
+        npm version 9.6.6 -> 9.8.1 <br>
+        mongoose version 7.1.0 -> 7.4.2 <br>
+    - 1.6.9 (client: approval.jsx) <br>
+        when etc, the length of etc reason is limited to 5 <br>
+        when reason is '출근', only the date before the current day is possible <br>
+        npm version 9.6.6 -> 9.8.1 <br>
+
 * 23/06/13 
     - 1.6.8 (backend) <br>
         apply postfix for mail <br>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { format } from 'date-fns'
+import { getUser } from '../storage/userSlice.js'
 
 const useFetch = (page, url, params, clickCount) => {
     const [data, setData] = useState([])
@@ -25,7 +26,10 @@ const useFetch = (page, url, params, clickCount) => {
             }
             setLoading(false)
         }
-        fetchData()
+        const user = getUser()
+        if (user.isLogin) {
+            fetchData()
+        }
     // eslint-disable-next-line
     }, [page, url, clickCount])
     return { data, setData, loading, error }

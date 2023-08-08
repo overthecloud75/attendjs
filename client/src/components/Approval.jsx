@@ -121,14 +121,21 @@ const Approval = ({navigate, open, setOpen}) => {
     }
 
     const handleUpdate = async () => {
-        if(!window.confirm('정말로 상신하시겠습니다.?')) return
+        if (value.reason==='출근' && value.end >= dayjs(new Date()).format('YYYY-MM-DD')) {
+            return alert('출근 신청은 당일 이전 날짜에서만 가능합니다.')
+        }
+        if (!window.confirm('정말로 상신하시겠습니까?')) return
         await postApproval(value)
         setOpen(false)
         navigate('/approvalhistory')
     }
 
     const handleChange = (event) => {
-        setValue({...value, [event.target.id]: event.target.value})    
+        if (event.target.id ==='etc' && event.target.value.length > 5){ 
+            window.alert('5글자 이하로 적어주세요.')
+        } else {
+            setValue({...value, [event.target.id]: event.target.value}) 
+        }
     }
 
     return (

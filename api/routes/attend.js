@@ -1,6 +1,6 @@
 import express from 'express'
 import { search } from '../controllers/attend.js'
-import { verifyIP } from '../utils/verifyToken.js'
+import { verifyUser } from '../utils/verifyToken.js'
 
 const router = express.Router()
 
@@ -32,6 +32,6 @@ const router = express.Router()
  *                          status:
  *                              type: string
  */
-router.get('/search', verifyIP, search)
+router.get('/search', verifyUser, search)
 
 export default router
