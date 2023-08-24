@@ -1,3 +1,7 @@
+* 23/08/24
+    - 1.7.1 (client) <br>
+        error fix in CheckConfirm.jsx<br>
+
 * 23/08/08 
     - 1.7.0 (client, api) <br>
         npm version 9.6.6 -> 9.8.1 <br>

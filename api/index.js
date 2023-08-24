@@ -26,6 +26,7 @@ import swaggerRoute from './routes/swagger.js'
 const app = express()
 dotenv.config()
 
+app.set('trust proxy', process.env.TRUST_PROXY)
 const connect = async () => {
     try {
         await mongoose.connect(process.env.MONGO)

@@ -101,7 +101,7 @@ const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setO
                         value[item.accessor]!== undefined && (
                             !['createdAt', 'updatedAt'].includes(item.accessor)?(
                                 <TextField
-                                    autoFocus={focus===item.accessor?true:false}
+                                    autoFocus={focus===item.accessor}
                                     margin='dense'
                                     id={item.accessor}
                                     label={item.accessor}

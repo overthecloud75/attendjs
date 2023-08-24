@@ -119,7 +119,6 @@ export const confirmCode = async (req, res, next) => {
         const status = 'Active'
         await User.updateOne({confirmationCode}, {$set: {status}})
         res.status(200).json({name: user.name, email: user.email, message: 'activated'})
-
     } catch (err) {
         next(err)
     }
