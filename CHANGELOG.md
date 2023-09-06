@@ -1,6 +1,11 @@
+* 23/09/06
+    - 1.7.2 (backend) <br>
+        error fix in report.py <br>
+        remove is not None and sonarlint <br>
+
 * 23/08/24
     - 1.7.1 (client) <br>
-        error fix in CheckConfirm.jsx<br>
+        error fix in CheckConfirm.jsx <br>
 
 * 23/08/08 
     - 1.7.0 (client, api) <br>

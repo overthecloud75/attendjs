@@ -11,7 +11,7 @@ def send_email(email=None, subject=None, body=None, include_cc=False):
     mimemsg = MIMEMultipart()
     mimemsg['From'] = 'HR_MANAGER' + '<' + ACCOUNT['email'] + '>'
     mimemsg['To'] = email
-    if include_cc and CC is not None:
+    if include_cc and CC:
         mimemsg['Cc'] = CC
     mimemsg['Subject'] = subject
     mimemsg.attach(MIMEText(body, 'plain'))

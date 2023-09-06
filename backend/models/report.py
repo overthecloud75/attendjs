@@ -40,16 +40,14 @@ class Report(BasicModel):
             4. wifi 근태 기록 확인
             5. overnight 근무가 확인 되는 경우 이전 날짜 근태 기록 update
         '''
-        hour, today, this_month = check_time()
+        hour, today, _ = check_time()
 
         self.today = today 
-
-        if date is not None:
+        if date:
             if date != today:
                 hour = 23
         else:
             date = today
-
         overNight_time = int(WORKING['time']['overNight'][:2])
 
         if hour > overNight_time - 1 and hour <= overNight_time:
@@ -121,8 +119,12 @@ class Report(BasicModel):
                 attend[employee_id]['status'] = None
                 attend[employee_id]['reason'] = status
                 if hour >= 18:
-                    if '반차' in status:  # status가 2개 이상으로 표시된 경우 ex) 반차, 정기점검
+                    # status가 2개 이상으로 표시된 경우 ex) 반차, 정기점검
+                    if '반차' in status: 
                         status = '반차'
+                        attend[employee_id]['reason'] = status
+                    elif '휴가' in status:
+                        status = '휴가'
                         attend[employee_id]['reason'] = status
                     attend[employee_id]['workingHours'] = WORKING['status'][status]
                 else:
@@ -186,7 +188,7 @@ class Report(BasicModel):
             employee_id = int(row[0])
             name = row[1]
             time = row[3]
-            mode = int(row[4])
+            # mode = int(row[4])
             # card 출근자 name = ''
             if name != '':
                 if int(time) > int(WORKING['time']['overNight']):  # overnight가 아닌 것에 대한 기준
@@ -316,7 +318,7 @@ class Report(BasicModel):
             notice = collection.find_one({'date': self.today})
             if notice is None:
                 for employee in employees_list:
-                    if employee['email'] is not None:
+                    if employee['email']:
                         insert_data = self._send_notice_email(employee=employee)
                         if insert_data:
                             collection.insert_one(insert_data)
@@ -379,13 +381,16 @@ class Report(BasicModel):
             status = '기타'
             for employee in employees_list:
                 if employee['name'] in data['title']:
-                    name = employee['name']
+                    name = employee['name']      
             for status_type in WORKING['status']:
                 if status_type in data['title']:
                     status = status_type
-            if name is not None:
-                if name in schedule_dict:
-                    schedule_dict[name] = schedule_dict[name] + ', ' + status
+            if name:
+                # 반차가 포함된 경우에만 status 추가 가능 
+                if name in schedule_dict and schedule_dict[name] != '휴가' and status !='휴가' and (schedule_dict[name] == '반차' or status == '반차'):
+                    schedule_dict[name] = schedule_dict[name] + ', ' + status_type
+                elif name in schedule_dict and status == '휴가':
+                    schedule_diect[name] = status 
                 else:
                     schedule_dict[name] = status
         return schedule_dict

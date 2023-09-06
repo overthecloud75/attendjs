@@ -55,3 +55,6 @@ EMPLOYEES_STATUS = {
 
 # approval
 APPROVAL_REASON = ['휴가', '반차', '재택', '기타']
+
+# date
+DATE_FORMAT = '%Y-%m-%d'
