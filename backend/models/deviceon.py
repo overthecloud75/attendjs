@@ -34,7 +34,6 @@ class DeviceOn(BasicModel):
         return device_list
 
     def post(self, request_data):
-
         data = {'mac': request_data['mac'], 'ip': request_data['ip'], 'end': request_data['time']}
         date = request_data['date']
         if data['end'] <= WORKING['time']['overNight']:

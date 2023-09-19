@@ -110,7 +110,6 @@ class Report(BasicModel):
             attend = self._fingerprint_or_wifi(attend, date)
         # Add GPS attend 
             attend = self._legacy_or_gps(attend, date)
-        
         # attend
         for employee_id in attend:
             name = attend[employee_id]['name']
@@ -175,7 +174,6 @@ class Report(BasicModel):
             except Exception as e:
                 print('error', e)
                 print(attend[employee_id])
-
         return overnight_employees
 
     def fingerprint_attend(self, attend, date, hour):
@@ -190,7 +188,7 @@ class Report(BasicModel):
             time = row[3]
             # mode = int(row[4])
             # card 출근자 name = ''
-            if name != '':
+            if name:
                 if int(time) > int(WORKING['time']['overNight']):  # overnight가 아닌 것에 대한 기준
                     if employee_id not in attend:
                         attend[employee_id] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None,
@@ -201,7 +199,7 @@ class Report(BasicModel):
                     if attend[employee_id]['begin']:
                         if int(time) < int(attend[employee_id]['begin']):
                             attend[employee_id]['begin'] = time
-                        if hour >= 18:
+                        if hour >= 18 and int(time) > int(attend[employee_id]['end']):
                             attend[employee_id]['end'] = time
                     else:
                         attend[employee_id]['begin'] = time

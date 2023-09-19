@@ -1,3 +1,7 @@
+* 23/09/19
+    - 1.7.3 (backend) <br>
+        quitting time logic fix in report.py <br>
+
 * 23/09/06
     - 1.7.2 (backend) <br>
         error fix in report.py <br>
