@@ -35,10 +35,12 @@ const EmployeeSchema = new mongoose.Schema(
         },
         regular: {
             type: String,
+            enum: ['상근', '비상근', '병특'],
             required: true,
         },
         mode: {
             type: String,
+            enum: ['내근', '파견'],
             required: true,
         },
         attendMode: {

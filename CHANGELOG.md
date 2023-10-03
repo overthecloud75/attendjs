@@ -1,3 +1,7 @@
+* 23/10/03
+    - 1.7.4 (client) <br>
+        Use select in Update.jsx <br>
+
 * 23/09/19
     - 1.7.3 (backend) <br>
         quitting time logic fix in report.py <br>

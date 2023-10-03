@@ -5,8 +5,10 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
+import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios'
-import { EditablePages, EditableTitles } from '../configs/pages'
+import { EditablePages, EditableTitles, EditableSelects } from '../configs/pages'
+import { options } from '../configs/options'
 
 const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
 
@@ -36,8 +38,8 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
     }
 
     const handleChange = (event) => {
-        setFocus(event.target.id)
-        setValue({...value, [event.target.id]: event.target.value})    
+        setFocus(event.target.name)
+        setValue({...value, [event.target.name]: event.target.value})    
     }
     // autofocus disappear after typing, 한글 입력 문제 
     // https://stackoverflow.com/questions/42573017/in-react-es6-why-does-the-input-field-lose-focus-after-typing-a-character
@@ -48,28 +50,55 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
             <DialogContent>
                 {columns.map((item, index) => {
                     return (
-                        EditableTitles.includes(item.accessor)?(
+                        EditableSelects.includes(item.accessor)?(
                             <TextField
-                                autoFocus={focus===item.accessor?true:false}
+                                autoFocus={focus===item.accessor}
+                                select
                                 margin='dense'
                                 id={item.accessor}
+                                name={item.accessor}
+                                label={item.accessor}
+                                fullWidth
+                                variant='outlined'
+                                defaultValue={value[item.accessor]}
+                                key={index}
+                                onChange={handleChange}
+                            >  
+                                {options[item.accessor].map((option) => (
+                                    <MenuItem
+                                        key={option} 
+                                        value={option}
+                                    >
+                                        {option}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        ):EditableTitles.includes(item.accessor)?(
+                            <TextField
+                                autoFocus={focus===item.accessor}
+                                margin='dense'
+                                id={item.accessor}
+                                name={item.accessor}
                                 label={item.accessor}
                                 fullWidth
                                 variant='outlined'
                                 value={value[item.accessor]?value[item.accessor]:''}
                                 key={index}
                                 onChange={handleChange}
+                                autoComplete='false'
                             />
                         ):(
                             <TextField
                                 margin='dense'
                                 id={item.accessor}
+                                name={item.accessor}
                                 label={item.accessor}
                                 fullWidth
                                 variant='standard'
                                 value={rowData[item.accessor]?rowData[item.accessor]:''}
                                 key={index}
                                 InputProps={{readOnly: true}}
+                                autoComplete='false'
                             />
                         )
                     )

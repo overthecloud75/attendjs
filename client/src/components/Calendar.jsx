@@ -104,8 +104,8 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
             plugins={[ dayGridPlugin, interactionPlugin ]}
             initialView='dayGridMonth'
             headerToolbar={headerToolbar}
-            editable={user.isAdmin?true:false}
-            selectable={user.isAdmin?true:false}
+            editable={user.isAdmin}
+            selectable={user.isAdmin}
             events={eventsData}
             weekends={weekends}
             select={user.isAdmin?handleDateSelect:false}

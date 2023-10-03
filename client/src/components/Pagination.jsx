@@ -89,16 +89,18 @@ const Pagination = ({gotoPage, canPreviousPage, previousPage, nextPage,
             <PageSpan>
                 Go to page:{" "}
                 <PageInput
-                    type="number"
+                    type='number'
                     defaultValue={pageIndex + 1}
+                    name='gotoPage'
                     onChange={(e) => {
-                    const page = e.target.value ? Number(e.target.value) - 1 : 0
-                    gotoPage(page)
+                        const page = e.target.value ? Number(e.target.value) - 1 : 0
+                        gotoPage(page)
                     }}
                 />
             </PageSpan>{" "}
             <PageSelect
                 value={pageSize}
+                name='pageSize'
                 onChange={(e) => {
                     setPageSize(Number(e.target.value));
                 }}

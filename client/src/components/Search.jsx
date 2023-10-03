@@ -82,8 +82,10 @@ const Search = ({page, searchKeyword, name, setName, date, setDate, clickCount, 
                 <Item>
                     <Icon><PersonIcon/></Icon>
                     <Input 
+                        name={ searchKeyword }
                         placeholder={ searchKeyword } 
                         onChange={(event) => setName(event.target.value)}
+                        autoComplete='off'
                     />
                 </Item>
                 <Item>

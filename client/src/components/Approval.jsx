@@ -48,7 +48,6 @@ const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, s
         setValue({...value, reason: radioValue})
         onClose()
     }
-
     const handleChange = (event) => {
         setRadioValue(event.target.value)
         if (event.target.value === '기타') {setEtcOpen(true)}
@@ -149,6 +148,7 @@ const Approval = ({navigate, open, setOpen}) => {
                     <TextField 
                         margin='dense'
                         id='attendance'
+                        name='근태현황'
                         label='근태현황'
                         fullWidth
                         variant='standard'
@@ -158,6 +158,7 @@ const Approval = ({navigate, open, setOpen}) => {
                 <TextField 
                     margin='dense'
                     id='approver'
+                    name='결재자'
                     label='결재자'
                     fullWidth
                     variant='standard'
@@ -180,6 +181,7 @@ const Approval = ({navigate, open, setOpen}) => {
                 <TextField 
                     margin='dense'
                     id='reason'
+                    name='사유'
                     label='사유'
                     fullWidth
                     variant='outlined'
@@ -201,6 +203,7 @@ const Approval = ({navigate, open, setOpen}) => {
                     <TextField 
                         margin='dense'
                         id='etc'
+                        name='etc'
                         label='etc'
                         fullWidth
                         variant='outlined'
