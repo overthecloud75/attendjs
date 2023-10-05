@@ -149,23 +149,8 @@ export const confirmApproval = async (req, res, next) => {
         const approval = await Approval.findOne({confirmationCode})
         if (!approval) return next(createError(404, 'approval not found!'))
         if (approval.status === 'Pending'){
-            let title = approval.name + '/' + approval.reason
-            let status
-            if (approval.reason === '기타' && approval.reason !== '') {
-                title = approval.name + '/' + approval.etc  
-            }
-            if (approval.end >= approval.start) {
-                await makeEvent(title, approval)
-                status = 'Active'
-                await Approval.updateOne({confirmationCode}, {$set: {status}})
-                await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, status)
-                res.status(200).send(makeHtml('승인하였습니다.'))
-            } else {
-                status = 'Wrong'
-                await Approval.updateOne({confirmationCode}, {$set: {status}})
-                await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, status)
-                res.status(200).send(makeHtml('기간에 문제가 있습니다.'))
-            }
+            const result = await makeActive(approval, confirmationCode)
+            res.status(200).send(makeHtml(result.msg))
         } else {
             res.status(200).send(makeHtml('이미 처리하였습니다.'))
         }
@@ -181,17 +166,40 @@ export const confirmCancel = async (req, res, next) => {
         const approval = await Approval.findOne({confirmationCode})
         if (!approval) return next(createError(404, 'approval not found!'))
         if (approval.status === 'Pending'){
-            const status = 'Cancel'
-            await Approval.updateOne({confirmationCode}, {$set: {status}})
-            await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, status)
-            res.status(200).send(makeHtml('취소하였습니다.'))
+            const result = await makeCancel(approval, confirmationCode)
+            res.status(200).send(makeHtml(result.msg))
         } else {
             res.status(200).send(makeHtml('이미 처리하였습니다.'))
         }
-
     } catch (err) {
         next(err)
     }
+}
+
+export const makeActive = async (approval, confirmationCode) => {
+    let status 
+    let msg 
+    if (approval.end >= approval.start) {
+        const title = makeTitle(approval)
+        await makeEvent(title, approval)
+        status = 'Active'
+        msg = '승인하였습니다.'
+    } else {
+        status = 'Wrong'
+        msg = '기간에 문제가 있습니다.'
+    }
+    await Approval.updateOne({confirmationCode}, {$set: {status}})
+    await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, status)
+    return {status, msg}
+}
+
+export const makeCancel = async (approval, confirmationCode) => {
+    const status = 'Cancel'
+    await Approval.updateOne({confirmationCode}, {$set: {status}})
+    await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, 
+    status)
+    const msg = '취소하였습니다.'
+    return {status, msg}
 }
 
 export const getNextDate = (date) => {
@@ -207,6 +215,14 @@ export const getNextDate = (date) => {
     day = String(nextDate.getDate()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`
     return formattedDate
+}
+
+const makeTitle = (approval) => {
+    let title = approval.name + '/' + approval.reason
+        if (approval.reason === '기타' && approval.reason !== '') {
+            title = approval.name + '/' + approval.etc  
+        }
+    return title
 }
 
 const makeEvent = async (title, approval) => {

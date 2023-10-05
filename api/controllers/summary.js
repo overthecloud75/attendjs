@@ -2,7 +2,7 @@ import { logger, reqFormat } from '../config/winston.js'
 import { getAttends } from './attend.js'
 import Report from '../models/Report.js'
 import Employee from '../models/Employee.js'
-import { WORKING, getReverseStatus } from '../config/WORKING.js'
+import { WORKING, getReverseStatus } from '../config/working.js'
 import { getToday, getDefaultAnnualLeave } from '../utils/util.js'
 
 export const search = async (req,res,next) => {

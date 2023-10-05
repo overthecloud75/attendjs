@@ -1,6 +1,6 @@
 import Report from '../models/Report.js'
 import Employee from '../models/Employee.js'
-import { WORKING } from '../config/WORKING.js'
+import { WORKING } from '../config/working.js'
 import { getToday } from '../utils/util.js'
 
 const seperateEvent = (action, event) => {
@@ -43,10 +43,8 @@ export const calculateWorkingHours = (begin, end) => {
             if (Number(WORKING.time.lunchTime) > Number(begin)) {
                 workingHours = workingHours - 1
             }
-        } else {
-            if (Number(end) > Number(WORKING.time.lunchFinishTime) && Number(WORKING.time.lunchFinishTime) > Number(begin)) {
-                workingHours = workingHours - 1
-            }
+        } else if (Number(end) > Number(WORKING.time.lunchFinishTime) && Number(WORKING.time.lunchFinishTime) > Number(begin)) {
+            workingHours = workingHours - 1
         }
         workingHours = Math.round(workingHours * 10) / 10
     }

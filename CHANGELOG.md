@@ -1,6 +1,10 @@
+* 23/10/05 
+    - 1.7.5 (api) <br>
+        update in Approval.jsx <br>  
+
 * 23/10/03
     - 1.7.4 (client) <br>
-        Use select in Update.jsx <br>
+        use select in Update.jsx <br>
 
 * 23/09/19
     - 1.7.3 (backend) <br>
