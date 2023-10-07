@@ -1,7 +1,7 @@
 import { logger, reqFormat } from '../config/winston.js'
 import Approval from '../models/Approval.js'
-// import { deleteEvent } from './event.js'
 import { makeActive, makeCancel } from './event.js'
+import { getToday } from '../utils/util.js'
 // import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
@@ -17,29 +17,28 @@ export const search = async (req,res,next) => {
 
 export const update = async (req,res,next) => {
     logger.info(reqFormat(req))
+    console.log('user', req.user)
     try {
-        // let result 
-        let msg = 'updated'
         const confirmationCode = req.body.confirmationCode
         const status = req.body.status
-        const approval = await Approval.findOne({confirmationCode})
+        let approval = await Approval.findOne({confirmationCode})
         if (approval) {
+            const today = getToday()
             if (req.user.isAdmin) {
-                if (approval.status === 'Pending' && status === 'Cancel') {
+                if ((approval.status === 'Pending' || approval.status === 'Active') && status === 'Cancel') {
                     await makeCancel(approval, confirmationCode)
+                    approval.status = 'Cancel'
                 } else if (approval.status === 'Pending' && status === 'Active') {
                     await makeActive(approval, confirmationCode)
-                } else { msg = 'not updated' }
-            } else {
-                if (approval.status ==='Pending' && status==='Cancel') {
-                    await Approval.updateOne({confirmationCode}, {$set: {status}})
-                } else if (approval.status ==='Active' && status==='Cancel') {
-                    await Approval.updateOne({confirmationCode}, {$set: {status}})
-                    // TO DO
-                } else { msg = 'not updated' }
-            }
-        } else { msg = 'not updated' }
-        res.status(200).json(msg)
+                    approval.status = 'Active'
+                } 
+            } else if ((approval.status ==='Pending' && status === 'Cancel') ||
+                (approval.status ==='Active' && status === 'Cancel' && approval.start > today)) {
+                await makeCancel(approval, confirmationCode)
+                approval.status = 'Cancel'
+            } 
+        }
+        res.status(200).json(approval)
     } catch (err) {
         console.log('err', err)
         next(err)

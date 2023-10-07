@@ -7,7 +7,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import Box from '@mui/material/Box'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { getColor, getEvents, addEvent, deleteEvent, getWindowDimension } from '../utils/EventUtil'
+import { getColor, getEventsInCalendar, addEventInCalendar, deleteEventInCalendar, getWindowDimension } from '../utils/EventUtil'
 import Approval from './Approval'
 import { getUser } from '../storage/userSlice.js'
 
@@ -30,6 +30,8 @@ const Button = styled.button`
 const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
 
     const calendarRef = useRef()
+    const user = getUser()
+
     const [headerToolbar, setHeaderToolbar] = useState({
         start: 'title', 
         center: '',
@@ -37,14 +39,13 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
     })
     const [eventsData, setEventsData] = useState([])
     const [thisMonth, setThisMonth] = useState('')
-    const user = getUser()
 
     useEffect(() => {
         const calendarApiView = calendarRef.current.getApi().view
         const args = {start: calendarApiView.activeStart, end: calendarApiView.activeEnd}
         
         const fetchData = async () => {
-            const events = await getEvents(args, tapValue)
+            const events = await getEventsInCalendar(args, tapValue)
             if (events.err) {
                 const errorStatus = events.err.response.data.status
                 if (errorStatus === 401) { 
@@ -60,7 +61,7 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
                 }
             }
         }
-        if (thisMonth!=='') {fetchData()}
+        if (thisMonth !== '') {fetchData()}
     // eslint-disable-next-line
     }, [thisMonth, tapValue])
 
@@ -77,17 +78,17 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
                 start: selectInfo.startStr,
                 end: selectInfo.endStr
             }
-            const result = await addEvent(event)
+            const result = await addEventInCalendar(event)
             if (!result.err) {
                 event = getColor(event)
-                calendarApi.addEvent(event)
+                calendarApi.addEventInCalendar(event)
             }
         }
     }
     
     const handleEventClick = async (clickInfo) => {
         if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-            const result = await deleteEvent(clickInfo.event)
+            const result = await deleteEventInCalendar(clickInfo.event)
             if (!result.err) {
                 clickInfo.event.remove()
             }

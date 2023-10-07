@@ -1,3 +1,13 @@
+export const getToday = () => {
+    let today = new Date()
+
+    const year = today.getFullYear()
+    const month = ('0' + (today.getMonth() + 1)).slice(-2)
+    const day = ('0' + today.getDate()).slice(-2)
+    const dateString = year + '-' + month  + '-' + day
+    return dateString 
+}
+
 const getSeparateDay = () => {
     let today = new Date()
     const thisYear = today.getFullYear()
@@ -35,16 +45,6 @@ const getEmployeementPeriod = (beginDate) => {
     }
     const baseDate = String(baseYear) + '-' + beginMonthDay
     return {employeementPeriod, baseDate, baseMonth}
-}
-
-export const getToday = () => {
-    let today = new Date()
-
-    const year = today.getFullYear()
-    const month = ('0' + (today.getMonth() + 1)).slice(-2)
-    const day = ('0' + today.getDate()).slice(-2)
-    const dateString = year + '-' + month  + '-' + day
-    return dateString 
 }
 
 export const getDefaultAnnualLeave = (beginDate) => {

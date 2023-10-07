@@ -27,11 +27,11 @@ export const getColor = (event) => {
     return event 
 }
 
-export const getEvents = async (args, option) => {
+export const getEventsInCalendar = async (args, option) => {
     const params = {start: format(args.start, 'yyyy-MM-dd'), end: format(args.end, 'yyyy-MM-dd'), option}
     try { const res = await axios.get('/api/event', {params, headers: {'Cache-Control': 'no-cache'}})
         for (let event of res.data) {
-            event = getColor(event)
+            getColor(event)
         }
         const data = res.data 
         const err = false
@@ -44,7 +44,7 @@ export const getEvents = async (args, option) => {
     }
 }
 
-export const addEvent = async (args) => {
+export const addEventInCalendar = async (args) => {
     const data = {title: args.title, id: args.id, start: args.start, end: args.end}
     try { const res = await axios.post('/api/event/add', data)
         const resData = res.data
@@ -57,7 +57,7 @@ export const addEvent = async (args) => {
     }
 }
 
-export const deleteEvent = async (args) => {
+export const deleteEventInCalendar = async (args) => {
     const data = {id: Number(args.id)}
     try { const res = await axios.post('/api/event/delete', data)
         const resData = res.data
@@ -102,3 +102,4 @@ export const getWindowDimension = () => {
         height
     }
 }
+

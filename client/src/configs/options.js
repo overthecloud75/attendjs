@@ -3,5 +3,5 @@ export const options = {
     mode: ['내근', '파견'],
     attendMode: ['O', 'X'],
     reason : ['휴가', '반차', '외근', '출근', '재택', '기타'], 
-    status : ['Active', 'Cancel']    
+    status : ['Active', 'Cancel', 'Pending']    
 }

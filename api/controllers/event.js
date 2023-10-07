@@ -18,7 +18,7 @@ const makeHtml = (event) => {
             </h1>`
 }
 
-export const getEvents = async (req,res,next) => {
+export const getEventsInCalendar = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const start = sanitizeData(req.query.start, 'date')
@@ -39,7 +39,7 @@ export const getEvents = async (req,res,next) => {
     }
 }
 
-export const addEvent = async (req,res,next) => {
+export const addEventInCalendar = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const id = req.body.id
@@ -63,7 +63,7 @@ export const addEvent = async (req,res,next) => {
     }
 }
 
-export const deleteEvent = async (req,res,next) => {
+export const deleteEventInCalendar = async (req,res,next) => {
     logger.info(reqFormat(req))
     try {
         const id = req.body.id
@@ -184,22 +184,51 @@ export const makeActive = async (approval, confirmationCode) => {
         await makeEvent(title, approval)
         status = 'Active'
         msg = '승인하였습니다.'
+        await Approval.updateOne({confirmationCode}, {$set: {status}})
+        await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, status)
     } else {
         status = 'Wrong'
         msg = '기간에 문제가 있습니다.'
     }
-    await Approval.updateOne({confirmationCode}, {$set: {status}})
-    await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, status)
+
     return {status, msg}
 }
 
 export const makeCancel = async (approval, confirmationCode) => {
     const status = 'Cancel'
+    if (approval.status === 'Active') {
+        await deleteEvent(approval)
+    }
     await Approval.updateOne({confirmationCode}, {$set: {status}})
     await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, 
     status)
     const msg = '취소하였습니다.'
     return {status, msg}
+}
+
+const makeTitle = (approval) => {
+    let title = approval.name + '/' + approval.reason
+        if (approval.reason === '기타' && approval.reason !== '') {
+            title = approval.name + '/' + approval.etc  
+        }
+    return title
+}
+
+const makeEvent = async (title, approval) => {
+    // reason이 출근인 경우 calendar에 기록 안 함 
+    const end = getNextDate(approval.end)
+    if (approval.reason !== '출근') {
+        const newEvent = new Event({id: Date.now(), title, start: approval.start, end, department: approval.department, employeeId: approval.employeeId})
+        await newEvent.save()
+    }
+    await reportUpdate('add', title, approval.start, end)
+}
+
+const deleteEvent = async (approval) => {
+    const start = approval.start 
+    const end = getNextDate(approval.end)
+    const title = makeTitle(approval)
+    await Event.deleteOne({employeeId: approval.employeeId, start, end, title})
 }
 
 export const getNextDate = (date) => {
@@ -215,24 +244,6 @@ export const getNextDate = (date) => {
     day = String(nextDate.getDate()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`
     return formattedDate
-}
-
-const makeTitle = (approval) => {
-    let title = approval.name + '/' + approval.reason
-        if (approval.reason === '기타' && approval.reason !== '') {
-            title = approval.name + '/' + approval.etc  
-        }
-    return title
-}
-
-const makeEvent = async (title, approval) => {
-    // reason이 출근인 경우 calendar에 기록 안 함 
-    const end = getNextDate(approval.end)
-    if (approval.reason!=='출근') {
-        const newEvent = new Event({id: Date.now(), title, start: approval.start, end, department: approval.department, employeeId: approval.employeeId})
-        await newEvent.save()
-    }
-    await reportUpdate('add', title, approval.start, end)
 }
 
 

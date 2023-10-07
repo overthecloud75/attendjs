@@ -48,7 +48,7 @@ const ApprovalSchema = new mongoose.Schema(
         },
         status: {
             type: String, 
-            enum: ['Pending', 'Active', 'Cancel', 'Wrong'],
+            enum: ['Pending', 'Active', 'Cancel'],
             default: 'Pending'
         },
         confirmationCode: { 

@@ -1,6 +1,11 @@
+* 23/10/07 
+    - 1.7.6 (api, client)
+        possible to change the status in Approval.js <br>
+        possible to change the status in Update.jsx <br>
+
 * 23/10/05 
     - 1.7.5 (api) <br>
-        update in Approval.jsx <br>  
+        possible to change the status in Approval.js <br>  
 
 * 23/10/03
     - 1.7.4 (client) <br>
