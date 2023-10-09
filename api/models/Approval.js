@@ -50,11 +50,7 @@ const ApprovalSchema = new mongoose.Schema(
             type: String, 
             enum: ['Pending', 'Active', 'Cancel'],
             default: 'Pending'
-        },
-        confirmationCode: { 
-            type: String, 
-            unique: true 
-        },
+        }
     },
     { timestamps: true }
 )

@@ -1,3 +1,8 @@
+* 23/10/09 
+    - 1.7.7 (api)
+        confirmationCode -> _id in event.js <br>
+        refactoring <br>
+
 * 23/10/07 
     - 1.7.6 (api, client)
         possible to change the status in Approval.js <br>

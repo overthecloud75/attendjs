@@ -9,7 +9,7 @@ router.post('/add', verifyAdmin, addEventInCalendar)
 router.post('/delete', verifyAdmin, deleteEventInCalendar)
 router.get('/approval', verifyUser, getApproval)
 router.post('/approval', verifyUser, postApproval)
-router.get('/confirm/approval/:confirmationCode', confirmApproval)
-router.get('/confirm/cancel/:confirmationCode', confirmCancel)
+router.get('/confirm/approval/:_id', confirmApproval)
+router.get('/confirm/cancel/:_id', confirmCancel)
 
 export default router

@@ -37,45 +37,43 @@ export const registerConfirmationEmail = async (name, email, confirmationCode) =
                 <P>Please confirm your email by clicking on the following link</p>
                 <a href=${process.env.DOMAIN}/confirm/${confirmationCode}> Click here</a>`,
         })
-    }
-    catch(err) {
+    } catch(err) {
         logger.error(err)
         console.log(err)
     }
 }
 
-export const attendRequestEmail = async (name, department, start, end, reason, etc, approverName, approverEmail, confirmationCode, summary) => {
+export const attendRequestEmail = async (approval, summary) => {
     logger.info('send attend request email')  
     try {
         const transport = makeTransport()
         await transport.sendMail({
             from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
-            to: approverEmail,
-            subject: `[근태 결재] ${department}팀 ${name} ${reason} 신청. 기간: ${start}~${end}`,
-            html: `<h3>안녕하세요. ${approverName}님</h3>
-                <p>${name}님이 다음과 같이 근태 신청을 하였습니다.</p>
-                <p>이름 : ${name}</p>
-                <p>기간 : ${start}~${end}</p>
+            to: approval.email,
+            subject: `[근태 결재] ${approval.department}팀 ${approval.name} ${approval.reason} 신청. 기간: ${approval.start}~${approval.end}`,
+            html: `<h3>안녕하세요. ${approval.approverName}님</h3>
+                <p>${approval.name}님이 다음과 같이 근태 신청을 하였습니다.</p>
+                <p>이름 : ${approval.name}</p>
+                <p>기간 : ${approval.start}~${approval.end}</p>
                 <p>근태현황 : 남은연차 ${summary.leftAnnualLeave}, 미출근 ${summary['미출근']}, 지각 ${summary['지각']}, 휴가 ${summary['휴가']}</p>
-                <p>사유 : ${reason}</p>
-                <p>기타 : ${etc}</p>
-                <a href=${process.env.DOMAIN}/api/event/confirm/approval/${confirmationCode} class="button" style="background-color: #0071c2; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">승인</a>
-                <a href=${process.env.DOMAIN}/api/event/confirm/cancel/${confirmationCode} class="button" style="background-color: #dc3545; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">취소</a>`    
+                <p>사유 : ${approval.reason}</p>
+                <p>기타 : ${approval.etc}</p>
+                <a href=${process.env.DOMAIN}/api/event/confirm/approval/${approval._id.toString()} class="button" style="background-color: #0071c2; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">승인</a>
+                <a href=${process.env.DOMAIN}/api/event/confirm/cancel/${approval._id.toString()} class="button" style="background-color: #dc3545; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">취소</a>`    
         })
-    }
-    catch(err) {
+    } catch(err) {
         logger.error(err)
         console.log(err)
     }
 }
 
-export const attendConfirmationEmail = async (name, email, department, start, end, reason, etc, status) => {
+export const attendConfirmationEmail = async (approval, status) => {
     logger.info('send attend confirmation email')  
     let action
     let cc = ''
     if (status==='Active') {
         action = '승인'
-        if (['휴가', '반차'].includes(reason)) {
+        if (['휴가', '반차'].includes(approval.reason)) {
             cc = cc + process.env.CC_email
         }
     } else if (status==='Cancel') {action = '반려'}
@@ -84,18 +82,17 @@ export const attendConfirmationEmail = async (name, email, department, start, en
         const transport = makeTransport()
         await transport.sendMail({
             from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
-            to: email,
+            to: approval.email,
             cc: cc,
-            subject: `[결재 ${action}] ${department}팀 ${name} ${reason} 신청. 기간: ${start}~${end}`,
-            html: `<h3>안녕하세요. ${name}님</h3>
-                <p>${name}님의 근태 신청이 ${action} 되었습니다.</p>
-                <p>이름 : ${name}</p>
-                <p>기간 : ${start}~${end}</p>
-                <p>사유 : ${reason}</p>
-                <p>기타 : ${etc}</p>` 
+            subject: `[결재 ${action}] ${approval.department}팀 ${approval.name} ${approval.reason} 신청. 기간: ${approval.start}~${approval.end}`,
+            html: `<h3>안녕하세요. ${approval.name}님</h3>
+                <p>${approval.name}님의 근태 신청이 ${action} 되었습니다.</p>
+                <p>이름 : ${approval.name}</p>
+                <p>기간 : ${approval.start}~${approval.end}</p>
+                <p>사유 : ${approval.reason}</p>
+                <p>기타 : ${approval.etc}</p>` 
         })
-    }
-    catch(err) {
+    } catch(err) {
         logger.error(err) 
         console.log(err)
     }

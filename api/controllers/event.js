@@ -1,4 +1,3 @@
-import CryptoJS from 'crypto-js'
 import { logger, reqFormat } from '../config/winston.js'
 import { WORKING } from '../config/working.js'
 import Event from '../models/Event.js'
@@ -18,7 +17,7 @@ const makeHtml = (event) => {
             </h1>`
 }
 
-export const getEventsInCalendar = async (req,res,next) => {
+export const getEventsInCalendar = async (req, res, next) => {
     logger.info(reqFormat(req))
     try {
         const start = sanitizeData(req.query.start, 'date')
@@ -39,7 +38,7 @@ export const getEventsInCalendar = async (req,res,next) => {
     }
 }
 
-export const addEventInCalendar = async (req,res,next) => {
+export const addEventInCalendar = async (req, res, next) => {
     logger.info(reqFormat(req))
     try {
         const id = req.body.id
@@ -63,7 +62,7 @@ export const addEventInCalendar = async (req,res,next) => {
     }
 }
 
-export const deleteEventInCalendar = async (req,res,next) => {
+export const deleteEventInCalendar = async (req, res, next) => {
     logger.info(reqFormat(req))
     try {
         const id = req.body.id
@@ -81,7 +80,7 @@ export const deleteEventInCalendar = async (req,res,next) => {
     }
 }
 
-export const getApproval = async (req,res,next) => {
+export const getApproval = async (req, res, next) => {
     logger.info(reqFormat(req))
     /* 
         1. apporover 확인 
@@ -104,15 +103,14 @@ export const postApproval = async (req,res,next) => {
         const end = sanitizeData(req.body.end, 'date')
         const employee = await getEmployeeByEmail(req.user.email)
         const approver = await getApprover(employee)
-        const confirmationCode = CryptoJS.lib.WordArray.random(20).toString()
         const checkTheSameApproval = await Approval.findOne({email: req.user.email, start, end, reason: req.body.reason})
         if (checkTheSameApproval && checkTheSameApproval.status === 'Pending') {
             res.status(200).send('결재가 진행중에 있습니다.')
         } else {
-            const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason: req.body.reason, etc: req.body.etc, approverName: approver.name, approverEmail: approver.email, confirmationCode})
+            const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason: req.body.reason, etc: req.body.etc, approverName: approver.name, approverEmail: approver.email})
             await newApproval.save()
             const summary = await getLeftLeaveSummary(employee)
-            await attendRequestEmail(employee.name, employee.department, start, end, req.body.reason, req.body.etc, approver.name, approver.email, confirmationCode, summary)
+            await attendRequestEmail(newApproval, summary)
             res.status(200).send('Event has been created.')
         }
     } catch (err) {
@@ -141,15 +139,15 @@ const getApprover = async (employee) => {
 export const confirmApproval = async (req, res, next) => {
     logger.info(reqFormat(req))
     /* 
-        1. confirmationCode 확인
+        1. _id 확인
         2. status가 pending이면서 기간에 문제가 없으면 status를 Active로 바꾸고 달력에 저장하고 confirm email 송부 
     */
     try {
-        const confirmationCode = req.params.confirmationCode
-        const approval = await Approval.findOne({confirmationCode})
+        const _id = req.params._id
+        const approval = await Approval.findOne({_id})
         if (!approval) return next(createError(404, 'approval not found!'))
         if (approval.status === 'Pending'){
-            const result = await makeActive(approval, confirmationCode)
+            const result = await makeActive(approval)
             res.status(200).send(makeHtml(result.msg))
         } else {
             res.status(200).send(makeHtml('이미 처리하였습니다.'))
@@ -162,11 +160,11 @@ export const confirmApproval = async (req, res, next) => {
 export const confirmCancel = async (req, res, next) => {
     logger.info(reqFormat(req))
     try {
-        const confirmationCode = req.params.confirmationCode
-        const approval = await Approval.findOne({confirmationCode})
+        const _id = req.params._id
+        const approval = await Approval.findOne({_id})
         if (!approval) return next(createError(404, 'approval not found!'))
         if (approval.status === 'Pending'){
-            const result = await makeCancel(approval, confirmationCode)
+            const result = await makeCancel(approval)
             res.status(200).send(makeHtml(result.msg))
         } else {
             res.status(200).send(makeHtml('이미 처리하였습니다.'))
@@ -176,7 +174,7 @@ export const confirmCancel = async (req, res, next) => {
     }
 }
 
-export const makeActive = async (approval, confirmationCode) => {
+export const makeActive = async (approval) => {
     let status 
     let msg 
     if (approval.end >= approval.start) {
@@ -184,33 +182,31 @@ export const makeActive = async (approval, confirmationCode) => {
         await makeEvent(title, approval)
         status = 'Active'
         msg = '승인하였습니다.'
-        await Approval.updateOne({confirmationCode}, {$set: {status}})
-        await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, status)
+        await Approval.updateOne({_id: approval._id}, {$set: {status}})
+        await attendConfirmationEmail(approval, status)
     } else {
         status = 'Wrong'
         msg = '기간에 문제가 있습니다.'
     }
-
     return {status, msg}
 }
 
-export const makeCancel = async (approval, confirmationCode) => {
+export const makeCancel = async (approval) => {
     const status = 'Cancel'
     if (approval.status === 'Active') {
         await deleteEvent(approval)
     }
-    await Approval.updateOne({confirmationCode}, {$set: {status}})
-    await attendConfirmationEmail(approval.name, approval.email, approval.department, approval.start, approval.end, approval.reason, approval.etc, 
-    status)
+    await Approval.updateOne({_id: approval._id}, {$set: {status}})
+    await attendConfirmationEmail(approval, status)
     const msg = '취소하였습니다.'
     return {status, msg}
 }
 
 const makeTitle = (approval) => {
     let title = approval.name + '/' + approval.reason
-        if (approval.reason === '기타' && approval.reason !== '') {
-            title = approval.name + '/' + approval.etc  
-        }
+    if (approval.reason === '기타' && approval.reason !== '') {
+        title = approval.name + '/' + approval.etc  
+    }
     return title
 }
 

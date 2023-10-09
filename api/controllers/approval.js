@@ -4,7 +4,7 @@ import { makeActive, makeCancel } from './event.js'
 import { getToday } from '../utils/util.js'
 // import { sanitizeData } from '../utils/util.js'
 
-export const search = async (req,res,next) => {
+export const search = async (req, res, next) => {
     logger.info(reqFormat(req))
     try {
         const approvalHistory = await getApprovalHistory(req)
@@ -15,30 +15,31 @@ export const search = async (req,res,next) => {
     }
 }
 
-export const update = async (req,res,next) => {
+export const update = async (req, res, next) => {
     logger.info(reqFormat(req))
-    console.log('user', req.user)
     try {
-        const confirmationCode = req.body.confirmationCode
+        console.log('body', req.body)
+        const _id = req.body._id
         const status = req.body.status
-        let approval = await Approval.findOne({confirmationCode})
-        if (approval) {
-            const today = getToday()
-            if (req.user.isAdmin) {
-                if ((approval.status === 'Pending' || approval.status === 'Active') && status === 'Cancel') {
-                    await makeCancel(approval, confirmationCode)
-                    approval.status = 'Cancel'
-                } else if (approval.status === 'Pending' && status === 'Active') {
-                    await makeActive(approval, confirmationCode)
-                    approval.status = 'Active'
-                } 
-            } else if ((approval.status ==='Pending' && status === 'Cancel') ||
-                (approval.status ==='Active' && status === 'Cancel' && approval.start > today)) {
-                await makeCancel(approval, confirmationCode)
+        if (!_id) return next(createError(404, 'approval not found!'))
+        let approval = await Approval.findOne({_id})
+        if (!approval) return next(createError(404, 'Approval not found!'))
+               
+        const today = getToday()
+        if (req.user.isAdmin) {
+            if ((approval.status === 'Pending' || approval.status === 'Active') && status === 'Cancel') {
+                await makeCancel(approval)
                 approval.status = 'Cancel'
+            } else if (approval.status === 'Pending' && status === 'Active') {
+                await makeActive(approval)
+                approval.status = 'Active'
             } 
-        }
-        res.status(200).json(approval)
+        } else if ((approval.status ==='Pending' && status === 'Cancel') ||
+            (approval.status ==='Active' && status === 'Cancel' && approval.start > today)) {
+            await makeCancel(approval)
+            approval.status = 'Cancel'
+        } 
+        res.status(200).json(approval)     
     } catch (err) {
         console.log('err', err)
         next(err)
