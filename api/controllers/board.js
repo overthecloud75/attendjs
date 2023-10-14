@@ -46,7 +46,6 @@ export const deleteBoard = async (req,res,next) => {
     try {
         const id = req.body.id
         const board = await Board.deleteOne({id})
-        console.log('deleteId', id, board)
         res.status(200).json(board)
     } catch (err) {
         console.log('err', err)

@@ -30,11 +30,6 @@ const getLocation = async () => {
     return {location, error}
 }
 
-const sleep = (ms) => {
-    const wakeUpTime = Date.now() + ms
-    while (Date.now() < wakeUpTime) {}
-}
-
 const Auth = ({mode}) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -69,24 +64,16 @@ const Auth = ({mode}) => {
         event.preventDefault()
         if (!buttonClicked) {
             setButtonClicked((click) => !click)
-            let locations = []
             if (['Windows'].includes(platform)){
-                requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, locations)
+                requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, '')
             } else {
                 try {
-                    let loc0 = await getLocation()
-                    locations.push(loc0.location)
-                    if (loc0.error) {
-                        setErrorMsg(loc0.error)
+                    const loc = await getLocation()
+                    const location = loc.location
+                    if (loc.error) {
+                        setErrorMsg(loc.error)
                     } else {
-                        sleep(1000)
-                        let loc1 = await getLocation()
-                        locations.push(loc1.location)
-                        if (loc1.error) {
-                            setErrorMsg(loc1.error)
-                        } else {
-                            requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, locations)
-                        }
+                        requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, location)
                     }
                 } catch(err) {
                     setErrorMsg(err)

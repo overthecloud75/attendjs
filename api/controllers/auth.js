@@ -130,7 +130,7 @@ export const setAttend = async (req, res, next) => {
         const {isMobile, isRemotePlace} = checkMobile(ip, user_agent)
 
         const user = await User.findOne({email: req.user.email})
-        const where = await updateLogin(user, ip, isMobile, user_agent, req.body.locations)
+        const where = await updateLogin(user, ip, isMobile, user_agent, req.body.location)
         res.status(200).json({where})
     } catch (err) {
         next(err)
@@ -184,13 +184,13 @@ const attendRemotePlace = (isRemotePlace, isMobile) => {
     return {attend, place, minDistance, placeLocation, isMobile}
 }
 
-const whereIs = async (location, abuse, isMobile) => {
+const whereIs = async (location, isMobile) => {
     let attend = false 
     let place = ''
     let distanceResult = 0 
     let minDistance = 10000
     let placeLocation = {latitude: -1, longitude: -1}
-    if (location && abuse==='X') {
+    if (location) {
         const locations = await Location.find()
         for (let loc of locations) {
             distanceResult = Math.round(distance(loc.latitude, loc.longitude, location.latitude, location.longitude)*1000)/1000
@@ -219,7 +219,7 @@ const saveLogin = async (user, ip, user_agent, platform, width, height) => {
     let attend
     if (where.attend) {attend = 'O'
     } else {attend = 'X'}
-    const login = new Login({employeeId, name, date, time, ip, isMobile, platform, user_agent, width, height, latitude: -1, longitude: -1, accuracy: 1, attend, abuse: 'X', hash, timestamp: Date.now()})
+    const login = new Login({employeeId, name, date, time, ip, isMobile, platform, user_agent, width, height, latitude: -1, longitude: -1, accuracy: 1, attend, hash, timestamp: Date.now()})
     
     await setGpsOn(employeeId, name, date, time, where)
     await login.save()
@@ -234,14 +234,14 @@ const updateLogin = async (user, ip, isMobile, user_agent, hashLocation) => {
 
     const {date, time} = dateAndTime()
     const lastLogin = await Login.findOne({employeeId, date}).sort({time: -1})
-    const {delta, location, abuse} = validateCheck(lastLogin, hashLocation, isMobile)
-    const where = await whereIs(location, abuse, isMobile)
+    const location = decryptLocation(lastLogin, hashLocation)
+    const where = await whereIs(location, isMobile)
 
     let attend
     if (where.attend) {attend = 'O'
     } else {attend = 'X'}
 
-    await Login.updateOne({timestamp: lastLogin.timestamp, employeeId, name}, {$set: {ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, accuracy: location.accuracy, attend, abuse, delta: JSON.stringify(delta)}})
+    await Login.updateOne({timestamp: lastLogin.timestamp, employeeId, name}, {$set: {ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, accuracy: location.accuracy, attend}})
     await setGpsOn(employeeId, name, date, time, where)
 
     return where 
@@ -267,19 +267,10 @@ const dateAndTime = () => {
     return {date, time}
 }
 
-const validateCheck = (lastLogin, hashLocation, isMobile) => {
-    let abuse = 'O'
+const decryptLocation = (lastLogin, hashLocation) => {
     const bytes  = CryptoJS.AES.decrypt(hashLocation, lastLogin.hash.toString())
-    const locations = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
-    const location0 = locations[0]
-    const location = locations[1]
-    const delta = {latitude:location.latitude - location0.latitude, longitude:location.longitude - location0.longitude, accuracy: location.accuracy - location0.accuracy, timestamp: location.timestamp - location0.timestamp}
-
-    if (isMobile === 'X') {abuse = 'X'}
-    else if (lastLogin.width > 1000 || lastLogin.height > 1000) {}
-    else if (delta.timestamp < 900) {}
-    else if ((Date.now() - lastLogin.timestamp) < 1000) {abuse = 'X'}
-    return {delta, location, abuse}
+    const location = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+    return location
 }
 
 const getRandomInt = (min=1, max=1000) => {

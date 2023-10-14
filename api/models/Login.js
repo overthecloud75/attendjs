@@ -55,19 +55,10 @@ const LoginSchema = new mongoose.Schema(
             type: Number, 
             required: true,
         },
-        delta: {
-            type: String, 
-            required: false,
-        },
         attend: {
             type: String,
             enum: ['O', 'X'],
             default: 'X', 
-        },
-        abuse: {
-            type: String,
-            enum: ['O', 'X'],
-            default: 'X',
         },
         hash: {
             type: Number, 

@@ -15,7 +15,6 @@ import GPS from './pages/GPS'
 import Location from './pages/Location'
 import Summary from './pages/Summary'
 import Device from './pages/Device'
-import Schedule from './pages/Schedule'
 import Employee from './pages/Employee'
 import LoginHistory from './pages/LoginHistory'
 import ApprovalHistory from './pages/ApprovalHistory'
@@ -25,6 +24,7 @@ import TooManyRequests from './pages/TooManyRequests'
 import NotFound from './pages/NotFound'
 
 const Home = lazy(() => import('./pages/Home'))
+const Schedule = lazy(() => import('./pages/Schedule'))
 const Board = lazy(() => import('./pages/Board'))
 const Report = lazy(() => import('./pages/Report'))
 
@@ -37,7 +37,7 @@ function App() {
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <CircularProgress/>
                     </Box>
-            }
+                }
             >
                 <Routes>
                     <Route exact path='/' element={<Home menu={menu} setMenu={setMenu}/>}/>

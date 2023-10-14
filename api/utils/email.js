@@ -49,7 +49,7 @@ export const attendRequestEmail = async (approval, summary) => {
         const transport = makeTransport()
         await transport.sendMail({
             from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
-            to: approval.email,
+            to: approval.approverEmail,
             subject: `[근태 결재] ${approval.department}팀 ${approval.name} ${approval.reason} 신청. 기간: ${approval.start}~${approval.end}`,
             html: `<h3>안녕하세요. ${approval.approverName}님</h3>
                 <p>${approval.name}님이 다음과 같이 근태 신청을 하였습니다.</p>

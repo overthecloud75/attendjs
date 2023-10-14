@@ -18,7 +18,6 @@ export const search = async (req, res, next) => {
 export const update = async (req, res, next) => {
     logger.info(reqFormat(req))
     try {
-        console.log('body', req.body)
         const _id = req.body._id
         const status = req.body.status
         if (!_id) return next(createError(404, 'approval not found!'))

@@ -1,3 +1,8 @@
+* 23/10/14 
+    - 1.7.8 (api, client) <br>
+        location: 2 -> 1 in Auth.jsx <br>
+        npm version 9.8.1 -> 10.2.0 <br>
+
 * 23/10/09 
     - 1.7.7 (api)
         confirmationCode -> _id in event.js <br>
@@ -36,7 +41,6 @@
     - 1.6.9 (client: approval.jsx) <br>
         when etc, the length of etc reason is limited to 5 <br>
         when reason is '출근', only the date before the current day is possible <br>
-        npm version 9.6.6 -> 9.8.1 <br>
 
 * 23/06/13 
     - 1.6.8 (backend) <br>

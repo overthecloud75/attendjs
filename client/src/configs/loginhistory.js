@@ -16,10 +16,6 @@ export const columnHeaders = [
         Header: 'Mobile',
     },
     {
-        accessor: 'abuse',
-        Header: 'Abuse',
-    },
-    {
         accessor: 'date',
         Header: 'Date',
     },
@@ -59,10 +55,6 @@ export const columnHeaders = [
         accessor: 'accuracy',
         Header: 'Accuracy',
     },
-    {
-        accessor: 'delta',
-        Header: 'Delta',
-    },
 ]
 
 export const csvHeaders = [
@@ -81,10 +73,6 @@ export const csvHeaders = [
     {
         key: 'isMobile',
         label: 'Mobile',
-    },
-    {
-        key: 'abuse',
-        label: 'Abuse',
     },
     {
         key: 'date',
@@ -125,10 +113,6 @@ export const csvHeaders = [
     {
         key: 'accuracy',
         label: 'Accuracy',
-    },
-    {
-        key: 'delta',
-        label: 'Delta',
     },
     {
         key: 'longitude',
