@@ -9,7 +9,7 @@ const seperateEvent = (action, event) => {
     let eventStatus 
     if (action === 'add') {
         eventStatus = '기타'
-        for (let status of Object.keys(WORKING.status)) {
+        for (let status in WORKING.status) {
             if (eventCandidate.includes(status)) {
                 eventStatus = status 
                 if (status === '반차') {

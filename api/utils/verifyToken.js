@@ -41,16 +41,17 @@ export const verifyIP = (req, res, next) => {
 }
 
 const checkExternalIP = (externalIP, internalIP) => {
-    let isExternalIP 
+    let isExternalIP = false
     if (['127.0.0.1', 'localhost'].includes(internalIP)) { 
         return isExternalIP
     }
     const splittedInternalIPRange = process.env.INTERNAL_IP_RANGE.split('.')
     const splittedExteranlIP = externalIP.split('.')
     for (let x of splittedInternalIPRange.keys()) { 
-        if (splittedInternalIPRange[x] === '0') { isExternalIP = false }
-        else if (splittedInternalIPRange[x] !== splittedExteranlIP[x]) 
-        { isExternalIP = true }
+        if (splittedInternalIPRange[x] !== splittedExteranlIP[x]) { 
+            isExternalIP = true 
+            break 
+        }
     }
     return isExternalIP 
 }

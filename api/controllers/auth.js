@@ -71,12 +71,12 @@ export const login = async (req, res, next) => {
         if (user.status != 'Active') {
             return next(createError(401, 'Pending Account. Please Verify Your Email!'))
         }
-        const employee = await getEmployeeByEmail(email)
-        if (employee.regular==='퇴사') {
+        const {regular, department} = await getEmployeeByEmail(email)
+        if (regular==='퇴사') {
             return next(createError(403, 'Employee not found!'))
         }
         const token = jwt.sign(
-            { id: user._id, isAdmin: user.isAdmin, email: user.email, department: employee.department },
+            {id: user._id, isAdmin: user.isAdmin, email, department},
             process.env.JWT
         )
         
@@ -127,7 +127,7 @@ export const setAttend = async (req, res, next) => {
     try {
         const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
         const user_agent = req.headers['user-agent']
-        const {isMobile, isRemotePlace} = checkMobile(ip, user_agent)
+        const {isMobile} = checkMobile(ip, user_agent)
 
         const user = await User.findOne({email: req.user.email})
         const where = await updateLogin(user, ip, isMobile, user_agent, req.body.location)

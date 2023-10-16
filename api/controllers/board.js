@@ -8,20 +8,19 @@ export const search = async (req,res,next) => {
         // const startDate = req.query.startDate
         // const endDate = req.query.endDate
         let boards
-        if (name && name !== '') {
+        if (name) {
             // to test NoSQL injection name = {$ne: null}
             // console.log({name}) = { name: '{$ne: null}'}
             // boards = await Board.find({name : {$ne: null}}).sort({createdAt: -1})  NoSQL Success
             // boards = await Board.find({name : '{$ne: '1'}'}).sort({createdAt: -1}) Not NoSQL Success
             boards = await Board.find({name}).sort({createdAt: -1})
-        }
-        else { 
-            boards = await Board.find().sort({createdAt: -1});
+        } else { 
+            boards = await Board.find().sort({createdAt: -1})
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(boards)
     } catch (err) {
         console.log('err', err)
-        next(err);
+        next(err)
     }
 }
 
@@ -37,7 +36,7 @@ export const write = async (req,res,next) => {
         res.status(200).json(board)
     } catch (err) {
         console.log('err', err)
-        next(err);
+        next(err)
     }
 }
 
@@ -49,6 +48,6 @@ export const deleteBoard = async (req,res,next) => {
         res.status(200).json(board)
     } catch (err) {
         console.log('err', err)
-        next(err);
+        next(err)
     }
 }

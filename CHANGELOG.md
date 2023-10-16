@@ -1,3 +1,7 @@
+* 23/10/17
+    - 1.7.9 (api) <br>
+        refactoring <br>
+
 * 23/10/14 
     - 1.7.8 (api, client) <br>
         location: 2 -> 1 in Auth.jsx <br>

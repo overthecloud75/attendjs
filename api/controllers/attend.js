@@ -18,8 +18,8 @@ export const getAttends = async (req) => {
     const endDate = sanitizeData(req.query.endDate, 'date')
     
     let attends
-    if (name && name !== '') {
-        attends = await Report.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({name: 1, date: 1})
+    if (name) {
+        attends = await Report.find({name, date: {$gte: startDate, $lte: endDate}}).sort({name: 1, date: 1})
     } else { 
         attends = await Report.find({date: {$gte: startDate, $lte: endDate}}).sort({name: 1, date: 1})
     }

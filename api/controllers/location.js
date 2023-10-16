@@ -6,10 +6,9 @@ export const search = async (req,res,next) => {
     try {
         const location = req.query.name
         let locations
-        if (location && location !== '') {
+        if (location) {
             locations = await Location.find({location}).sort({location: 1})
-        }
-        else { 
+        } else { 
             locations = await Location.find().sort({location: 1})
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(locations)

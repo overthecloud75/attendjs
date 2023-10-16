@@ -9,16 +9,15 @@ export const search = async (req,res,next) => {
         const startDate = sanitizeData(req.query.startDate, 'date')
         const endDate = sanitizeData(req.query.endDate, 'date')
         let devices
-        if (mac && mac !== '') {
+        if (mac) {
             devices = await Device.find({mac, endDate: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1})
-        }
-        else { 
+        } else { 
             devices = await Device.find({endDate: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1, mac: 1})
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(devices)
     } catch (err) {
         console.log('err', err)
-        next(err);
+        next(err)
     }
 }
 

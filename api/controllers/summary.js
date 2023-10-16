@@ -22,26 +22,20 @@ export const search = async (req,res,next) => {
                     days: 0,
                     workingHours: 0
                 }
-                for (const inStatus of WORKING.inStatus){
-                    summary[attend.employeeId][inStatus] = 0 
-                }
-                for (const outStatus of Object.keys(WORKING.outStatus)){
+                WORKING.inStatus.forEach(inStatus => {summary[attend.employeeId][inStatus] = 0})
+                for (const outStatus in WORKING.outStatus){
                     summary[attend.employeeId][outStatus] = 0 
                 }
             }
-            summary[attend.employeeId].days = summary[attend.employeeId].days + 1  
+            summary[attend.employeeId].days++  
             summary[attend.employeeId].workingHours = summary[attend.employeeId].workingHours + attend.workingHours
-            if (attend.status) {
-                summary[attend.employeeId][attend.status] = summary[attend.employeeId][attend.status] + 1
-            }
-            if (attend.reason) {
-                summary[attend.employeeId][reverseStatus[attend.reason]] = summary[attend.employeeId][reverseStatus[attend.reason]] + 1
-            }
+            if (attend.status) { summary[attend.employeeId][attend.status]++ }
+            if (attend.reason) { summary[attend.employeeId][reverseStatus[attend.reason]]++ }
         }
-        for (const id of Object.keys(summary)) {
+        for (const id in summary) {
             summary[id].workingHours = Math.round(summary[id].workingHours * 10) / 10
             summary[id].workingDays = summary[id].days
-            for (const key of Object.keys(summary[id])) {
+            for (const key in summary[id]) {
                 if (Object.keys(WORKING.offDay).includes(key)) {
                     summary[id].workingDays = summary[id].workingDays - summary[id][key] * WORKING.offDay[key]
                 }
@@ -52,7 +46,7 @@ export const search = async (req,res,next) => {
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(summaryList)
     } catch (err) {
         console.log('err', err)
-        next(err);
+        next(err)
     }
 }
 
@@ -76,7 +70,7 @@ export const getLeftLeave = async (req,res,next) => {
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(summary)
     } catch (err) {
         console.log('err', err)
-        next(err);
+        next(err)
     }
 }
 
@@ -92,30 +86,31 @@ export const getLeftLeaveList = async (req,res,next) => {
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(summaryList)
     } catch (err) {
         console.log('err', err)
-        next(err);
+        next(err)
     }
 }
 
-export const getLeftLeaveSummary = async (employee) => {
+export const getLeftLeaveSummary = async ({employeeId, name, beginDate}) => {
     const reverseStatus = getReverseStatus()
     let summary 
-    if (employee.beginDate) {
-        const {defaultAnnualLeave, baseDate, baseMonth} = getDefaultAnnualLeave(employee.beginDate)
-        summary = {name: employee.name, beginDate: employee.beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave}
+    if (beginDate) {
+        const {defaultAnnualLeave, baseDate, baseMonth} = getDefaultAnnualLeave(beginDate)
+        summary = {name, beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave}
+        
         for (const inStatus of WORKING.inStatus){
             if (Object.keys(WORKING.offDay).includes(inStatus)) {summary[inStatus] = 0} 
         }
-        for (const outStatus of Object.keys(WORKING.outStatus)){
+        for (const outStatus in WORKING.outStatus){
             if (Object.keys(WORKING.offDay).includes(outStatus)) {summary[outStatus] = 0}
         }
-        const attends = await Report.find({employeeId: employee.employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1})
+        const attends = await Report.find({employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1})
         for (const attend of attends) {
             if (attend.status && Object.keys(WORKING.offDay).includes(attend.status)) {
-                summary[attend.status] = summary[attend.status] + 1
+                summary[attend.status]++
                 summary.leftAnnualLeave = summary.leftAnnualLeave - WORKING.offDay[attend.status]
             }
             if (attend.reason && Object.keys(WORKING.offDay).includes(attend.reason)) {
-                summary[reverseStatus[attend.reason]] = summary[reverseStatus[attend.reason]] + 1
+                summary[reverseStatus[attend.reason]]++
                 summary.leftAnnualLeave = summary.leftAnnualLeave - WORKING.offDay[attend.reason]
             }
         }

@@ -7,8 +7,6 @@
     "start": "concurrently \"npm run start --prefix api\" \"npm run start --prefix client\""
   },
   "dependencies": {
-    "concurrently": "^8.2.1",
-    "react-scripts": "^5.0.1",
-    "sass": "^1.69.3"
+    "concurrently": "^8.2.1"
   }
 }

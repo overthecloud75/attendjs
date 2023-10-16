@@ -26,7 +26,7 @@ export const search = async (req,res,next) => {
         }
 
         let deviceOns
-        if (ip && ip !== '') {
+        if (ip) {
             deviceOns = await DeviceOn.find({ip, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1})
         } else { 
             deviceOns = await DeviceOn.find({ip: {$regex: process.env.WIFI_RANGE}, date: {$gte: startDate, $lte: endDate}}).sort({ipStr: 1})

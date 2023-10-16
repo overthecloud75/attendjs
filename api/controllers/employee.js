@@ -38,7 +38,7 @@ const getEmployees = async (req) => {
     // const startDate = sanitizeData(req.query.startDate, 'date')
     // const endDate = sanitizeData(req.query.endDate, 'date')
     let employees
-    if (name && name !== '') {
+    if (name) {
         employees = await Employee.find({name, regular: {$ne: '퇴사'}}).sort({name: 1})
     } else { 
         employees = await Employee.find({regular: {$ne: '퇴사'}}).sort({name: 1})

@@ -66,8 +66,7 @@ export const separateIP = (x_forwarded_for) => {
         const externalIP = ipList[0].split(':')[0]
         const internalIP = ipList[1]
         return {externalIP, internalIP}
-    }
-    else {
+    } else {
         const externalIP = ipList[0]
         const internalIP = ipList[0]
         return {externalIP, internalIP}

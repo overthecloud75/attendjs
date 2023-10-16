@@ -1,10 +1,10 @@
 import express from 'express'
 import { search, update } from '../controllers/device.js'
-import { verifyIP } from '../utils/verifyToken.js'
+import { verifyUser } from '../utils/verifyToken.js'
 
 const router = express.Router();
 
-router.get('/search', verifyIP, search)
-router.post('/update', verifyIP, update)
+router.get('/search', verifyUser, search)
+router.post('/update', verifyUser, update)
 
 export default router;
