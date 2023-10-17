@@ -264,7 +264,7 @@ const Sidebar = () => {
                 </Items>
             </Middle>
             <Bottom>
-                <Color Options/>
+                <Color/> 
             </Bottom>
         </Wrapper>
     )

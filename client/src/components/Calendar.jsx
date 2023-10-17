@@ -53,15 +53,14 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
                 }
             } else {
                 setEventsData(events.data)
-                // eslint-disable-next-line
-                const {width, height} = getWindowDimension()
+                const {width} = getWindowDimension()
                 if (width < mobileSize) {
                     setWeekends(false)
                     setHeaderToolbar({start: '', center: '', end: 'today prev,next'})
                 }
             }
         }
-        if (thisMonth !== '') {fetchData()}
+        if (thisMonth) {fetchData()}
     // eslint-disable-next-line
     }, [thisMonth, tapValue])
 
