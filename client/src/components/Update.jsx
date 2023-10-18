@@ -15,7 +15,7 @@ import { getUser } from '../storage/userSlice.js'
 
 const getEditableTitles = (user) => {
     let editableTitles = AdminEditableTitles
-    if (!user.IsAdmin) {
+    if (!user.isAdmin) {
         editableTitles = UserEditableTitles
     }
     return editableTitles
