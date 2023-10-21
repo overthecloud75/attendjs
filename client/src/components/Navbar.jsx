@@ -6,6 +6,7 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
 import ListOutlinedIcon from '@mui/icons-material/ListOutlined'
 import Avatar from '@mui/material/Avatar'
+import { getUser } from '../storage/userSlice.js'
 import ProfileMenu from './ProfileMenu'
 
 const Container = styled.div`
@@ -54,9 +55,10 @@ const Counter = styled.div`
 
 const Navbar = ({menu, setMenu}) => {
 
+    const user = getUser()
     const [anchorEl, setAnchorEl] = useState(null)
     const handleMenu = () => {
-        setMenu(!menu)
+        user.isLogin&&setMenu(!menu)
     }
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)

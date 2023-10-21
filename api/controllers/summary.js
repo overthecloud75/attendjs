@@ -30,7 +30,10 @@ export const search = async (req,res,next) => {
             summary[attend.employeeId].days++  
             summary[attend.employeeId].workingHours = summary[attend.employeeId].workingHours + attend.workingHours
             if (attend.status) { summary[attend.employeeId][attend.status]++ }
-            if (attend.reason) { summary[attend.employeeId][reverseStatus[attend.reason]]++ }
+            if (attend.reason === '출근') { summary[attend.employeeId]['정상출근']++ 
+            } else {
+                summary[attend.employeeId][reverseStatus[attend.reason]]++
+            }
         }
         for (const id in summary) {
             summary[id].workingHours = Math.round(summary[id].workingHours * 10) / 10

@@ -1,3 +1,9 @@
+* 23/10/20 (api, client) 
+    - 1.8.1 (client) <br>
+        fix GeolocationPositionError in Auth.jsx <br>
+    - 1.8.0 (api, client) <br>
+        fix the status in working.js <br>
+
 * 23/10/17
     - 1.7.9 (api) <br>
         refactoring <br>

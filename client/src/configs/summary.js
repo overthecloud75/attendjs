@@ -44,10 +44,6 @@ export const columnHeaders = [
         Header: '외근',
     },
     {
-        accessor: '파견',
-        Header: '파견',
-    },
-    {
         accessor: '재택',
         Header: '재택',
     },
@@ -101,10 +97,6 @@ export const csvHeaders = [
     {
         key: '외근',
         label: '외근',
-    },
-    {
-        key: '파견',
-        label: '파견',
     },
     {
         key: '재택',

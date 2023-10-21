@@ -1,9 +1,5 @@
 import { useState, Suspense, lazy } from 'react'
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-} from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import './style.scss'

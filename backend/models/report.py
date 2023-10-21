@@ -87,8 +87,8 @@ class Report(BasicModel):
                     name = employee['name']
                     employee_id = employee['employeeId']
                     regular = employee['regular']
-                    if employee['mode'] in WORKING['status'] and employee['attendMode'] == 'X':
-                        reason = employee['mode']
+                    if employee['mode'] == '파견' and employee['attendMode'] == 'X':
+                        reason = '출근'
                     else:
                         reason = None
                     # 같은 employee_id 인데 이름이 바뀌는 경우 발생
@@ -133,7 +133,7 @@ class Report(BasicModel):
                 if hour >= 18:
                     attend[employee_id]['workingHours'] = WORKING['status'][attend[employee_id]['reason']]
                 else:
-                    attend[employee_id]['workingHours'] = None # 파견인 경우 18시 전에 workingHours에 대한 내용이 없어서 추가
+                    attend[employee_id]['workingHours'] = None 
             elif attend[employee_id]['begin']:
                 if not is_holiday:
                     if 'regular' in attend[employee_id] and attend[employee_id]['regular'] in WORKING['update'] and \

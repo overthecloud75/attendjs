@@ -10,22 +10,21 @@ const getLocation = async () => {
     // location 정보 저장
     let error = ''
     let location = {latitude: -1, longitude: -1, accuracy: 1, timestamp: 0}
-    const {geolocation} = navigator
 
     // 사용된 브라우저에서 지리적 위치(Geolocation)가 정의되지 않은 경우 오류로 처리합니다.
-    if (!geolocation) {
-        error = 'Geolocation is not supported.'
-    } else {
+    if (navigator.geolocation) {
         // Geolocation API 호출
         const pos = await new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(
                 position => resolve(position),
-                error => reject(error), 
+                err => {error = err} , 
                 {enableHighAccuracy: true, maximumAge: 0}
             )}
         )
         const {latitude, longitude, accuracy} = pos.coords
         location = {latitude, longitude, accuracy, timestamp: pos.timestamp}
+    } else {
+        error = 'Geolocation is not supported.'
     }
     return {location, error}
 }
