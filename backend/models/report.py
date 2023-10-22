@@ -48,9 +48,9 @@ class Report(BasicModel):
                 hour = 23
         else:
             date = today
-        overNight_time = int(WORKING['time']['overNight'][:2])
+        overnight_time = int(WORKING['time']['overNight'][:2])
 
-        if hour > overNight_time - 1 and hour <= overNight_time:
+        if hour > overnight_time - 1 and hour <= overnight_time:
             yesterday = get_delta_day(date, delta=-1)
             overnight_employees = self._check_attend(yesterday, 23)
             '''
@@ -59,7 +59,7 @@ class Report(BasicModel):
             if overnight_employees:
                 self._update_overnight(overnight_employees, date=yesterday)
 
-        elif hour > overNight_time and hour <= overNight_time + 1:
+        elif hour > overnight_time and hour <= overnight_time + 1:
             overnight_employees = self._check_attend(date, hour)
             '''
                  1. overnight 근무자에 대해서 이전 날짜 update
@@ -67,7 +67,7 @@ class Report(BasicModel):
             if overnight_employees:
                 self._update_overnight(overnight_employees, date=date)
 
-        elif hour > overNight_time + 2:
+        elif hour > overnight_time + 2:
             self._check_attend(date, hour)
 
     def _check_attend(self, date, hour):

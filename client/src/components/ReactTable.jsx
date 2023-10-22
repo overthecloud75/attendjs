@@ -5,8 +5,9 @@ import { v } from '../variable'
 import CsvDownload from './CsvDownload'
 import Pagination from './Pagination'
 import Update from './Update'
-import Write from './Write'
-import { UpdatePages } from '../configs/pages'
+import EditWrite from './EditWrite'
+import { AdminEditablePages, UserEditablePages, UpdatablePages } from '../configs/pages'
+import { getUser } from '../storage/userSlice.js'
 
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 
@@ -67,33 +68,50 @@ const BodyTr = styled.tr`
     background-color: transparent;
 `
 
+const getEditablePages = (user) => {
+    let editablePages = AdminEditablePages
+    if (!user.isAdmin) {
+        editablePages = UserEditablePages
+    }
+    return editablePages
+}
+
 // useTable에다가 작성한 columns와 data를 전달한 후 아래 4개의 props를 받아온다
 // initialState https://github.com/TanStack/table/discussions/2029
 
-const Table = ({ url, columns, data, setData, csvHeaders, fileName }) => {
+const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
+
+    const user = getUser()
+    const editablePages = getEditablePages(user)
     // update시 page 설정
     const [selectedRowData, setSelectedRowData] = useState({})
     // Update 화면 
     const [openUpdate, setOpenUpdate] = useState(false)
     // Write 화면, if writeMode is true, use empty value. else use existing value 
     const [writeMode, setWriteMode] = useState(true)
-    const [openWrite, setOpenWrite] = useState(false)
+    const [openEditWrite, setOpenEditWrite] = useState(false)
     // eslint-disable-next-line
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow,  
-        page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize, state: { pageIndex, pageSize } } =
-        useTable({ columns, data, initialState: { pageSize: 20 } }, useSortBy, usePagination);
+    const {getTableProps, getTableBodyProps, headerGroups, prepareRow,  
+        page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize, state: {pageIndex, pageSize}} =
+        useTable({columns, data, initialState:{ pageSize: 20}}, useSortBy, usePagination)
     // when url is board, open write 
     const handleUpdateClick = (e, rowData) => {
         setSelectedRowData(rowData)
-        if (url!=='board') {setOpenUpdate(true)}
-        else {
-            setOpenWrite(true)
-            setWriteMode(false)
+        setWriteMode(false)
+        if (UpdatablePages.includes(url)) { 
+            setOpenUpdate(true) 
+        } else if (UserEditablePages.includes(url)) {
+            setOpenEditWrite(true)
         }
     }
     const handleWriteClick = () => {
-        setOpenWrite(true)
         setWriteMode(true)
+        if (['board', 'report'].includes(url)) {
+            setOpenEditWrite(true)
+        } else if (AdminEditablePages.includes(url)) {
+            setSelectedRowData({})
+            setOpenUpdate(true)
+        }
     }
 
     return (
@@ -104,7 +122,7 @@ const Table = ({ url, columns, data, setData, csvHeaders, fileName }) => {
                     headers={csvHeaders}
                     filename={fileName}
                 />
-                {UpdatePages.includes(url)&&(
+                {editablePages.includes(url)&&(
                     <button 
                         className='defaultButton'
                         onClick={handleWriteClick}
@@ -113,7 +131,7 @@ const Table = ({ url, columns, data, setData, csvHeaders, fileName }) => {
                 )}
             </Buttons>
             <TableSheet {...getTableProps()}
-                style={url==='device'?{width:"130%"}:{width:"100%"}}
+                style={url==='device'?{width:'130%'}:{width:'100%'}}
             >
                 <THead>
                     {headerGroups.map(header => (
@@ -165,6 +183,7 @@ const Table = ({ url, columns, data, setData, csvHeaders, fileName }) => {
             />
             {openUpdate&&(
                 <Update
+                    writeMode={writeMode}
                     page={url}
                     columns={columns}
                     data={data}
@@ -174,19 +193,18 @@ const Table = ({ url, columns, data, setData, csvHeaders, fileName }) => {
                     rowData={selectedRowData}
                 />
             )}
-            {openWrite&&(
-                <Write
-                    UpdatePages={UpdatePages}
+            {openEditWrite&&
+                <EditWrite
                     writeMode={writeMode}
                     page={url}
                     columns={columns}
                     data={data}
                     setData={setData}
-                    open={openWrite}
-                    setOpen={setOpenWrite}
+                    open={openEditWrite}
+                    setOpen={setOpenEditWrite}
                     rowData={selectedRowData}
                 />
-            )}
+            }
         </Container>
     )
 }

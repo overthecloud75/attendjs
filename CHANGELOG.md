@@ -1,4 +1,8 @@
-* 23/10/20 (api, client) 
+* 23/10/22 
+    - 1.8.2 (api, client) <br>
+        make new in employee, board pages <br>
+
+* 23/10/20 
     - 1.8.1 (client) <br>
         fix GeolocationPositionError in Auth.jsx <br>
     - 1.8.0 (api, client) <br>

@@ -1,5 +1,6 @@
-export const UpdatePages = ['board', 'report']
-export const EditablePages = ['location', 'device', 'employee', 'approval']
+export const UserEditablePages = ['board', 'report']
+export const AdminEditablePages = ['location', 'employee', 'board', 'report']
+export const UpdatablePages = ['location', 'device', 'employee', 'approval']
 export const AdminEditableTitles = ['info', 'type', 'location', 'charge', 'beginDate', 'email', 'department', 'rank', 'position', 'regular', 'mode', 'attendMode', 'latitude', 'longitude', 'dev', 'status']
 export const UserEditableTitles = ['info', 'type', 'location', 'charge', 'status']
 export const EditableSelects = ['regular', 'mode', 'attendMode', 'status']

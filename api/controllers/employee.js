@@ -33,6 +33,41 @@ export const update = async (req,res,next) => {
     }
 }
 
+export const write = async (req,res,next) => {
+    logger.info(reqFormat(req))
+    try {
+        const employeeId = Number(req.body.employeeId)
+        const name = req.body.name
+        const beginDate = sanitizeData(req.body.beginDate, 'date')
+        const email = req.body.email
+        const department = req.body.department
+        const rank = req.body.rank
+        const position = req.body.position
+        const regular = req.body.regular
+        const mode = req.body.mode 
+        const attendMode = req.body.attendMode
+
+        const newEmployee = Employee({employeeId, name, beginDate, email, department, rank, position, regular, mode, attendMode})
+        await newEmployee.save()
+        res.status(200).json(newEmployee)
+    } catch (err) {
+        console.log('err', err)
+        next(err)
+    }
+}
+
+export const deleteEmployee = async (req,res,next) => {
+    logger.info(reqFormat(req))
+    try {
+        const _id = req.body._id
+        const employee = await Employee.deleteOne({_id})
+        res.status(200).json(employee)
+    } catch (err) {
+        console.log('err', err)
+        next(err)
+    }
+}
+
 const getEmployees = async (req) => {
     const name = req.query.name
     // const startDate = sanitizeData(req.query.startDate, 'date')

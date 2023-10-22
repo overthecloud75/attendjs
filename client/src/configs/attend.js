@@ -13,23 +13,23 @@ export const columnHeaders = [
     },
     {
         accessor: 'begin',
-        Header: 'Begin',
+        Header: '출근',
     },
     {
         accessor: 'end',
-        Header: 'End',
+        Header: '퇴근',
     },
     {
         accessor: 'workingHours',
-        Header: 'WorkingHours',
+        Header: '근무시간',
     },
     {
         accessor: 'status',
-        Header: 'Status',
+        Header: '근태상황',
     },
     {
         accessor: 'reason',
-        Header: 'Reason',
+        Header: '사유',
     },
 ]
 

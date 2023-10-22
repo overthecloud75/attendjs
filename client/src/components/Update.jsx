@@ -8,8 +8,8 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios'
-import { EditablePages, AdminEditableTitles, UserEditableTitles, EditableSelects } from '../configs/pages'
-import { getToday } from '../utils/DateUtil'
+import { AdminEditableTitles, UserEditableTitles, EditableSelects } from '../configs/pages'
+import { approvalUpdate } from '../utils/Approval'
 import { options } from '../configs/options'
 import { getUser } from '../storage/userSlice.js'
 
@@ -21,7 +21,7 @@ const getEditableTitles = (user) => {
     return editableTitles
 }
 
-const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
+const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
 
     const user = getUser()
     const editableTitles = getEditableTitles(user)
@@ -32,6 +32,13 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
     const [value, setValue] = useState(rowData)
     const handleClose = () => { setOpen(false) }
 
+    const insertData = () => {
+        let tableData = [...data]
+        let newValue = value 
+        tableData.unshift(newValue)
+        setData(tableData)
+    }
+
     const updateData = () => {
         let tableData = []
         data.map((prev) => (
@@ -40,40 +47,42 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
         setData(tableData)
     }
 
+    const deleteData = () => {
+        let tableData = []
+        data.map((prev) => (prev._id!==value._id&&tableData.push(prev)))
+        setData(tableData)
+    }
+
     const handleUpdate = async () => {
-        const url = '/api/' + page + '/update'
-        if (EditablePages.includes(page)) {
-            try {
-                if (page === 'approval') {
-                    if (previousStatus === value.status) { 
-                        alert('status가 바뀌지 않았습니다.')
-                        navigate('/approvalhistory')
-                    } else if (user.isAdmin) {
-                        if (previousStatus === 'Pending' || (previousStatus === 'Active' && value.status === 'Cancel')) {
-                            const res = await axios.post(url, value)
-                            setValue(res.data)
-                            updateData()
-                        } else {
-                            alert('변경할 수 없는 조건입니다.')
-                            navigate('/approvalhistory')
-                        }     
-                    } else if ((previousStatus === 'Pending' && value.status === 'Cancel') ||
-                        (previousStatus === 'Active' && value.status === 'Cancel' && value.start) > getToday()) {
-                        const res = await axios.post(url, value)
-                        setValue(res.data)
-                        updateData()
-                    } else {
-                        alert('변경할 수 없는 조건입니다.')
-                        navigate('/approvalhistory')
-                    }
-                } else {
-                    const res = await axios.post(url, value)
-                    setValue(res.data)
-                    updateData()
-                }
-            } catch (err) {
-                console.log(url, err)
+        let url 
+        if (writeMode) {
+            url = '/api/' + page + '/write'
+        } else {
+            url = '/api/' + page + '/update'
+        }
+        try {
+            if (page === 'approval') {
+                await approvalUpdate(user, url, previousStatus, value, setValue, updateData, navigate)
+            } else {
+                const res = await axios.post(url, value)
+                setValue(res.data)
+                if (writeMode) {insertData()}
+                else {updateData()}
             }
+        } catch (err) {
+            console.log(url, err)
+        }
+        handleClose()
+    }
+
+    const handleDelete = async () => {
+        const url = '/api/' + page + '/delete'
+        if(!window.confirm('정말로 삭제하시겠습니다.?')) return
+        try {
+            await axios.post(url, value)
+            deleteData()
+        } catch (err) {
+            console.log(url, err)
         }
         handleClose()
     }
@@ -90,8 +99,8 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
             <DialogTitle>Update {page}</DialogTitle>
             <DialogContent>
                 {columns.map((item, index) => {
-                    return (
-                        EditableSelects.includes(item.accessor)?(
+                    if (EditableSelects.includes(item.accessor)) {
+                        return (
                             <TextField
                                 autoFocus={focus===item.accessor}
                                 select
@@ -115,7 +124,9 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
                                     </MenuItem>
                                 ))}
                             </TextField>
-                        ):editableTitles.includes(item.accessor)?(
+                        )
+                    } else if (editableTitles.includes(item.accessor) || writeMode){
+                        return (
                             <TextField
                                 autoFocus={focus===item.accessor}
                                 margin='dense'
@@ -129,7 +140,9 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
                                 onChange={handleChange}
                                 autoComplete='false'
                             />
-                        ):(
+                        )
+                    } else {
+                        return (
                             <TextField
                                 margin='dense'
                                 id={item.accessor}
@@ -143,12 +156,15 @@ const Update = ({page, columns, data, setData, open, setOpen, rowData}) => {
                                 autoComplete='false'
                             />
                         )
-                    )
+                    }
                 })}
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} variant='outlined'>Cancel</Button>
-                <Button onClick={handleUpdate} variant='outlined'>Update</Button>
+                <Button onClick={handleUpdate} variant='outlined'>{writeMode?'Write':'Update'}</Button>
+                {!writeMode&&
+                    (<Button onClick={handleDelete} variant='outlined'>Delete</Button>)
+                }
             </DialogActions>
         </Dialog>
     )

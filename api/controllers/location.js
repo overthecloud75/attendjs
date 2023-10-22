@@ -26,8 +26,37 @@ export const update = async (req,res,next) => {
         const latitude = req.body.latitude
         const longitude = req.body.longitude
         const dev = req.body.dev
-        const locations = await Location.updateOne({_id}, {$set: {location, latitude, longitude, dev}})
-        res.status(200).json(locations)
+        const updatedLocation = await Location.updateOne({_id}, {$set: {location, latitude, longitude, dev}})
+        res.status(200).json(updatedLocation)
+    } catch (err) {
+        console.log('err', err)
+        next(err)
+    }
+}
+
+export const write = async (req,res,next) => {
+    logger.info(reqFormat(req))
+    try {
+        const location = req.body.location
+        const latitude = req.body.latitude
+        const longitude = req.body.longitude
+        const dev = req.body.dev
+
+        const newLocation = Location({location, latitude, longitude, dev})
+        await newLocation.save()
+        res.status(200).json(newLocation)
+    } catch (err) {
+        console.log('err', err)
+        next(err)
+    }
+}
+
+export const deleteLocation = async (req,res,next) => {
+    logger.info(reqFormat(req))
+    try {
+        const _id = req.body._id
+        const location = await Location.deleteOne({_id})
+        res.status(200).json(location)
     } catch (err) {
         console.log('err', err)
         next(err)

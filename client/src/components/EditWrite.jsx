@@ -10,22 +10,18 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import axios from 'axios'
 import { format } from 'date-fns'
 
-const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
+const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
  
     const [focus, setFocus] = useState('name')
-    const [value, setValue] = useState(
-        writeMode?{id: '', name: '', title: '', content: ''
-        }:rowData
-    )
-    const [content, setContent] = useState(value.content)
-    const handleClose = () => {setOpen(false)}
+    const [value, setValue] = useState(writeMode?{id: '', name: '', title: '', content: ''}:rowData)
+    const handleClose = () => { setOpen(false) }
 
     const insertData = () => {
         let tableData = [...data]
         let newValue = value 
         const timestamp = new Date()
-        newValue.createdAt = format(timestamp, "yy-MM-dd HH:mm:ss")
-        newValue.updatedAt = format(timestamp, "yy-MM-dd HH:mm:ss")
+        newValue.createdAt = format(timestamp, 'yy-MM-dd HH:mm:ss')
+        newValue.updatedAt = format(timestamp, 'yy-MM-dd HH:mm:ss')
         tableData.unshift(newValue)
         setData(tableData)
     }
@@ -34,14 +30,14 @@ const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setO
         let tableData = []
         let newValue = value
         const timestamp = new Date()
-        newValue.updatedAt = format(timestamp, "yy-MM-dd HH:mm:ss")
-        data.map((prev) => (prev.id=== value.id?tableData.push(newValue):tableData.push(prev)))
+        newValue.updatedAt = format(timestamp, 'yy-MM-dd HH:mm:ss')
+        data.map((prev) => (prev._id===value._id?tableData.push(newValue):tableData.push(prev)))
         setData(tableData)
     }
 
     const deleteData = () => {
         let tableData = []
-        data.map((prev) => (prev.id!== value.id&&tableData.push(prev)))
+        data.map((prev) => (prev._id!==value._id&&tableData.push(prev)))
         setData(tableData)
     }
 
@@ -52,42 +48,42 @@ const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setO
 
     const handleEditReady = (editor) => {
         if (writeMode) {setValue({...value, id: editor.id})}
-        else {editor.id = rowData.id}
         editor.editing.view.change((writer) => {
             writer.setStyle('min-height', '400px', editor.editing.view.document.getRoot())
         })
     }
    
     const handleEditChange = (e, editor) => {
-        setContent(editor.getData())
         setValue({...value, content: editor.getData()})
     }
 
     const handleUpdate = async () => {
-        const url = '/api/' + page + '/write'
-        if (UpdatePages.includes(page)) {
-            if(!window.confirm('정말로 저장하시겠습니다.?')) return
-            try {
-                await axios.post(url, value)
-                if (writeMode) {insertData()}
-                else {updateData()}
-            } catch (err) {
-                console.log(url, err)
-            }
+        let url 
+        if (writeMode) {
+            url = '/api/' + page + '/write'
+        } else {
+            url = '/api/' + page + '/update'
+        }
+        if(!window.confirm('정말로 저장하시겠습니다.?')) return
+        try {
+            const res = await axios.post(url, value)
+            setValue(res.data)
+            if (writeMode) {insertData()}
+            else {updateData()}
+        } catch (err) {
+            console.log(url, err)
         }
         handleClose()
     }
 
     const handleDelete = async () => {
         const url = '/api/' + page + '/delete'
-        if (UpdatePages.includes(page)) {
-            if(!window.confirm('정말로 삭제하시겠습니다.?')) return
-            try {
-                await axios.post(url, value)
-                deleteData()
-            } catch (err) {
-                console.log(url, err)
-            }
+        if(!window.confirm('정말로 삭제하시겠습니다.?')) return
+        try {
+            await axios.post(url, value)
+            deleteData()
+        } catch (err) {
+            console.log(url, err)
         }
         handleClose()
     }
@@ -98,8 +94,8 @@ const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setO
             <DialogContent>
                 {columns.map((item, index) => {
                     return ( 
-                        value[item.accessor]!== undefined && (
-                            !['createdAt', 'updatedAt'].includes(item.accessor)?(
+                        value[item.accessor]!==undefined&& 
+                            (!['createdAt', 'updatedAt'].includes(item.accessor)?(
                                 <TextField
                                     autoFocus={focus===item.accessor}
                                     margin='dense'
@@ -129,14 +125,14 @@ const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setO
                 })}
                 <CKEditor
                     editor={ ClassicEditor }
-                    data={ content }
+                    data={ value.content }
                     onReady={ editor => handleEditReady(editor)}
                     onChange={ (e, editor) => handleEditChange(e, editor)}
                 />
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} variant='outlined'>Cancel</Button>
-                <Button onClick={handleUpdate} variant='outlined'>Update</Button>
+                <Button onClick={handleUpdate} variant='outlined'>{writeMode?'Write':'Update'}</Button>
                 {!writeMode&&
                     (<Button onClick={handleDelete} variant='outlined'>Delete</Button>)
                 }
@@ -145,4 +141,4 @@ const Write = ({UpdatePages, writeMode, page, columns, data, setData, open, setO
     )
 }
 
-export default Write
+export default EditWrite

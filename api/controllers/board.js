@@ -32,7 +32,24 @@ export const write = async (req,res,next) => {
         const title = req.body.title
         const content = req.body.content
 
-        const board = await Board.updateOne({id}, {$set: {id, name, title, content}}, {upsert: true})
+        const newBoard = Board({id, name, title, content})
+        await newBoard.save()
+        res.status(200).json(newBoard)
+    } catch (err) {
+        console.log('err', err)
+        next(err)
+    }
+}
+
+export const update = async (req,res,next) => {
+    logger.info(reqFormat(req))
+    try {
+        const id = req.body.id
+        const name = req.body.name
+        const title = req.body.title
+        const content = req.body.content
+
+        const board = await Board.updateOne({id}, {$set: {id, name, title, content}})
         res.status(200).json(board)
     } catch (err) {
         console.log('err', err)

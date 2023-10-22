@@ -13,7 +13,7 @@ export const columnHeaders = [
     },
     {
         accessor: 'begin',
-        Header: 'Begin',
+        Header: '출근',
     },
     {
         accessor: 'beginPlace',
@@ -21,7 +21,7 @@ export const columnHeaders = [
     },
     {
         accessor: 'end',
-        Header: 'End',
+        Header: '퇴근',
     },
     {
         accessor: 'endPlace',
