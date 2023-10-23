@@ -105,6 +105,7 @@ const Navbar = ({menu, setMenu}) => {
             <ProfileMenu 
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
+                setMenu={setMenu}
             />     
         </Container>
     )

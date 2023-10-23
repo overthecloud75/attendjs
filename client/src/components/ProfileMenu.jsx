@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { requestAuth } from '../utils/AuthUtil'
 import { getUser } from '../storage/userSlice.js'
 
-const ProfileMenu = ({anchorEl, setAnchorEl}) => {
+const ProfileMenu = ({anchorEl, setAnchorEl, setMenu}) => {
     // eslint-disable-next-line
     const [loading, setLoading] = useState(false)
     // eslint-disable-next-line
@@ -18,6 +18,7 @@ const ProfileMenu = ({anchorEl, setAnchorEl}) => {
     const handleClose = () => {setAnchorEl(null)}
     const handleLogout = async () => {
         requestAuth('logout', 'get', '', dispatch, navigate, setErrorMsg, setLoading)
+        setMenu(false)
         handleClose()
     }
 

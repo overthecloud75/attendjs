@@ -94,7 +94,7 @@ const Auth = ({mode}) => {
                     <button>{mode==='login'?'Sign in':'Sign up'}</button>
                     {loading && 
                         <span>
-                            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
                                 <CircularProgress/>
                             </Box>
                         </span>}
