@@ -1,22 +1,19 @@
-import { logger, reqFormat } from '../config/winston.js'
 import Approval from '../models/Approval.js'
 import { makeActive, makeCancel } from './event.js'
 import { getToday } from '../utils/util.js'
+import { createError } from '../utils/error.js'
 // import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req, res, next) => {
-    logger.info(reqFormat(req))
     try {
         const approvalHistory = await getApprovalHistory(req)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(approvalHistory)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const update = async (req, res, next) => {
-    logger.info(reqFormat(req))
     try {
         const _id = req.body._id
         const status = req.body.status
@@ -40,7 +37,6 @@ export const update = async (req, res, next) => {
         } 
         res.status(200).json(approval)     
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }

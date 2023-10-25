@@ -1,4 +1,3 @@
-import { logger, reqFormat } from '../config/winston.js'
 import DeviceOn from '../models/DeviceOn.js'
 import Device from '../models/Device.js'
 import { sanitizeData } from '../utils/util.js'
@@ -13,7 +12,6 @@ const insertOwner = (deviceOns, deviceDict) => {
 }
 
 export const search = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const ip = req.query.ip
         const startDate = sanitizeData(req.query.startDate, 'date')
@@ -36,7 +34,6 @@ export const search = async (req,res,next) => {
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(deviceOns)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }

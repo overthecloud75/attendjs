@@ -1,9 +1,7 @@
-import { logger, reqFormat } from '../config/winston.js'
 import Device from '../models/Device.js'
 import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const mac = req.query.mac
         const startDate = sanitizeData(req.query.startDate, 'date')
@@ -16,13 +14,11 @@ export const search = async (req,res,next) => {
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(devices)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const update = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const _id = req.body._id
         const info = req.body.info
@@ -33,7 +29,6 @@ export const update = async (req,res,next) => {
         const device = await Device.updateOne({_id}, {$set: {info, type, location, charge, owner}})
         res.status(200).json(device)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }

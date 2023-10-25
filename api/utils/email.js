@@ -39,7 +39,6 @@ export const registerConfirmationEmail = async (name, email, confirmationCode) =
         })
     } catch(err) {
         logger.error(err)
-        console.log(err)
     }
 }
 
@@ -63,7 +62,6 @@ export const attendRequestEmail = async (approval, summary) => {
         })
     } catch(err) {
         logger.error(err)
-        console.log(err)
     }
 }
 
@@ -94,6 +92,5 @@ export const attendConfirmationEmail = async (approval, status) => {
         })
     } catch(err) {
         logger.error(err) 
-        console.log(err)
     }
 }

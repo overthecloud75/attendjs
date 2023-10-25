@@ -7,7 +7,7 @@ const { combine, timestamp, printf } = winston.format
 // Define log format
 const logFormat = printf(info => {
     return `${info.timestamp} ${info.level}: ${info.message}`
-});
+})
 
 export const reqFormat = (req) => {
     const headers = req.headers

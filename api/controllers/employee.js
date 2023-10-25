@@ -1,20 +1,16 @@
-import { logger, reqFormat } from '../config/winston.js'
 import Employee from '../models/Employee.js'
 import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const employees = await getEmployees(req)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(employees)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const update = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const _id = req.body._id
         const beginDate = sanitizeData(req.body.beginDate, 'date')
@@ -28,13 +24,11 @@ export const update = async (req,res,next) => {
         const employee = await Employee.updateOne({_id}, {$set: {beginDate, email, department, rank, position, regular, mode, attendMode}})
         res.status(200).json(employee)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const write = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const employeeId = Number(req.body.employeeId)
         const name = req.body.name
@@ -51,19 +45,16 @@ export const write = async (req,res,next) => {
         await newEmployee.save()
         res.status(200).json(newEmployee)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const deleteEmployee = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const _id = req.body._id
         const employee = await Employee.deleteOne({_id})
         res.status(200).json(employee)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }

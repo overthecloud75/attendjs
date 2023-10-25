@@ -52,7 +52,6 @@ export const addEventInCalendar = async (args) => {
         return {resData, err}
     } catch (err) {
         const resData = []
-        console.log('err', err)
         return {resData, err}
     }
 }
@@ -65,7 +64,6 @@ export const deleteEventInCalendar = async (args) => {
         return {resData, err}
     } catch (err) {
         const resData = []
-        console.log('err', err)
         return {resData, err}
     }
 }
@@ -78,7 +76,6 @@ export const getApproval = async () => {
         return {resData, err}
     } catch (err) {
         const resData = []
-        console.log('err', err)
         return {resData, err}
     }
 }
@@ -90,7 +87,6 @@ export const postApproval = async (data) => {
         return {resData, err}
     } catch (err) {
         const resData = []
-        console.log('err', err)
         return {resData, err}
     }
 }

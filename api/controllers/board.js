@@ -1,8 +1,6 @@
-import { logger, reqFormat } from '../config/winston.js'
 import Board from '../models/Board.js'
 
 export const search = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const name = req.query.name
         // const startDate = req.query.startDate
@@ -10,7 +8,6 @@ export const search = async (req,res,next) => {
         let boards
         if (name) {
             // to test NoSQL injection name = {$ne: null}
-            // console.log({name}) = { name: '{$ne: null}'}
             // boards = await Board.find({name : {$ne: null}}).sort({createdAt: -1})  NoSQL Success
             // boards = await Board.find({name : '{$ne: '1'}'}).sort({createdAt: -1}) Not NoSQL Success
             boards = await Board.find({name}).sort({createdAt: -1})
@@ -19,13 +16,11 @@ export const search = async (req,res,next) => {
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(boards)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const write = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const id = req.body.id
         const name = req.body.name
@@ -36,13 +31,11 @@ export const write = async (req,res,next) => {
         await newBoard.save()
         res.status(200).json(newBoard)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const update = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const id = req.body.id
         const name = req.body.name
@@ -52,19 +45,16 @@ export const update = async (req,res,next) => {
         const board = await Board.updateOne({id}, {$set: {id, name, title, content}})
         res.status(200).json(board)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const deleteBoard = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const id = req.body.id
         const board = await Board.deleteOne({id})
         res.status(200).json(board)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }

@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 import CryptoJS from 'crypto-js'
 import { formatToTimeZone } from 'date-fns-timezone'
 import distance from 'gps-distance'
-import { logger, reqFormat } from '../config/winston.js'
 import { MOBILE_IP_LIST } from '../config/working.js'
 import User from '../models/User.js'
 import GPSOn from '../models/GPSOn.js'
@@ -55,7 +54,6 @@ export const register = async (req, res, next) => {
 }
 
 export const login = async (req, res, next) => {
-    logger.info(reqFormat(req))
     const email = sanitizeData(req.body.email, 'email')
     try {
         const user = await getUserByEmail(email)
@@ -99,7 +97,6 @@ export const login = async (req, res, next) => {
 }
 
 export const logout = async (req, res, next) => {
-    logger.info(reqFormat(req))
     try {
         res.clearCookie('access_token').status(200).json([])
     } catch (err) {
@@ -108,7 +105,6 @@ export const logout = async (req, res, next) => {
 }
 
 export const confirmCode = async (req, res, next) => {
-    logger.info(reqFormat(req))
     try {
         const confirmationCode = req.params.confirmationCode
         const user = await User.findOne({confirmationCode})
@@ -123,7 +119,6 @@ export const confirmCode = async (req, res, next) => {
 }
 
 export const setAttend = async (req, res, next) => {
-    logger.info(reqFormat(req))
     try {
         const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
         const user_agent = req.headers['user-agent']
@@ -138,7 +133,6 @@ export const setAttend = async (req, res, next) => {
 }
 
 export const search = async (req, res, next) => {
-    logger.info(reqFormat(req))
     try {
         const name = req.query.name 
         const startDate = sanitizeData(req.query.startDate, 'date')

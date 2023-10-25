@@ -1,9 +1,7 @@
-import { logger, reqFormat } from '../config/winston.js'
 import Report from "../models/Report.js"
 import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const attends = await getAttends(req)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(attends)

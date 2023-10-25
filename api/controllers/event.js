@@ -1,13 +1,14 @@
-import { logger, reqFormat } from '../config/winston.js'
 import { WORKING } from '../config/working.js'
 import Event from '../models/Event.js'
 import Employee from '../models/Employee.js'
 import Approval from '../models/Approval.js'
+import { isValidObjectId } from '../models/utils.js'
 import { getEmployeeByEmail } from './employee.js'
 import { reportUpdate } from './eventReport.js'
 import { sanitizeData } from '../utils/util.js'
 import { attendRequestEmail, attendConfirmationEmail } from '../utils/email.js'
 import { getLeftLeaveSummary } from './summary.js'
+import { createError } from '../utils/error.js'
 
 const makeHtml = (event) => {
     return `<h1 style=
@@ -18,7 +19,6 @@ const makeHtml = (event) => {
 }
 
 export const getEventsInCalendar = async (req, res, next) => {
-    logger.info(reqFormat(req))
     try {
         const start = sanitizeData(req.query.start, 'date')
         const end = sanitizeData(req.query.end, 'date')    
@@ -33,13 +33,11 @@ export const getEventsInCalendar = async (req, res, next) => {
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(events)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const addEventInCalendar = async (req, res, next) => {
-    logger.info(reqFormat(req))
     try {
         const id = req.body.id
         const title = req.body.title
@@ -57,13 +55,11 @@ export const addEventInCalendar = async (req, res, next) => {
             next({status: 500, message: '/ is not included'})
         }
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const deleteEventInCalendar = async (req, res, next) => {
-    logger.info(reqFormat(req))
     try {
         const id = req.body.id
         const event = await Event.findOne({id}).lean()
@@ -75,13 +71,11 @@ export const deleteEventInCalendar = async (req, res, next) => {
             res.status(400).send('not deleted')
         }
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const getApproval = async (req, res, next) => {
-    logger.info(reqFormat(req))
     /* 
         1. apporover 확인 
         2. 연차 기록 확인 
@@ -97,7 +91,6 @@ export const getApproval = async (req, res, next) => {
 }
 
 export const postApproval = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const start = sanitizeData(req.body.start, 'date')
         const end = sanitizeData(req.body.end, 'date')
@@ -115,7 +108,6 @@ export const postApproval = async (req,res,next) => {
         }
     } catch (err) {
         next(err)
-        console.log(err)
     }
 }
 
@@ -137,20 +129,23 @@ const getApprover = async (employee) => {
 }
 
 export const confirmApproval = async (req, res, next) => {
-    logger.info(reqFormat(req))
     /* 
         1. _id 확인
         2. status가 pending이면서 기간에 문제가 없으면 status를 Active로 바꾸고 달력에 저장하고 confirm email 송부 
     */
     try {
         const _id = req.params._id
-        const approval = await Approval.findOne({_id})
-        if (!approval) return next(createError(404, 'approval not found!'))
-        if (approval.status === 'Pending'){
-            const result = await makeActive(approval)
-            res.status(200).send(makeHtml(result.msg))
+        if (isValidObjectId(_id)) {
+            const approval = await Approval.findOne({_id})
+            if (!approval) return next(createError(403, 'approval not found!'))
+            if (approval.status === 'Pending'){
+                const result = await makeActive(approval)
+                res.status(200).send(makeHtml(result.msg))
+            } else {
+                res.status(200).send(makeHtml('이미 처리하였습니다.'))
+            }
         } else {
-            res.status(200).send(makeHtml('이미 처리하였습니다.'))
+            next(createError(403, 'approval not found!'))
         }
     } catch (err) {
         next(err)
@@ -158,16 +153,19 @@ export const confirmApproval = async (req, res, next) => {
 }
 
 export const confirmCancel = async (req, res, next) => {
-    logger.info(reqFormat(req))
     try {
         const _id = req.params._id
-        const approval = await Approval.findOne({_id})
-        if (!approval) return next(createError(404, 'approval not found!'))
-        if (approval.status === 'Pending'){
-            const result = await makeCancel(approval)
-            res.status(200).send(makeHtml(result.msg))
+        if (isValidObjectId(_id)) {
+            const approval = await Approval.findOne({_id})
+            if (!approval) return next(createError(404, 'approval not found!'))
+            if (approval.status === 'Pending'){
+                const result = await makeCancel(approval)
+                res.status(200).send(makeHtml(result.msg))
+            } else {
+                res.status(200).send(makeHtml('이미 처리하였습니다.'))
+            }
         } else {
-            res.status(200).send(makeHtml('이미 처리하였습니다.'))
+            next(createError(404, 'approval not found!'))
         }
     } catch (err) {
         next(err)

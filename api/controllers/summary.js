@@ -1,4 +1,3 @@
-import { logger, reqFormat } from '../config/winston.js'
 import { getAttends } from './attend.js'
 import Report from '../models/Report.js'
 import Employee from '../models/Employee.js'
@@ -6,7 +5,6 @@ import { WORKING, getReverseStatus } from '../config/working.js'
 import { getToday, getDefaultAnnualLeave } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const reverseStatus = getReverseStatus()
 
@@ -48,7 +46,6 @@ export const search = async (req,res,next) => {
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(summaryList)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
@@ -66,19 +63,16 @@ export const search = async (req,res,next) => {
 */
 
 export const getLeftLeave = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {      
         const employee = await Employee.findOne({email: req.user.email})
         const summary = await getLeftLeaveSummary(employee)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(summary)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }
 
 export const getLeftLeaveList = async (req,res,next) => {
-    logger.info(reqFormat(req))
     try {
         const employees = await Employee.find({regular: {$ne: '퇴사'}}).sort({name: 1})
         let summaryList = []
@@ -88,7 +82,6 @@ export const getLeftLeaveList = async (req,res,next) => {
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(summaryList)
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }

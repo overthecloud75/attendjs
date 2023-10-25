@@ -6,7 +6,7 @@ import cors from 'cors'
 import rateLimit from 'express-rate-limit'
 import csrf from 'csurf'
 
-import { logger } from './config/winston.js'
+import { logger, reqFormat } from './config/winston.js'
 import authRoute from './routes/auth.js'
 import usersRoute from './routes/users.js'
 import wifiRoute from './routes/wifi.js'
@@ -31,8 +31,8 @@ const connect = async () => {
     try {
         await mongoose.connect(process.env.MONGO)
         logger.info('Connected to mongoDB.')
-    } catch (error) {
-        console.log(error)
+    } catch (err) {
+        logger.error(err)
         process.exit(1)
     }
 }
@@ -62,7 +62,10 @@ app.use(cors({ origin: [
     process.env.DOMAIN
     ]}
 ))
-
+app.use((req, res, next) => {
+    logger.info(reqFormat(req))
+    next()
+})
 app.use('/api/auth', authRoute)
 app.use('/api/users', usersRoute)
 app.use('/api/attend', attendRoute)
@@ -83,11 +86,9 @@ app.use((err, req, res, next) => {
     const errorStatus = err.status || 500
     const errorMessage = err.message || 'Something went wrong!'
     if (err.status === 500) {
-        logger.error(err.stack)
+        logger.error(err)
     }
     return res.status(errorStatus).json({
-        success: false,
-        status: errorStatus,
         message: errorMessage
     })
 })
