@@ -112,9 +112,8 @@ class Report(BasicModel):
             attend = self._legacy_or_gps(attend, date)
         # attend
         for employee_id in attend:
-            name = attend[employee_id]['name']
-            if name in schedule_dict:
-                status = schedule_dict[name]
+            if employee_id in schedule_dict:
+                status = schedule_dict[employee_id]
                 attend[employee_id]['status'] = None
                 attend[employee_id]['reason'] = status
                 if hour >= 18:
@@ -161,7 +160,6 @@ class Report(BasicModel):
                         attend[employee_id]['status'] = '출근전'
                 else:
                     attend[employee_id]['status'] = '정상출근'
-
             try:
                 if 'regular' in attend[employee_id] and attend[employee_id]['regular'] not in WORKING['update'] and \
                         attend[employee_id]['status'] not in ['정상출근'] :
@@ -376,20 +374,21 @@ class Report(BasicModel):
                 schedule_dict = {'holiday': data['title']}
                 break
             name = None
-            status = '기타'
-            for employee in employees_list:
-                if employee['name'] in data['title']:
-                    name = employee['name']      
+            status = '기타'     
             for status_type in WORKING['status']:
                 if status_type in data['title']:
                     status = status_type
-            if name:
+
+            if 'employeeId' in data:
+                employee_id = data['employeeId']
                 # 반차가 포함된 경우에만 status 추가 가능 
-                if name in schedule_dict and schedule_dict[name] != '휴가' and status !='휴가' and (schedule_dict[name] == '반차' or status == '반차'):
-                    schedule_dict[name] = schedule_dict[name] + ', ' + status_type
-                elif name in schedule_dict and status == '휴가':
-                    schedule_diect[name] = status 
+                if employee_id in schedule_dict and schedule_dict[employee_id] != '휴가' and status !='휴가' and (schedule_dict[employee_id] == '반차' or status == '반차'):
+                    schedule_dict[employee_id] = schedule_dict[employee_id] + ', ' + status
+                elif employee_id in schedule_dict and status == '휴가':
+                    schedule_diect[employee_id] = status 
                 else:
-                    schedule_dict[name] = status
+                    schedule_dict[employee_id] = status
+            else:
+                print('schedule', data)
         return schedule_dict
   

@@ -1,3 +1,7 @@
+* 23/10/27
+    - 1.8.4 (backend) <br>
+        shedule_dict: name -> employee_id <br>
+
 * 23/10/25
     - 1.8.3 (api) <br>
         refactoring <br>
