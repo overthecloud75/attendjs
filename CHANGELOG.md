@@ -1,3 +1,7 @@
+* 23/10/29 
+    - 1.8.5 (api, client) <br>
+        editable, selectable false in Calendar.jsx <br>
+        
 * 23/10/27
     - 1.8.4 (backend) <br>
         shedule_dict: name -> employee_id <br>

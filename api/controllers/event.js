@@ -1,4 +1,3 @@
-import { WORKING } from '../config/working.js'
 import Event from '../models/Event.js'
 import Employee from '../models/Employee.js'
 import Approval from '../models/Approval.js'
@@ -37,44 +36,6 @@ export const getEventsInCalendar = async (req, res, next) => {
     }
 }
 
-export const addEventInCalendar = async (req, res, next) => {
-    try {
-        const id = req.body.id
-        const title = req.body.title
-        const start = req.body.start
-        const end = req.body.end
-        const newEvent = new Event({id, title, start, end})
-        if (WORKING.specialHolidays.includes(title)) {
-            await newEvent.save()
-            res.status(200).send('Event has been created.')
-        } else if (title.includes('/')) {
-            await newEvent.save()
-            await reportUpdate('add', title, start, end)
-            res.status(200).send('Event has been created.')
-        } else {
-            next({status: 500, message: '/ is not included'})
-        }
-    } catch (err) {
-        next(err)
-    }
-}
-
-export const deleteEventInCalendar = async (req, res, next) => {
-    try {
-        const id = req.body.id
-        const event = await Event.findOne({id}).lean()
-        const eventDelete = await Event.deleteOne({id}) 
-        if (eventDelete.deletedCount) {
-            await reportUpdate('delete', event.title, event.start, event.end)
-            res.status(200).send('Event has been deleted.')
-        } else {
-            res.status(400).send('not deleted')
-        }
-    } catch (err) {
-        next(err)
-    }
-}
-
 export const getApproval = async (req, res, next) => {
     /* 
         1. apporover 확인 
@@ -82,7 +43,8 @@ export const getApproval = async (req, res, next) => {
     */
     try {
         const employee = await getEmployeeByEmail(req.user.email)
-        const approver = await getApprover(employee)
+        const approverWithEmployeeId = await getApprover(employee)
+        const {employeeId, ...approver} = approverWithEmployeeId
         const summary = await getLeftLeaveSummary(employee)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json({approver, summary})
     } catch (err) {
@@ -96,9 +58,9 @@ export const postApproval = async (req,res,next) => {
         const end = sanitizeData(req.body.end, 'date')
         const employee = await getEmployeeByEmail(req.user.email)
         const approver = await getApprover(employee)
-        const checkTheSameApproval = await Approval.findOne({email: req.user.email, start, end, reason: req.body.reason})
-        if (checkTheSameApproval && checkTheSameApproval.status === 'Pending') {
-            res.status(200).send('결재가 진행중에 있습니다.')
+        const checkTheSameApproval = await Approval.findOne({email: req.user.email, start, end, reason: req.body.reason, etc: req.body.etc})
+        if (checkTheSameApproval && checkTheSameApproval.status !== 'Cancel') {
+            res.status(200).send('Already there is the same approval.')
         } else {
             const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason: req.body.reason, etc: req.body.etc, approverName: approver.name, approverEmail: approver.email})
             await newApproval.save()
@@ -122,9 +84,11 @@ const getApprover = async (employee) => {
     } else if (employee.position === '팀장') {
         approver = await Employee.findOne({position: '본부장'})
     } else if (employee.position === '본부장') {
-        approver = await Employee.findOne({position: '대표이사'})
+        approver = employee
+    } else if (employee.position === '대표이사') {
+        approver = employee
     }
-    baseApprover = {name: approver.name, department: approver.department, email: approver.email}
+    baseApprover = {name: approver.name, department: approver.department, email: approver.email, employeeId: approver.employeeId}
     return baseApprover
 }
 
@@ -212,7 +176,7 @@ const makeEvent = async (title, approval) => {
     // reason이 출근인 경우 calendar에 기록 안 함 
     const end = getNextDate(approval.end)
     if (approval.reason !== '출근') {
-        const newEvent = new Event({id: Date.now(), title, start: approval.start, end, department: approval.department, employeeId: approval.employeeId})
+        const newEvent = new Event({title, start: approval.start, end, department: approval.department, employeeId: approval.employeeId})
         await newEvent.save()
     }
     await reportUpdate('add', title, approval.start, end)

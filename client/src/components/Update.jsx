@@ -162,7 +162,7 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
             <DialogActions>
                 <Button onClick={handleClose} variant='outlined'>Cancel</Button>
                 <Button onClick={handleUpdate} variant='outlined'>{writeMode?'Write':'Update'}</Button>
-                {!writeMode&&
+                {!writeMode&&page!=='approval'&&
                     (<Button onClick={handleDelete} variant='outlined'>Delete</Button>)
                 }
             </DialogActions>

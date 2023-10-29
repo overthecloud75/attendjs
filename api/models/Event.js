@@ -14,11 +14,6 @@ const EventSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        id: {
-            type: Number,     
-            required: true,
-            unique: true,
-        },
         employeeId: {
             type: Number,     
         },

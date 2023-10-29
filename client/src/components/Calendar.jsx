@@ -7,9 +7,8 @@ import interactionPlugin from '@fullcalendar/interaction'
 import Box from '@mui/material/Box'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { getColor, getEventsInCalendar, addEventInCalendar, deleteEventInCalendar, getWindowDimension } from '../utils/EventUtil'
+import { getEventsInCalendar, getWindowDimension } from '../utils/EventUtil'
 import Approval from './Approval'
-import { getUser } from '../storage/userSlice.js'
 
 const mobileSize = 800
 
@@ -30,7 +29,6 @@ const Button = styled.button`
 const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
 
     const calendarRef = useRef()
-    const user = getUser()
 
     const [headerToolbar, setHeaderToolbar] = useState({
         start: 'title', 
@@ -64,36 +62,6 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
     // eslint-disable-next-line
     }, [thisMonth, tapValue])
 
-    const handleDateSelect = async (selectInfo) => {
-        let title = prompt('Please enter a new title for your event')
-        let calendarApi = selectInfo.view.calendar
-    
-        calendarApi.unselect() // clear date selection
-
-        if (title) {
-            let event = {
-                id: Date.now(),
-                title,
-                start: selectInfo.startStr,
-                end: selectInfo.endStr
-            }
-            const result = await addEventInCalendar(event)
-            if (!result.err) {
-                event = getColor(event)
-                calendarApi.addEventInCalendar(event)
-            }
-        }
-    }
-    
-    const handleEventClick = async (clickInfo) => {
-        if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-            const result = await deleteEventInCalendar(clickInfo.event)
-            if (!result.err) {
-                clickInfo.event.remove()
-            }
-        }
-    }
-
     const handleDates = async (datesInfo) => {
         setThisMonth(datesInfo.view.title)
     }
@@ -104,12 +72,12 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
             plugins={[ dayGridPlugin, interactionPlugin ]}
             initialView='dayGridMonth'
             headerToolbar={headerToolbar}
-            editable={user.isAdmin}
-            selectable={user.isAdmin}
+            editable={false}
+            selectable={false}
             events={eventsData}
             weekends={weekends}
-            select={user.isAdmin?handleDateSelect:false}
-            eventClick={user.isAdmin?handleEventClick:false}
+            select={false}
+            eventClick={false}
             datesSet={handleDates}
             contentHeight='auto'
         />

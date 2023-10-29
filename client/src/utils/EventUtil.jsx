@@ -44,30 +44,6 @@ export const getEventsInCalendar = async (args, option) => {
     }
 }
 
-export const addEventInCalendar = async (args) => {
-    const data = {title: args.title, id: args.id, start: args.start, end: args.end}
-    try { const res = await axios.post('/api/event/add', data)
-        const resData = res.data
-        const err = false
-        return {resData, err}
-    } catch (err) {
-        const resData = []
-        return {resData, err}
-    }
-}
-
-export const deleteEventInCalendar = async (args) => {
-    const data = {id: Number(args.id)}
-    try { const res = await axios.post('/api/event/delete', data)
-        const resData = res.data
-        const err = false
-        return {resData, err}
-    } catch (err) {
-        const resData = []
-        return {resData, err}
-    }
-}
-
 export const getApproval = async () => {
     try { const res = await axios.get('/api/event/approval')
         const resData = res.data
