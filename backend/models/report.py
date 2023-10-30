@@ -373,7 +373,6 @@ class Report(BasicModel):
             if data['title'] in WORKING['specialHolidays']:
                 schedule_dict = {'holiday': data['title']}
                 break
-            name = None
             status = '기타'     
             for status_type in WORKING['status']:
                 if status_type in data['title']:

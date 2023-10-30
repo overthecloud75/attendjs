@@ -8,7 +8,7 @@ class Employee(BasicModel):
     def __init__(self):
         super().__init__(model='employees')
 
-    def get(self, name=None, date=None):
+    def get(self, date=None):
         employees = self.collection.find(sort=[('name', 1)])
         employees_list = []
         for employee in employees:

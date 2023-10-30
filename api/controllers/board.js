@@ -10,9 +10,9 @@ export const search = async (req,res,next) => {
             // to test NoSQL injection name = {$ne: null}
             // boards = await Board.find({name : {$ne: null}}).sort({createdAt: -1})  NoSQL Success
             // boards = await Board.find({name : '{$ne: '1'}'}).sort({createdAt: -1}) Not NoSQL Success
-            boards = await Board.find({name}).sort({createdAt: -1})
+            boards = await Board.find({name}, {id: 1, name: 1, title: 1, createdAt: 1, updatedAt: 1}).sort({createdAt: -1})
         } else { 
-            boards = await Board.find().sort({createdAt: -1})
+            boards = await Board.find({}, {id: 1, name: 1, title: 1, createdAt: 1, updatedAt: 1}).sort({createdAt: -1})
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(boards)
     } catch (err) {
@@ -23,11 +23,10 @@ export const search = async (req,res,next) => {
 export const write = async (req,res,next) => {
     try {
         const id = req.body.id
-        const name = req.body.name
         const title = req.body.title
         const content = req.body.content
 
-        const newBoard = Board({id, name, title, content})
+        const newBoard = Board({id, name: req.user.name, title, content, employeeId: req.user.employeeId})
         await newBoard.save()
         res.status(200).json(newBoard)
     } catch (err) {

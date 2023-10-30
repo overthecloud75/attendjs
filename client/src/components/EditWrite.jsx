@@ -9,11 +9,13 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import axios from 'axios'
 import { format } from 'date-fns'
+import { getUser } from '../storage/userSlice.js'
 
 const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
- 
+    
+    const user = getUser()
     const [focus, setFocus] = useState('name')
-    const [value, setValue] = useState(writeMode?{id: '', name: '', title: '', content: ''}:rowData)
+    const [value, setValue] = useState(writeMode?{id: '', name: user.name, title: '', content: ''}:rowData)
     const handleClose = () => { setOpen(false) }
 
     const insertData = () => {
@@ -95,7 +97,20 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
                 {columns.map((item, index) => {
                     return ( 
                         value[item.accessor]!==undefined&& 
-                            (!['createdAt', 'updatedAt'].includes(item.accessor)?(
+                            (['createdAt', 'updatedAt', 'name'].includes(item.accessor)?(
+                                <TextField
+                                    autoFocus={focus===item.accessor}
+                                    margin='dense'
+                                    id={item.accessor}
+                                    label={item.accessor}
+                                    fullWidth
+                                    variant='standard'
+                                    value={value[item.accessor]?value[item.accessor]:''}
+                                    key={index}
+                                    InputProps={{readOnly: true}}
+                                    
+                                />
+                            ):(
                                 <TextField
                                     autoFocus={focus===item.accessor}
                                     margin='dense'
@@ -106,17 +121,6 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
                                     value={value[item.accessor]?value[item.accessor]:''}
                                     key={index}
                                     onChange={handleInputChange}
-                                />
-                            ):(
-                                <TextField
-                                    margin='dense'
-                                    id={item.accessor}
-                                    label={item.accessor}
-                                    fullWidth
-                                    variant='standard'
-                                    value={rowData[item.accessor]?rowData[item.accessor]:''}
-                                    key={index}
-                                    InputProps={{readOnly: true}}
                                 />
                             )
 

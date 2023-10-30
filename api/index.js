@@ -83,6 +83,7 @@ app.use('/api/confirm', confirmRoute)
 app.use('/swagger', swaggerRoute)
 
 app.use((err, req, res, next) => {
+    console.log(err)
     const errorStatus = err.status || 500
     const errorMessage = err.message || 'Something went wrong!'
     if (err.status === 500) {

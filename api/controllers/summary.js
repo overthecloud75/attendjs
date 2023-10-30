@@ -6,8 +6,6 @@ import { getToday, getDefaultAnnualLeave } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
     try {
-        const reverseStatus = getReverseStatus()
-
         let summaryList = []
         let summary = {}
         const attends = await getAttends(req)
@@ -28,9 +26,10 @@ export const search = async (req,res,next) => {
             summary[attend.employeeId].days++  
             summary[attend.employeeId].workingHours = summary[attend.employeeId].workingHours + attend.workingHours
             if (attend.status) { summary[attend.employeeId][attend.status]++ }
+           
             if (attend.reason === '출근') { summary[attend.employeeId]['정상출근']++ 
-            } else {
-                summary[attend.employeeId][reverseStatus[attend.reason]]++
+            } else if (attend.reason) {
+                summary[attend.employeeId][attend.reason]++
             }
         }
         for (const id in summary) {
