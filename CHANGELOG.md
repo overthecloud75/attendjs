@@ -1,4 +1,7 @@
 * 23/11/24
+    - 1.8.8 (api) <br>
+        apply ping for livenessprobe <br>
+
     - 1.8.7 (api, backend) <br>
         apply mongodb auth <br>
 

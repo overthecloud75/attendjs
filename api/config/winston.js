@@ -15,7 +15,8 @@ export const reqFormat = (req) => {
     if (headers.referer) {
         referer = headers.referer
     }
-    const x_forwarded_for = headers['x-forwarded-for'].split(',')[0].split(':')[0]
+    let x_forwarded_for = req.connection.remoteAddress
+    if (Object.keys(headers).includes('x-forwarded-for')) {x_forwarded_for = headers['x-forwarded-for'].split(',')[0].split(':')[0]}
     let info
     try {
         info = x_forwarded_for + '-' + req.method + '-' + decodeURI(req.originalUrl) + '-' + referer + '-' + headers['user-agent']

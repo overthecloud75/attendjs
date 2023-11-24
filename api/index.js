@@ -7,6 +7,7 @@ import rateLimit from 'express-rate-limit'
 import csrf from 'csurf'
 
 import { logger, reqFormat } from './config/winston.js'
+import pingRoute from './routes/ping.js'
 import authRoute from './routes/auth.js'
 import usersRoute from './routes/users.js'
 import wifiRoute from './routes/wifi.js'
@@ -69,6 +70,8 @@ app.use((req, res, next) => {
     logger.info(reqFormat(req))
     next()
 })
+
+app.use('/', pingRoute)
 app.use('/api/auth', authRoute)
 app.use('/api/users', usersRoute)
 app.use('/api/attend', attendRoute)
