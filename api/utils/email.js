@@ -45,7 +45,6 @@ export const registerConfirmationEmail = async (name, email, confirmationCode) =
 export const attendRequestEmail = async (approval, summary) => {
     logger.info('send attend request email')  
     try {
-        console.log('summary', summary)
         const transport = makeTransport()
         await transport.sendMail({
             from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
