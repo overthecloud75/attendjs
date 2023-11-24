@@ -1,3 +1,7 @@
+* 23/11/24
+    - 1.8.7 (api, backend) <br>
+        apply mongodb auth <br>
+
 * 23/10/30 
     - 1.8.6 (api, client) <br>
         fix some issue in board.js <br>

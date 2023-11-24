@@ -109,7 +109,7 @@ export const confirmApproval = async (req, res, next) => {
                 res.status(200).send(makeHtml('이미 처리하였습니다.'))
             }
         } else {
-            next(createError(403, 'approval not found!'))
+            next(createError(500, 'approval not found!'))
         }
     } catch (err) {
         next(err)

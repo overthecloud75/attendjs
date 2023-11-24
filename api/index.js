@@ -29,7 +29,10 @@ dotenv.config()
 app.set('trust proxy', process.env.TRUST_PROXY)
 const connect = async () => {
     try {
-        await mongoose.connect(process.env.MONGO)
+        await mongoose.connect(
+            process.env.MONGOURL, {
+            dbName: process.env.MONGODB, auth: {username: process.env.MONGOUSER, password: process.env.MONGOPWD}
+        })
         logger.info('Connected to mongoDB.')
     } catch (err) {
         logger.error(err)
@@ -83,6 +86,7 @@ app.use('/api/confirm', confirmRoute)
 app.use('/swagger', swaggerRoute)
 
 app.use((err, req, res, next) => {
+    console.log(req)
     console.log(err)
     const errorStatus = err.status || 500
     const errorMessage = err.message || 'Something went wrong!'

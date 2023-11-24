@@ -57,21 +57,21 @@ export const login = async (req, res, next) => {
     const email = sanitizeData(req.body.email, 'email')
     try {
         const user = await getUserByEmail(email)
-        if (!user) return next(createError(403, 'User not found!'))
+        if (!user) return next(createError(403, 'Wrong password or email!'))
 
-        const isPasswordCorrect = bcrypt.compare(
+        const isPasswordCorrect = await bcrypt.compare(
             req.body.password,
             user.password
         )
         if (!isPasswordCorrect)
-            return next(createError(400, 'Wrong password or email!'))
+            return next(createError(403, 'Wrong password or email!'))
 
         if (user.status != 'Active') {
             return next(createError(401, 'Pending Account. Please Verify Your Email!'))
         }
         const {regular, department} = await getEmployeeByEmail(email)
         if (regular==='퇴사') {
-            return next(createError(403, 'Employee not found!'))
+            return next(createError(403, 'Wrong password or email!'))
         }
         const token = jwt.sign(
             {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department},

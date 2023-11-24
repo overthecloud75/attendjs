@@ -45,6 +45,7 @@ export const registerConfirmationEmail = async (name, email, confirmationCode) =
 export const attendRequestEmail = async (approval, summary) => {
     logger.info('send attend request email')  
     try {
+        console.log('summary', summary)
         const transport = makeTransport()
         await transport.sendMail({
             from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
@@ -54,6 +55,7 @@ export const attendRequestEmail = async (approval, summary) => {
                 <p>${approval.name}님이 다음과 같이 근태 신청을 하였습니다.</p>
                 <p>이름 : ${approval.name}</p>
                 <p>기간 : ${approval.start}~${approval.end}</p>
+                <p>연차기준 : ${summary.baseDate}</p>
                 <p>근태현황 : 남은연차 ${summary.leftAnnualLeave}, 미출근 ${summary['미출근']}, 지각 ${summary['지각']}, 휴가 ${summary['휴가']}</p>
                 <p>사유 : ${approval.reason}</p>
                 <p>기타 : ${approval.etc}</p>
