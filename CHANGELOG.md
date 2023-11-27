@@ -1,3 +1,7 @@
+* 23/11/26
+    - 1.8.9 (api) <br>
+        Dockerfile <br>
+
 * 23/11/24
     - 1.8.8 (api) <br>
         apply ping for livenessprobe <br>
