@@ -6,11 +6,13 @@ RUN npm install -g npm@10.2.0
 RUN mkdir /webApp
 WORKDIR /webApp
 
-RUN chown -R 1000:1000 .
-RUN chmod -R 744 . 
+COPY ./ ./
 
-COPY ./ ./ 
-RUN npm install
+RUN chown -R 1000:1000 .
+RUN chmod -R 744 .
 
 USER 1000
+
+RUN npm install 
+
 CMD ["node", "index.js"]

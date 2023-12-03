@@ -4,11 +4,6 @@ import os
 BASE_DIR= os.getcwd()
 LOG_DIR = 'logs'
 
-# smtp_server
-SMTP_CONFIG = {'host' : '127.0.0.1', 
-               'port' : 25
-}
-
 # paging
 PAGE_DEFAULT = {
     'per_page': 20,

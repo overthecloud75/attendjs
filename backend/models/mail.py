@@ -1,7 +1,6 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from config import SMTP_CONFIG
 try:
     from mainconfig import ACCOUNT, MAIL_SERVER, CC
 except Exception as e:
