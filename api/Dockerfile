@@ -1,4 +1,4 @@
-FROM node:18.18.2
+FROM node:18.19.0-alpine
 ARG REGISTRY
 
 RUN npm config set registry ${REGISTRY}
@@ -8,10 +8,11 @@ WORKDIR /webApp
 
 COPY ./ ./
 
-RUN chown -R 1000:1000 .
+RUN adduser -D smartwork
+RUN chown -R smartwork:smartwork .
 RUN chmod -R 744 .
 
-USER 1000
+USER smartwork
 
 RUN npm install 
 

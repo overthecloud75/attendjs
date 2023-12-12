@@ -1,3 +1,7 @@
+* 23/12/12
+    - 1.9.0 (client, api) <br>
+        crypto-js: 4.1.1 -> 4.2.0 <br>
+
 * 23/11/26
     - 1.8.9 (api) <br>
         Dockerfile <br>
