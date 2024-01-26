@@ -83,16 +83,21 @@ class Report(BasicModel):
             schedule_dict = self._schedule(employees_list, date=date)
             # special holiday가 있는 경우 제외
             if 'holiday' not in schedule_dict:
-                for employee in employees_list:
-                    name = employee['name']
-                    employee_id = employee['employeeId']
-                    regular = employee['regular']
-                    if employee['mode'] == '파견' and employee['attendMode'] == 'X':
-                        reason = '출근'
-                    else:
-                        reason = None
-                    # 같은 employee_id 인데 이름이 바뀌는 경우 발생
-                    attend[employee_id] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 'end': None, 'reason': reason, 'regular': regular}
+                attend_list = self.collection.find({'date': date})
+                if attend_list is None:
+                    for employee in employees_list:
+                        name = employee['name']
+                        employee_id = employee['employeeId']
+                        regular = employee['regular']
+                        if employee['mode'] == '파견' and employee['attendMode'] == 'X':
+                            reason = '출근'
+                        else:
+                            reason = None
+                        # 같은 employee_id 인데 이름이 바뀌는 경우 발생
+                        attend[employee_id] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 'end': None, 'reason': reason, 'regular': regular}
+                else:
+                    for check_previous_attend in attend_list:
+                        attend[check_previous_attend['employeeId']] = check_previous_attend
                 # update 날짜가 오늘 날짜인 경우만 진행
                 if date == self.today:
                     # self._update_devices(date=date)
@@ -104,35 +109,29 @@ class Report(BasicModel):
             self._update_devices(date=date)
 
         # 지문 인식 출퇴근 기록
-        attend, overnight_employees = self.fingerprint_attend(attend, date, hour)
+        attend, overnight_employees = self.fingerprint_attend(attend, date)
         # 지문 인식기 + wifi 출퇴근 기록
         if USE_WIFI_ATTENDANCE:
             attend = self._fingerprint_or_wifi(attend, date)
         # Add GPS attend 
-            attend = self._legacy_or_gps(attend, date)
+        attend = self._legacy_or_gps(attend, date)
         # attend
         for employee_id in attend:
             if employee_id in schedule_dict:
                 status = schedule_dict[employee_id]
                 attend[employee_id]['status'] = None
                 attend[employee_id]['reason'] = status
-                if hour >= 18:
-                    # status가 2개 이상으로 표시된 경우 ex) 반차, 정기점검
-                    if '반차' in status: 
-                        status = '반차'
-                        attend[employee_id]['reason'] = status
-                    elif '휴가' in status:
-                        status = '휴가'
-                        attend[employee_id]['reason'] = status
-                    attend[employee_id]['workingHours'] = WORKING['status'][status]
-                else:
-                    attend[employee_id]['workingHours'] = None
+                # status가 2개 이상으로 표시된 경우 ex) 반차, 정기점검
+                if '반차' in status: 
+                    status = '반차'
+                    attend[employee_id]['reason'] = status
+                elif '휴가' in status:
+                    status = '휴가'
+                    attend[employee_id]['reason'] = status
+                attend[employee_id]['workingHours'] = WORKING['status'][status]
             elif attend[employee_id]['reason']:
                 attend[employee_id]['status'] = None
-                if hour >= 18:
-                    attend[employee_id]['workingHours'] = WORKING['status'][attend[employee_id]['reason']]
-                else:
-                    attend[employee_id]['workingHours'] = None 
+                attend[employee_id]['workingHours'] = WORKING['status'][attend[employee_id]['reason']] 
             elif attend[employee_id]['begin']:
                 if not is_holiday:
                     if 'regular' in attend[employee_id] and attend[employee_id]['regular'] in WORKING['update'] and \
@@ -143,20 +142,13 @@ class Report(BasicModel):
                         attend[employee_id]['status'] = '정상출근'
                 else:
                     attend[employee_id]['status'] = '정상출근'
-                if hour >= 18:
-                    attend[employee_id]['workingHours'] = self._calculate_working_hours(attend[employee_id]['begin'], attend[employee_id]['end'], overnight=False)
-                else:
-                    attend[employee_id]['workingHours'] = None
+                attend[employee_id]['workingHours'] = self._calculate_working_hours(attend[employee_id]['begin'], attend[employee_id]['end'], overnight=False)
             else:
                 if not is_holiday:
+                    attend[employee_id]['workingHours'] = 0
                     if hour >= 18:
-                        attend[employee_id]['workingHours'] = 0
                         attend[employee_id]['status'] = '미출근'
-                    elif hour >= int(WORKING['time']['beginTime']) / 10000:
-                        attend[employee_id]['workingHours'] = None
-                        attend[employee_id]['status'] = '지각'
                     else:
-                        attend[employee_id]['workingHours'] = None
                         attend[employee_id]['status'] = '출근전'
                 else:
                     attend[employee_id]['status'] = '정상출근'
@@ -174,7 +166,7 @@ class Report(BasicModel):
                 print(attend[employee_id])
         return overnight_employees
 
-    def fingerprint_attend(self, attend, date, hour):
+    def fingerprint_attend(self, attend, date):
         overnight_employees = []
 
         access_today = date[0:4] + date[5:7] + date[8:]  # access_day 형식으로 변환
@@ -193,18 +185,15 @@ class Report(BasicModel):
                                         'end': None, 'reason': None}
                         
                         # employee_id가 있는데 attend에 없는 경우는 신입 사원 => 등록 
-                        self.employee.post(employee_id=employee_id, name=name, begin_date=date )
+                        self.employee.post(employee_id=employee_id, name=name, begin_date=date)
                     if attend[employee_id]['begin']:
                         if int(time) < int(attend[employee_id]['begin']):
                             attend[employee_id]['begin'] = time
-                        if hour >= 18 and int(time) > int(attend[employee_id]['end']):
+                        if int(time) > int(attend[employee_id]['end']):
                             attend[employee_id]['end'] = time
                     else:
                         attend[employee_id]['begin'] = time
-                        if hour >= 18:
-                            attend[employee_id]['end'] = time
-                        else:
-                            attend[employee_id]['end'] = None
+                        attend[employee_id]['end'] = time
                 else:
                     print('overnight', employee_id, time)
                     if employee_id not in overnight_employees:
