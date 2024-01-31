@@ -83,8 +83,11 @@ class Report(BasicModel):
             schedule_dict = self._schedule(employees_list, date=date)
             # special holiday가 있는 경우 제외
             if 'holiday' not in schedule_dict:
-                attend_list = self.collection.find({'date': date})
-                if attend_list is None:
+                if self.collection.count_documents({'date': date}):
+                    attend_list = self.collection.find({'date': date})
+                    for check_previous_attend in attend_list:
+                        attend[check_previous_attend['employeeId']] = check_previous_attend
+                else:
                     for employee in employees_list:
                         name = employee['name']
                         employee_id = employee['employeeId']
@@ -95,9 +98,6 @@ class Report(BasicModel):
                             reason = None
                         # 같은 employee_id 인데 이름이 바뀌는 경우 발생
                         attend[employee_id] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 'end': None, 'reason': reason, 'regular': regular}
-                else:
-                    for check_previous_attend in attend_list:
-                        attend[check_previous_attend['employeeId']] = check_previous_attend
                 # update 날짜가 오늘 날짜인 경우만 진행
                 if date == self.today:
                     # self._update_devices(date=date)
