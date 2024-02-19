@@ -1,3 +1,7 @@
+* 24/02/19
+    - 1.9.2 (backend) <br>
+        refactoring <br>
+
 * 24/01/26
     - 1.9.1 (backend) <br>
         apply check_previous_attend in report.py <br>

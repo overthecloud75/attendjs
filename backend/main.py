@@ -11,6 +11,7 @@ if not os.path.exists(os.path.join(BASE_DIR, LOG_DIR)):
 
 def save_db(report):
     report.update()
+    time.sleep(1800)
 
 # Arp Scan : nmap -sn 
 def check_sn():
@@ -60,7 +61,7 @@ if __name__ == '__main__':
 
     while True:
         save_db(report)
-        time.sleep(1800)
+        
 
         
         

@@ -43,7 +43,7 @@ class Device(BasicModel):
         if 'owner' in request_data and request_data['owner'] == 'None':
             request_data['owner'] = None
         if 'owner' in request_data and request_data['owner']:
-            employees_list = self.employee.get()
+            employees_list = self.employee.get_list()
             for employee in employees_list:
                 name = employee['name']
                 employee_id = employee['employeeId']
