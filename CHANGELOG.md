@@ -1,3 +1,7 @@
+* 24/02/20 
+    - 1.9.3 (api) <br>
+        error fix <br>
+
 * 24/02/19
     - 1.9.2 (backend) <br>
         refactoring <br>

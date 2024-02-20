@@ -10,6 +10,9 @@ PAGE_DEFAULT = {
     'screen_pages': 10
 }
 
+# device check
+CHECK_DEVICE = True 
+
 # wift attend
 USE_WIFI_ATTENDANCE = False
 

@@ -57,22 +57,22 @@ export const reportUpdate = async (action, event, start, end) => {
     const employee = await Employee.findOne({name}).lean()
     const today = getToday()
     if (employee) {
+        let isUpdate = true 
         const employeeId = employee.employeeId
         const reports = await Report.find({name, employeeId, date: {$gte: start, $lt: end}}).sort({date: 1}).lean()
-        let reason = null 
-        if (eventStatus) {reason = eventStatus}
         for (let report of reports) {
             const date = report.date 
             if (date < today) {
-                report.reason = reason
-                if (reason) {
-                    report.workingHours = WORKING.status[reason]
+                if (eventStatus == '출근' && report.reason) { isUpdate = false
+                } else {report.reason = eventStatus}
+                if (eventStatus) {
+                    report.workingHours = WORKING.status[eventStatus]
                     report.status = null 
                 } else {
                     report.workingHours = calculateWorkingHours(report.begin, report.end)
                     report.state = getState(employee.status, report.begin, report.end)
-                }
-                await Report.updateOne({name, employeeId, date}, {$set: report})
+                } 
+                if (isUpdate) {await Report.updateOne({name, employeeId, date}, {$set: report})}
             } else {
                 break
             }    

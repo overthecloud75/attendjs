@@ -51,7 +51,7 @@ export const logger = winston.createLogger({
         new winstonDaily({
             level: 'error',
             datePattern: 'YYYY-MM-DD',
-            dirname: logDir + '/error',  // error.log 파일은 /logs/error 하위에 저장 
+            dirname: logDir,  // error.log 파일은 /logs/error 하위에 저장 
             filename: `%DATE%.error.log`,
             maxFiles: 30,
             zippedArchive: true,

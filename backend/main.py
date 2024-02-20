@@ -4,7 +4,7 @@ import time
 
 from models import Report, Device, DeviceOn
 from utils import Scanner
-from config import BASE_DIR, LOG_DIR, USE_WIFI_ATTENDANCE
+from config import BASE_DIR, LOG_DIR, USE_WIFI_ATTENDANCE, CHECK_DEVICE
 
 if not os.path.exists(os.path.join(BASE_DIR, LOG_DIR)):
     os.mkdir(os.path.join(BASE_DIR, LOG_DIR))
@@ -13,7 +13,7 @@ def save_db(report):
     report.update()
     time.sleep(1800)
 
-# Arp Scan : nmap -sn 
+# nmap -sn 
 def check_sn():
     while True:
         wifi_connected = scanner.check_wifi_connected()
@@ -30,7 +30,7 @@ def check_sn():
            
         time.sleep(60)
 
-# Arp Scan : nmap -O
+# nmap -O
 def check_o():
     while True:
         wifi_connected = scanner.check_wifi_connected()
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     scanner = Scanner()
     report = Report()
 
-    if USE_WIFI_ATTENDANCE:
+    if CHECK_DEVICE:
         th1 = threading.Thread(target=check_sn)
         th1.daemon = True
         th1.start()

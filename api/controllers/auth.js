@@ -14,7 +14,6 @@ import { registerConfirmationEmail } from '../utils/email.js'
 import { sanitizeData } from '../utils/util.js'
 
 export const register = async (req, res, next) => {
-    logger.info(reqFormat(req))
     try {
         const name = req.body.name 
         const email = sanitizeData(req.body.email, 'email')

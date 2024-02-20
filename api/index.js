@@ -34,7 +34,7 @@ const connect = async () => {
             process.env.MONGOURL, {
             dbName: process.env.MONGODB, auth: {username: process.env.MONGOUSER, password: process.env.MONGOPWD}
         })
-        logger.info('Connected to mongoDB.')
+        logger.warn('Connected to mongoDB.')
     } catch (err) {
         logger.error(err)
         process.exit(1)
@@ -42,11 +42,11 @@ const connect = async () => {
 }
 
 mongoose.connection.on('disconnected', () => {
-    logger.info('mongoDB disconnected!')
+    logger.warn('mongoDB disconnected!')
 })
 
 mongoose.connection.on('connected', () => {
-    logger.info('mongoDB connected!')
+    logger.warn('mongoDB connected!')
 })
 
 const limiter = rateLimit({
@@ -89,11 +89,9 @@ app.use('/api/confirm', confirmRoute)
 app.use('/swagger', swaggerRoute)
 
 app.use((err, req, res, next) => {
-    console.log(req)
-    console.log(err)
     const errorStatus = err.status || 500
     const errorMessage = err.message || 'Something went wrong!'
-    if (err.status === 500) {
+    if (errorStatus === 500) {
         logger.error(err)
     }
     return res.status(errorStatus).json({
@@ -103,5 +101,5 @@ app.use((err, req, res, next) => {
 
 app.listen(8888, () => {
     connect()
-    logger.info('Connected to backend.')
+    logger.warn('Connected to backend.')
 })
