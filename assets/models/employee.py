@@ -17,12 +17,3 @@ class Employee(BasicModel):
                 else:
                     employees_list.append(employee_info)
         return employees_list
-
-    def get(self, employee_id=None):
-        return self.collection.find_one({'employeeId': employee_id})
-
-    def post(self, employee_id=None, name=None, begin_date=None):
-        if employee_id and name and begin_date:
-            employee = self.get(employee_id=employee_id)
-            if not employee:
-                self.collection.insert_one({'employeeId': employee_id, 'name': name, 'beginDate': begin_date, 'regular': '상근', 'mode': '내근', 'attendMode': 'X'})

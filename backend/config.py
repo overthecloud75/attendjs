@@ -4,14 +4,14 @@ import os
 BASE_DIR= os.getcwd()
 LOG_DIR = 'logs'
 
+if not os.path.exists(os.path.join(BASE_DIR, LOG_DIR)):
+    os.mkdir(os.path.join(BASE_DIR, LOG_DIR))
+
 # paging
 PAGE_DEFAULT = {
     'per_page': 20,
     'screen_pages': 10
 }
-
-# device check
-CHECK_DEVICE = True 
 
 # wift attend
 USE_WIFI_ATTENDANCE = False
@@ -41,14 +41,6 @@ USE_LUNAR_NEW_YEAR = True
 
 # security
 PRIVATE_IP_RANGE = '192.168.0.0'
-
-# employees
-EMPLOYEES_STATUS = {
-    'department': ['연구소', '솔루션', '컨설팅', '기획', '아도스'],
-    'position': ['팀원', '팀장', '본부장', '대표이사'],
-    'regular': ['상근', '병특', '비상근', '휴직', '퇴사'],
-    'mode': ['내근', '파견'],
-}
 
 # approval
 APPROVAL_REASON = ['휴가', '반차', '재택', '기타']

@@ -28,9 +28,11 @@ cursor = conn.cursor()
 class Report(BasicModel):
     def __init__(self):
         super().__init__(model='reports')
+        self.logger.info('Start')
         self.employee = Employee()
-        self.devices = Device()
-        self.device_on = DeviceOn()
+        if USE_WIFI_ATTENDANCE:
+            self.devices = Device()
+            self.device_on = DeviceOn()
         self.gps_on = GPSOn()
         
         self.e_uptime = 0
@@ -71,7 +73,6 @@ class Report(BasicModel):
             self._check_attend(date, hour)
 
     def _check_attend(self, date, hour):
-        print('update', datetime.datetime.now())
         # attend 초기화
         
         self.previous_attend = {}
@@ -93,7 +94,6 @@ class Report(BasicModel):
 
         # notice and update_device        
         self._notice_email(date=date)
-        self._update_devices(date=date)
 
         # 지문 인식 출퇴근 기록
         attend = self.fingerprint_attend(attend, date)
@@ -101,9 +101,14 @@ class Report(BasicModel):
         if USE_WIFI_ATTENDANCE:
             attend = self._fingerprint_or_wifi(attend, date)
         # Add GPS attend 
-        attend = self._legacy_or_gps(attend, date)
+        if USE_GPS_ATTENDANCE:
+            attend = self._legacy_or_gps(attend, date)
         # attend
         for employee_id in attend:
+            # GPS 기록에는 regualar 여부 기록하지 않음 비상근일 때 reqular key 값이 없어 error 발생할 수 있음 
+            if 'regular' not in attend:
+                employee = self.employee.get(employee_id=employee_id)
+                attend[employee_id]['regular'] = employee['regular']
             if employee_id in schedule_dict:
                 status = schedule_dict[employee_id]
                 attend[employee_id]['status'] = None
@@ -188,7 +193,7 @@ class Report(BasicModel):
                         attend[employee_id]['begin'] = time
                         attend[employee_id]['end'] = time
                 elif int(time) <= int(WORKING['time']['overNight']) and employee_id not in self.overnight_employees:
-                    print('overnight', employee_id, time)
+                    self.logger.info('overnight: {}, {}'.format(employee_id, time))
                     self.overnight_employees.append(employee_id)
         if max_uptime:
             self.e_uptime = max_uptime
@@ -228,7 +233,7 @@ class Report(BasicModel):
                 else:
                     self.collection.update_one({'date': date, 'employeeId': employee_id}, {'$set': attend_by_employee_id}, upsert=True)
         except Exception as e:
-            print('error', e, attend_by_employee_id)
+            self.logger.error('{}, {}'.format(e, attend_by_employee_id))
 
     def _compare_time(self, attend, date, employee_id, name, begin, end):
         if employee_id in attend:
@@ -261,7 +266,7 @@ class Report(BasicModel):
         return working_hours
 
     def _update_overnight(self, date=None):
-        print('overnight', self.overnight_employees)
+        self.logger.info('overnight: {}'.format(self.overnight_employees))
         yesterday = get_delta_day(date, delta=-1)
         access_yesterday = yesterday[0:4] + yesterday[5:7] + yesterday[8:]
         for employee_id in self.overnight_employees:
@@ -282,7 +287,7 @@ class Report(BasicModel):
                         attend['end'] = time
 
             if 'begin' in attend:
-                print('attendyesterday', attend)
+                self.logger.info('attendyesterday: {}'.format(attend))
                 access_today = date[0:4] + date[5:7] + date[8:]
                 cursor.execute(
                     "select e_id, e_name, e_date, e_time, e_mode from tenter where e_date = ? and e_id = ?",
@@ -328,7 +333,7 @@ class Report(BasicModel):
                 begin = self._convert_begin(report['begin'])
                 status = report['status']
                 if status in EMAIL_NOTICE_BASE:
-                    print('send_notice_email', self.today, name)
+                    self.logger.info('send_notice_email, {}, {}'.format(self.today, name))
                     # https://techexpert.tips/ko/python-ko/파이썬-office-365를-사용하여-이메일-보내기
                     # https://nowonbun.tistory.com/684 (참조자)
                     body = '\n' \
@@ -352,16 +357,6 @@ class Report(BasicModel):
                         return sent
                 else:
                     return False
-
-    def _update_devices(self, date=None):
-        '''
-            1. update 날짜가 오늘 날짜인 경우만 진행 
-        '''
-        if date == self.today:
-            mac_list = self.device_on.get_device_list(date=date)
-            for device in mac_list:
-                request_data = {'mac': device['mac'], 'ip': device['ip'], 'endDate': date}
-                self.devices.post(request_data)
 
     def _schedule(self, date=None):
         collection = db['events']

@@ -1,3 +1,7 @@
+* 24/02/24
+    - 1.9.4 (backend) <br>
+        separate assets from backend <br>
+
 * 24/02/20 
     - 1.9.3 (api) <br>
         error fix <br>
