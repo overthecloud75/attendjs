@@ -3,6 +3,7 @@ import subprocess
 import nmap
 import locale
 import datetime
+import logging
 
 try:
     from mainconfig import WIFI, SCAN_RANGE_LIST
@@ -13,6 +14,8 @@ from config import DATE_FORMAT
 
 class Scanner:
     def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        self.logger.info('Start')
         self.nm = nmap.PortScanner()
 
     def nmap_sn_scan(self):
@@ -27,6 +30,7 @@ class Scanner:
                 if result['scan']:
                     for ip in result['scan']:
                         network = {}
+                        mac = ''
                         if 'mac' in result['scan'][ip]['addresses']:
                             mac = result['scan'][ip]['addresses']['mac']
                             # nmap으로 하는 경우 mac 값이 대문자로 표시가 됨 -> 소문자로 변경 필요
@@ -39,7 +43,7 @@ class Scanner:
                         network['ipStr'] = ip_str 
                         network['date'] = date
                         network['time'] = time 
-                        if mac in result['scan'][ip]['vendor']:
+                        if mac and mac in result['scan'][ip]['vendor']:
                             network['vendor'] = result['scan'][ip]['vendor'][mac]
                         else:
                             network['vendor'] = ''
@@ -66,30 +70,42 @@ class Scanner:
         return network_list
 
     def check_wifi_connected(self):
-        os_encoding = locale.getpreferredencoding()
-        cmd = 'netsh interface show interface'
-        cmd = cmd.split()
-        fd_popen = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
-        data_list = fd_popen.read().decode(os_encoding).strip().split()
-        fd_popen.close()
+        if os.name == 'nt':
+            os_encoding = locale.getpreferredencoding()
+            cmd = 'netsh interface show interface'
+            cmd = cmd.split()
+            fd_popen = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
+            data_list = fd_popen.read().decode(os_encoding).strip().split()
+            fd_popen.close()
 
-        status_list = []
-        interface_list = []
-        for data in data_list:
-            if '연결' in data or 'connected' in data.lower():
-                status_list.append(data.lower())
-            if '이더넷' in data or 'ethernet' in data.lower() or 'wi-fi' in data.lower():
-                interface_list.append(data.lower())
+            status_list = []
+            interface_list = []
+            for data in data_list:
+                if '연결' in data or 'connected' in data.lower():
+                    status_list.append(data.lower())
+                if '이더넷' in data or 'ethernet' in data.lower() or 'wi-fi' in data.lower():
+                    interface_list.append(data.lower())
 
-        connected = False
-        for status, interface in zip(status_list, interface_list):
-            if interface == 'wi-fi' and (status == '연결됨' or status == 'connected'):
-                connected = True
-
+            connected = False
+            for status, interface in zip(status_list, interface_list):
+                if interface == 'wi-fi' and (status == '연결됨' or status == 'connected'):
+                    connected = True
+        else:
+            try:
+                output = subprocess.check_output(["iwconfig", WIFI['NAME_OF_ROUTER']])
+                if b"ESSID:off/any" in output:
+                    connected = False
+                else:
+                    connected = True
+            except subprocess.CalledProcessError:
+                connected = False 
         return connected
 
     def connect_wifi(self):
-        os.system(f'''cmd /c "netsh wlan connect name={WIFI['NAME_OF_ROUTER']}"''')
+        if os.name:
+            os.system(f'''cmd /c "netsh wlan connect name={WIFI['NAME_OF_ROUTER']}"''')
+        else:
+            subprocess.run(['iwconfig', WIFI['NAME_OF_ROUTER'], 'txpower', 'auto'])
 
     def make_ip_str(self, ip):
         ip_split_list = ip.split('.')

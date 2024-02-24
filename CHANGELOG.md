@@ -1,3 +1,7 @@
+* 24/02/25
+    - 1.9.5 (assets) <br>
+        consider linux container environment <br>
+
 * 24/02/24
     - 1.9.4 (backend) <br>
         separate assets from backend <br>
