@@ -72,7 +72,7 @@ if __name__ == '__main__':
     devices = Device()
     device_on = DeviceOn()
     scanner = Scanner()
-        
+     
     th1 = threading.Thread(target=check_sn)
     th1.daemon = True
     th1.start()

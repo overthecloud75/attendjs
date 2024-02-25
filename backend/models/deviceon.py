@@ -13,13 +13,9 @@ class DeviceOn(BasicModel):
         for mac in mac_list:
             data = self.collection.find_one({'date': date, 'mac': mac})
             if data:
-                if begin and int(begin) > int(data['begin']):
+                if begin is None or (int(begin) > int(data['begin'])):
                     begin = data['begin']
-                elif not begin:
-                    begin = data['begin']
-                if  end and int(end) < int(data['end']):
-                    end = data['end']
-                elif not end:
+                if end is None or (int(end) < int(data['end'])):
                     end = data['end']
         return begin, end
 

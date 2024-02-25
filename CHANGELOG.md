@@ -1,4 +1,6 @@
 * 24/02/25
+    - 1.9.6 (backend) <br>
+        refactoring <br>
     - 1.9.5 (assets) <br>
         consider linux container environment <br>
 

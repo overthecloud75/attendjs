@@ -162,7 +162,7 @@ class Report(BasicModel):
         self.overnight_employees = []
         max_uptime = 0 
 
-        access_today = date[0:4] + date[5:7] + date[8:]  # access_day 형식으로 변환
+        access_today = self._get_access_day(date, delta=0)  # access_day 형식으로 변환
         cursor.execute("select e_id, e_name, e_date, e_time, e_mode, e_uptime from tenter where e_date = ?", access_today)
 
         for row in cursor.fetchall():
@@ -267,8 +267,7 @@ class Report(BasicModel):
 
     def _update_overnight(self, date=None):
         self.logger.info('overnight: {}'.format(self.overnight_employees))
-        yesterday = get_delta_day(date, delta=-1)
-        access_yesterday = yesterday[0:4] + yesterday[5:7] + yesterday[8:]
+        access_yesterday = self._get_access_day(date, delta=-1)
         for employee_id in self.overnight_employees:
             cursor.execute("select e_id, e_name, e_date, e_time, e_mode from tenter where e_date=? and e_id = ?",
                            (access_yesterday, employee_id))
@@ -392,6 +391,12 @@ class Report(BasicModel):
             if status_type in title:
                 status = status_type
         return status 
+
+    def _get_access_day(self, date, delta=0):
+        if delta:
+            date = get_delta_day(date, delta=delta)
+        return date[0:4] + date[5:7] + date[8:]
+
 
 
 

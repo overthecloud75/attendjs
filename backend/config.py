@@ -7,12 +7,6 @@ LOG_DIR = 'logs'
 if not os.path.exists(os.path.join(BASE_DIR, LOG_DIR)):
     os.mkdir(os.path.join(BASE_DIR, LOG_DIR))
 
-# paging
-PAGE_DEFAULT = {
-    'per_page': 20,
-    'screen_pages': 10
-}
-
 # wift attend
 USE_WIFI_ATTENDANCE = False
 
@@ -38,12 +32,6 @@ WORKING = {
 
 # holiday
 USE_LUNAR_NEW_YEAR = True
-
-# security
-PRIVATE_IP_RANGE = '192.168.0.0'
-
-# approval
-APPROVAL_REASON = ['휴가', '반차', '재택', '기타']
 
 # date
 DATE_FORMAT = '%Y-%m-%d'
