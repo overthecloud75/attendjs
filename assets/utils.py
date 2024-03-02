@@ -29,7 +29,6 @@ class Scanner:
             else:
                 if result['scan']:
                     for ip in result['scan']:
-                        network = {}
                         mac = ''
                         if 'mac' in result['scan'][ip]['addresses']:
                             mac = result['scan'][ip]['addresses']['mac']
@@ -39,14 +38,9 @@ class Scanner:
                         # ip 정렬 문제로 ip_str 필요
                         ip_str = self.make_ip_str(ip)
 
-                        network['ip'] = ipv4
-                        network['ipStr'] = ip_str 
-                        network['date'] = date
-                        network['time'] = time 
+                        network = {'ip': ipv4, 'ipstr', ip_str, 'date': date, 'time': time, 'vendor': ''}
                         if mac and mac in result['scan'][ip]['vendor']:
                             network['vendor'] = result['scan'][ip]['vendor'][mac]
-                        else:
-                            network['vendor'] = ''
                         network_list.append(network)
         return network_list
 
@@ -56,13 +50,10 @@ class Scanner:
             result = self.nm.scan(ip_range, arguments='-O')
             if result['scan']:
                 for ip in result['scan']:
-                    network = {}
+                    network = {'ip': ip, 'os': '', 'accuracy': ''}
                     if 'mac' in result['scan'][ip]['addresses']:
                         mac = result['scan'][ip]['addresses']['mac']
                         network['mac'] = mac.lower()
-                    network['ip'] = ip   
-                    network['os'] = ''
-                    network['accuracy'] = ''
                     if result['scan'][ip]['osmatch']:
                         network['os'] = result['scan'][ip]['osmatch'][0]['name']
                         network['accuracy'] = result['scan'][ip]['osmatch'][0]['accuracy'] 
@@ -142,9 +133,9 @@ def get_delta_day(date, delta=None):
     date = datetime.datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]), 0, 0, 0)
     if delta:
         if delta >= 0:
-            date = date + timedelta(days=delta)
+            date = date + datetime.timedelta(days=delta)
         else:
             delta = -1 * delta
-            date = date - timedelta(days=delta)
+            date = date - datetime.timedelta(days=delta)
     date = date.strftime(DATE_FORMAT)
     return date

@@ -8,6 +8,7 @@ import { sanitizeData } from '../utils/util.js'
 import { attendRequestEmail, attendConfirmationEmail } from '../utils/email.js'
 import { getLeftLeaveSummary } from './summary.js'
 import { createError } from '../utils/error.js'
+import { WORKING } from '../config/working.js'
 
 const makeHtml = (event) => {
     return `<h1 style=
@@ -23,14 +24,57 @@ export const getEventsInCalendar = async (req, res, next) => {
         const end = sanitizeData(req.query.end, 'date')    
         const option = req.query.option
         let events = []
-        if (option==='private') {
-            events = await Event.find({start: {$gte: start, $lt: end}, employeeId: {$exists: true, $eq: req.user.employeeId}}).sort({id: 1})
-        } else if (option==='company') {
-            events = await Event.find({start: {$gte: start, $lt: end}}).sort({id: 1})
-        } else {
-            events = await Event.find({start: {$gte: start, $lt: end}, department: req.user.department}).sort({id: 1})
+        switch (option) {
+            case 'private':
+                events = await Event.find({start: {$gte: start, $lt: end}, employeeId: {$exists: true, $eq: req.user.employeeId}}).sort({start: 1})
+                break
+            case 'company':
+                events = await Event.find({start: {$gte: start, $lt: end}}).sort({start: 1})
+                break
+            case 'team':
+                events = await Event.find({start: {$gte: start, $lt: end}, department: req.user.department}).sort({start: 1}).lean()
+                // specialHoliday 포함 
+                const notExistEmployeeIdEvent = await Event.find({start: {$gte: start, $lt: end}, employeeId: {$exists: false}}).sort({start: 1}).lean()
+                if (notExistEmployeeIdEvent) {notExistEmployeeIdEvent.forEach(event => {events.push(event)})}
+                break 
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(events)
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const addEventInCalendar = async (req, res, next) => {
+    try {
+        const title = req.body.title
+        const start = req.body.start
+        const end = req.body.end
+        const newEvent = new Event({title, start, end})
+        if (WORKING.specialHolidays.includes(title)) {
+            await newEvent.save()
+            res.status(200).send('Event has been created.')
+        } else {
+            next({status: 400, message: "It's an event that cannot be created."})
+        }
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const deleteEventInCalendar = async (req, res, next) => {
+    try {
+        const _id = req.body._id
+        const event = await Event.findOne({_id}).lean()
+        if (event && WORKING.specialHolidays.includes(event.title)) {   // fool proof 
+            const eventDelete = await Event.deleteOne({_id})
+            if (eventDelete.deletedCount) {
+                res.status(200).send('Event has been deleted.')
+            } else {
+                res.status(400).send('not deleted')
+            }
+        } else {
+            res.status(400).send('not deleted') 
+        }
     } catch (err) {
         next(err)
     }
@@ -74,21 +118,25 @@ export const postApproval = async (req,res,next) => {
 }
 
 const getApprover = async (employee) => {
-    let baseApprover = {name: '', department: '', email: ''}
-    let approver = baseApprover
-    if (employee.position === '팀원') {
-        approver = await Employee.findOne({position: '팀장', department: employee.department})
-        if (!approver) {
+    let approver
+    switch (employee.position) {
+        case '팀원':
+            approver = await Employee.findOne({position: '팀장', department: employee.department})
+            if (!approver) { approver = await Employee.findOne({position: '본부장'})}
+            break 
+        case '팀장':
             approver = await Employee.findOne({position: '본부장'})
-        }
-    } else if (employee.position === '팀장') {
-        approver = await Employee.findOne({position: '본부장'})
-    } else if (employee.position === '본부장') {
-        approver = employee
-    } else if (employee.position === '대표이사') {
-        approver = employee
+            break
+        case '본부장':
+            approver = employee
+            break
+        case '대표이사':
+            approver = employee
+            break
+        default:
+            approver = await Employee.findOne({position: '본부장'})
     }
-    baseApprover = {name: approver.name, department: approver.department, email: approver.email, employeeId: approver.employeeId}
+    const baseApprover = {name: approver.name, department: approver.department, email: approver.email, employeeId: approver.employeeId}
     return baseApprover
 }
 

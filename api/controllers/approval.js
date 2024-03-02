@@ -17,7 +17,7 @@ export const update = async (req, res, next) => {
     try {
         const _id = req.body._id
         const status = req.body.status
-        if (!_id) return next(createError(404, 'approval not found!'))
+        if (!_id) return next(createError(404, 'Approval not found!'))
         let approval = await Approval.findOne({_id})
         if (!approval) return next(createError(404, 'Approval not found!'))
                

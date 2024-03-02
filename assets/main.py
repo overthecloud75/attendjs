@@ -36,17 +36,20 @@ logger = logging.getLogger(__name__)
 # nmap -sn 
 def check_sn():
     while True:
-        wifi_connected = scanner.check_wifi_connected()
-        if not wifi_connected:
-            scanner.connect_wifi()
+        try:
+            wifi_connected = scanner.check_wifi_connected()
+            if not wifi_connected:
+                scanner.connect_wifi()
 
-        scan_result = scanner.nmap_sn_scan()
-        for network in scan_result:
-            if 'mac' in network:
-                devices.sn_post(network)
-                device_on.post(network)
-            else:
-                devices.ip_sn_post(network)
+            scan_result = scanner.nmap_sn_scan()
+            for network in scan_result:
+                if 'mac' in network:
+                    devices.sn_post(network)
+                    device_on.post(network)
+                else:
+                    devices.ip_sn_post(network)
+        except Exception as e:
+            logger.error(e)
         time.sleep(60)
 
 # nmap -O

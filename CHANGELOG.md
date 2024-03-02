@@ -1,3 +1,13 @@
+* 24/03/02
+    - 1.9.9 (client, api) <br>
+        apply the latest pkg <br>
+    - 1.9.8 (api, assets) <br>
+        refactoring <br>
+
+* 24/03/01
+    - 1.9.7 (client) <br>
+        consider to input specialHoliday in Calendar <br>
+
 * 24/02/25
     - 1.9.6 (backend) <br>
         refactoring <br>
@@ -45,7 +55,7 @@
 
 * 23/10/27
     - 1.8.4 (backend) <br>
-        shedule_dict: name -> employee_id <br>
+        schedule_dict: name -> employee_id <br>
 
 * 23/10/25
     - 1.8.3 (api) <br>

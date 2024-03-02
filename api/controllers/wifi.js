@@ -4,7 +4,7 @@ import { sanitizeData } from '../utils/util.js'
 
 const insertOwner = (deviceOns, deviceDict) => {
     for (let deviceOn of deviceOns) {
-        if (Object.keys(deviceDict).includes(deviceOn['mac'])) {
+        if (deviceOn['mac'] in deviceDict) {
             deviceOn['owner'] = deviceDict[deviceOn['mac']]
         }
     }

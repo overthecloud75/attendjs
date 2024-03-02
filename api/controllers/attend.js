@@ -1,4 +1,4 @@
-import Report from "../models/Report.js"
+import Report from '../models/Report.js'
 import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req,res,next) => {

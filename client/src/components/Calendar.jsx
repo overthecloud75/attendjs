@@ -7,10 +7,10 @@ import interactionPlugin from '@fullcalendar/interaction'
 import Box from '@mui/material/Box'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { getEventsInCalendar, getWindowDimension } from '../utils/EventUtil'
+import { getColor, getSpecialHolidays, getEventsInCalendar, getWindowDimension, addEventInCalendar, deleteEventInCalendar } from '../utils/EventUtil'
 import Approval from './Approval'
-
-const mobileSize = 800
+import { getUser } from '../storage/userSlice'
+import { MOBILE } from '../configs/mobile'
 
 const Wrapper = styled.div`
     padding: 10px;
@@ -29,6 +29,7 @@ const Button = styled.button`
 const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
 
     const calendarRef = useRef()
+    const user = getUser()
 
     const [headerToolbar, setHeaderToolbar] = useState({
         start: 'title', 
@@ -52,7 +53,7 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
             } else {
                 setEventsData(events.data)
                 const {width} = getWindowDimension()
-                if (width < mobileSize) {
+                if (width < MOBILE.size) {
                     setWeekends(false)
                     setHeaderToolbar({start: '', center: '', end: 'today prev,next'})
                 }
@@ -61,6 +62,36 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
         if (thisMonth) {fetchData()}
     // eslint-disable-next-line
     }, [thisMonth, tapValue])
+
+    const handleDateSelect = async (selectInfo) => {
+        const specialHolidays = getSpecialHolidays()
+        let title = prompt(`'${specialHolidays}' 중 하나만 입력 가능합니다.`)
+        let calendarApi = selectInfo.view.calendar
+
+        calendarApi.unselect() // clear date selection
+
+        if (title) {
+            let event = {
+                title,
+                start: selectInfo.startStr,
+                end: selectInfo.endStr
+            }
+            const result = await addEventInCalendar(event)
+            if (!result.err) {
+                event = getColor(event)
+                calendarApi.addEvent(event)
+            }
+        }
+    }
+
+    const handleEventClick = async (clickInfo) => {
+        if (window.confirm(`'${clickInfo.event.title}' event를 지우기를 정말로 원하시나요?`)) {
+            const result = await deleteEventInCalendar(clickInfo.event)
+            if (!result.err) {
+                clickInfo.event.remove()
+            }
+        }
+    }
 
     const handleDates = async (datesInfo) => {
         setThisMonth(datesInfo.view.title)
@@ -72,12 +103,12 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
             plugins={[ dayGridPlugin, interactionPlugin ]}
             initialView='dayGridMonth'
             headerToolbar={headerToolbar}
-            editable={false}
-            selectable={false}
+            editable={user.isAdmin}
+            selectable={user.isAdmin}
             events={eventsData}
             weekends={weekends}
-            select={false}
-            eventClick={false}
+            select={user.isAdmin?handleDateSelect:false}
+            eventClick={user.isAdmin?handleEventClick:false}
             datesSet={handleDates}
             contentHeight='auto'
         />

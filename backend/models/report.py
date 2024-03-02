@@ -327,7 +327,7 @@ class Report(BasicModel):
             email = employee['email']
 
         if email and employee['regular'] in WORKING['update']:
-            report = self.collection.find_one({'employeeId': employee_id, 'date': {"$lt": self.today}}, sort=[('date', -1)])
+            report = self.collection.find_one({'employeeId': employee_id, 'date': {'$lt': self.today}}, sort=[('date', -1)])
             if report:
                 begin = self._convert_begin(report['begin'])
                 status = report['status']
@@ -360,7 +360,7 @@ class Report(BasicModel):
     def _schedule(self, date=None):
         collection = db['events']
         schedule_dict = {}
-        data_list = collection.find({'start': {"$lte": date}, 'end': {"$gt": date}})
+        data_list = collection.find({'start': {'$lte': date}, 'end': {'$gt': date}})
         for data in data_list:
             title = data['title']
             if title in WORKING['specialHolidays']:
@@ -372,7 +372,7 @@ class Report(BasicModel):
                 status = self._get_status_from_schedule(title)
                 
                 # 반차가 포함된 경우에만 status 추가 가능 
-                if employee_id in schedule_dict and schedule_dict[employee_id] != '휴가' and status !='휴가' and (schedule_dict[employee_id] == '반차' or status == '반차'):
+                if employee_id in schedule_dict and schedule_dict[employee_id] != '휴가' and status != '휴가' and (schedule_dict[employee_id] == '반차' or status == '반차'):
                     schedule_dict[employee_id] = schedule_dict[employee_id] + ', ' + status
                 elif employee_id in schedule_dict and status == '휴가':
                     schedule_dict[employee_id] = status 

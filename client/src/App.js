@@ -14,8 +14,6 @@ import Device from './pages/Device'
 import Employee from './pages/Employee'
 import LoginHistory from './pages/LoginHistory'
 import ApprovalHistory from './pages/ApprovalHistory'
-import CheckEmail from './pages/CheckEmail'
-import Confirm from './pages/Confirm'
 import TooManyRequests from './pages/TooManyRequests'
 import NotFound from './pages/NotFound'
 
@@ -23,6 +21,8 @@ const Home = lazy(() => import('./pages/Home'))
 const Schedule = lazy(() => import('./pages/Schedule'))
 const Board = lazy(() => import('./pages/Board'))
 const Report = lazy(() => import('./pages/Report'))
+const CheckEmail = lazy(() => import('./pages/CheckEmail'))
+const Confirm = lazy(() => import('./pages/Confirm'))
 
 function App() { 
     const [menu, setMenu] = useState(false)

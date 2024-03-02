@@ -6,14 +6,14 @@ import { separateIP } from '../utils/util.js'
 export const verifyToken = (req) => {
     const token = req.cookies.access_token
     if (!token) {
-        return { status: 401, message: 'You are not authenticated!' }
+        return {status: 401, message: 'You are not authenticated!'}
     }
     try {
         const user = jwt.verify(token, process.env.JWT)
         req.user = user
-        return { status: 200, user }
+        return {status: 200, user}
     } catch (e) {
-        return { status: 403, message: 'Token is not valid!' }
+        return {status: 403, message: 'Token is not valid!'}
     }
 }
 
@@ -47,7 +47,7 @@ const checkExternalIP = (externalIP, internalIP) => {
     }
     const splittedInternalIPRange = process.env.INTERNAL_IP_RANGE.split('.')
     const splittedExteranlIP = externalIP.split('.')
-    for (let x of splittedInternalIPRange.keys()) { 
+    for (let x of splittedInternalIPRange) { 
         if (splittedInternalIPRange[x] !== splittedExteranlIP[x]) { 
             isExternalIP = true 
             break 

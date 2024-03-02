@@ -8,18 +8,18 @@ export const getColor = (event) => {
         title = title[0].split(' ')
     }
     if (title.length > 1) {
-        let event_title = title[1]
-        for (const s of Object.keys(WORKING.status)) { 
+        let eventTitle = title[1]
+        for (const s in WORKING.status) { 
             if (title[1].includes(s)) {
-                event_title = s
+                eventTitle = s
             }
         }
-        if (Object.keys(WORKING.offDay).includes(event_title)){
+        if (eventTitle in WORKING.offDay){
             event.color = 'yellow'
             event.textColor = 'black'
-        }
-        else if (Object.keys(WORKING.status).includes(event_title)){ }
-        else { event.color = 'green' }
+        } else if (eventTitle in WORKING.status) { 
+            event.textColor = 'white'
+        } else { event.color = 'green' }
     }
     else {
         event.color = 'red'
@@ -27,9 +27,21 @@ export const getColor = (event) => {
     return event 
 }
 
+export const getSpecialHolidays = () => {
+    let specialHolidays = ''
+    for (const holiday of WORKING.specialHolidays) {
+        if (specialHolidays) {
+            specialHolidays = specialHolidays + ' / ' + holiday
+        } else {
+            specialHolidays = holiday
+        } 
+    }
+    return specialHolidays 
+}
+
 export const getEventsInCalendar = async (args, option) => {
     const params = {start: format(args.start, 'yyyy-MM-dd'), end: format(args.end, 'yyyy-MM-dd'), option}
-    try { const res = await axios.get('/api/event', {params, headers: {'Cache-Control': 'no-cache'}})
+    try { const res = await axios.get('/api/event', {params})
         for (let event of res.data) {
             getColor(event)
         }
@@ -39,8 +51,33 @@ export const getEventsInCalendar = async (args, option) => {
         axios.defaults.headers.delete['X-CSRF-Token'] = res.headers.csrftoken
         return {data, err}
     } catch (err) {
-        const data = []
-        return {data, err}
+        return {data: [], err}
+    }
+}
+
+export const addEventInCalendar = async (data) => {
+    if (data && WORKING.specialHolidays.includes(data.title)) {  // full proof 
+        try { const res = await axios.post('/api/event/add', data)
+            const resData = res.data
+            const err = false
+            return {resData, err}
+        } catch (err) {
+            return {resData: [], err}
+        }
+    } else {
+        return {resData: [], err: "It's an event that cannot be created."}
+    }
+}
+
+export const deleteEventInCalendar = async (args) => {
+    const data = {_id: args.extendedProps._id}
+    try { const res = await axios.post('/api/event/delete', data)
+        const resData = res.data
+        const err = false
+        return {resData, err}
+    } catch (err) {
+        const resData = []
+        return {resData, err}
     }
 }
 

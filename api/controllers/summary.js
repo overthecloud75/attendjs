@@ -1,17 +1,16 @@
 import { getAttends } from './attend.js'
 import Report from '../models/Report.js'
 import Employee from '../models/Employee.js'
-import { WORKING, getReverseStatus } from '../config/working.js'
 import { getToday, getDefaultAnnualLeave } from '../utils/util.js'
+import { WORKING, getReverseStatus } from '../config/working.js'
 
 export const search = async (req,res,next) => {
     try {
-        let summaryList = []
         let summary = {}
         const attends = await getAttends(req)
 
         for (const attend of attends) {
-            if (!Object.keys(summary).includes(String(attend.employeeId))) {
+            if (!(String(attend.employeeId) in summary)) {
                 summary[attend.employeeId] = {
                     employeeId: attend.employeeId, 
                     name: attend.name, 
@@ -32,17 +31,9 @@ export const search = async (req,res,next) => {
                 summary[attend.employeeId][attend.reason]++
             }
         }
-        for (const id in summary) {
-            summary[id].workingHours = Math.round(summary[id].workingHours * 10) / 10
-            summary[id].workingDays = summary[id].days
-            for (const key in summary[id]) {
-                if (Object.keys(WORKING.offDay).includes(key)) {
-                    summary[id].workingDays = summary[id].workingDays - summary[id][key] * WORKING.offDay[key]
-                }
-            }
-            summary[id].workingDays = Math.round(summary[id].workingDays * 100) / 100
-            summaryList.push(summary[id])
-        }
+
+        const summaryList = summaryWorkingHours(summary)
+
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(summaryList)
     } catch (err) {
         next(err)
@@ -93,23 +84,39 @@ export const getLeftLeaveSummary = async ({employeeId, name, beginDate}) => {
         summary = {name, beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave}
         
         for (const inStatus of WORKING.inStatus){
-            if (Object.keys(WORKING.offDay).includes(inStatus)) {summary[inStatus] = 0} 
+            if (inStatus in WORKING.offDay) {summary[inStatus] = 0} 
         }
         for (const outStatus in WORKING.outStatus){
-            if (Object.keys(WORKING.offDay).includes(outStatus)) {summary[outStatus] = 0}
+            if (outStatus in WORKING.offDay) {summary[outStatus] = 0}
         }
         const attends = await Report.find({employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1})
         for (const attend of attends) {
-            if (attend.status && Object.keys(WORKING.offDay).includes(attend.status)) {
+            if (attend.status && attend.status in WORKING.offDay) {
                 summary[attend.status]++
                 summary.leftAnnualLeave = summary.leftAnnualLeave - WORKING.offDay[attend.status]
             }
-            if (attend.reason && Object.keys(WORKING.offDay).includes(attend.reason)) {
+            if (attend.reason && attend.reason in WORKING.offDay) {
                 summary[reverseStatus[attend.reason]]++
                 summary.leftAnnualLeave = summary.leftAnnualLeave - WORKING.offDay[attend.reason]
             }
         }
     }
     return summary
+}
+
+const summaryWorkingHours = (summary) => {
+    let summaryList = []
+    for (const id in summary) {
+        summary[id].workingHours = Math.round(summary[id].workingHours * 10) / 10
+        summary[id].workingDays = summary[id].days
+        for (const key in summary[id]) {
+            if (key in WORKING.offDay) {
+                summary[id].workingDays = summary[id].workingDays - summary[id][key] * WORKING.offDay[key]
+            }
+        }
+        summary[id].workingDays = Math.round(summary[id].workingDays * 100) / 100
+        summaryList.push(summary[id])
+    }
+    return summaryList 
 }
 

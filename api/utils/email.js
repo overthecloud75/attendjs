@@ -11,14 +11,17 @@ const makeTransport = () => {
             pass: process.env.ACCOUNT_PASSWORD,
         },
     }
-    if (host==='smtp.gmail.com') {
-        options.secure = true
-    } else if (host==='smtp.office365.com') {
-        options.secureConnection = false
-        options.tls = { ciphers: 'SSLv3' }
-    } else {
-        options.secure = false
-        options.ignoreTLS = true 
+    switch (host) {
+        case 'smtp.gmail.com':
+            options.secure = true
+            break
+        case 'smtp.office365.com':
+            options.secureConnection = false
+            options.tls = {ciphers: 'SSLv3'}
+            break 
+        default:
+            options.secure = false
+            options.ignoreTLS = true 
     }
     const transport = nodemailer.createTransport(options)
     return transport

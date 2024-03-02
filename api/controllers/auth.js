@@ -137,7 +137,7 @@ export const search = async (req, res, next) => {
         const startDate = sanitizeData(req.query.startDate, 'date')
         const endDate = sanitizeData(req.query.endDate, 'date')
         let logins 
-        if (name && name !== '') {
+        if (name) {
             logins = await Login.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: -1})}
         else { 
             logins = await Login.find({date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: -1, name: 1})

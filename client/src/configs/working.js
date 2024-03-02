@@ -1,5 +1,4 @@
 export const WORKING = {
-    time: {beginTime: '100000', lunchTime: '123000', lunchFinishTime: '133000', overNight: '040000'},
     inStatus: ['미출근', '정상출근', '지각'],
     outStatus: {
         '휴가': ['연차', '휴가', '월차'], 
@@ -9,11 +8,7 @@ export const WORKING = {
         '재택': ['재택'],
         '기타': ['기타']
     }, 
-    update: ['상근', '병특'],
     status: {연차: 0, 휴가: 0, 반차: 4, 외근: 8, 재택: 8, 출근:8, 기타: 8},
     offDay: {연차: 1, 휴가: 1, 월차: 1, 반차: 0.5, 지각: 0.25, 미출근: 1},
-    holidays: ['0301', '0501', '0505', '0606', '0717', '0815', '1003', '1009', '1225'],
-    specialHolidays: ['선거', '명절', '휴일'],
-    lunarHolidays: ['0101', '0102', '0408', '0814', '0815', '0816'],
-    alternativeVacation: ['0301', '0505', '0815', '1003', '1009']
+    specialHolidays: ['선거', '명절', '휴일']
 }
