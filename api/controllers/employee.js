@@ -21,8 +21,8 @@ export const update = async (req,res,next) => {
         const regular = req.body.regular
         const mode = req.body.mode 
         const attendMode = req.body.attendMode
-        const employee = await Employee.updateOne({_id}, {$set: {beginDate, email, department, rank, position, regular, mode, attendMode}})
-        res.status(200).json(employee)
+        await Employee.updateOne({_id}, {$set: {beginDate, email, department, rank, position, regular, mode, attendMode}}, { runValidators: true})
+        res.status(200).json({message: 'updated'})
     } catch (err) {
         next(err)
     }

@@ -35,7 +35,7 @@ const EmployeeSchema = new mongoose.Schema(
         },
         regular: {
             type: String,
-            enum: ['상근', '비상근', '병특'],
+            enum: ['상근', '비상근', '병특', '퇴사'],
             required: true,
         },
         mode: {

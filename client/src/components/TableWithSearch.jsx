@@ -28,6 +28,7 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
                 const errorStatus = error.response.data.status
                 if (errorStatus === 401) { 
                     // 401 Unauthorized
+                    sessionStorage.removeItem('user')
                     navigate('/login')
                 } else if (errorStatus === 429) {
                     // 429 too many requests

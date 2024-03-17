@@ -48,6 +48,7 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
             if (events.err) {
                 const errorStatus = events.err.response.data.status
                 if (errorStatus === 401) { 
+                    sessionStorage.removeItem('user')
                     navigate('/login')
                 }
             } else {

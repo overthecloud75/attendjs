@@ -1,3 +1,7 @@
+* 24/03/17
+   - 2.0.0 (api) <br>
+        apply runValidators in mongoose when Update <br> 
+
 * 24/03/02
     - 1.9.9 (client, api) <br>
         apply the latest pkg <br>

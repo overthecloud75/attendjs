@@ -110,7 +110,7 @@ export const confirmCode = async (req, res, next) => {
         if (!user) return next(createError(404, 'User not found!'))
 
         const status = 'Active'
-        await User.updateOne({confirmationCode}, {$set: {status}})
+        await User.updateOne({confirmationCode}, {$set: {status}}, {runValidators: true})
         res.status(200).json({name: user.name, email: user.email, message: 'activated'})
     } catch (err) {
         next(err)
@@ -234,7 +234,7 @@ const updateLogin = async (user, ip, isMobile, user_agent, hashLocation) => {
     if (where.attend) {attend = 'O'
     } else {attend = 'X'}
 
-    await Login.updateOne({timestamp: lastLogin.timestamp, employeeId, name}, {$set: {ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, accuracy: location.accuracy, attend}})
+    await Login.updateOne({timestamp: lastLogin.timestamp, employeeId, name}, {$set: {ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, accuracy: location.accuracy, attend}}, {runValidators: true})
     await setGpsOn(employeeId, name, date, time, where)
 
     return where 
@@ -244,7 +244,7 @@ const setGpsOn = async (employeeId, name, date, time, where) => {
     if (where.attend) { 
         const gpsOn = await GPSOn.findOne({date, employeeId})
         if (gpsOn) {
-            await GPSOn.updateOne({date, employeeId, name}, {$set: {end: time, endPlace: where.place}})
+            await GPSOn.updateOne({date, employeeId, name}, {$set: {end: time, endPlace: where.place}}, {runValidators: true})
         } else {
             const newGPSOn = new GPSOn({employeeId, name, date, begin: time, beginPlace: where.place, end: time, endPlace: where.place})
             await newGPSOn.save()

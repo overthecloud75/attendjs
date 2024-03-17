@@ -41,8 +41,8 @@ export const update = async (req,res,next) => {
         const title = req.body.title
         const content = req.body.content
 
-        const board = await Board.updateOne({id}, {$set: {id, name, title, content}})
-        res.status(200).json(board)
+        await Board.updateOne({id}, {$set: {id, name, title, content}}, {runValidators: true})
+        res.status(200).json({message: 'updated'})
     } catch (err) {
         next(err)
     }

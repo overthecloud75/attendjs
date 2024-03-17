@@ -72,7 +72,7 @@ export const reportUpdate = async (action, event, start, end) => {
                     report.workingHours = calculateWorkingHours(report.begin, report.end)
                     report.state = getState(employee.status, report.begin, report.end)
                 } 
-                if (isUpdate) {await Report.updateOne({name, employeeId, date}, {$set: report})}
+                if (isUpdate) {await Report.updateOne({name, employeeId, date}, {$set: report}), {runValidators: true}}
             } else {
                 break
             }    

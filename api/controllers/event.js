@@ -192,7 +192,7 @@ export const makeActive = async (approval) => {
         await makeEvent(title, approval)
         status = 'Active'
         msg = '승인하였습니다.'
-        await Approval.updateOne({_id: approval._id}, {$set: {status}})
+        await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
         await attendConfirmationEmail(approval, status)
     } else {
         status = 'Wrong'
@@ -206,7 +206,7 @@ export const makeCancel = async (approval) => {
     if (approval.status === 'Active') {
         await deleteEvent(approval)
     }
-    await Approval.updateOne({_id: approval._id}, {$set: {status}})
+    await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
     await attendConfirmationEmail(approval, status)
     const msg = '취소하였습니다.'
     return {status, msg}

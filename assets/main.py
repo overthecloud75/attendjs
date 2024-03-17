@@ -43,7 +43,7 @@ def check_sn():
 
             scan_result = scanner.nmap_sn_scan()
             for network in scan_result:
-                if 'mac' in network:
+                if 'mac' in network and network['mac']:
                     devices.sn_post(network)
                     device_on.post(network)
                 else:
@@ -63,7 +63,7 @@ def check_o():
 
             scan_result = scanner.nmap_o_scan()
             for network in scan_result:
-                if 'mac' in network:
+                if 'mac' in network and network['mac']:
                     devices.o_post(network)
                 else:
                     devices.ip_o_post(network)

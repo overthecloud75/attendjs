@@ -22,8 +22,8 @@ export const update = async (req,res,next) => {
         const latitude = req.body.latitude
         const longitude = req.body.longitude
         const dev = req.body.dev
-        const updatedLocation = await Location.updateOne({_id}, {$set: {location, latitude, longitude, dev}})
-        res.status(200).json(updatedLocation)
+        await Location.updateOne({_id}, {$set: {location, latitude, longitude, dev}}, {runValidators: true})
+        res.status(200).json({message:'updated'})
     } catch (err) {
         next(err)
     }

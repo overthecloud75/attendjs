@@ -9,7 +9,7 @@ const CheckConfirm = ({url}) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let res = await axios.get(url, {headers: {'Cache-Control': 'no-cache'}})
+                let res = await axios.get(url)
                 axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
                 setData(res.data)
             } catch (err) {

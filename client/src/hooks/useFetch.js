@@ -12,7 +12,7 @@ const useFetch = (page, url, params, clickCount) => {
         const fetchData = async () => {
             setLoading(true)
             try {
-                let res = await axios.get(url, {params, headers: {'Cache-Control': 'no-cache'}})
+                let res = await axios.get(url, {params})
                 axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
                 for (let data of res.data) {
                     if (data.createdAt) {

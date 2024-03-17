@@ -29,16 +29,15 @@ class Scanner:
             else:
                 if result['scan']:
                     for ip in result['scan']:
+                        # ip 정렬 문제로 ip_str 필요
+                        ip_str = self.make_ip_str(ip)
+                        ipv4 = result['scan'][ip]['addresses']['ipv4']
+                        network = {'ip': ipv4, 'ipStr': ip_str, 'date': date, 'time': time, 'vendor': ''}
                         mac = ''
                         if 'mac' in result['scan'][ip]['addresses']:
                             mac = result['scan'][ip]['addresses']['mac']
                             # nmap으로 하는 경우 mac 값이 대문자로 표시가 됨 -> 소문자로 변경 필요
                             network['mac'] = mac.lower()
-                        ipv4 = result['scan'][ip]['addresses']['ipv4']
-                        # ip 정렬 문제로 ip_str 필요
-                        ip_str = self.make_ip_str(ip)
-
-                        network = {'ip': ipv4, 'ipstr', ip_str, 'date': date, 'time': time, 'vendor': ''}
                         if mac and mac in result['scan'][ip]['vendor']:
                             network['vendor'] = result['scan'][ip]['vendor'][mac]
                         network_list.append(network)

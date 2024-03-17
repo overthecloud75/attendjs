@@ -90,10 +90,11 @@ app.use('/swagger', swaggerRoute)
 
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500
-    const errorMessage = err.message || 'Something went wrong!'
+    let errorMessage = err.message || 'Something went wrong'
     if (errorStatus === 500) {
-        logger.error(err)
+        errorMessage = 'Something went wrong!'
     }
+    logger.error(reqFormat(req) + '-' + errorStatus + '-' + err)
     return res.status(errorStatus).json({
         message: errorMessage
     })
