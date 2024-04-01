@@ -1,3 +1,7 @@
+* 24/04/01
+   - 2.0.1 (api) <br>
+        delete user when 퇴사 <br>
+
 * 24/03/17
    - 2.0.0 (api) <br>
         apply runValidators in mongoose when Update <br> 

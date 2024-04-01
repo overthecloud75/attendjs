@@ -1,4 +1,5 @@
 import Employee from '../models/Employee.js'
+import User from '../models/User.js'
 import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req,res,next) => {
@@ -22,6 +23,10 @@ export const update = async (req,res,next) => {
         const mode = req.body.mode 
         const attendMode = req.body.attendMode
         await Employee.updateOne({_id}, {$set: {beginDate, email, department, rank, position, regular, mode, attendMode}}, { runValidators: true})
+        // 퇴사하는 경우 id 삭제 
+        if (regular === '퇴사') {
+            await User.deleteOne({email})
+        }
         res.status(200).json({message: 'updated'})
     } catch (err) {
         next(err)
@@ -73,6 +78,7 @@ const getEmployees = async (req) => {
 }
 
 export const getEmployeeByEmail = async (email) => {
-    const employee = await Employee.findOne({email})
+    // 퇴사자가 아닌 경우에만 이메일 중복 허용하지 않음 
+    const employee = await Employee.findOne({email, regular: {$ne: '퇴사'}})
     return employee 
 }

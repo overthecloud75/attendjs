@@ -43,8 +43,16 @@ export const update = async (req, res, next) => {
 
 const getApprovalHistory = async (req) => {
     let approvalHistory
+
+    const name = req.query.name 
+    // const startDate = sanitizeData(req.query.startDate, 'date')
+    // const endDate = sanitizeData(req.query.endDate, 'date')
     if (req.user.isAdmin) {
-        approvalHistory = await Approval.find({}).sort({createdAt: -1}).limit(200)
+        if (name) {
+            approvalHistory = await Approval.find({name}).sort({createdAt: -1}).limit(200)
+        } else {
+            approvalHistory = await Approval.find({}).sort({createdAt: -1}).limit(200)
+        }
     } else { 
         approvalHistory = await Approval.find({email: req.user.email}).sort({createdAt: -1}).limit(200)
     }

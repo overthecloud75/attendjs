@@ -68,10 +68,7 @@ export const login = async (req, res, next) => {
         if (user.status != 'Active') {
             return next(createError(401, 'Pending Account. Please Verify Your Email!'))
         }
-        const {regular, department} = await getEmployeeByEmail(email)
-        if (regular==='퇴사') {
-            return next(createError(403, 'Wrong password or email!'))
-        }
+        const {department} = await getEmployeeByEmail(email)
         const token = jwt.sign(
             {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department},
             process.env.JWT
@@ -276,6 +273,5 @@ const getUserByEmail = async (email) => {
     const user = await User.findOne({email})
     return user
 }
-
 
 
