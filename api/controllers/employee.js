@@ -27,7 +27,7 @@ export const update = async (req,res,next) => {
         if (regular === '퇴사') {
             await User.deleteOne({email})
         }
-        res.status(200).json({message: 'updated'})
+        res.status(204).send()
     } catch (err) {
         next(err)
     }

@@ -42,7 +42,7 @@ export const update = async (req,res,next) => {
         const content = req.body.content
 
         await Board.updateOne({id}, {$set: {id, name, title, content}}, {runValidators: true})
-        res.status(200).json({message: 'updated'})
+        res.status(204).send()
     } catch (err) {
         next(err)
     }
@@ -51,8 +51,8 @@ export const update = async (req,res,next) => {
 export const deleteBoard = async (req,res,next) => {
     try {
         const id = req.body.id
-        const board = await Board.deleteOne({id})
-        res.status(200).json(board)
+        await Board.deleteOne({id})
+        res.status(204).send()
     } catch (err) {
         next(err)
     }

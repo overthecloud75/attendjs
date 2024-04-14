@@ -1,3 +1,7 @@
+* 24/04/14
+   - 2.0.1 (backend) <br>
+        error fix <br>
+
 * 24/04/01
    - 2.0.1 (api) <br>
         delete user when 퇴사 <br>

@@ -27,7 +27,7 @@ export const update = async (req,res,next) => {
         const charge = req.body.charge
         const owner = req.body.owner
         await Device.updateOne({_id}, {$set: {info, type, location, charge, owner}}, {runValidators: true})
-        res.status(200).json({message: 'updated'})
+        res.status(204).send()
     } catch (err) {
         next(err)
     }

@@ -18,6 +18,6 @@ COPY ./ ./
 
 #USER smartwork
 
-RUN pip3 install --extra-index-url ${REGISTRY} -r requirements.txt
+RUN pip3 install -i ${REGISTRY} -r requirements.txt
 
 CMD ["python3", "main.py"]

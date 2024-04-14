@@ -69,12 +69,15 @@ class Report(BasicModel):
             '''
             if self.overnight_employees:
                 self._update_overnight(date=date)
-        elif hour > overnight_time + 2:
+        elif hour > overnight_time + 2 and hour <= overnight_time + 3:
+            self._check_attend(date, hour)
+             # notice        
+            self._notice_email(date=date)
+        elif hour > overnight_time + 3:
             self._check_attend(date, hour)
 
     def _check_attend(self, date, hour):
         # attend 초기화
-        
         self.previous_attend = {}
         attend = {}
         
@@ -91,9 +94,6 @@ class Report(BasicModel):
                 self.e_uptime = 0
             else:
                 attend = self._get_initial_attend_and_employees(date=date)
-
-        # notice and update_device        
-        self._notice_email(date=date)
 
         # 지문 인식 출퇴근 기록
         attend = self.fingerprint_attend(attend, date)
@@ -268,6 +268,7 @@ class Report(BasicModel):
     def _update_overnight(self, date=None):
         self.logger.info('overnight: {}'.format(self.overnight_employees))
         access_yesterday = self._get_access_day(date, delta=-1)
+        yesterday = get_delta_day(date, delta=-1)
         for employee_id in self.overnight_employees:
             cursor.execute("select e_id, e_name, e_date, e_time, e_mode from tenter where e_date=? and e_id = ?",
                            (access_yesterday, employee_id))
@@ -310,7 +311,7 @@ class Report(BasicModel):
         '''
         if not self.is_holiday and date == self.today and USE_NOTICE_EMAIL:
             collection = db['notice']
-            notice = collection.find_one({'date': date})
+            notice = collection.find_one({'date': date})    
             if notice is None:
                 for employee in self.employees_list:
                     insert_data = self._send_notice_email(employee=employee)
@@ -325,16 +326,15 @@ class Report(BasicModel):
         employee_id = employee['employeeId']
         if 'email' in employee:
             email = employee['email']
-
         if email and employee['regular'] in WORKING['update']:
             report = self.collection.find_one({'employeeId': employee_id, 'date': {'$lt': self.today}}, sort=[('date', -1)])
             if report:
-                begin = self._convert_begin(report['begin'])
                 status = report['status']
                 if status in EMAIL_NOTICE_BASE:
                     self.logger.info('send_notice_email, {}, {}'.format(self.today, name))
                     # https://techexpert.tips/ko/python-ko/파이썬-office-365를-사용하여-이메일-보내기
                     # https://nowonbun.tistory.com/684 (참조자)
+                    subject = '[근태 관리] ' + report['date'] + ' ' + name + ' ' + str(status)
                     body = '\n' \
                         ' 안녕하세요 %s님 \n' \
                         '근태 관련하여 다음의 사유가 있어 메일을 송부합니다. \n ' \
@@ -346,12 +346,10 @@ class Report(BasicModel):
                         '- 사유: %s \n' \
                         '\n' \
                         '연차, 외근 등의 사유가 있는 경우 %s 를 통해 출근 품의를 진행하면 근태가 정정이 됩니다. ' \
-                        %(name, name, report['date'], begin, report['workingHours'], str(status), SITE_URL + 'schedule')
-
-                    subject = '[근태 관리] ' + report_date + ' ' + name + ' ' + str(status)
-                    sent = send_email(email=email, subject=subject, body=body, include_cc=True)
+                        %(name, name, report['date'], self._convert_begin(report['begin']), report['workingHours'], str(status), SITE_URL + 'schedule')
+                    sent = send_email(email=email, subject=subject, body=body, include_cc=True)     
                     if sent:
-                        return {'date': self.today, 'name': name, 'email': email, 'reportDate': report_date, 'status': status}
+                        return {'date': self.today, 'name': name, 'email': email, 'reportDate': report['date'], 'status': status}
                     else:
                         return sent
                 else:
