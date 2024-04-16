@@ -25,7 +25,7 @@ export const columnHeaders = [
     },
     {
         accessor: '정상출근',
-        Header: '정상출근',
+        Header: '출근',
     },
     {
         accessor: '지각',

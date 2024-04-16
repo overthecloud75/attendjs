@@ -21,11 +21,11 @@ export const columnHeaders = [
     },
     {
         accessor: 'workingHours',
-        Header: '근무시간',
+        Header: '시간',
     },
     {
         accessor: 'status',
-        Header: '근태상황',
+        Header: '근태',
     },
     {
         accessor: 'reason',

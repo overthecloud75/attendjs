@@ -37,7 +37,7 @@ export const columnHeaders = [
     },
     {
         accessor: 'attendMode',
-        Header: '근태적용',
+        Header: '적용',
     },
 ]
 
