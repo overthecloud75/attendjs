@@ -17,7 +17,7 @@ export const columnHeaders = [
     },
     {
         accessor: 'workingHours',
-        Header: 'WorkingHours',
+        Header: '시간',
     },
     {
         accessor: '미출근',
@@ -72,7 +72,7 @@ export const csvHeaders = [
     },
     {
         key: 'workingHours',
-        label: 'WorkingHours',
+        label: '시간',
     },
     {
         key: '미출근',
@@ -80,7 +80,7 @@ export const csvHeaders = [
     },
     {
         key: '정상출근',
-        label: '정상출근',
+        label: '출근',
     },
     {
         key: '지각',

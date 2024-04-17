@@ -35,7 +35,7 @@ export const register = async (req, res, next) => {
         if (user) {
             return next(createError(403, 'The User is already created'))
         }
-        const userCount = await User.count()
+        const userCount = await User.countDocuments()
 
         let isAdmin 
         if (userCount !== 0) {

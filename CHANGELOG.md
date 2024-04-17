@@ -1,3 +1,7 @@
+* 24/04/17
+   - 2.0.4 (api) <br>
+        User.count() > User.countDocuments() <br>
+
 * 24/04/16
    - 2.0.3 (all) <br>
         little fix <br>

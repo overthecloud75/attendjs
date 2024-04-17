@@ -37,7 +37,7 @@ export const columnHeaders = [
     },
     {
         accessor: 'status',
-        Header: '진행상태',
+        Header: '상태',
     },
     {
         accessor: 'approverName',
@@ -88,7 +88,7 @@ export const csvHeaders = [
     },
     {
         key: 'status',
-        label: '진행상태',
+        label: '상태',
     },
     {
         key: 'approverName',
