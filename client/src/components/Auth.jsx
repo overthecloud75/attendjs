@@ -33,48 +33,44 @@ const getLocation = async () => {
 const Auth = ({mode}) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [value, setValue] = useState(
-        {
-            name: '',
-            email: '',
-            password: '',
-            width: 0, 
-            height: 0,
-            platform: '',
-            token: ''
-        }
-    )
+
     const [loading, setLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
+    const [width, setWidth] = useState(0)
+    const [height, setHeight] = useState(0)
     const [platform, setPlatform] = useState('')
+    const [token, setToken] = useState('')
     const [buttonClicked, setButtonClicked] = useState(false)
 
     useEffect(() => {
-        const {width, height} = getWindowDimension()
-        if (mode==='login' && value.width !== 0) {
+        const { width, height } = getWindowDimension()
+        setWidth(width)
+        setHeight(height)
+        if (mode==='login' && width) {
             window.turnstile.render('#cf-turnstile', {
                 sitekey: siteKey,
                 callback: function(token) {
-                    setValue({...value, token})
+                    setToken(token)
                 },
             })
         }
         if (navigator.userAgentData) {setPlatform(navigator.userAgentData.platform)}
-        setValue({...value, width, height, platform})
         requestAuth(mode, 'get', '', dispatch, navigate, setErrorMsg, setLoading)
     // eslint-disable-next-line
     }, [mode, platform])
 
-    const handleChange = (event) => {
-        setValue({...value, [event.target.id]: event.target.value})    
-    }
-
     const handleSubmit = async (event) => {
         event.preventDefault()
+        let name = ''
+        if (document.getElementById('name')) {
+            name = document.getElementById('name').value
+        }
+        const email = document.getElementById('email').value
+        const password = document.getElementById('password').value
         if (!buttonClicked) {
             setButtonClicked((click) => !click)
             if (['Windows'].includes(platform)){
-                requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, '')
+                requestAuth(mode, 'post', {name, email, password, width, height, token, platform}, dispatch, navigate, setErrorMsg, setLoading, '')
             } else {
                 try {
                     const loc = await getLocation()
@@ -82,7 +78,7 @@ const Auth = ({mode}) => {
                     if (loc.error) {
                         setErrorMsg(loc.error)
                     } else {
-                        requestAuth(mode, 'post', value, dispatch, navigate, setErrorMsg, setLoading, location)
+                        requestAuth(mode, 'post', {name, email, password, width, height, token, platform}, dispatch, navigate, setErrorMsg, setLoading, location)
                     }
                 } catch(err) {
                     setErrorMsg(err)
@@ -98,9 +94,9 @@ const Auth = ({mode}) => {
                 <span className='logo'>SmartWork</span>
                 <span className='title'>{mode}</span>
                 <form onSubmit={handleSubmit}>
-                    {(mode!=='login')&&(<input id='name' type='text' placeholder='name' onChange={handleChange} width='300px'/>)}
-                    <input id='email' type='email' placeholder='email' onChange={handleChange}/>
-                    <input id='password' type='password' placeholder='password' onChange={handleChange}/>
+                    {(mode!=='login')&&(<input id='name' type='text' placeholder='name' />)}
+                    <input id='email' type='email' placeholder='email' />
+                    <input id='password' type='password' placeholder='password' />
                     {(mode==='login')&&(<div id='cf-turnstile'/>)}
                     <button>{mode==='login'?'Sign in':'Sign up'}</button>
                     {loading && 

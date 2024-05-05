@@ -1,8 +1,12 @@
-* 24/05/06   
+* 24/05/06
+    - 2.0.7 (client) <br>
+        fix in Auth.jsx <br>
+
+* 24/05/05   
     - 2.0.6 (client, api) <br>
         apply turnstile validataion <br>
 
-* 24/05/05   
+* 24/05/04   
     - 2.0.5 (client) <br>
         apply open graph in index.html <br>
         apply i18next <br>
