@@ -64,6 +64,10 @@ const LoginSchema = new mongoose.Schema(
             type: Number, 
             required: true, 
         },
+        cloudflareCheck: {
+            type: String,
+            enum: ['O', 'X'],
+        },
         timestamp: {
             type: Number, 
             required: false, 

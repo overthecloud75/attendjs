@@ -1,21 +1,30 @@
+* 24/05/06   
+    - 2.0.6 (client, api) <br>
+        apply turnstile validataion <br>
+
+* 24/05/05   
+    - 2.0.5 (client) <br>
+        apply open graph in index.html <br>
+        apply i18next <br>
+
 * 24/04/17
-   - 2.0.4 (api) <br>
+    - 2.0.4 (api) <br>
         User.count() > User.countDocuments() <br>
 
 * 24/04/16
-   - 2.0.3 (all) <br>
+    - 2.0.3 (all) <br>
         little fix <br>
 
 * 24/04/14
-   - 2.0.2 (backend) <br>
+    - 2.0.2 (backend) <br>
         error fix <br>
 
 * 24/04/01
-   - 2.0.1 (api) <br>
+    - 2.0.1 (api) <br>
         delete user when 퇴사 <br>
 
 * 24/03/17
-   - 2.0.0 (api) <br>
+    - 2.0.0 (api) <br>
         apply runValidators in mongoose when Update <br> 
 
 * 24/03/02

@@ -34,7 +34,7 @@ report = Report()
 def save_db():
     try:
         logger.info('update')
-        report.update()
+        report.update(date=None)
     except Exception as e:
         logger.error(e)
     time.sleep(1800)

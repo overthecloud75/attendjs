@@ -68,6 +68,7 @@ export const login = async (req, res, next) => {
         if (user.status != 'Active') {
             return next(createError(401, 'Pending Account. Please Verify Your Email!'))
         }
+        
         const {department} = await getEmployeeByEmail(email)
         const token = jwt.sign(
             {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department},
@@ -79,8 +80,10 @@ export const login = async (req, res, next) => {
         const platform = req.body.platform
         const width = req.body.width
         const height = req.body.height 
-
-        const {where, hash} = await saveLogin(user, ip, user_agent, platform, width, height)
+        const cloudflareToken = req.body.token
+        
+        const cloudflareCheck = await handleCloudflarePost(ip, cloudflareToken)
+        const {where, hash} = await saveLogin(user, ip, user_agent, platform, width, height, cloudflareCheck)
         
         res.cookie('access_token', token, {
             httpOnly: true, secure: true, sameSite: 'Strict'
@@ -161,12 +164,12 @@ const checkMobile = (ip, user_agent) => {
     return {isMobile, isRemotePlace}
 }
 
-const attendRemotePlace = (isRemotePlace, isMobile) => {
+const attendRemotePlace = (isRemotePlace, isMobile, cloudflareCheck) => {
     let attend = false 
     let place = ''
     let minDistance = 10000
     const placeLocation = {latitude: -1, longitude: -1}
-    if (isRemotePlace) {
+    if (isRemotePlace && cloudflareCheck==='O') {
         attend = true
         place = process.env.REMOTE_PLACE
         minDistance = 0 
@@ -197,19 +200,19 @@ const whereIs = async (location, isMobile) => {
     return {attend, place, minDistance, placeLocation, isMobile}
 }
 
-const saveLogin = async (user, ip, user_agent, platform, width, height) => {
+const saveLogin = async (user, ip, user_agent, platform, width, height, cloudflareCheck) => {
     const employeeId = user.employeeId
     const name = user.name 
     const {date, time} = dateAndTime()
 
     const {isMobile, isRemotePlace} = checkMobile(ip, user_agent)
-    const where = attendRemotePlace(isRemotePlace, isMobile)
+    const where = attendRemotePlace(isRemotePlace, isMobile, cloudflareCheck)
     const hash = getRandomInt()
 
     let attend
     if (where.attend) {attend = 'O'
     } else {attend = 'X'}
-    const login = new Login({employeeId, name, date, time, ip, isMobile, platform, user_agent, width, height, latitude: -1, longitude: -1, accuracy: 1, attend, hash, timestamp: Date.now()})
+    const login = new Login({employeeId, name, date, time, ip, isMobile, platform, user_agent, width, height, latitude: -1, longitude: -1, accuracy: 1, attend, hash, cloudflareCheck, timestamp: Date.now()})
     
     await setGpsOn(employeeId, name, date, time, where)
     await login.save()
@@ -272,6 +275,28 @@ const getRandomInt = (min=1, max=1000) => {
 const getUserByEmail = async (email) => {
     const user = await User.findOne({email})
     return user
+}
+
+// https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
+const handleCloudflarePost = async (ip, cloudflareToken) => {
+    let cloudflareCheck = 'X'
+    if (cloudflareToken) {
+        let formData = new FormData();
+        formData.append('secret', process.env.CLOUDFLRAE_SECRET_KEY)
+        formData.append('response', cloudflareToken)
+        formData.append('remoteip', ip)
+
+        const result = await fetch(process.env.CLOUDFLRAE_URL, {
+            body: formData,
+            method: 'POST',
+        })
+
+        const outcome = await result.json()
+        if (outcome.success) {
+            cloudflareCheck = 'O'
+        }
+    }
+    return cloudflareCheck 
 }
 
 

@@ -16,7 +16,6 @@ def check_holiday(date):
 
     date = datetime.datetime(int(year), int(month), int(day), 1, 0, 0)  # str -> datetime으로 변환
     lunar_month_day = get_lunar_day(year, month_day)
-
     if month_day in WORKING['holidays'] or lunar_month_day in WORKING['lunarHolidays']:
         is_holiday = True
     elif date.weekday() == 5 or date.weekday() == 6:
