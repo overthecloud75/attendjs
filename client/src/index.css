@@ -45,3 +45,7 @@ a:link {
     width: 120px;
 }
 
+iframe {
+    width: 280px!important;
+}
+

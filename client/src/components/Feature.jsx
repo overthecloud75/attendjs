@@ -14,11 +14,11 @@ const Image = styled.img`
 `
 
 const Feature = () => {
-  return (
-    <Container>
-        <Image src={EmployeesImg}/>
-    </Container>
-  )
+    return (
+        <Container>
+            <Image src={EmployeesImg}/>
+        </Container>
+    )
 }
 
 export default Feature

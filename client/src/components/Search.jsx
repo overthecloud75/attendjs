@@ -75,7 +75,7 @@ const Search = ({page, searchKeyword, name, setName, date, setDate, clickCount, 
         setClickCount(clickCount+1)
         setFileName(page + '_' + format(date[0].startDate, 'yyyy-MM-dd') + '_'+ format(date[0].endDate, 'yyyy-MM-dd') + '_' + name)
     }
-    
+
     return (     
         <Wrapper>
             <Items>

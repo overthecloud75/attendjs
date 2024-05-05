@@ -15,6 +15,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
+import { useTranslation } from 'react-i18next'
 import { getApproval, postApproval } from '../utils/EventUtil'
 import { WORKING } from '../configs/working'
 
@@ -29,6 +30,8 @@ const DatePickWrapper = styled.div`
 const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, setEtcOpen, ...other}) => {
     
     const radioGroupRef = useRef(null)
+    const {t} = useTranslation()
+
     useEffect(() => {
         if (!open) {
           setRadioValue(radioValue)
@@ -62,7 +65,7 @@ const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, s
             open={open}
             {...other}
             >
-            <DialogTitle>사유</DialogTitle>
+            <DialogTitle>{t('reason')}</DialogTitle>
             <DialogContent dividers>
                 <RadioGroup
                     ref={radioGroupRef}
@@ -81,8 +84,8 @@ const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, s
                 </RadioGroup>
             </DialogContent>
             <DialogActions>
-                <Button autoFocus onClick={handleCancel}>Cancel</Button>
-                <Button onClick={handleOk}>Ok</Button>
+                <Button autoFocus onClick={handleCancel}>{t('button-cancel')}</Button>
+                <Button onClick={handleOk}>{t('button-ok')}</Button>
             </DialogActions>
         </Dialog>
     )
@@ -96,6 +99,7 @@ const Approval = ({navigate, open, setOpen}) => {
         reason: '휴가', 
         etc: ''
     })
+    const {t} = useTranslation()
     const [leftLeave, setLeftLeave] = useState('')
     const [radioValue, setRadioValue] = useState('휴가')
     const [radioOpen, setRadioOpen] = useState(false)
@@ -139,7 +143,7 @@ const Approval = ({navigate, open, setOpen}) => {
 
     return (
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>근태 결재</DialogTitle>
+            <DialogTitle>{t('button-attend-approval')}</DialogTitle>
             <DialogContent>
                 {leftLeave===''? 
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -213,8 +217,8 @@ const Approval = ({navigate, open, setOpen}) => {
                 }
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} variant='outlined'>Cancel</Button>
-                <Button onClick={handleUpdate} variant='outlined'>Update</Button>
+                <Button onClick={handleClose} variant='outlined'>{t('button-cancel')}</Button>
+                <Button onClick={handleUpdate} variant='outlined'>{t('button-ok')}</Button>
             </DialogActions>
         </Dialog>
     )

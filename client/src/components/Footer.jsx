@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 const Footer = () => {
     return (
         <Wrapper>
-            Copyright © 2023 SmartWork.
+            Copyright © {(new Date().getFullYear())} SmartWork.
         </Wrapper>
     )
 }

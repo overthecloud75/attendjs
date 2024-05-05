@@ -7,6 +7,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import Box from '@mui/material/Box'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import { useTranslation } from 'react-i18next'
 import { getColor, getSpecialHolidays, getEventsInCalendar, getWindowDimension, addEventInCalendar, deleteEventInCalendar } from '../utils/EventUtil'
 import Approval from './Approval'
 import { getUser } from '../storage/userSlice'
@@ -22,6 +23,7 @@ const Button = styled.button`
     font-weight: 500;
     border: none;
     padding: 10px;
+    margin-left: 10px;
     border-radius: 8px;
     cursor: pointer;
 `
@@ -119,6 +121,7 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
 const Calendar = () => {
 
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const [weekends, setWeekends] = useState(true)
     const [tapValue, setTapValue] = useState('team')
@@ -156,7 +159,7 @@ const Calendar = () => {
                         <Tab value='company' label='Company' />        
                     </Tabs>)
                 }
-                <Button onClick={handleApprovalClick}>근태 결재</Button>
+                <Button onClick={handleApprovalClick}>{t('button-attend-approval')}</Button>
             </Box>
             <GetCalendar
                 navigate={navigate}

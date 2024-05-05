@@ -55,6 +55,10 @@ export const columnHeaders = [
         accessor: 'accuracy',
         Header: 'Accuracy',
     },
+    {
+        accessor: 'cloudflareCheck',
+        Header: 'CloudFlare',
+    },
 ]
 
 export const csvHeaders = [
@@ -111,11 +115,15 @@ export const csvHeaders = [
         label: 'Latitude',
     },
     {
+        key: 'longitude',
+        label: 'Longitude',
+    },
+    {
         key: 'accuracy',
         label: 'Accuracy',
     },
     {
-        key: 'longitude',
-        label: 'Longitude',
+        key: 'cloudflareCheck',
+        label: 'CloudFlare',
     }
 ]

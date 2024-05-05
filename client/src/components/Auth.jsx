@@ -5,6 +5,7 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import { requestAuth } from '../utils/AuthUtil'
 import { getWindowDimension } from '../utils/EventUtil'
+import { siteKey } from '../configs/apiKey'
 
 const getLocation = async () => {
     // location 정보 저장
@@ -39,7 +40,8 @@ const Auth = ({mode}) => {
             password: '',
             width: 0, 
             height: 0,
-            platform: ''
+            platform: '',
+            token: ''
         }
     )
     const [loading, setLoading] = useState(false)
@@ -49,6 +51,14 @@ const Auth = ({mode}) => {
 
     useEffect(() => {
         const {width, height} = getWindowDimension()
+        if (mode==='login' && value.width !== 0) {
+            window.turnstile.render('#cf-turnstile', {
+                sitekey: siteKey,
+                callback: function(token) {
+                    setValue({...value, token})
+                },
+            })
+        }
         if (navigator.userAgentData) {setPlatform(navigator.userAgentData.platform)}
         setValue({...value, width, height, platform})
         requestAuth(mode, 'get', '', dispatch, navigate, setErrorMsg, setLoading)
@@ -88,9 +98,10 @@ const Auth = ({mode}) => {
                 <span className='logo'>SmartWork</span>
                 <span className='title'>{mode}</span>
                 <form onSubmit={handleSubmit}>
-                    {(mode!=='login')&&(<input id='name' type='text' placeholder='name' onChange={handleChange}/>)}
+                    {(mode!=='login')&&(<input id='name' type='text' placeholder='name' onChange={handleChange} width='300px'/>)}
                     <input id='email' type='email' placeholder='email' onChange={handleChange}/>
                     <input id='password' type='password' placeholder='password' onChange={handleChange}/>
+                    {(mode==='login')&&(<div id='cf-turnstile'/>)}
                     <button>{mode==='login'?'Sign in':'Sign up'}</button>
                     {loading && 
                         <span>

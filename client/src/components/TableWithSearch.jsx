@@ -5,6 +5,7 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import useFetch from '../hooks/useFetch'
 import Search from './Search'
+import { SearchPages } from '../configs/pages'
 
 const Table = lazy(() => import('./ReactTable'))
 
@@ -45,7 +46,7 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
 
     return (
         <>
-            <Search
+            {SearchPages.includes(page)&&<Search
                 page={page}
                 searchKeyword={searchKeyword}
                 name={name}
@@ -55,7 +56,7 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
                 clickCount={clickCount}
                 setClickCount={setClickCount}
                 setFileName={setFileName}
-            />
+            />}
             <Suspense 
                 fallback={
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
