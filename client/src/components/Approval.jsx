@@ -111,7 +111,7 @@ const Approval = ({navigate, open, setOpen}) => {
             if (!result.err) {
                 const summary = result.resData.summary 
                 setValue({...value, approver: result.resData.approver.name})
-                setLeftLeave(`남은연차 ${summary.leftAnnualLeave}, 미출근 ${summary['미출근']}, 지각 ${summary['지각']}, 휴가 ${summary['휴가'] + summary['반차']}`)
+                setLeftLeave(`남은연차 ${summary.leftAnnualLeave}, 미출근 ${summary['미출근']}, 지각 ${summary['지각']}, 휴가 ${summary['휴가'] + summary['반차'] * 0.5}`)
             }
         }
         fetchData()

@@ -1,3 +1,7 @@
+* 24/05/29
+    - 2.0.8 (client, api) <br>
+        error fix <br>
+
 * 24/05/06
     - 2.0.7 (client) <br>
         fix in Auth.jsx <br>

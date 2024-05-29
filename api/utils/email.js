@@ -58,7 +58,7 @@ export const attendRequestEmail = async (approval, summary) => {
                 <p>이름 : ${approval.name}</p>
                 <p>기간 : ${approval.start}~${approval.end}</p>
                 <p>연차기준 : ${summary.baseDate}</p>
-                <p>근태현황 : 남은연차 ${summary.leftAnnualLeave}, 미출근 ${summary['미출근']}, 지각 ${summary['지각']}, 휴가 ${summary['휴가']}</p>
+                <p>근태현황 : 남은연차 ${summary.leftAnnualLeave}, 미출근 ${summary['미출근']}, 지각 ${summary['지각']}, 휴가 ${summary['휴가'] + summary['반차'] * 0.5}</p>
                 <p>사유 : ${approval.reason}</p>
                 <p>기타 : ${approval.etc}</p>
                 <a href=${process.env.DOMAIN}/api/event/confirm/approval/${approval._id.toString()} class="button" style="background-color: #0071c2; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">승인</a>

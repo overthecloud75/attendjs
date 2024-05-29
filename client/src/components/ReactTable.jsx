@@ -80,7 +80,6 @@ const getEditablePages = (user) => {
 // initialState https://github.com/TanStack/table/discussions/2029
 
 const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
-
     const user = getUser()
     const editablePages = getEditablePages(user)
     // update시 page 설정
@@ -120,7 +119,7 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                 <CsvDownload
                     data={data}
                     headers={csvHeaders}
-                    filename={fileName}
+                    fileName={fileName}
                 />
                 {editablePages.includes(url)&&(
                     <button 
