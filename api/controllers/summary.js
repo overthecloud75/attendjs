@@ -4,7 +4,7 @@ import Employee from '../models/Employee.js'
 import { getToday, getDefaultAnnualLeave } from '../utils/util.js'
 import { WORKING, getReverseStatus } from '../config/working.js'
 
-export const search = async (req,res,next) => {
+export const search = async (req, res, next) => {
     try {
         let summary = {}
         const attends = await getAttends(req)

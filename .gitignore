@@ -106,5 +106,6 @@ dist
 build
 backups
 api/config/process.js
+api/uploads
 todo.md
 

@@ -1,7 +1,7 @@
 import Report from '../models/Report.js'
 import { sanitizeData } from '../utils/util.js'
 
-export const search = async (req,res,next) => {
+export const search = async (req, res, next) => {
     try {
         const attends = await getAttends(req)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(attends)

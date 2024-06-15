@@ -1,7 +1,7 @@
 import Login from '../models/GPSOn.js'
 import { sanitizeData } from '../utils/util.js'
 
-export const search = async (req,res,next) => {
+export const search = async (req, res, next) => {
     try {
         const name = req.query.name
         const startDate = sanitizeData(req.query.startDate, 'date')

@@ -2,7 +2,7 @@ import Employee from '../models/Employee.js'
 import User from '../models/User.js'
 import { sanitizeData } from '../utils/util.js'
 
-export const search = async (req,res,next) => {
+export const search = async (req, res, next) => {
     try {
         const employees = await getEmployees(req)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(employees)
@@ -11,7 +11,7 @@ export const search = async (req,res,next) => {
     }
 }
 
-export const update = async (req,res,next) => {
+export const update = async (req, res, next) => {
     try {
         const _id = req.body._id
         const beginDate = sanitizeData(req.body.beginDate, 'date')

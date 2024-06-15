@@ -1,6 +1,6 @@
 import Board from '../models/Board.js'
 
-export const search = async (req,res,next) => {
+export const search = async (req, res, next) => {
     try {
         const name = req.query.name
         // const startDate = req.query.startDate

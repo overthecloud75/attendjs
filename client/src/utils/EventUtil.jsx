@@ -41,7 +41,8 @@ export const getSpecialHolidays = () => {
 
 export const getEventsInCalendar = async (args, option) => {
     const params = {start: format(args.start, 'yyyy-MM-dd'), end: format(args.end, 'yyyy-MM-dd'), option}
-    try { const res = await axios.get('/api/event', {params})
+    try { 
+        const res = await axios.get('/api/event', {params})
         for (let event of res.data) {
             getColor(event)
         }
@@ -57,7 +58,8 @@ export const getEventsInCalendar = async (args, option) => {
 
 export const addEventInCalendar = async (data) => {
     if (data && WORKING.specialHolidays.includes(data.title)) {  // full proof 
-        try { const res = await axios.post('/api/event/add', data)
+        try { 
+            const res = await axios.post('/api/event/add', data)
             const resData = res.data
             const err = false
             return {resData, err}
@@ -71,7 +73,8 @@ export const addEventInCalendar = async (data) => {
 
 export const deleteEventInCalendar = async (args) => {
     const data = {_id: args.extendedProps._id}
-    try { const res = await axios.post('/api/event/delete', data)
+    try { 
+        const res = await axios.post('/api/event/delete', data)
         const resData = res.data
         const err = false
         return {resData, err}
@@ -82,7 +85,8 @@ export const deleteEventInCalendar = async (args) => {
 }
 
 export const getApproval = async () => {
-    try { const res = await axios.get('/api/event/approval')
+    try { 
+        const res = await axios.get('/api/event/approval')
         const resData = res.data
         const err = false
         axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
@@ -94,7 +98,8 @@ export const getApproval = async () => {
 }
 
 export const postApproval = async (data) => {
-    try { const res = await axios.post('/api/event/approval', data)
+    try { 
+        const res = await axios.post('/api/event/approval', data)
         const resData = res.data
         const err = false
         return {resData, err}

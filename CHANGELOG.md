@@ -1,3 +1,7 @@
+* 24/06/15
+    - 2.0.9 (client, api) <br>
+        image upload in editor <br>
+
 * 24/05/29
     - 2.0.8 (client, api) <br>
         error fix <br>

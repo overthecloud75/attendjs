@@ -1,6 +1,6 @@
 import Location from '../models/Location.js'
 
-export const search = async (req,res,next) => {
+export const search = async (req, res, next) => {
     try {
         const location = req.query.name
         let locations
@@ -15,7 +15,7 @@ export const search = async (req,res,next) => {
     }
 }
 
-export const update = async (req,res,next) => {
+export const update = async (req, res, next) => {
     try {
         const _id = req.body._id 
         const location = req.body.location
@@ -29,7 +29,7 @@ export const update = async (req,res,next) => {
     }
 }
 
-export const write = async (req,res,next) => {
+export const write = async (req, res, next) => {
     try {
         const location = req.body.location
         const latitude = req.body.latitude
@@ -44,7 +44,7 @@ export const write = async (req,res,next) => {
     }
 }
 
-export const deleteLocation = async (req,res,next) => {
+export const deleteLocation = async (req, res, next) => {
     try {
         const _id = req.body._id
         const location = await Location.deleteOne({_id})

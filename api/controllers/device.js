@@ -1,7 +1,7 @@
 import Device from '../models/Device.js'
 import { sanitizeData } from '../utils/util.js'
 
-export const search = async (req,res,next) => {
+export const search = async (req, res, next) => {
     try {
         const mac = req.query.mac
         const startDate = sanitizeData(req.query.startDate, 'date')
@@ -18,7 +18,7 @@ export const search = async (req,res,next) => {
     }
 }
 
-export const update = async (req,res,next) => {
+export const update = async (req, res, next) => {
     try {
         const _id = req.body._id
         const info = req.body.info
