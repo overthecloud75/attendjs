@@ -111,10 +111,12 @@ export const makePaymentCancel = async (approval) => {
 }
 
 export const makePaymentInProgress = async (approval) => {
-    const status = 'InProgress'
+    let status
+    if (approval.status === 'Pending') {status = 'InProgress'}
+    else (status = 'Active')
     const msg = '승인하였습니다.'
     await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
-    await paymentRequestEmail(approval, status) // 승인 후 합의권자에게 메일 송부 
+    await paymentRequestEmail(approval) // 승인 후 합의권자에게 메일 송부 
     return {status, msg}
 }
 
