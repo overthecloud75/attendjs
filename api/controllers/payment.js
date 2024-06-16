@@ -1,7 +1,7 @@
 import Approval from '../models/Approval.js'
 import { isValidObjectId } from '../models/utils.js'
 import { getEmployeeByEmail } from './employee.js'
-import { getApprover, getConsenter } from './event.js'
+import { getApprover, getConsenter, makeHtml } from './event.js'
 import { sanitizeData } from '../utils/util.js'
 import { paymentRequestEmail, paymentConfirmationEmail } from '../utils/email.js'
 import { createError } from '../utils/error.js'

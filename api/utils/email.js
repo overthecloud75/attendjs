@@ -121,8 +121,8 @@ export const paymentRequestEmail = async (approval) => {
                 <p>사용내용 : ${approval.reason}</p>
                 <p>사용금액 : ${approval.etc}</p>
                 <p>증빙 : ${approval.content}</p>
-                <a href=${process.env.DOMAIN}/api/payment/approval/${approval._id.toString()} class="button" style="background-color: #0071c2; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">승인</a>
-                <a href=${process.env.DOMAIN}/api/payment/cancel/${approval._id.toString()} class="button" style="background-color: #dc3545; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">취소</a>`    
+                <a href=${process.env.DOMAIN}/api/payment/confirm/approval/${approval._id.toString()} class="button" style="background-color: #0071c2; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">승인</a>
+                <a href=${process.env.DOMAIN}/api/payment/confirm/cancel/${approval._id.toString()} class="button" style="background-color: #dc3545; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">취소</a>`    
         })
     } catch(err) {
         logger.error(err)

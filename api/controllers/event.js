@@ -15,7 +15,7 @@ const getReasons = () => {
     return reasons
 }
 
-const makeHtml = (event) => {
+export const makeHtml = (event) => {
     return `<h1 style=
                 "text-align:center;"
             >

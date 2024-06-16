@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { postUpload } from '../../utils/UploadUtil.jsx'
+import { siteUrl } from '../../configs/apiKey.js' 
 
 const Editor = ({writeMode, value, setValue}) => {
     
@@ -21,7 +22,7 @@ const Editor = ({writeMode, value, setValue}) => {
     }
      
     const imageUploadAdapter = (loader) => {
-        const imgLink = '/api/upload/image'
+        const imgLink = siteUrl + '/api/upload/image'
         return {
             upload: async () => {
                 try {
