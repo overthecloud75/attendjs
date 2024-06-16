@@ -5,7 +5,6 @@ import { postUpload } from '../../utils/UploadUtil.jsx'
 import { siteUrl } from '../../configs/apiKey.js' 
 
 const Editor = ({writeMode, value, setValue}) => {
-    
     const [flag, setFlag] = useState(false)
     // eslint-disable-next-line
     const [image, setImage] = useState('')
@@ -22,7 +21,6 @@ const Editor = ({writeMode, value, setValue}) => {
     }
      
     const imageUploadAdapter = (loader) => {
-        console.log(window.location.href, window.location.protocol)
         const imgLink = siteUrl + '/api/upload/image'
         return {
             upload: async () => {

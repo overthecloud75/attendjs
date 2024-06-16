@@ -93,6 +93,7 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                 fileName={fileName}
                 writeMode={writeMode}
                 setWriteMode={setWriteMode}
+                setOpenEditWrite={setOpenEditWrite}
                 setSelectedRowData={setSelectedRowData}
                 setOpenUpdate={setOpenUpdate}
             />

@@ -99,9 +99,9 @@ export const attendConfirmationEmail = async (approval, status) => {
     }
 }
 
-export const paymentRequestEmail = async (approval) => {
+export const paymentRequestEmail = async (approval, status) => {
     let recipient 
-    if (approval.status === 'Pending') {
+    if (status === 'Pending') {
         logger.info('send payment request email')
         recipient = approval.approverEmail
     } else {

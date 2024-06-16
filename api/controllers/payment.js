@@ -5,7 +5,6 @@ import { getApprover, getConsenter, makeHtml } from './event.js'
 import { sanitizeData } from '../utils/util.js'
 import { paymentRequestEmail, paymentConfirmationEmail } from '../utils/email.js'
 import { createError } from '../utils/error.js'
-import { request } from 'express'
 
 export const getPayment = async (req, res, next) => {
     /* 
@@ -39,7 +38,7 @@ export const postPayment = async (req, res, next) => {
         } else {
             const newApproval = new Approval({approvalType: 'payment', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason: req.body.reason, etc: req.body.etc, approverName: approver.name, approverEmail: approver.email, consenterName: consenter.name, consenterEmail: consenter.email, content: req.body.content})
             await newApproval.save()
-            await paymentRequestEmail(newApproval)
+            await paymentRequestEmail(newApproval, newApproval.status)
             res.status(200).send('Event has been created.')
         }
     } catch (err) {
@@ -116,7 +115,7 @@ export const makePaymentInProgress = async (approval) => {
     else (status = 'Active')
     const msg = '승인하였습니다.'
     await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
-    await paymentRequestEmail(approval) // 승인 후 합의권자에게 메일 송부 
+    await paymentRequestEmail(approval, status) // 승인 후 합의권자에게 메일 송부 
     return {status, msg}
 }
 
