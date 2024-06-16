@@ -10,6 +10,11 @@ import { getLeftLeaveSummary } from './summary.js'
 import { createError } from '../utils/error.js'
 import { WORKING } from '../config/working.js'
 
+const getReasons = () => {
+    const reasons = Object.keys(WORKING.status) 
+    return reasons
+}
+
 const makeHtml = (event) => {
     return `<h1 style=
                 "text-align:center;"
@@ -96,17 +101,22 @@ export const getApproval = async (req, res, next) => {
     }
 }
 
-export const postApproval = async (req,res,next) => {
+export const postApproval = async (req, res, next) => {
     try {
         const start = sanitizeData(req.body.start, 'date')
         const end = sanitizeData(req.body.end, 'date')
         const employee = await getEmployeeByEmail(req.user.email)
         const approver = await getApprover(employee)
-        const checkTheSameApproval = await Approval.findOne({email: req.user.email, start, end, reason: req.body.reason, etc: req.body.etc})
+        const reason = req.body.reason
+        const reasons = getReasons()
+        if (!reasons.includes(reason)) {
+            return next(createError(400, 'Something Wrong!'))
+        }
+        const checkTheSameApproval = await Approval.findOne({email: req.user.email, start, end, reason, etc: req.body.etc})
         if (checkTheSameApproval && checkTheSameApproval.status !== 'Cancel') {
             res.status(200).send('Already there is the same approval.')
         } else {
-            const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason: req.body.reason, etc: req.body.etc, approverName: approver.name, approverEmail: approver.email})
+            const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason, etc: req.body.etc, approverName: approver.name, approverEmail: approver.email})
             await newApproval.save()
             const summary = await getLeftLeaveSummary(employee)
             await attendRequestEmail(newApproval, summary)
@@ -117,7 +127,7 @@ export const postApproval = async (req,res,next) => {
     }
 }
 
-const getApprover = async (employee) => {
+export const getApprover = async (employee) => {
     let approver
     switch (employee.position) {
         case '팀원':
@@ -138,6 +148,12 @@ const getApprover = async (employee) => {
     }
     const baseApprover = {name: approver.name, department: approver.department, email: approver.email, employeeId: approver.employeeId}
     return baseApprover
+}
+
+export const getConsenter = async (employee) => {
+    //const consenter = await Employee.findOne({position: '팀장', department: '관리팀'})
+    const consenter = await Employee.findOne({position: '본부장'})
+    return consenter
 }
 
 export const confirmApproval = async (req, res, next) => {

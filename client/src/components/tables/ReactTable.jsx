@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import { useTable, useSortBy, usePagination } from 'react-table'
 import styled from 'styled-components'
-import { v } from '../variable'
-import CsvDownload from './CsvDownload'
+import { v } from '../../variable'
 import Pagination from './Pagination'
 import Update from './Update'
 import EditWrite from './EditWrite'
-import { AdminEditablePages, UserEditablePages, UpdatablePages } from '../configs/pages'
-import { getUser } from '../storage/userSlice.js'
+import { UserEditablePages, UpdatablePages } from '../../configs/pages'
+import TableButtons from './TableButtons.jsx'
 
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 
@@ -18,14 +17,6 @@ const Container = styled.div`
     justify-content: center;
     margin: 0 5px 0 5px;
     font-size: 14px;
-`
-
-const Buttons = styled.div`
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    gap: 4px;
-    margin: 12px;
 `
 
 const TableSheet = styled.table`
@@ -68,20 +59,10 @@ const BodyTr = styled.tr`
     background-color: transparent;
 `
 
-const getEditablePages = (user) => {
-    let editablePages = AdminEditablePages
-    if (!user.isAdmin) {
-        editablePages = UserEditablePages
-    }
-    return editablePages
-}
-
 // useTable에다가 작성한 columns와 data를 전달한 후 아래 4개의 props를 받아온다
 // initialState https://github.com/TanStack/table/discussions/2029
 
 const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
-    const user = getUser()
-    const editablePages = getEditablePages(user)
     // update시 page 설정
     const [selectedRowData, setSelectedRowData] = useState({})
     // Update 화면 
@@ -103,32 +84,18 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
             setOpenEditWrite(true)
         }
     }
-    const handleWriteClick = () => {
-        setWriteMode(true)
-        if (['board', 'report'].includes(url)) {
-            setOpenEditWrite(true)
-        } else if (AdminEditablePages.includes(url)) {
-            setSelectedRowData({})
-            setOpenUpdate(true)
-        }
-    }
-
     return (
         <Container>
-            <Buttons>
-                <CsvDownload
-                    data={data}
-                    headers={csvHeaders}
-                    fileName={fileName}
-                />
-                {editablePages.includes(url)&&(
-                    <button 
-                        className='defaultButton'
-                        onClick={handleWriteClick}
-                    >New 
-                    </button>
-                )}
-            </Buttons>
+            <TableButtons
+                url={url}   
+                data={data}
+                csvHeaders={csvHeaders}
+                fileName={fileName}
+                writeMode={writeMode}
+                setWriteMode={setWriteMode}
+                setSelectedRowData={setSelectedRowData}
+                setOpenUpdate={setOpenUpdate}
+            />
             <TableSheet {...getTableProps()}
                 style={url==='device'?{width:'130%'}:{width:'100%'}}
             >

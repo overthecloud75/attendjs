@@ -19,6 +19,7 @@ import deviceRoute from './routes/device.js'
 import locationRoute from './routes/location.js'
 import employeeRoute from './routes/employee.js'
 import approvalRoute from './routes/approval.js'
+import paymentRoute from './routes/payment.js'
 import boardRoute from './routes/board.js'
 import reportRoute from './routes/report.js'
 import confirmRoute from './routes/confirm.js'
@@ -84,6 +85,7 @@ app.use('/api/location', locationRoute)
 app.use('/api/device', deviceRoute)
 app.use('/api/employee', employeeRoute)
 app.use('/api/approval', approvalRoute)
+app.use('/api/payment', paymentRoute)
 app.use('/api/board', boardRoute)
 app.use('/api/report', reportRoute)
 app.use('/api/confirm', confirmRoute)

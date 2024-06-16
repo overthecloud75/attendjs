@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
-import useFetch from '../hooks/useFetch'
+import useFetch from '../../hooks/useFetch'
 import Search from './Search'
-import { SearchPages } from '../configs/pages'
+import { SearchPages } from '../../configs/pages'
 
 const Table = lazy(() => import('./ReactTable'))
 

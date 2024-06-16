@@ -162,6 +162,12 @@ const itemDict =
         ],
     Management : [
         {
+            to: '/employee',
+            icon: <PeopleIcon/>,
+            title: 'Employee',
+            auth: true
+        },
+        {
             to: '/device',
             icon: <ComputerIcon/>,
             title: 'Device',
@@ -169,18 +175,6 @@ const itemDict =
         }
     ],
     Communaity : [
-        {
-            to: '/employee',
-            icon: <PeopleIcon/>,
-            title: 'Employee',
-            auth: true
-        },
-        {
-            to: '/loginhistory',
-            icon: <BookIcon/>,
-            title: 'LoginHistory',
-            auth: false
-        },
         {
             to: '/approvalhistory',
             icon: <AssignmentTurnedInIcon/>,
@@ -198,7 +192,13 @@ const itemDict =
             icon: <FolderIcon/>,
             title: 'Report',
             auth: false
-        }
+        },
+        {
+            to: '/loginhistory',
+            icon: <BookIcon/>,
+            title: 'LoginHistory',
+            auth: false
+        },
     ]
 }
 

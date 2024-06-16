@@ -3,5 +3,6 @@
     "button-ok": "Ok",
     "button-cancel": "취소", 
     "button-update": "UPDATE", 
-    "button-attend-approval": "근태 결재"
+    "button-attend-approval": "근태 결재",
+    "button-payment-approval": "지출 결재"
 }

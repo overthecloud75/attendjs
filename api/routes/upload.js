@@ -37,6 +37,6 @@ const imageUpload = multer(
 const router = express.Router()
 
 router.post('/image', verifyUser, imageUpload.single('file'), postImageUpload)
-router.get('/image/:file', verifyUser, getImage)
+router.get('/image/:file', getImage) // verifyUser 
 
 export default router

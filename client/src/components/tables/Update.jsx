@@ -8,10 +8,10 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios'
-import { AdminEditableTitles, UserEditableTitles, EditableSelects } from '../configs/pages'
-import { approvalUpdate } from '../utils/Approval'
-import { options } from '../configs/options'
-import { getUser } from '../storage/userSlice.js'
+import { AdminEditableTitles, UserEditableTitles, EditableSelects } from '../../configs/pages.js'
+import { approvalUpdate } from '../../utils/Approval.jsx'
+import { options } from '../../configs/options.js'
+import { getUser } from '../../storage/userSlice.js'
 
 const getEditableTitles = (user) => {
     let editableTitles = AdminEditableTitles

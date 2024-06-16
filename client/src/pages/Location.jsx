@@ -1,6 +1,6 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
-import TableWithSearch from '../components/TableWithSearch'
+import TableWithSearch from '../components/tables/TableWithSearch'
 import { columnHeaders, csvHeaders } from '../configs/location'
 import Footer from '../components/Footer'
 

@@ -3,5 +3,6 @@
     "button-ok": "OK",
     "button-cancel": "CANCEL",
     "button-update": "UPDATE", 
-    "button-attend-approval": "ATTEND APPROVAL"
+    "button-attend-approval": "ATTEND APPROVAL",
+    "button-payment-approval": "PAYMENT APPROVAL"
 }

@@ -120,16 +120,23 @@ const Approval = ({navigate, open, setOpen}) => {
     // eslint-disable-next-line
     }, [open])
 
+    const checkValue = () => {
+        if (value.reason==='출근' && value.end >= dayjs(new Date()).format('YYYY-MM-DD')) {
+            window.alert('출근 신청은 당일 이전 날짜에서만 가능합니다.')
+            return false
+        }
+        if (!window.confirm('정말로 상신하시겠습니다.?')) return false
+        return true
+    }
+
     const handleClose = () => { setOpen(false) }
     const handleRadioClose = () => { 
         setRadioOpen(false)
     }
 
     const handleUpdate = async () => {
-        if (value.reason==='출근' && value.end >= dayjs(new Date()).format('YYYY-MM-DD')) {
-            return alert('출근 신청은 당일 이전 날짜에서만 가능합니다.')
-        }
-        if (!window.confirm('정말로 상신하시겠습니까?')) return
+        const valueStatus = checkValue()
+        if (!valueStatus) return 
         await postApproval(value)
         setOpen(false)
         navigate('/approvalhistory')

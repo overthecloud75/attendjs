@@ -1,6 +1,10 @@
 * 24/06/16
+    - 2.1.2 (client, api) <br>
+        apply payment approval <br>
+
+* 24/06/16
     - 2.1.1 (client, api) <br> 
-        apply the latest pkg 
+        apply the latest pkg <br>
     - 2.1.0 (client, api) <br>
         image upload in editor (2) <br>
 

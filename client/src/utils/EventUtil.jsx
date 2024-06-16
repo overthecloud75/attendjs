@@ -109,6 +109,31 @@ export const postApproval = async (data) => {
     }
 }
 
+export const getPaymentApproval = async () => {
+    try { 
+        const res = await axios.get('/api/payment')
+        const resData = res.data
+        const err = false
+        axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
+        return {resData, err}
+    } catch (err) {
+        const resData = []
+        return {resData, err}
+    }
+}
+
+export const postPaymentApproval = async (data) => {
+    try { 
+        const res = await axios.post('/api/payment', data)
+        const resData = res.data
+        const err = false
+        return {resData, err}
+    } catch (err) {
+        const resData = []
+        return {resData, err}
+    }
+}
+
 export const getWindowDimension = () => {
     const { innerWidth: width, innerHeight: height } = window
     return {

@@ -5,21 +5,16 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
-import { CKEditor } from '@ckeditor/ckeditor5-react'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import axios from 'axios'
 import { format } from 'date-fns'
-import { getUser } from '../storage/userSlice.js'
-import { postUpload } from '../utils/UploadUtil'
+import { getUser } from '../../storage/userSlice.js'
+import Editor from './Editor'
 
 const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
     
     const user = getUser()
     const [focus, setFocus] = useState('name')
     const [value, setValue] = useState(writeMode?{id: '', name: user.name, title: '', content: ''}:rowData)
-    const [flag, setFlag] = useState(false)
-    // eslint-disable-next-line
-    const [image, setImage] = useState('')
     const handleClose = () => { setOpen(false) }
 
     const insertData = () => {
@@ -65,17 +60,6 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
         setValue({...value, [e.target.id]: e.target.value})    
     }
 
-    const handleEditReady = (editor) => {
-        if (writeMode) {setValue({...value, id: editor.id})}
-        editor.editing.view.change((writer) => {
-            writer.setStyle('min-height', '400px', editor.editing.view.document.getRoot())
-        })
-    }
-   
-    const handleEditChange = (e, editor) => {
-        setValue({...value, content: editor.getData()})
-    }
-
     const handleUpdate = async () => {
         const valueStatus = checkValue()
         if (!valueStatus) return 
@@ -109,37 +93,6 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
         handleClose()
     }
      
-    const imageUploadAdapter = (loader) => {
-        const imgLink = '/api/upload/image'
-        return {
-            upload: async () => {
-                try {
-                    const file = await loader.file;
-                    const result = await postUpload(file)
-                    if (!result.err) {
-                        if (!flag) {
-                            setFlag(true)
-                            setImage(result.resData.filename)
-                        }
-                        return {
-                            default: `${imgLink}/${result.resData.filename}`
-                        }
-                    } else {
-                        throw result.err
-                    }
-                } catch (error) {
-                    console.error('Error uploading file:', error)
-                }
-            }
-        }
-    }
-
-    function uploadImagePlugin(editor) { 
-        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-            return imageUploadAdapter(loader)
-        }
-    }
-   
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth='lg'>
             <DialogTitle>Write {page}</DialogTitle>
@@ -177,14 +130,10 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
                         )
                     )
                 })}
-                <CKEditor
-                    editor={ ClassicEditor }
-                    config={{ 
-                        extraPlugins: [uploadImagePlugin]
-                    }}
-                    data={ value.content }
-                    onReady={ editor => handleEditReady(editor)}
-                    onChange={ (e, editor) => handleEditChange(e, editor)}
+                <Editor
+                    writeMode={writeMode}
+                    value={value}
+                    setValue={setValue}
                 />
             </DialogContent>
             <DialogActions>

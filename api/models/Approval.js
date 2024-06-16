@@ -1,10 +1,4 @@
 import mongoose from 'mongoose'
-import { WORKING } from '../config/working.js'
-
-const getReasons = () => {
-    const reasons = Object.keys(WORKING.status) 
-    return reasons
-}
 
 const ApprovalSchema = new mongoose.Schema(
     {
@@ -39,7 +33,6 @@ const ApprovalSchema = new mongoose.Schema(
         },
         reason: {
             type: String,
-            enum: getReasons(),
             required: true
         },
         etc: {
@@ -53,10 +46,21 @@ const ApprovalSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        consenterName: {
+            type: String,
+            default: ''
+        },
+        consenterEmail: {
+            type: String,
+            default: ''
+        },
         status: {
             type: String, 
-            enum: ['Pending', 'Active', 'Cancel'],
+            enum: ['Pending', 'Active', 'Cancel', 'InProgress'],
             default: 'Pending'
+        },
+        content: {
+            type: String
         }
     },
     { timestamps: true }
