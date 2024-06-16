@@ -4,7 +4,6 @@ import { createError } from '../utils/error.js'
 
 export const postImageUpload = async (req, res, next) => {
     try {
-        console.log(req.file)
         const originalName = req.file.originalname
         const destination = req.file.destination
         const fileName = req.file.filename
@@ -19,7 +18,6 @@ export const postImageUpload = async (req, res, next) => {
 export const getImage = async (req, res, next) => {
     try {
         const upload = await Upload.findOne({_id: req.params.file})
-        console.log(upload)
         if (upload) {
             const absolutePath = path.resolve(upload.destination + upload.fileName)
             res.status(200).sendFile(absolutePath)
