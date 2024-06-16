@@ -1,6 +1,12 @@
+* 24/06/16
+    - 2.1.1 (client, api) <br> 
+        apply the latest pkg 
+    - 2.1.0 (client, api) <br>
+        image upload in editor (2) <br>
+
 * 24/06/15
     - 2.0.9 (client, api) <br>
-        image upload in editor <br>
+        image upload in editor (1) <br>
 
 * 24/05/29
     - 2.0.8 (client, api) <br>

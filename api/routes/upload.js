@@ -4,10 +4,20 @@ import { v4 as uuidv4 } from 'uuid'
 import mime from 'mime-types'
 import { postImageUpload, getImage } from '../controllers/upload.js'
 import { verifyUser } from '../utils/verifyToken.js'
+import { getYearMonth } from '../utils/util.js'
+import fs from 'fs'
+
+const ensureDirectoryExists = (targetPath) => {
+    if (!fs.existsSync(targetPath)) {
+        fs.mkdirSync(targetPath, { recursive: true });
+    }
+  }
 
 const storage = multer.diskStorage({ 
     destination: (req, file, cb) => { 
-        cb(null, 'uploads/')
+        const { year, month } = getYearMonth()
+        ensureDirectoryExists('uploads/'+ year + '/' + month + '/')  
+        cb(null, 'uploads/'+ year + '/' + month + '/')
     },
     filename: (req, file, cb) => { 
         cb(null, `${uuidv4()}.${mime.extension(file.mimetype)}`)

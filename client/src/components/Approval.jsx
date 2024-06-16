@@ -101,6 +101,7 @@ const Approval = ({navigate, open, setOpen}) => {
     })
     const {t} = useTranslation()
     const [leftLeave, setLeftLeave] = useState('')
+    const [leftStatus, setLeftStatus] = useState('')
     const [radioValue, setRadioValue] = useState('휴가')
     const [radioOpen, setRadioOpen] = useState(false)
     const [etcOpen, setEtcOpen] = useState(false)
@@ -111,7 +112,8 @@ const Approval = ({navigate, open, setOpen}) => {
             if (!result.err) {
                 const summary = result.resData.summary 
                 setValue({...value, approver: result.resData.approver.name})
-                setLeftLeave(`남은연차 ${summary.leftAnnualLeave}, 미출근 ${summary['미출근']}, 지각 ${summary['지각']}, 휴가 ${summary['휴가'] + summary['반차'] * 0.5}`)
+                setLeftLeave(`${summary.leftAnnualLeave}`)
+                setLeftStatus(`미출근 ${summary['미출근']}, 지각 ${summary['지각']}, 휴가 ${summary['휴가'] + summary['반차'] * 0.5}`)
             }
         }
         fetchData()
@@ -152,11 +154,25 @@ const Approval = ({navigate, open, setOpen}) => {
                     <TextField 
                         margin='dense'
                         id='attendance'
+                        name='남은연차'
+                        label='남은연자'
+                        fullWidth
+                        variant='standard'
+                        value={leftLeave}
+                    />
+                }
+                {leftStatus===''? 
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <CircularProgress/>
+                    </Box>:
+                    <TextField 
+                        margin='dense'
+                        id='leftstatus'
                         name='근태현황'
                         label='근태현황'
                         fullWidth
                         variant='standard'
-                        value={leftLeave}
+                        value={leftStatus}
                     />
                 }
                 <TextField 
@@ -169,13 +185,15 @@ const Approval = ({navigate, open, setOpen}) => {
                     value={value.approver}
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePickWrapper>
+                    <DatePickWrapper style={{ width: '100%', justifyContent: 'space-between'}}>
                         <DatePicker 
+                            style={{ flex: 1 }}
                             label='시작일' 
                             format={'YYYY-MM-DD'}
                             onChange={(newValue) => setValue({...value, start: newValue.format('YYYY-MM-DD')})}
                         />
                         <DatePicker 
+                            style={{ flex: 1 }}
                             label='종료일' 
                             format={'YYYY-MM-DD'}
                             onChange={(newValue) => setValue({...value, end: newValue.format('YYYY-MM-DD')})}

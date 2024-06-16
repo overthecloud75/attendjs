@@ -1,5 +1,5 @@
 export const getToday = () => {
-    let today = new Date()
+    const today = new Date()
 
     const year = today.getFullYear()
     const month = ('0' + (today.getMonth() + 1)).slice(-2)
@@ -8,8 +8,15 @@ export const getToday = () => {
     return dateString 
 }
 
+export const getYearMonth = () => {
+    const today = new Date()
+    const year = today.getFullYear()
+    const month = ('0' + (today.getMonth() + 1)).slice(-2)
+    return { year, month }
+}
+
 const getSeparateDay = () => {
-    let today = new Date()
+    const today = new Date()
     const thisYear = today.getFullYear()
     const month = ('0' + (today.getMonth() + 1)).slice(-2)
     const day = ('0' + today.getDate()).slice(-2)

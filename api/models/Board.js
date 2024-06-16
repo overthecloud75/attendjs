@@ -18,6 +18,9 @@ const BoardSchema = new mongoose.Schema(
         content: {
             type: String,
         },
+        employeeId : {
+            type: Number
+        }
     },
     { timestamps: true }
 )
