@@ -5,6 +5,7 @@ import { getApprover, getConsenter, makeHtml } from './event.js'
 import { sanitizeData } from '../utils/util.js'
 import { paymentRequestEmail, paymentConfirmationEmail } from '../utils/email.js'
 import { createError } from '../utils/error.js'
+import { request } from 'express'
 
 export const getPayment = async (req, res, next) => {
     /* 
@@ -59,7 +60,7 @@ export const paymentApproval = async (req, res, next) => {
             if (approval.status === 'Pending'){
                 const result = await makePaymentInProgress(approval)
                 res.status(200).send(makeHtml(result.msg))
-            } else if (approval.status === 'InProgess') {
+            } else if (approval.status === 'InProgress') {
                 const result = await makePaymentActive(approval)
                 res.status(200).send(makeHtml(result.msg))
             } else {

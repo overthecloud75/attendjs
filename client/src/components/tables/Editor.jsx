@@ -22,6 +22,7 @@ const Editor = ({writeMode, value, setValue}) => {
     }
      
     const imageUploadAdapter = (loader) => {
+        console.log(window.location.href, window.location.protocol)
         const imgLink = siteUrl + '/api/upload/image'
         return {
             upload: async () => {
