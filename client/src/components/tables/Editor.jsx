@@ -1,14 +1,18 @@
-import { useState } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import { postUpload } from '../../utils/UploadUtil.jsx'
-import { siteUrl } from '../../configs/apiKey.js' 
+import { postUpload } from '../../utils/UploadUtil.jsx' 
+
+const SiteUrl = () => {
+    const { protocol, hostname, port } = window.location;
+    const scheme = protocol.replace(':', '')
+    let siteUrl = scheme + '://' + hostname 
+    if (port) {
+        siteUrl = siteUrl + ':' + port
+    }
+    return siteUrl
+}
 
 const Editor = ({writeMode, value, setValue}) => {
-    const [flag, setFlag] = useState(false)
-    // eslint-disable-next-line
-    const [image, setImage] = useState('')
-
     const handleEditReady = (editor) => {
         if (writeMode) {setValue({...value, id: editor.id})}
         editor.editing.view.change((writer) => {
@@ -21,17 +25,13 @@ const Editor = ({writeMode, value, setValue}) => {
     }
      
     const imageUploadAdapter = (loader) => {
-        const imgLink = siteUrl + '/api/upload/image'
+        const imgLink = SiteUrl() + '/api/upload/image'
         return {
             upload: async () => {
                 try {
                     const file = await loader.file;
                     const result = await postUpload(file)
                     if (!result.err) {
-                        if (!flag) {
-                            setFlag(true)
-                            setImage(result.resData.filename)
-                        }
                         return {
                             default: `${imgLink}/${result.resData.filename}`
                         }

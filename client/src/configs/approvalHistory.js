@@ -4,10 +4,6 @@ export const columnHeaders = [
         Header: 'Type',
     },
     {
-        accessor: 'employeeId',
-        Header: '사번',
-    },
-    {
         accessor: 'name',
         Header: '이름',
     },
@@ -53,10 +49,6 @@ export const csvHeaders = [
     {
         key: 'approvalType',
         label: 'Type',
-    },
-    {
-        key: 'employeeId',
-        label: '사번',
     },
     {
         key: 'name',

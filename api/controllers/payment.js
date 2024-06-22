@@ -28,7 +28,7 @@ export const postPayment = async (req, res, next) => {
     */
     try {
         const start = sanitizeData(req.body.start, 'date')
-        const end = sanitizeData(req.body.end, 'date')
+        const end = start
         const employee = await getEmployeeByEmail(req.user.email)
         const approver = await getApprover(employee)
         const consenter = await getConsenter(employee)
@@ -48,18 +48,18 @@ export const postPayment = async (req, res, next) => {
 
 export const paymentApproval = async (req, res, next) => {
     /* 
-        1. _id 확인
-        2. status가 pending이면서 기간에 문제가 없으면 status를 Active로 바꾸고 달력에 저장하고 confirm email 송부 
+        1. _id, _order 확인
     */
     try {
         const _id = req.params._id
+        const _order = req.params._order
         if (isValidObjectId(_id)) {
             const approval = await Approval.findOne({_id})
             if (!approval) return next(createError(403, 'approval not found!'))
-            if (approval.status === 'Pending'){
+            if (approval.status === 'Pending' && _order === '0'){
                 const result = await makePaymentInProgress(approval)
                 res.status(200).send(makeHtml(result.msg))
-            } else if (approval.status === 'InProgress') {
+            } else if (approval.status === 'InProgress' && _order === '1') {
                 const result = await makePaymentActive(approval)
                 res.status(200).send(makeHtml(result.msg))
             } else {
@@ -105,7 +105,7 @@ export const makePaymentCancel = async (approval) => {
     const status = 'Cancel'
     const msg = '취소하였습니다.'
     await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
-    await paymentConfirmationEmail(approval, status) // 반련 후 요청자에게 메일 송부 
+    await paymentConfirmationEmail(approval, status) // 반려 후 요청자에게 메일 송부 
     return {status, msg}
 }
 

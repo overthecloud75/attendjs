@@ -1,0 +1,43 @@
+.calendar-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+  
+/* 기본 스타일 */
+.fc .fc-toolbar-title {
+    font-size: 24px;
+    text-align: center;
+}
+  
+.fc .fc-daygrid-day-number {
+    font-size: 16px;
+    text-align: center;
+}
+  
+.fc .fc-daygrid-event {
+    font-size: 14px;
+    text-align: center;
+}
+  
+.fc .fc-daygrid-event .fc-event-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    white-space: normal;
+}
+  
+/* 모바일 : 화면 너비가 600px 이하 */
+@media (max-width: 600px) {
+    .fc .fc-toolbar-title {
+      font-size: 18px;
+    }
+  
+    .fc .fc-daygrid-day-number {
+      font-size: 12px;
+    }
+  
+    .fc .fc-daygrid-event {
+      font-size: 10px;
+    }
+}

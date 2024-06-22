@@ -25,7 +25,6 @@ const Payment = ({writeMode, open, setOpen}) => {
         approver: '', 
         consenter: '',
         start: dayjs(new Date()).format('YYYY-MM-DD'), 
-        end: dayjs(new Date()).format('YYYY-MM-DD'), 
         reason: '', 
         etc: '',
         content: ''
@@ -48,7 +47,7 @@ const Payment = ({writeMode, open, setOpen}) => {
             window.alert('사용일이 작성되지 않습니다.')
             return false
         }
-        if (value.end > dayjs(new Date()).format('YYYY-MM-DD')) {
+        if (value.start > dayjs(new Date()).format('YYYY-MM-DD')) {
             window.alert('사용일은 당일 이후 날짜는 가능하지 않습니다.')
             return false
         }
@@ -108,7 +107,7 @@ const Payment = ({writeMode, open, setOpen}) => {
                         <DatePicker 
                             label='사용일' 
                             format={'YYYY-MM-DD'}
-                            onChange={(newValue) => setValue({...value, start: newValue.format('YYYY-MM-DD'), end: newValue.format('YYYY-MM-DD')})}
+                            onChange={(newValue) => setValue({...value, start: newValue.format('YYYY-MM-DD')})}
                         />
                     </DatePickWrapper>
                 </LocalizationProvider>

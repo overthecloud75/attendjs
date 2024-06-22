@@ -12,6 +12,7 @@ import { getColor, getSpecialHolidays, getEventsInCalendar, getWindowDimension, 
 import Approval from './Approval'
 import { getUser } from '../storage/userSlice'
 import { MOBILE } from '../configs/mobile'
+import './Calendar.css';
 
 const Wrapper = styled.div`
     padding: 10px;

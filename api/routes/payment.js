@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/', verifyUser, getPayment)
 router.post('/', verifyUser, postPayment)
-router.get('/confirm/approval/:_id', paymentApproval)
-router.get('/confirm/cancel/:_id', paymentCancel)
+router.get('/confirm/approval/:_id/:_order', paymentApproval)
+router.get('/confirm/cancel/:_id/:_order', paymentCancel)
 
 export default router
