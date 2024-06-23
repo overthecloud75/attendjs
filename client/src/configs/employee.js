@@ -41,11 +41,26 @@ export const columnHeaders = [
     },
 ]
 
-export const csvHeaders = [
+export const mobileColumnHeaders = [
     {
-        key: 'employeeId',
-        label: 'ID',
+        accessor: 'employeeId',
+        Header: '사번',
     },
+    {
+        accessor: 'name',
+        Header: '이름',
+    },
+    {
+        accessor: 'email',
+        Header: 'email',
+    },
+    {
+        accessor: 'department',
+        Header: '부서',
+    },
+]
+
+export const csvHeaders = [
     {
         key: 'name',
         label: '이름',

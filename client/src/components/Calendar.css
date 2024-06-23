@@ -1,9 +1,18 @@
-.calendar-container {
-    max-width: 900px;
-    margin: 0 auto;
+/* 기본 스타일 */
+
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 1.5rem;
+}
+
+.fc-button {
+    font-size: 14px !important; 
 }
   
-/* 기본 스타일 */
+.fc-prev-button,
+.fc-next-button {
+    font-size: 14px !important; 
+}
+
 .fc .fc-toolbar-title {
     font-size: 24px;
     text-align: center;
@@ -29,6 +38,20 @@
   
 /* 모바일 : 화면 너비가 600px 이하 */
 @media (max-width: 600px) {
+
+    .fc .fc-toolbar.fc-header-toolbar {
+        margin-bottom: 10px;
+    }
+
+    .fc-button {
+        font-size: 11px !important; 
+    }
+      
+    .fc-prev-button,
+    .fc-next-button {
+        font-size: 11px !important;   
+    }
+
     .fc .fc-toolbar-title {
       font-size: 18px;
     }
@@ -38,6 +61,6 @@
     }
   
     .fc .fc-daygrid-event {
-      font-size: 10px;
+      font-size: 9px;
     }
 }

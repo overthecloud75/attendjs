@@ -1,7 +1,7 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
-import { columnHeaders, csvHeaders } from '../configs/loginHistory'
+import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/loginHistory'
 import Footer from '../components/Footer'
 
 const LoginHistory = ({menu, setMenu}) => {
@@ -14,7 +14,7 @@ const LoginHistory = ({menu, setMenu}) => {
                     searchKeyword='name'
                     page='loginhistory'
                     url='/api/auth/search'
-                    columnHeaders={columnHeaders}
+                    columnHeaders={window.innerWidth>600?columnHeaders:mobileColumnHeaders}
                     csvHeaders={csvHeaders}
                 />
                 {menu && <Footer/>}

@@ -5,11 +5,11 @@ export const columnHeaders = [
     },
     {
         accessor: 'name',
-        Header: 'Name',
+        Header: '이름',
     },
     {
         accessor: 'date',
-        Header: 'Date',
+        Header: '날짜',
     },
     {
         accessor: 'begin',
@@ -22,6 +22,21 @@ export const columnHeaders = [
     {
         accessor: 'workingHours',
         Header: '시간',
+    },
+    {
+        accessor: 'status',
+        Header: '근태',
+    },
+    {
+        accessor: 'reason',
+        Header: '사유',
+    },
+]
+
+export const mobileColumnHeaders = [
+    {
+        accessor: 'name',
+        Header: '이름',
     },
     {
         accessor: 'status',

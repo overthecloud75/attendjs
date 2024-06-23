@@ -1,7 +1,11 @@
+* 24/06/23
+    - 2.1.4 (client) <br>
+        mobileColumnHeaders, tooltip, Calendar.css <br>
+
 * 24/06/22
     - 2.1.3 (client, api) <br>
         little fix <br>
-
+        
 * 24/06/16
     - 2.1.2 (client, api) <br>
         apply payment approval <br>

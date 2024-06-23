@@ -1,7 +1,7 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
-import { columnHeaders, csvHeaders } from '../configs/employee'
+import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/employee'
 import Footer from '../components/Footer'
 
 const Employee = ({menu, setMenu}) => {
@@ -14,7 +14,7 @@ const Employee = ({menu, setMenu}) => {
                     searchKeyword='name'
                     page ='employee'
                     url='/api/employee/search'
-                    columnHeaders={columnHeaders}
+                    columnHeaders={window.innerWidth>600?columnHeaders:mobileColumnHeaders}
                     csvHeaders={csvHeaders}
                 />
                 {menu && <Footer/>}

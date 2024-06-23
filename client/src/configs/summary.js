@@ -5,7 +5,7 @@ export const columnHeaders = [
     },
     {
         accessor: 'name',
-        Header: 'Name',
+        Header: '이름',
     },
     {
         accessor: 'days',
@@ -51,6 +51,41 @@ export const columnHeaders = [
         accessor: '기타',
         Header: '기타',
     }
+]
+
+export const mobileColumnHeaders = [
+    {
+        accessor: 'employeeId',
+        Header: 'ID',
+    },
+    {
+        accessor: 'name',
+        Header: '이름',
+    },
+    {
+        accessor: 'days',
+        Header: '기준일',
+    },
+    {
+        accessor: 'workingDays',
+        Header: '근무일',
+    },
+    {
+        accessor: 'workingHours',
+        Header: '시간',
+    },
+    {
+        accessor: '미출근',
+        Header: '미출근',
+    },
+    {
+        accessor: '정상출근',
+        Header: '출근',
+    },
+    {
+        accessor: '지각',
+        Header: '지각',
+    },
 ]
 
 export const csvHeaders = [

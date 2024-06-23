@@ -1,11 +1,11 @@
 export const columnHeaders = [
     {
         accessor: 'title',
-        Header: 'Title',
+        Header: '제목',
     },
     {
         accessor: 'name',
-        Header: 'Name',
+        Header: '작성자',
     },
     {
         accessor: 'createdAt',
@@ -14,6 +14,21 @@ export const columnHeaders = [
     {
         accessor: 'updatedAt',
         Header: 'UpdatedAt',
+    },
+]
+
+export const mobileColumnHeaders = [
+    {
+        accessor: 'title',
+        Header: '제목',
+    },
+    {
+        accessor: 'name',
+        Header: '작성자',
+    },
+    {
+        accessor: 'createdAt',
+        Header: 'CreatedAt',
     },
 ]
 

@@ -9,23 +9,19 @@ import { UserEditablePages, UpdatablePages } from '../../configs/pages'
 import TableButtons from './TableButtons.jsx'
 
 const Container = styled.div`
-    width: 100%;
-    overflow-x: auto;
+    min-width: calc(100% - 40px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin: 0 5px 0 5px;
     font-size: 14px;
-    @media screen and (max-width: 600px) {
-        font-size: 11px;
-    }
 `
 
 const TableSheet = styled.table`
     border-collapse: collapse;
     text-align: center;
     border-radius: ${v.borderRadius};
-    overflow-x: auto;
+    overflow: scroll;
 `
 
 const THead = styled.thead`
@@ -38,12 +34,14 @@ const HeadTr = styled.tr`
 `
 
 const Th = styled.th`
+    font-weight: normal;
     padding: ${v.smSpacing};
     border: 1px solid;
     color: white;
     text-transform: capitalize;
     font-weight: 600;
     @media screen and (max-width: 600px) {
+        font-size: 11px;
         padding-left: 0px;
         padding-right: 0px
     }
@@ -54,7 +52,9 @@ const Td = styled.td`
     border-bottom: 1px solid #F2F2F2; 
     color #2E2E2E; 
     font-weight: 400;
+    font-size: 14px;
     @media screen and (max-width: 600px) {
+        font-size: 11px;
         padding-left: 0px;
         padding-right: 0px
     }

@@ -1,7 +1,7 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
-import { columnHeaders, csvHeaders } from '../configs/wifi'
+import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/wifi'
 import Footer from '../components/Footer'
 
 const Wifi = ({menu, setMenu}) => {
@@ -14,7 +14,7 @@ const Wifi = ({menu, setMenu}) => {
                     searchKeyword='ip'
                     page='wifi-attend'
                     url='/api/wifi-attend/search'
-                    columnHeaders={columnHeaders}
+                    columnHeaders={window.innerWidth>600?columnHeaders:mobileColumnHeaders}
                     csvHeaders={csvHeaders}
                 />
                 {menu && <Footer/>}

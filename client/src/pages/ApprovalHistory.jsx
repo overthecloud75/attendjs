@@ -1,7 +1,7 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
-import { columnHeaders, csvHeaders } from '../configs/approvalHistory'
+import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/approvalHistory'
 import Footer from '../components/Footer'
 
 const ApprovalHistory = ({menu, setMenu}) => {
@@ -14,7 +14,7 @@ const ApprovalHistory = ({menu, setMenu}) => {
                     searchKeyword='name'
                     page='approval'
                     url='/api/approval/search'
-                    columnHeaders={columnHeaders}
+                    columnHeaders={window.innerWidth>600?columnHeaders:mobileColumnHeaders}
                     csvHeaders={csvHeaders}
                 />
                 {menu && <Footer/>}

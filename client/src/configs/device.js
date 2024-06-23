@@ -49,6 +49,21 @@ export const columnHeaders = [
     },
 ]
 
+export const mobileColumnHeaders = [
+    {
+        accessor: 'ip',
+        Header: 'IP',
+    },
+    {
+        accessor: 'mac',
+        Header: 'MAC',
+    },
+    {
+        accessor: 'vendor',
+        Header: 'Vendor',
+    },
+]
+
 export const csvHeaders = [
     {
         key: 'ip',

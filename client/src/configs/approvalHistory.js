@@ -36,12 +36,39 @@ export const columnHeaders = [
         Header: '상태',
     },
     {
-        accessor: 'approverName',
-        Header: '결재자',
-    },
-    {
         accessor: 'createdAt',
         Header: 'CreatedAt',
+    },
+]
+
+export const mobileColumnHeaders = [
+    {
+        accessor: 'approvalType',
+        Header: 'Type',
+    },
+    {
+        accessor: 'name',
+        Header: '이름',
+    },
+    {
+        accessor: 'start',
+        Header: '시작일',
+    },
+    {
+        accessor: 'end',
+        Header: '종료일',
+    },
+    {
+        accessor: 'reason',
+        Header: '사유',
+    },
+    {
+        accessor: 'etc',
+        Header: '기타',
+    },
+    {
+        accessor: 'status',
+        Header: '상태',
     },
 ]
 

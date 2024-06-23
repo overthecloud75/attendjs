@@ -1,7 +1,7 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
-import { columnHeaders, csvHeaders } from '../configs/location'
+import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/location'
 import Footer from '../components/Footer'
 
 const Location = ({menu, setMenu}) => {
@@ -14,7 +14,7 @@ const Location = ({menu, setMenu}) => {
                     searchKeyword='name'
                     page ='location'
                     url='/api/location/search'
-                    columnHeaders={columnHeaders}
+                    columnHeaders={window.innerWidth>600?columnHeaders:mobileColumnHeaders}
                     csvHeaders={csvHeaders}
                 />
                 {menu && <Footer/>}

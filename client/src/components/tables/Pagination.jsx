@@ -6,6 +6,9 @@ const Paginate = styled.div`
     align-items: center;
     gap: 4px;
     margin: 16px;
+    @media screen and (max-width: 600px) {
+        margin: 5px
+    }
 `
 
 const PageButton = styled.button`
@@ -15,7 +18,6 @@ const PageButton = styled.button`
     margin: 0;
     background: #2E2E2E;
     color: white;
-    font-size: 1rem;
 
     &:hover {
         background: #007AFF;
@@ -35,10 +37,18 @@ const PageButton = styled.button`
         cursor: revert;
         transform: revert;
     }
+    
+    @media screen and (max-width: 600px) {
+        padding: 3px;
+    }
 `
 
 const PageSpan = styled.span`
     margin: 0px 5px;
+    
+    @media screen and (max-width: 600px) {
+        margin: 0px 2px;
+    }
 `
 
 const PageInput = styled.input`
@@ -48,7 +58,13 @@ const PageInput = styled.input`
 	border-radius: 8px;
     width: 50px;
     background-color: transparent;
-	}
+    justify-content: center;
+
+    @media screen and (max-width: 600px) {
+        padding: 3px 3px;
+        margin: 0px 2px;
+        width: 25px;
+    }
 `
 
 const PageSelect = styled.select`
@@ -62,6 +78,12 @@ const PageSelect = styled.select`
 	&:focus {
 		border-color: red;
 	}
+    
+    @media screen and (max-width: 600px) {
+        padding: 3px 3px;
+        margin: 0px 2px;
+        display: None
+    }
 `
 
 const Pagination = ({gotoPage, canPreviousPage, previousPage, nextPage, 

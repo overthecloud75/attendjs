@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Tooltip } from 'react-tooltip'
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'
 import WifiFindIcon from '@mui/icons-material/WifiFind'
 import GpsFixedIcon from '@mui/icons-material/GpsFixed'
@@ -31,6 +32,9 @@ const Top = styled.div`
 
 const Middle = styled.div`
     padding-left: 10px;
+    @media screen and (max-width: 600px) {
+        padding-left: 0px;
+    }
 `
 
 const Bottom = styled.div`
@@ -38,14 +42,17 @@ const Bottom = styled.div`
     margin: 10px;
     align-items: center;
     justify-content: center;
+    @media screen and (max-width: 600px) {
+        margin: 0px;
+    }
 `
 
 const Logo = styled.span`
     font-size: 20px;
     font-weight: bold;
     color: #6439ff;
-    @media screen and (max-width: 800px) {
-        font-size: 10px;
+    @media screen and (max-width: 600px) {
+        font-size: 7px;
     }
 `
 
@@ -61,7 +68,7 @@ const Title = styled.div`
     color: #999;
     margin-top: 15px;
     margin-bottom: 5px;
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 600px) {
         display: none;
     }
 `
@@ -74,14 +81,17 @@ const Item = styled.li`
     cursor: pointer;
 
     &:hover {
-    background-color: #ece8ff;
+        background-color: #ece8ff;
     }
 
     border: ${props => props.active ? '1px solid black' : 'none'};
     border-radius: ${props => props.active ? '20px' : 'none'};
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 600px) {
+        display: flex;
         height: 30px;
+        padding: 0px;
+        justify-content: center;
     }
 ` 
 
@@ -95,8 +105,9 @@ const Span = styled.span`
     font-weight: 600;
     color: #888;
     margin-left: 10px;
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 600px) {
         display: none;
+        margin-left: 0px;
     }
 `
 
@@ -116,6 +127,12 @@ const Color = styled.div`
     }
     &:nth-child(3){
         background-color: darkblue;
+    }
+
+    @media screen and (max-width: 600px) {
+        margin-left: 0px;
+        margin-right: 0px;
+        justify-content: center;
     }
 }
 `
@@ -216,8 +233,14 @@ const SidebarItems = ({itemList, titleIndex, activeTitleIndex, activeItemIndex, 
                         onClick={() => handleClick(titleIndex, itemIndex)}
                         active={activeTitleIndex===titleIndex&&activeItemIndex===itemIndex?1:0}    
                     >
-                        <Icon>{item.icon}</Icon>
+                        <Icon
+                            data-tooltip-id={window.innerWidth<600 && item.title}
+                            data-tooltip-content={item.title}
+                        >
+                            {item.icon}    
+                        </Icon>
                         <Span>{item.title}</Span>
+                        <Tooltip id={item.title} place='top' type='dark' effect='float'/>
                     </Item>
                 }
             </Link>

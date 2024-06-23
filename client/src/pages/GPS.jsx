@@ -1,7 +1,7 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
-import { columnHeaders, csvHeaders } from '../configs/gps'
+import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/gps'
 import Footer from '../components/Footer'
 
 const GPS = ({menu, setMenu}) => {
@@ -14,7 +14,7 @@ const GPS = ({menu, setMenu}) => {
                     searchKeyword='name'
                     page='gps-attend'
                     url='/api/gps-attend/search'
-                    columnHeaders={columnHeaders}
+                    columnHeaders={window.innerWidth>600?columnHeaders:mobileColumnHeaders}
                     csvHeaders={csvHeaders}
                 />
                 {menu && <Footer/>}

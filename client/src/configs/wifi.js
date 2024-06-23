@@ -25,6 +25,25 @@ export const columnHeaders = [
     },
 ]
 
+export const mobileColumnHeaders = [
+    {
+        accessor: 'mac',
+        Header: 'MAC',
+    },
+    {
+        accessor: 'begin',
+        Header: '시작',
+    },
+    {
+        accessor: 'end',
+        Header: '종료',
+    },
+    {
+        accessor: 'owner',
+        Header: '소유자',
+    },
+]
+
 export const csvHeaders = [
     {
         key: 'ip',

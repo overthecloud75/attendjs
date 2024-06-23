@@ -2,7 +2,7 @@ import { CSVLink } from 'react-csv'
 
 const CsvDownload = ({data, csvHeaders, fileName}) => {
     return (
-        <button className='defaultButton'>
+        <button id='csvDownload' className='defaultButton'>
             <CSVLink 
                 data={data}
                 headers={csvHeaders}

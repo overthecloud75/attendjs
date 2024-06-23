@@ -10,20 +10,11 @@ import { getUser } from '../../storage/userSlice.js'
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 
 const Container = styled.div`
-    min-width: calc(100% - 40px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin: 0 5px 0 5px;
     font-size: 14px;
-`
-
-const Buttons = styled.div`
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    gap: 4px;
-    margin: 12px;
 `
 
 const getEditablePages = (user) => {
@@ -79,7 +70,7 @@ const TableButtons = ({url, data, csvHeaders, fileName, writeMode, setWriteMode,
                     setOpen={setOpenPayment}
                 />
             )}
-            <Buttons>
+            <div className='buttons'>
                 {(url==='approval')&&(
                     <button 
                         className='defaultButton'
@@ -106,7 +97,7 @@ const TableButtons = ({url, data, csvHeaders, fileName, writeMode, setWriteMode,
                     headers={csvHeaders}
                     fileName={fileName}
                 />
-            </Buttons>
+            </div>
         </Container>
     )
 }

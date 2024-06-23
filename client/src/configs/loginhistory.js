@@ -5,7 +5,7 @@ export const columnHeaders = [
     },
     {
         accessor: 'name',
-        Header: 'Name',
+        Header: '이름',
     },
     {
         accessor: 'attend',
@@ -54,6 +54,37 @@ export const columnHeaders = [
     {
         accessor: 'accuracy',
         Header: 'Accuracy',
+    },
+    {
+        accessor: 'cloudflareCheck',
+        Header: 'CloudFlare',
+    },
+]
+
+export const mobileColumnHeaders = [
+    {
+        accessor: 'employeeId',
+        Header: 'ID',
+    },
+    {
+        accessor: 'name',
+        Header: '이름',
+    },
+    {
+        accessor: 'attend',
+        Header: 'Attend',
+    },
+    {
+        accessor: 'isMobile',
+        Header: 'Mobile',
+    },
+    {
+        accessor: 'time',
+        Header: 'Time',
+    },
+    {
+        accessor: 'platform',
+        Header: 'Platform',
     },
     {
         accessor: 'cloudflareCheck',

@@ -5,7 +5,7 @@ export const columnHeaders = [
     },
     {
         accessor: 'name',
-        Header: 'Name',
+        Header: '이름',
     },
     {
         accessor: 'date',
@@ -27,6 +27,25 @@ export const columnHeaders = [
         accessor: 'endPlace',
         Header: 'EndPlace',
     },
+]
+
+export const mobileColumnHeaders = [
+    {
+        accessor: 'employeeId',
+        Header: 'ID',
+    },
+    {
+        accessor: 'name',
+        Header: '이름',
+    },
+    {
+        accessor: 'begin',
+        Header: '출근',
+    },
+    {
+        accessor: 'end',
+        Header: '퇴근',
+    }
 ]
 
 export const csvHeaders = [

@@ -13,7 +13,7 @@ const Wrapper = styled.div`
     margin-left: 50px;
     top: 0px;
     position: absolute;
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 900px) {
         display: none;
     }
 `

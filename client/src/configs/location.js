@@ -17,6 +17,25 @@ export const columnHeaders = [
     },
 ]
 
+export const mobileColumnHeaders = [
+    {
+        accessor: 'location',
+        Header: '근무지',
+    },
+    {
+        accessor: 'latitude',
+        Header: '위도',
+    },
+    {
+        accessor: 'longitude',
+        Header: '경도',
+    },
+    {
+        accessor: 'dev',
+        Header: '편차',
+    },
+]
+
 export const csvHeaders = [
     {
         key: 'location',

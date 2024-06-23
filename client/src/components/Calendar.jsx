@@ -18,17 +18,6 @@ const Wrapper = styled.div`
     padding: 10px;
 `
 
-const Button = styled.button`
-    background-color: #0071c2;
-    color: white;
-    font-weight: 500;
-    border: none;
-    padding: 10px;
-    margin-left: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-`
-
 const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
 
     const calendarRef = useRef()
@@ -89,7 +78,7 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
     }
 
     const handleEventClick = async (clickInfo) => {
-        if (window.confirm(`'${clickInfo.event.title}' event를 지우기를 정말로 원하시나요?`)) {
+        if (window.confirm(`'${clickInfo.event.title}' 정말로 event를 지우기를 원하시나요?`)) {
             const result = await deleteEventInCalendar(clickInfo.event)
             if (!result.err) {
                 clickInfo.event.remove()
@@ -160,7 +149,12 @@ const Calendar = () => {
                         <Tab value='company' label='Company' />        
                     </Tabs>)
                 }
-                <Button onClick={handleApprovalClick}>{t('button-attend-approval')}</Button>
+                <button 
+                    className='defaultButton'
+                    onClick={handleApprovalClick}
+                >
+                    {t('button-attend-approval')}
+                </button>
             </Box>
             <GetCalendar
                 navigate={navigate}
