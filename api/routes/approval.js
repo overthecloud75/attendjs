@@ -1,5 +1,5 @@
 import express from 'express'
-import { search, update } from '../controllers/approval.js'
+import { search, update } from '../controllers/attendApproval.js'
 import { verifyUser } from '../utils/verifyToken.js'
 
 const router = express.Router()

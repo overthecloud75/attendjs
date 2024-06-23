@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { v } from '../../variable'
 import Pagination from './Pagination'
 import Update from './Update'
+import ApprovalUpdate from './ApprovalUpdate'
 import EditWrite from './EditWrite'
 import { UserEditablePages, UpdatablePages } from '../../configs/pages'
 import TableButtons from './TableButtons.jsx'
@@ -156,7 +157,14 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                 pageSize={pageSize}
                 setPageSize={setPageSize}
             />
-            {openUpdate&&(
+            {openUpdate&&url==='approval'?(
+                <ApprovalUpdate
+                    data={data}
+                    setData={setData}
+                    open={openUpdate}
+                    setOpen={setOpenUpdate}
+                    rowData={selectedRowData}
+                />):(
                 <Update
                     writeMode={writeMode}
                     page={url}
@@ -166,8 +174,8 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                     open={openUpdate}
                     setOpen={setOpenUpdate}
                     rowData={selectedRowData}
-                />
-            )}
+                />)
+            }
             {openEditWrite&&
                 <EditWrite
                     writeMode={writeMode}

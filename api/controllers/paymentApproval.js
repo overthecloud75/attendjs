@@ -6,6 +6,46 @@ import { sanitizeData } from '../utils/util.js'
 import { paymentRequestEmail, paymentConfirmationEmail } from '../utils/email.js'
 import { createError } from '../utils/error.js'
 
+export const update = async (req, res, next) => {
+    try {
+        const _id = req.body._id
+        const status = req.body.status
+        if (!_id) return next(createError(404, 'Approval not found!'))
+        let approval = await Approval.findOne({_id})
+        if (!approval) return next(createError(404, 'Approval not found!'))
+               
+        if (approval.status === status || approval.status === 'Cancel') {
+            return next(createError(400, 'Something wrong'))
+        } else if (req.user.email === approval.approverEmail) {
+            if (status === 'Cancel') {
+                await makePaymentCancel(approval)
+                approval.status = 'Cancel'
+            } else if (approval.status === 'Pending' && status === 'InProgress') {
+                await makePaymentInProgress(approval)
+                approval.status = 'InProgress'
+            } else {
+                return next(createError(400, 'Something wrong'))
+            }
+        } else if (req.user.email === approval.consenterEmail) {
+            if (status === 'Cancel') {
+                await makePaymentCancel(approval)
+                approval.status = 'Cancel'
+            } else if (approval.status === 'InProgress' && status === 'Active') {
+                await makePaymentActive(approval)
+                approval.status = 'Active'
+            } else {
+                return next(createError(400, 'Something wrong'))
+            }
+        } else if (approval.status !=='Active' && status === 'Cancel') {
+            await makePaymentCancel(approval)
+            approval.status = 'Cancel'     
+        } else {return next(createError(400, 'Something wrong'))}
+        res.status(200).json(approval)     
+    } catch (err) {
+        next(err)
+    }
+}
+
 export const getPayment = async (req, res, next) => {
     /* 
         1. apporover 확인 

@@ -1,7 +1,7 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
-import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/approvalHistory'
+import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/approval'
 import Footer from '../components/Footer'
 
 const ApprovalHistory = ({menu, setMenu}) => {

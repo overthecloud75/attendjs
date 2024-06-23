@@ -22,19 +22,21 @@ export const update = async (req, res, next) => {
         if (!approval) return next(createError(404, 'Approval not found!'))
                
         const today = getToday()
-        if (req.user.isAdmin) {
+        if (approval.status === status || approval.status === 'Cancel') {
+            return next(createError(400, 'Something wrong'))
+        } else if (req.user.isAdmin) {
             if ((approval.status === 'Pending' || approval.status === 'Active') && status === 'Cancel') {
                 await makeCancel(approval)
                 approval.status = 'Cancel'
             } else if (approval.status === 'Pending' && status === 'Active') {
                 await makeActive(approval)
                 approval.status = 'Active'
-            } 
+            } else {return next(createError(400, 'Something wrong'))}
         } else if ((approval.status ==='Pending' && status === 'Cancel') ||
             (approval.status ==='Active' && status === 'Cancel' && approval.start > today)) {
             await makeCancel(approval)
             approval.status = 'Cancel'
-        } 
+        } else {return next(createError(400, 'Something wrong'))}
         res.status(200).json(approval)     
     } catch (err) {
         next(err)

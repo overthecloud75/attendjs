@@ -12,7 +12,7 @@ const SiteUrl = () => {
     return siteUrl
 }
 
-const Editor = ({writeMode, value, setValue}) => {
+const Editor = ({writeMode, value, setValue, isReadOnly}) => {
     const handleEditReady = (editor) => {
         if (writeMode) {setValue({...value, id: editor.id})}
         editor.editing.view.change((writer) => {
@@ -50,16 +50,17 @@ const Editor = ({writeMode, value, setValue}) => {
             return imageUploadAdapter(loader)
         }
     }
-   
+  
     return ( 
         <CKEditor
             editor={ ClassicEditor }
             config={{ 
-                extraPlugins: [uploadImagePlugin]
+                extraPlugins: [uploadImagePlugin],
             }}
             data={ value.content }
             onReady={ editor => handleEditReady(editor)}
             onChange={ (e, editor) => handleEditChange(e, editor)}
+            disabled={isReadOnly}
         />
     )
 }

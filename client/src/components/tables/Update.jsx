@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
@@ -9,7 +8,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios'
 import { AdminEditableTitles, UserEditableTitles, EditableSelects } from '../../configs/pages.js'
-import { approvalUpdate } from '../../utils/Approval.jsx'
 import { options } from '../../configs/options.js'
 import { getUser } from '../../storage/userSlice.js'
 
@@ -22,11 +20,8 @@ const getEditableTitles = (user) => {
 }
 
 const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
-
     const user = getUser()
     const editableTitles = getEditableTitles(user)
-    const previousStatus = rowData.status
-    const navigate = useNavigate()
 
     const [focus, setFocus] = useState('info')
     const [value, setValue] = useState(rowData)
@@ -61,14 +56,10 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
             url = '/api/' + page + '/update'
         }
         try {
-            if (page === 'approval') {
-                await approvalUpdate(user, url, previousStatus, value, setValue, updateData, navigate)
-            } else {
-                const res = await axios.post(url, value)
-                setValue(res.data)
-                if (writeMode) {insertData()}
-                else {updateData()}
-            }
+            const res = await axios.post(url, value)
+            setValue(res.data)
+            if (writeMode) {insertData()}
+            else {updateData()}   
         } catch (err) {
             console.log(url, err)
         }
@@ -99,7 +90,7 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
             <DialogTitle>Update {page}</DialogTitle>
             <DialogContent>
                 {columns.map((item, index) => {
-                    if (EditableSelects.includes(item.accessor)) {
+                    if (EditableSelects.includes(item.accessor)&&options[item.accessor]) {
                         return (
                             <TextField
                                 autoFocus={focus===item.accessor}
@@ -162,9 +153,7 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
             <DialogActions>
                 <Button onClick={handleClose} variant='outlined'>Cancel</Button>
                 <Button onClick={handleUpdate} variant='outlined'>{writeMode?'Write':'Update'}</Button>
-                {!writeMode&&page!=='approval'&&
-                    (<Button onClick={handleDelete} variant='outlined'>Delete</Button>)
-                }
+                {!writeMode&&(<Button onClick={handleDelete} variant='outlined'>Delete</Button>)}
             </DialogActions>
         </Dialog>
     )

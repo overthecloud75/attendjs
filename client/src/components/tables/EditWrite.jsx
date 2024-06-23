@@ -134,6 +134,7 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
                     writeMode={writeMode}
                     value={value}
                     setValue={setValue}
+                    isReadOnly={false}
                 />
             </DialogContent>
             <DialogActions>

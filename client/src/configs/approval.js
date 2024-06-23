@@ -72,6 +72,76 @@ export const mobileColumnHeaders = [
     },
 ]
 
+export const attendUpdateColumnHeaders = [
+    {
+        accessor: 'approvalType',
+        Header: 'Type',
+    },
+    {
+        accessor: 'name',
+        Header: '이름',
+    },
+    {
+        accessor: 'email',
+        Header: 'Email',
+    },
+    {
+        accessor: 'start',
+        Header: '시작일',
+    },
+    {
+        accessor: 'end',
+        Header: '종료일',
+    },
+    {
+        accessor: 'reason',
+        Header: '사유',
+    },
+    {
+        accessor: 'etc',
+        Header: '기타',
+    },
+    {
+        accessor: 'status',
+        Header: '상태',
+    },
+]
+
+export const paymentUpdateColumnHeaders = [
+    {
+        accessor: 'approvalType',
+        Header: 'Type',
+    },
+    {
+        accessor: 'name',
+        Header: '이름',
+    },
+    {
+        accessor: 'email',
+        Header: 'Email',
+    },
+    {
+        accessor: 'start',
+        Header: '시작일',
+    },
+    {
+        accessor: 'reason',
+        Header: '사유',
+    },
+    {
+        accessor: 'etc',
+        Header: '기타',
+    },
+    {
+        accessor: 'status',
+        Header: '상태',
+    },
+    {
+        accessor: 'content',
+        Header: '증빙',
+    },
+]
+
 export const csvHeaders = [
     {
         key: 'approvalType',

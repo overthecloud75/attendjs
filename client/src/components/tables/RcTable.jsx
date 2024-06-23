@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useTable, useSortBy, usePagination } from 'react-table'
+import { useReactTable, flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel } from '@tanstack/react-table'
 import styled from 'styled-components'
 import { v } from '../../variable'
 import Pagination from './Pagination'
@@ -9,19 +9,23 @@ import { UserEditablePages, UpdatablePages } from '../../configs/pages'
 import TableButtons from './TableButtons.jsx'
 
 const Container = styled.div`
-    min-width: calc(100% - 40px);
+    width: 100%;
+    overflow-x: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin: 0 5px 0 5px;
     font-size: 14px;
+    @media screen and (max-width: 600px) {
+        font-size: 11px;
+    }
 `
 
 const TableSheet = styled.table`
     border-collapse: collapse;
     text-align: center;
     border-radius: ${v.borderRadius};
-    overflow: scroll;
+    overflow-x: auto;
 `
 
 const THead = styled.thead`
@@ -34,14 +38,12 @@ const HeadTr = styled.tr`
 `
 
 const Th = styled.th`
-    font-weight: normal;
     padding: ${v.smSpacing};
     border: 1px solid;
     color: white;
     text-transform: capitalize;
     font-weight: 600;
     @media screen and (max-width: 600px) {
-        font-size: 11px;
         padding-left: 0px;
         padding-right: 0px
     }
@@ -52,9 +54,7 @@ const Td = styled.td`
     border-bottom: 1px solid #F2F2F2; 
     color #2E2E2E; 
     font-weight: 400;
-    font-size: 14px;
     @media screen and (max-width: 600px) {
-        font-size: 11px;
         padding-left: 0px;
         padding-right: 0px
     }
@@ -67,21 +67,40 @@ const BodyTr = styled.tr`
     background-color: transparent;
 `
 
-// useTable에다가 작성한 columns와 data를 전달한 후 아래 4개의 props를 받아온다
-// initialState https://github.com/TanStack/table/discussions/2029
+// https://geuni620.github.io/blog/2023/12/2/tanstack-table/
 
-const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
+const Table = ({url, setData, csvHeaders, fileName}) => {
+
+    const columns = {
+        accessorKey: 'name', 
+        header: '이름', 
+    }
+
+    const data = {
+        name: 'clinton'
+    }
     // update시 page 설정
     const [selectedRowData, setSelectedRowData] = useState({})
+    const [pagination, setPagination] = useState({
+        pageIndex: 0,
+        pageSize: 20,
+    })
     // Update 화면 
     const [openUpdate, setOpenUpdate] = useState(false)
     // Write 화면, if writeMode is true, use empty value. else use existing value 
     const [writeMode, setWriteMode] = useState(true)
     const [openEditWrite, setOpenEditWrite] = useState(false)
     // eslint-disable-next-line
-    const {getTableProps, getTableBodyProps, headerGroups, prepareRow,  
-        page, canPreviousPage, canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, setPageSize, state: {pageIndex, pageSize}} =
-        useTable({columns, data, initialState:{ pageSize: 20}}, useSortBy, usePagination)
+    const table =
+        useReactTable({
+            columns, 
+            data, 
+            state:{ pagination }, 
+            getCoreRowModel: getCoreRowModel(), 
+            getPaginationRowModel: getPaginationRowModel(), 
+            getSortedRowModel: getSortedRowModel(),
+            onPaginationChange: setPagination,
+        })
     // when url is board, open write 
     const handleUpdateClick = (e, rowData) => {
         setSelectedRowData(rowData)
@@ -92,6 +111,7 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
             setOpenEditWrite(true)
         }
     }
+
     return (
         <Container>
             <TableButtons
@@ -105,37 +125,44 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                 setSelectedRowData={setSelectedRowData}
                 setOpenUpdate={setOpenUpdate}
             />
-            <TableSheet {...getTableProps()}
+            <TableSheet
                 style={url==='device'?{width:'130%'}:{width:'100%'}}
             >
                 <THead>
-                    {headerGroups.map(header => (
-                    // getHeaderGroupProps를 통해 header 배열을 호출한다
-                        <HeadTr {...header.getHeaderGroupProps()}>
+                    {table.getHeaderGroups().map(headerGroup => {
+                        return (
+                        <HeadTr key={headerGroup.id}>
                             <Th>No</Th>
-                            {header.headers.map(col => (
-                            // getHeaderProps는 각 셀 순서에 맞게 header를 호출한다
-                            <Th {...col.getHeaderProps(col.getSortByToggleProps())}>{col.render('Header')}</Th>
+                            {headerGroup.headers.map(header => (
+                                <Th 
+                                    key={header.id} 
+                                    colSpan={header.colSpan}
+                                >
+                                    {flexRender(
+                                        header.column.columnDef.header,
+                                        header.getContext()
+                                    )}
+                                </Th>
                             ))}
                         </HeadTr>
-                    ))}
+                    )})}
                 </THead>
-                <TBody {...getTableBodyProps()}>
-                    {page.map((row, rowIndex) => {
-                        prepareRow(row);
+                <TBody>
+                    {table.getRowModel().rows.map((row, rowIndex) => {
                         return (
-                            // getRowProps는 각 row data를 호출해낸다
-                            <BodyTr {...row.getRowProps()}>
+                            <BodyTr key={row.id}>
                                 <Td 
                                     onClick={(e) => handleUpdateClick(e, row.original)}
                                     style={{textDecoration: 'underline'}}
                                 >
-                                    { pageIndex * pageSize + rowIndex + 1 }
+                                    { table.getState().pagination.pageIndex * table.getState().pagination.pageSize + rowIndex + 1 }
                                 </Td>
-                                {row.cells.map(cell => (
-                                    // getCellProps는 각 cell data를 호출해낸다
-                                    <Td {...cell.getCellProps()}>
-                                        {cell.render('Cell')}
+                                {row.getVisibleCells().map(cell => (
+                                    <Td key={cell.id}>
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
                                     </Td>  
                                     )   
                                 )}
@@ -145,16 +172,16 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                 </TBody>
             </TableSheet>
             <Pagination
-                gotoPage={gotoPage}
-                canPreviousPage={canPreviousPage}
-                previousPage={previousPage}
-                nextPage={nextPage}
-                canNextPage={canNextPage}
-                pageCount={pageCount}
-                pageIndex={pageIndex}
-                pageOptions={pageOptions}
-                pageSize={pageSize}
-                setPageSize={setPageSize}
+                gotoPage={table.setPageIndex}
+                canPreviousPage={table.getCanPreviousPage()}
+                previousPage={table.previousPage}
+                nextPage={table.nextPage}
+                canNextPage={table.getCanNextPage()}
+                pageCount={table.getPageCount().toLocaleString()}
+                pageIndex={table.getState().pagination.pageIndex}
+                pageOptions={table.getPageCount().toLocaleString()}
+                pageSize={table.getState().pagination.pageSize}
+                setPageSize={table.setPageSize}
             />
             {openUpdate&&(
                 <Update
