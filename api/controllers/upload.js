@@ -1,4 +1,5 @@
 import path from 'path'
+import sharp from 'sharp'
 import Upload from '../models/Upload.js'
 import { createError } from '../utils/error.js'
 
@@ -7,7 +8,20 @@ export const postImageUpload = async (req, res, next) => {
         const originalName = req.file.originalname
         const destination = req.file.destination
         const fileName = req.file.filename
-        const newUpload = Upload({employeeId: req.user.employeeId, originalName, destination, fileName})
+        const filePath = destination + fileName 
+
+        let width, height
+
+        try {
+            // Sharp를 사용하여 이미지 크기 확인
+            const metadata = await sharp(filePath).metadata()
+            width = metadata.width
+            height = metadata.height
+        } catch (err) {
+            next(err)
+        }
+
+        const newUpload = Upload({employeeId: req.user.employeeId, originalName, destination, fileName, width, height})
         const result = await newUpload.save()
         res.status(200).json({filename: result._id})
     } catch (err) {

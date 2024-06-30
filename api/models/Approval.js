@@ -31,6 +31,10 @@ const ApprovalSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        cardNo: {
+            type: String,
+            default: ''
+        },
         reason: {
             type: String,
             required: true
@@ -51,6 +55,10 @@ const ApprovalSchema = new mongoose.Schema(
             default: ''
         },
         consenterEmail: {
+            type: String,
+            default: ''
+        },
+        paymentId: {
             type: String,
             default: ''
         },

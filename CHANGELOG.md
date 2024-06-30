@@ -1,3 +1,7 @@
+* 24/06/30
+    - 2.1.6 (client, api) <br>
+        attach payment xlsx file <br>
+
 * 24/06/23
     - 2.1.5 (client, api) <br>
         approvalPaymentUpdate <br>

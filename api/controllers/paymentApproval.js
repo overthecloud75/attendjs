@@ -1,9 +1,13 @@
 import Approval from '../models/Approval.js'
+import Upload from '../models/Upload.js'
+import Payment from '../models/Payment.js'
 import { isValidObjectId } from '../models/utils.js'
 import { getEmployeeByEmail } from './employee.js'
 import { getApprover, getConsenter, makeHtml } from './event.js'
 import { sanitizeData } from '../utils/util.js'
 import { paymentRequestEmail, paymentConfirmationEmail } from '../utils/email.js'
+import { fillPaymentExcelTemplate } from '../utils/xls.js'
+import { getImageId } from '../utils/image.js'
 import { createError } from '../utils/error.js'
 
 export const update = async (req, res, next) => {
@@ -64,7 +68,9 @@ export const getPayment = async (req, res, next) => {
 export const postPayment = async (req, res, next) => {
     /* 
         1. approval 내용 저장 
-        2. paymentReqeustEmail 송부 
+        2. content의 imagePath 및 id 확인 
+        3. 개인경비 청구서 excel 작성 
+        4. paymentReqeustEmail 송부 
     */
     try {
         const start = sanitizeData(req.body.start, 'date')
@@ -76,10 +82,24 @@ export const postPayment = async (req, res, next) => {
         if (checkTheSameApproval && checkTheSameApproval.status !== 'Cancel') {
             res.status(200).send('Already there is the same approval.')
         } else {
-            const newApproval = new Approval({approvalType: 'payment', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason: req.body.reason, etc: req.body.etc, approverName: approver.name, approverEmail: approver.email, consenterName: consenter.name, consenterEmail: consenter.email, content: req.body.content})
-            await newApproval.save()
-            await paymentRequestEmail(newApproval, newApproval.status)
-            res.status(200).send('Event has been created.')
+            let approval = {approvalType: 'payment', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, cardNo:req.body.cardNo, reason: req.body.reason, etc: req.body.etc, approverName: approver.name, approverEmail: approver.email, consenterName: consenter.name, consenterEmail: consenter.email, content: req.body.content}
+            const imageId = getImageId(approval.content) 
+            
+            if (imageId) {
+                const uploadImage = await Upload.findOne({_id: imageId}) 
+                const {destination, fileName} = await fillPaymentExcelTemplate(approval, uploadImage)
+                const newPayment = new Payment({employeeId: approval.employeeId, destination, fileName})
+                const payment = await newPayment.save()
+
+                approval.paymentId = payment._id
+                const newApproval = new Approval(approval)
+                await newApproval.save()
+                await paymentRequestEmail(newApproval, newApproval.status, payment)
+
+                res.status(200).send('Event has been created.')
+            } else {
+                return next(createError(400, 'Image is missing'))
+            }
         }
     } catch (err) {
         next(err)
@@ -155,7 +175,8 @@ export const makePaymentInProgress = async (approval) => {
     else (status = 'Active')
     const msg = '승인하였습니다.'
     await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
-    await paymentRequestEmail(approval, status) // 승인 후 합의권자에게 메일 송부 
+    const payment = Payment.findOne({_id: approval.paymentId})
+    await paymentRequestEmail(approval, status, payment) // 승인 후 합의권자에게 메일 송부 
     return {status, msg}
 }
 

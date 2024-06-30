@@ -125,6 +125,10 @@ export const paymentUpdateColumnHeaders = [
         Header: '시작일',
     },
     {
+        accessor: 'cardNo',
+        Header: '카드번호',
+    },
+    {
         accessor: 'reason',
         Header: '사유',
     },

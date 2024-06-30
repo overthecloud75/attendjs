@@ -62,7 +62,7 @@ export const attendRequestEmail = async (approval, summary) => {
                 <p>사유 : ${approval.reason}</p>
                 <p>기타 : ${approval.etc}</p>
                 <a href=${process.env.DOMAIN}/api/event/confirm/approval/${approval._id.toString()} class="button" style="background-color: #0071c2; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">승인</a>
-                <a href=${process.env.DOMAIN}/api/event/confirm/cancel/${approval._id.toString()} class="button" style="background-color: #dc3545; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">취소</a>`    
+                <a href=${process.env.DOMAIN}/api/event/confirm/cancel/${approval._id.toString()} class="button" style="background-color: #dc3545; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">취소</a>`
         })
     } catch(err) {
         logger.error(err)
@@ -99,7 +99,7 @@ export const attendConfirmationEmail = async (approval, status) => {
     }
 }
 
-export const paymentRequestEmail = async (approval, status) => {
+export const paymentRequestEmail = async (approval, status, payment) => {
     let recipient 
     let approverName 
     let _order 
@@ -119,16 +119,23 @@ export const paymentRequestEmail = async (approval, status) => {
         await transport.sendMail({
             from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
             to: recipient,
-            subject: `[지출 결재] ${approval.department}팀 ${approval.name}, ${approval.reason}, ${approval.start}`,
+            subject: `[지출 결재] ${approval.department}팀 ${approval.name}, 사용내용: ${approval.reason}, 사용일: ${approval.start}`,
             html: `<h3>안녕하세요. ${approverName}님</h3>
                 <p>${approval.name}님이 다음과 같이 결재 신청을 하였습니다.</p>
                 <p>이름 : ${approval.name}</p>
                 <p>사용일 : ${approval.start}</p>
+                <p>카드번호 : ${approval.cardNo}</p>
                 <p>사용내용 : ${approval.reason}</p>
                 <p>사용금액 : ${approval.etc}</p>
                 <p>증빙 : ${approval.content}</p>
                 <a href=${process.env.DOMAIN}/api/payment/confirm/approval/${approval._id.toString()}/${_order} class="button" style="background-color: #0071c2; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">승인</a>
-                <a href=${process.env.DOMAIN}/api/payment/confirm/cancel/${approval._id.toString()}/${_order} class="button" style="background-color: #dc3545; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">취소</a>`    
+                <a href=${process.env.DOMAIN}/api/payment/confirm/cancel/${approval._id.toString()}/${_order} class="button" style="background-color: #dc3545; border: none; border-radius: 8px; color: white; padding: 15px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 5px; cursor: pointer;">취소</a>`,  
+            attachments: [
+                {
+                    filename: payment.fileName, // 첨부 파일 이름
+                    path: payment.destination   // 첨부 파일 경로
+                }
+            ]    
         })
     } catch(err) {
         logger.error(err)
@@ -152,7 +159,7 @@ export const paymentConfirmationEmail = async (approval, status) => {
         await transport.sendMail({
             from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
             to: approval.email,
-            subject: `[결재 ${action}] ${approval.department}팀 ${approval.name} 사용내용 : ${approval.reason} 사용일: ${approval.start}`,
+            subject: `[결재 ${action}] ${approval.department}팀 ${approval.name}, 사용내용 : ${approval.reason}, 사용일: ${approval.start}`,
             html: `<h3>안녕하세요. ${approval.name}님</h3>
                 <p>${approval.name}님의 지출 결재 신청이 ${action} 되었습니다.</p>
                 <p>이름 : ${approval.name}</p>

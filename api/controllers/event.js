@@ -151,8 +151,7 @@ export const getApprover = async (employee) => {
 }
 
 export const getConsenter = async (employee) => {
-    //const consenter = await Employee.findOne({position: '팀장', department: '관리팀'})
-    const consenter = await Employee.findOne({position: '본부장'})
+    const consenter = await Employee.findOne({position: '팀장', department: '관리팀'})
     return consenter
 }
 

@@ -107,5 +107,6 @@ build
 backups
 api/config/process.js
 api/uploads
+api/payments
 todo.md
 

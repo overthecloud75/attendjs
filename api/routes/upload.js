@@ -5,13 +5,7 @@ import mime from 'mime-types'
 import { postImageUpload, getImage } from '../controllers/upload.js'
 import { verifyUser } from '../utils/verifyToken.js'
 import { getYearMonth } from '../utils/util.js'
-import fs from 'fs'
-
-const ensureDirectoryExists = (targetPath) => {
-    if (!fs.existsSync(targetPath)) {
-        fs.mkdirSync(targetPath, { recursive: true });
-    }
-  }
+import { ensureDirectoryExists } from '../utils/file.js'
 
 const storage = multer.diskStorage({ 
     destination: (req, file, cb) => { 

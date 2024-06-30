@@ -25,6 +25,7 @@ const Payment = ({writeMode, open, setOpen}) => {
         approver: '', 
         consenter: '',
         start: dayjs(new Date()).format('YYYY-MM-DD'), 
+        cardNo: '',
         reason: '', 
         etc: '',
         content: ''
@@ -49,6 +50,10 @@ const Payment = ({writeMode, open, setOpen}) => {
         }
         if (value.start > dayjs(new Date()).format('YYYY-MM-DD')) {
             window.alert('사용일은 당일 이후 날짜는 가능하지 않습니다.')
+            return false
+        }
+        if (!value.cardNo) {
+            window.alert('카드번호가 작성되지 않았습니다.')
             return false
         }
         if (!value.reason) {
@@ -111,6 +116,16 @@ const Payment = ({writeMode, open, setOpen}) => {
                         />
                     </DatePickWrapper>
                 </LocalizationProvider>
+                <TextField 
+                    margin='dense'
+                    id='cardNo'
+                    name='카드번호'
+                    label='카드번호'
+                    fullWidth
+                    variant='outlined'
+                    value={value.cardNo}
+                    onChange={handleChange}
+                />
                 <TextField 
                     margin='dense'
                     id='reason'
