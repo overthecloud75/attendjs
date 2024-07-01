@@ -56,6 +56,7 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
             url = '/api/' + page + '/update'
         }
         try {
+            console.log('update', value)
             const res = await axios.post(url, value)
             setValue(res.data)
             if (writeMode) {insertData()}
@@ -70,6 +71,7 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
         const url = '/api/' + page + '/delete'
         if(!window.confirm('정말로 삭제하시겠습니다.?')) return
         try {
+            console.log(value)
             await axios.post(url, value)
             deleteData()
         } catch (err) {

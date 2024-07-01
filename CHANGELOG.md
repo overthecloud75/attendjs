@@ -1,3 +1,7 @@
+* 24/07/01
+    - 2.1.7 (client, backend) <br>
+        little fix <br>
+
 * 24/06/30
     - 2.1.6 (client, api) <br>
         attach payment xlsx file <br>

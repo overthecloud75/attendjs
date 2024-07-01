@@ -386,7 +386,8 @@ class Report(BasicModel):
     def _get_status_from_schedule(self, title):
         status = '기타'     
         for status_type in WORKING['status']:
-            if status_type in title:
+            # if status_type in title: 포함된 값이 아닌 select로 값을 받기 때문에 == 으로 변경
+            if status_type == title:
                 status = status_type
         return status 
 

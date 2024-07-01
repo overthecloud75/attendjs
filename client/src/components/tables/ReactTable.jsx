@@ -164,7 +164,7 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                     open={openUpdate}
                     setOpen={setOpenUpdate}
                     rowData={selectedRowData}
-                />):(
+                />):(openUpdate&& 
                 <Update
                     writeMode={writeMode}
                     page={url}
