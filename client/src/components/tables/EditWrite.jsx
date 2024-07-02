@@ -38,11 +38,11 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
 
     const checkValue = () => {
         if (!value.content) {
-            window.alert('내용이 작성되지 않았습니다.')
+            alert('내용이 작성되지 않았습니다.')
             return false
         }
         if (!value.title) {
-            window.alert('제목이 작성되지 않았습니다.')
+            alert('제목이 작성되지 않았습니다.')
             return false
         }
         if (!window.confirm('정말로 저장하시겠습니다.?')) return false
@@ -76,7 +76,7 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
             if (writeMode) {insertData()}
             else {updateData()}
         } catch (err) {
-            window.alert(err)
+            alert(err)
         }
         handleClose()
     }
@@ -88,7 +88,7 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
             await axios.post(url, value)
             deleteData()
         } catch (err) {
-            window.alert(err)
+            alert(err)
         }
         handleClose()
     }

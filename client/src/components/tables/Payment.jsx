@@ -45,27 +45,27 @@ const Payment = ({writeMode, open, setOpen}) => {
 
     const checkValue = () => {
         if (!value.start) {
-            window.alert('사용일이 작성되지 않습니다.')
+            alert('사용일이 작성되지 않습니다.')
             return false
         }
         if (value.start > dayjs(new Date()).format('YYYY-MM-DD')) {
-            window.alert('사용일은 당일 이후 날짜는 가능하지 않습니다.')
+            alert('사용일은 당일 이후 날짜는 가능하지 않습니다.')
             return false
         }
         if (!value.cardNo) {
-            window.alert('카드번호가 작성되지 않았습니다.')
+            alert('카드번호가 작성되지 않았습니다.')
             return false
         }
         if (!value.reason) {
-            window.alert('사용내용이 작성되지 않습니다.')
+            alert('사용내용이 작성되지 않습니다.')
             return false
         }
         if (!value.etc) {
-            window.alert('사용금액이 작성되지 않습니다.')
+            alert('사용금액이 작성되지 않습니다.')
             return false
         }
         if (!value.content) {
-            window.alert('이미지가 삽입되지 않았습니다.')
+            alert('이미지가 삽입되지 않았습니다.')
             return false
         }
         if (!window.confirm('정말로 상신하시겠습니다.?')) return false

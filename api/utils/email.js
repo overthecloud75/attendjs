@@ -100,16 +100,19 @@ export const attendConfirmationEmail = async (approval, status) => {
 }
 
 export const paymentRequestEmail = async (approval, status, payment) => {
+    let _term
     let recipient 
     let approverName 
     let _order 
     if (status === 'Pending') {
         logger.info('send payment request email')
+        _term = '결재'
         recipient = approval.approverEmail
         approverName = approval.approverName
         _order = '0'
     } else {
         logger.info('send payment consent email')
+        _term = '합의'
         recipient = approval.consenterEmail
         approverName = approval.consenterName
         _order = '1'
@@ -117,9 +120,9 @@ export const paymentRequestEmail = async (approval, status, payment) => {
     try {
         const transport = makeTransport()
         await transport.sendMail({
-            from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
+            from: 'ACCOUNTING_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
             to: recipient,
-            subject: `[지출 결재] ${approval.department}팀 ${approval.name}, 사용내용: ${approval.reason}, 사용일: ${approval.start}`,
+            subject: `[지출 ${_term}] ${approval.department}팀 ${approval.name}, 사용내용: ${approval.reason}, 사용일: ${approval.start}`,
             html: `<h3>안녕하세요. ${approverName}님</h3>
                 <p>${approval.name}님이 다음과 같이 결재 신청을 하였습니다.</p>
                 <p>이름 : ${approval.name}</p>
@@ -157,7 +160,7 @@ export const paymentConfirmationEmail = async (approval, status) => {
     try {
         const transport = makeTransport()
         await transport.sendMail({
-            from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
+            from: 'ACCOUNTING_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
             to: approval.email,
             subject: `[결재 ${action}] ${approval.department}팀 ${approval.name}, 사용내용 : ${approval.reason}, 사용일: ${approval.start}`,
             html: `<h3>안녕하세요. ${approval.name}님</h3>

@@ -157,14 +157,14 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                 pageSize={pageSize}
                 setPageSize={setPageSize}
             />
-            {openUpdate&&url==='approval'?(
+            {openUpdate&&(url==='approval'?
                 <ApprovalUpdate
                     data={data}
                     setData={setData}
                     open={openUpdate}
                     setOpen={setOpenUpdate}
                     rowData={selectedRowData}
-                />):(openUpdate&& 
+                />:
                 <Update
                     writeMode={writeMode}
                     page={url}
@@ -174,8 +174,8 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                     open={openUpdate}
                     setOpen={setOpenUpdate}
                     rowData={selectedRowData}
-                />)
-            }
+                />
+            )}
             {openEditWrite&&
                 <EditWrite
                     writeMode={writeMode}

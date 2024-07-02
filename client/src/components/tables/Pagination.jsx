@@ -87,29 +87,29 @@ const PageSelect = styled.select`
 `
 
 const Pagination = ({gotoPage, canPreviousPage, previousPage, nextPage, 
-    canNextPage, pageCount, pageIndex, pageOptions, pageSize, setPageSize,}) => {
+    canNextPage, pageCount, pageIndex, pageOptions, pageSize, setPageSize}) => {
     return (
         <Paginate>
             <PageButton onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                {"<<"}
-            </PageButton>{" "}
+                {'<<'}
+            </PageButton>{' '}
             <PageButton onClick={() => previousPage()} disabled={!canPreviousPage}>
-                {"<"}
-            </PageButton>{" "}
+                {'<'}
+            </PageButton>{' '}
             <PageButton onClick={() => nextPage()} disabled={!canNextPage}>
-                {">"}
-            </PageButton>{" "}
+                {'>'}
+            </PageButton>{' '}
             <PageButton onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                {">>"}
-            </PageButton>{" "}
+                {'>>'}
+            </PageButton>{' '}
             <PageSpan>
-                Page{" "}
+                Page{' '}
                 <strong>
                     {pageIndex + 1} of {pageOptions.length}
-                </strong>{" "}
+                </strong>{' '}
             </PageSpan>
             <PageSpan>
-                Go to page:{" "}
+                Go to page:{' '}
                 <PageInput
                     type='number'
                     defaultValue={pageIndex + 1}
@@ -119,7 +119,7 @@ const Pagination = ({gotoPage, canPreviousPage, previousPage, nextPage,
                         gotoPage(page)
                     }}
                 />
-            </PageSpan>{" "}
+            </PageSpan>{' '}
             <PageSelect
                 value={pageSize}
                 name='pageSize'
