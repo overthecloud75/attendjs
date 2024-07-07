@@ -92,23 +92,23 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
             <DialogTitle>Update {page}</DialogTitle>
             <DialogContent>
                 {columns.map((item, index) => {
-                    if (EditableSelects.includes(item.accessor)&&options[item.accessor]) {
+                    if (EditableSelects.includes(item.accessorKey)&&options[item.accessorKey]) {
                         return (
                             <TextField
-                                autoFocus={focus===item.accessor}
+                                autoFocus={focus===item.accessorKey}
                                 select
                                 margin='dense'
-                                id={item.accessor}
-                                name={item.accessor}
-                                label={item.accessor}
+                                id={item.accessorKey}
+                                name={item.accessorKey}
+                                label={item.accessorKey}
                                 fullWidth
                                 variant='outlined'
-                                defaultValue={value[item.accessor]?value[item.accessor]:''}
+                                defaultValue={value[item.accessorKey]?value[item.accessorKey]:''}
                                 key={index}
                                 onChange={handleChange}
                                 autoComplete='false'
                             >  
-                                {options[item.accessor].map((option) => (
+                                {options[item.accessorKey].map((option) => (
                                     <MenuItem
                                         key={option} 
                                         value={option}
@@ -118,17 +118,17 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
                                 ))}
                             </TextField>
                         )
-                    } else if (editableTitles.includes(item.accessor) || writeMode){
+                    } else if (editableTitles.includes(item.accessorKey) || writeMode){
                         return (
                             <TextField
-                                autoFocus={focus===item.accessor}
+                                autoFocus={focus===item.accessorKey}
                                 margin='dense'
-                                id={item.accessor}
-                                name={item.accessor}
-                                label={item.accessor}
+                                id={item.accessorKey}
+                                name={item.accessorKey}
+                                label={item.accessorKey}
                                 fullWidth
                                 variant='outlined'
-                                value={value[item.accessor]?value[item.accessor]:''}
+                                value={value[item.accessorKey]?value[item.accessorKey]:''}
                                 key={index}
                                 onChange={handleChange}
                                 autoComplete='false'
@@ -138,12 +138,12 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
                         return (
                             <TextField
                                 margin='dense'
-                                id={item.accessor}
-                                name={item.accessor}
-                                label={item.accessor}
+                                id={item.accessorKey}
+                                name={item.accessorKey}
+                                label={item.accessorKey}
                                 fullWidth
                                 variant='standard'
-                                value={rowData[item.accessor]?rowData[item.accessor]:''}
+                                value={rowData[item.accessorKey]?rowData[item.accessorKey]:''}
                                 key={index}
                                 InputProps={{readOnly: true}}
                                 autoComplete='false'

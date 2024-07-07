@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, Suspense, lazy } from 'react'
+import { useState, useEffect, Suspense, lazy } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import Box from '@mui/material/Box'
@@ -7,7 +7,7 @@ import useFetch from '../../hooks/useFetch'
 import Search from './Search'
 import { SearchPages } from '../../configs/pages'
 
-const Table = lazy(() => import('./ReactTable'))
+const Table = lazy(() => import('./Table'))
 
 const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) => {
     const navigate = useNavigate()
@@ -41,9 +41,6 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
     // eslint-disable-next-line
     }, [error])
 
-    const columns = useMemo(() => columnHeaders, [columnHeaders])
-    const tableData = useMemo(() => data, [data])
-
     return (
         <>
             {SearchPages.includes(page)&&<Search
@@ -66,8 +63,8 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
             >
                 <Table 
                     url={page}
-                    columns={columns}
-                    data={tableData}
+                    columns={columnHeaders}
+                    data={data}
                     setData={setData}
                     fileName={fileName}
                     csvHeaders={csvHeaders}

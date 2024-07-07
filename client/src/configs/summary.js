@@ -1,90 +1,90 @@
 export const columnHeaders = [
     {
-        accessor: 'employeeId',
-        Header: 'ID',
+        accessorKey: 'employeeId',
+        header: 'ID',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'days',
-        Header: '기준일',
+        accessorKey: 'days',
+        header: '기준일',
     },
     {
-        accessor: 'workingDays',
-        Header: '근무일',
+        accessorKey: 'workingDays',
+        header: '근무일',
     },
     {
-        accessor: 'workingHours',
-        Header: '시간',
+        accessorKey: 'workingHours',
+        header: '시간',
     },
     {
-        accessor: '미출근',
-        Header: '미출근',
+        accessorKey: '미출근',
+        header: '미출근',
     },
     {
-        accessor: '정상출근',
-        Header: '출근',
+        accessorKey: '정상출근',
+        header: '출근',
     },
     {
-        accessor: '지각',
-        Header: '지각',
+        accessorKey: '지각',
+        header: '지각',
     },
     {
-        accessor: '휴가',
-        Header: '휴가',
+        accessorKey: '휴가',
+        header: '휴가',
     },
     {
-        accessor: '반차',
-        Header: '반차',
+        accessorKey: '반차',
+        header: '반차',
     },
     {
-        accessor: '외근',
-        Header: '외근',
+        accessorKey: '외근',
+        header: '외근',
     },
     {
-        accessor: '재택',
-        Header: '재택',
+        accessorKey: '재택',
+        header: '재택',
     },
     {
-        accessor: '기타',
-        Header: '기타',
+        accessorKey: '기타',
+        header: '기타',
     }
 ]
 
 export const mobileColumnHeaders = [
     {
-        accessor: 'employeeId',
-        Header: 'ID',
+        accessorKey: 'employeeId',
+        header: 'ID',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'days',
-        Header: '기준일',
+        accessorKey: 'days',
+        header: '기준일',
     },
     {
-        accessor: 'workingDays',
-        Header: '근무일',
+        accessorKey: 'workingDays',
+        header: '근무일',
     },
     {
-        accessor: 'workingHours',
-        Header: '시간',
+        accessorKey: 'workingHours',
+        header: '시간',
     },
     {
-        accessor: '미출근',
-        Header: '미출근',
+        accessorKey: '미출근',
+        header: '미출근',
     },
     {
-        accessor: '정상출근',
-        Header: '출근',
+        accessorKey: '정상출근',
+        header: '출근',
     },
     {
-        accessor: '지각',
-        Header: '지각',
+        accessorKey: '지각',
+        header: '지각',
     },
 ]
 

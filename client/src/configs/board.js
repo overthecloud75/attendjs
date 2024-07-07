@@ -1,34 +1,34 @@
 export const columnHeaders = [
     {
-        accessor: 'title',
-        Header: '제목',
+        accessorKey: 'title',
+        header: '제목',
     },
     {
-        accessor: 'name',
-        Header: '작성자',
+        accessorKey: 'name',
+        header: '작성자',
     },
     {
-        accessor: 'createdAt',
-        Header: 'CreatedAt',
+        accessorKey: 'createdAt',
+        header: 'CreatedAt',
     },
     {
-        accessor: 'updatedAt',
-        Header: 'UpdatedAt',
+        accessorKey: 'updatedAt',
+        header: 'UpdatedAt',
     },
 ]
 
 export const mobileColumnHeaders = [
     {
-        accessor: 'title',
-        Header: '제목',
+        accessorKey: 'title',
+        header: '제목',
     },
     {
-        accessor: 'name',
-        Header: '작성자',
+        accessorKey: 'name',
+        header: '작성자',
     },
     {
-        accessor: 'createdAt',
-        Header: 'CreatedAt',
+        accessorKey: 'createdAt',
+        header: 'CreatedAt',
     },
 ]
 

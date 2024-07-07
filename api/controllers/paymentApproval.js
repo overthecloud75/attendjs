@@ -175,7 +175,7 @@ export const makePaymentInProgress = async (approval) => {
     else (status = 'Active')
     const msg = '승인하였습니다.'
     await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
-    const payment = Payment.findOne({_id: approval.paymentId})
+    const payment = await Payment.findOne({_id: approval.paymentId})
     await paymentRequestEmail(approval, status, payment) // 승인 후 합의권자에게 메일 송부 
     return {status, msg}
 }

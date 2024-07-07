@@ -1,66 +1,66 @@
 export const columnHeaders = [
     {
-        accessor: 'ip',
-        Header: 'IP',
+        accessorKey: 'ip',
+        header: 'IP',
     },
     {
-        accessor: 'mac',
-        Header: 'MAC',
+        accessorKey: 'mac',
+        header: 'MAC',
     },
     {
-        accessor: 'registerDate',
-        Header: '등록일',
+        accessorKey: 'registerDate',
+        header: '등록일',
     },
     {
-        accessor: 'endDate',
-        Header: '최종 확인일',
+        accessorKey: 'endDate',
+        header: '최종 확인일',
     },
     {
-        accessor: 'vendor',
-        Header: 'Vendor',
+        accessorKey: 'vendor',
+        header: 'Vendor',
     },
     {
-        accessor: 'os',
-        Header: 'OS',
+        accessorKey: 'os',
+        header: 'OS',
     },
     {
-        accessor: 'accuracy',
-        Header: 'Accuracy',
+        accessorKey: 'accuracy',
+        header: 'Accuracy',
     },
     {
-        accessor: 'info',
-        Header: 'Info',
+        accessorKey: 'info',
+        header: 'Info',
     },
     {
-        accessor: 'type',
-        Header: '유형',
+        accessorKey: 'type',
+        header: '유형',
     },
     {
-        accessor: 'location',
-        Header: '위치',
+        accessorKey: 'location',
+        header: '위치',
     },
     {
-        accessor: 'charge',
-        Header: '담당',
+        accessorKey: 'charge',
+        header: '담당',
     },
     {
-        accessor: 'owner',
-        Header: '소유자',
+        accessorKey: 'owner',
+        header: '소유자',
     },
 ]
 
 export const mobileColumnHeaders = [
     {
-        accessor: 'ip',
-        Header: 'IP',
+        accessorKey: 'ip',
+        header: 'IP',
     },
     {
-        accessor: 'mac',
-        Header: 'MAC',
+        accessorKey: 'mac',
+        header: 'MAC',
     },
     {
-        accessor: 'vendor',
-        Header: 'Vendor',
+        accessorKey: 'vendor',
+        header: 'Vendor',
     },
 ]
 

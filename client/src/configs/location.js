@@ -1,38 +1,38 @@
 export const columnHeaders = [
     {
-        accessor: 'location',
-        Header: '근무지',
+        accessorKey: 'location',
+        header: '근무지',
     },
     {
-        accessor: 'latitude',
-        Header: '위도',
+        accessorKey: 'latitude',
+        header: '위도',
     },
     {
-        accessor: 'longitude',
-        Header: '경도',
+        accessorKey: 'longitude',
+        header: '경도',
     },
     {
-        accessor: 'dev',
-        Header: '편차',
+        accessorKey: 'dev',
+        header: '편차',
     },
 ]
 
 export const mobileColumnHeaders = [
     {
-        accessor: 'location',
-        Header: '근무지',
+        accessorKey: 'location',
+        header: '근무지',
     },
     {
-        accessor: 'latitude',
-        Header: '위도',
+        accessorKey: 'latitude',
+        header: '위도',
     },
     {
-        accessor: 'longitude',
-        Header: '경도',
+        accessorKey: 'longitude',
+        header: '경도',
     },
     {
-        accessor: 'dev',
-        Header: '편차',
+        accessorKey: 'dev',
+        header: '편차',
     },
 ]
 

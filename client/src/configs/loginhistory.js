@@ -1,95 +1,95 @@
 export const columnHeaders = [
     {
-        accessor: 'employeeId',
-        Header: 'ID',
+        accessorKey: 'employeeId',
+        header: 'ID',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'attend',
-        Header: 'Attend',
+        accessorKey: 'attend',
+        header: 'Attend',
     },
     {
-        accessor: 'isMobile',
-        Header: 'Mobile',
+        accessorKey: 'isMobile',
+        header: 'Mobile',
     },
     {
-        accessor: 'date',
-        Header: 'Date',
+        accessorKey: 'date',
+        header: 'Date',
     },
     {
-        accessor: 'time',
-        Header: 'Time',
+        accessorKey: 'time',
+        header: 'Time',
     },
     {
-        accessor: 'ip',
-        Header: 'IP',
+        accessorKey: 'ip',
+        header: 'IP',
     },
     {
-        accessor: 'platform',
-        Header: 'Platform',
+        accessorKey: 'platform',
+        header: 'Platform',
     },
     {
-        accessor: 'user_agent',
-        Header: 'USER_AGENT',
+        accessorKey: 'user_agent',
+        header: 'USER_AGENT',
     },
     {
-        accessor: 'width',
-        Header: 'Width',
+        accessorKey: 'width',
+        header: 'Width',
     },
     {
-        accessor: 'height',
-        Header: 'Height',
+        accessorKey: 'height',
+        header: 'Height',
     },
     {
-        accessor: 'latitude',
-        Header: 'Latitude',
+        accessorKey: 'latitude',
+        header: 'Latitude',
     },
     {
-        accessor: 'longitude',
-        Header: 'Longitude',
+        accessorKey: 'longitude',
+        header: 'Longitude',
     },
     {
-        accessor: 'accuracy',
-        Header: 'Accuracy',
+        accessorKey: 'accuracy',
+        header: 'Accuracy',
     },
     {
-        accessor: 'cloudflareCheck',
-        Header: 'CloudFlare',
+        accessorKey: 'cloudflareCheck',
+        header: 'CloudFlare',
     },
 ]
 
 export const mobileColumnHeaders = [
     {
-        accessor: 'employeeId',
-        Header: 'ID',
+        accessorKey: 'employeeId',
+        header: 'ID',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'attend',
-        Header: 'Attend',
+        accessorKey: 'attend',
+        header: 'Attend',
     },
     {
-        accessor: 'isMobile',
-        Header: 'Mobile',
+        accessorKey: 'isMobile',
+        header: 'Mobile',
     },
     {
-        accessor: 'time',
-        Header: 'Time',
+        accessorKey: 'time',
+        header: 'Time',
     },
     {
-        accessor: 'platform',
-        Header: 'Platform',
+        accessorKey: 'platform',
+        header: 'Platform',
     },
     {
-        accessor: 'cloudflareCheck',
-        Header: 'CloudFlare',
-    },
+        accessorKey: 'cloudflareCheck',
+        header: 'CloudFlare',
+    }
 ]
 
 export const csvHeaders = [

@@ -1,50 +1,50 @@
 export const columnHeaders = [
     {
-        accessor: 'employeeId',
-        Header: 'ID',
+        accessorKey: 'employeeId',
+        header: 'ID',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'date',
-        Header: 'Date',
+        accessorKey: 'date',
+        header: 'Date',
     },
     {
-        accessor: 'begin',
-        Header: '출근',
+        accessorKey: 'begin',
+        header: '출근',
     },
     {
-        accessor: 'beginPlace',
-        Header: 'BeginPlace',
+        accessorKey: 'beginPlace',
+        header: 'BeginPlace',
     },
     {
-        accessor: 'end',
-        Header: '퇴근',
+        accessorKey: 'end',
+        header: '퇴근',
     },
     {
-        accessor: 'endPlace',
-        Header: 'EndPlace',
+        accessorKey: 'endPlace',
+        header: 'EndPlace',
     },
 ]
 
 export const mobileColumnHeaders = [
     {
-        accessor: 'employeeId',
-        Header: 'ID',
+        accessorKey: 'employeeId',
+        header: 'ID',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'begin',
-        Header: '출근',
+        accessorKey: 'begin',
+        header: '출근',
     },
     {
-        accessor: 'end',
-        Header: '퇴근',
+        accessorKey: 'end',
+        header: '퇴근',
     }
 ]
 

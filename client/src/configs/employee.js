@@ -1,62 +1,62 @@
 export const columnHeaders = [
     {
-        accessor: 'employeeId',
-        Header: '사번',
+        accessorKey: 'employeeId',
+        header: '사번',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'beginDate',
-        Header: '입사일',
+        accessorKey: 'beginDate',
+        header: '입사일',
     },
     {
-        accessor: 'email',
-        Header: 'email',
+        accessorKey: 'email',
+        header: 'email',
     },
     {
-        accessor: 'department',
-        Header: '부서',
+        accessorKey: 'department',
+        header: '부서',
     },
     {
-        accessor: 'rank',
-        Header: '직급',
+        accessorKey: 'rank',
+        header: '직급',
     },
     {
-        accessor: 'position',
-        Header: '직책',
+        accessorKey: 'position',
+        header: '직책',
     },
     {
-        accessor: 'regular',
-        Header: 'regular',
+        accessorKey: 'regular',
+        header: 'regular',
     },
     {
-        accessor: 'mode',
-        Header: 'mode',
+        accessorKey: 'mode',
+        header: 'mode',
     },
     {
-        accessor: 'attendMode',
-        Header: '적용',
+        accessorKey: 'attendMode',
+        header: '적용',
     },
 ]
 
 export const mobileColumnHeaders = [
     {
-        accessor: 'employeeId',
-        Header: '사번',
+        accessorKey: 'employeeId',
+        header: '사번',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'email',
-        Header: 'email',
+        accessorKey: 'email',
+        header: 'email',
     },
     {
-        accessor: 'department',
-        Header: '부서',
+        accessorKey: 'department',
+        header: '부서',
     },
 ]
 

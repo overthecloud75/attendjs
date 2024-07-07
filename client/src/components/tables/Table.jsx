@@ -1,11 +1,18 @@
 import { useState } from 'react'
-import { useReactTable, flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel } from '@tanstack/react-table'
+import { 
+    useReactTable, 
+    flexRender, 
+    getCoreRowModel, 
+    getPaginationRowModel, 
+    getSortedRowModel 
+} from '@tanstack/react-table'
 import styled from 'styled-components'
-import { v } from '../../variable'
-import Pagination from './Pagination'
-import Update from './Update'
-import EditWrite from './EditWrite'
-import { UserEditablePages, UpdatablePages } from '../../configs/pages'
+import { v } from '../../variable.js'
+import Pagination from './Pagination.jsx'
+import Update from './Update.jsx'
+import ApprovalUpdate from './ApprovalUpdate.jsx'
+import EditWrite from './EditWrite.jsx'
+import { UserEditablePages, UpdatablePages } from '../../configs/pages.js'
 import TableButtons from './TableButtons.jsx'
 
 const Container = styled.div`
@@ -68,17 +75,7 @@ const BodyTr = styled.tr`
 `
 
 // https://geuni620.github.io/blog/2023/12/2/tanstack-table/
-
-const Table = ({url, setData, csvHeaders, fileName}) => {
-
-    const columns = {
-        accessorKey: 'name', 
-        header: '이름', 
-    }
-
-    const data = {
-        name: 'clinton'
-    }
+const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
     // update시 page 설정
     const [selectedRowData, setSelectedRowData] = useState({})
     const [pagination, setPagination] = useState({
@@ -183,7 +180,14 @@ const Table = ({url, setData, csvHeaders, fileName}) => {
                 pageSize={table.getState().pagination.pageSize}
                 setPageSize={table.setPageSize}
             />
-            {openUpdate&&(
+            {openUpdate&&(url==='approval'?
+                <ApprovalUpdate
+                    data={data}
+                    setData={setData}
+                    open={openUpdate}
+                    setOpen={setOpenUpdate}
+                    rowData={selectedRowData}
+                />:
                 <Update
                     writeMode={writeMode}
                     page={url}

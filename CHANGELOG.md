@@ -1,3 +1,7 @@
+* 24/07/07
+    - 2.1.8 (client) <br>
+        ReactTable > @tanstack/react-table <br>
+
 * 24/07/01
     - 2.1.7 (client, backend) <br>
         little fix <br>

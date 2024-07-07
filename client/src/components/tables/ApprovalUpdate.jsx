@@ -90,23 +90,23 @@ const ApprovalUpdate = ({data, setData, open, setOpen, rowData}) => {
             <DialogTitle>Update approval</DialogTitle>
             <DialogContent>
                 {columns.map((item, index) => {
-                    if (EditableSelects.includes(item.accessor)&&options[item.accessor]) {
+                    if (EditableSelects.includes(item.accessorKey)&&options[item.accessorKey]) {
                         return (
                             <TextField
-                                autoFocus={focus===item.accessor}
+                                autoFocus={focus===item.accessorKey}
                                 select
                                 margin='dense'
-                                id={item.accessor}
-                                name={item.accessor}
-                                label={item.accessor}
+                                id={item.accessorKey}
+                                name={item.accessorKey}
+                                label={item.accessorKey}
                                 fullWidth
                                 variant='outlined'
-                                defaultValue={value[item.accessor]?value[item.accessor]:''}
+                                defaultValue={value[item.accessorKey]?value[item.accessorKey]:''}
                                 key={index}
                                 onChange={handleChange}
                                 autoComplete='false'
                             >  
-                                {options[item.accessor].map((option) => (
+                                {options[item.accessorKey].map((option) => (
                                     <MenuItem
                                         key={option} 
                                         value={option}
@@ -118,7 +118,7 @@ const ApprovalUpdate = ({data, setData, open, setOpen, rowData}) => {
                         )
                     } else {
                         return (
-                            item.accessor==='content'?
+                            item.accessorKey==='content'?
                                 <Editor
                                     writeMode={false}
                                     value={value}
@@ -127,12 +127,12 @@ const ApprovalUpdate = ({data, setData, open, setOpen, rowData}) => {
                                 /> :
                                 <TextField
                                     margin='dense'
-                                    id={item.accessor}
-                                    name={item.accessor}
-                                    label={item.accessor}
+                                    id={item.accessorKey}
+                                    name={item.accessorKey}
+                                    label={item.accessorKey}
                                     fullWidth
                                     variant='standard'
-                                    value={rowData[item.accessor]?rowData[item.accessor]:''}
+                                    value={rowData[item.accessorKey]?rowData[item.accessorKey]:''}
                                     key={index}
                                     InputProps={{readOnly: true}}
                                     autoComplete='false'

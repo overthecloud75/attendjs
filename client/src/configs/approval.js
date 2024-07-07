@@ -1,148 +1,148 @@
 export const columnHeaders = [
     {
-        accessor: 'approvalType',
-        Header: 'Type',
+        accessorKey: 'approvalType',
+        header: 'Type',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'email',
-        Header: 'Email',
+        accessorKey: 'email',
+        header: 'Email',
     },
     {
-        accessor: 'department',
-        Header: '부서',
+        accessorKey: 'department',
+        header: '부서',
     },
     {
-        accessor: 'start',
-        Header: '시작일',
+        accessorKey: 'start',
+        header: '시작일',
     },
     {
-        accessor: 'end',
-        Header: '종료일',
+        accessorKey: 'end',
+        header: '종료일',
     },
     {
-        accessor: 'reason',
-        Header: '사유',
+        accessorKey: 'reason',
+        header: '사유',
     },
     {
-        accessor: 'etc',
-        Header: '기타',
+        accessorKey: 'etc',
+        header: '기타',
     },
     {
-        accessor: 'status',
-        Header: '상태',
+        accessorKey: 'status',
+        header: '상태',
     },
     {
-        accessor: 'createdAt',
-        Header: 'CreatedAt',
+        accessorKey: 'createdAt',
+        header: 'CreatedAt',
     },
 ]
 
 export const mobileColumnHeaders = [
     {
-        accessor: 'approvalType',
-        Header: 'Type',
+        accessorKey: 'approvalType',
+        header: 'Type',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'start',
-        Header: '시작일',
+        accessorKey: 'start',
+        header: '시작일',
     },
     {
-        accessor: 'end',
-        Header: '종료일',
+        accessorKey: 'end',
+        header: '종료일',
     },
     {
-        accessor: 'reason',
-        Header: '사유',
+        accessorKey: 'reason',
+        header: '사유',
     },
     {
-        accessor: 'etc',
-        Header: '기타',
+        accessorKey: 'etc',
+        header: '기타',
     },
     {
-        accessor: 'status',
-        Header: '상태',
+        accessorKey: 'status',
+        header: '상태',
     },
 ]
 
 export const attendUpdateColumnHeaders = [
     {
-        accessor: 'approvalType',
-        Header: 'Type',
+        accessorKey: 'approvalType',
+        header: 'Type',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'email',
-        Header: 'Email',
+        accessorKey: 'email',
+        header: 'Email',
     },
     {
-        accessor: 'start',
-        Header: '시작일',
+        accessorKey: 'start',
+        header: '시작일',
     },
     {
-        accessor: 'end',
-        Header: '종료일',
+        accessorKey: 'end',
+        header: '종료일',
     },
     {
-        accessor: 'reason',
-        Header: '사유',
+        accessorKey: 'reason',
+        header: '사유',
     },
     {
-        accessor: 'etc',
-        Header: '기타',
+        accessorKey: 'etc',
+        header: '기타',
     },
     {
-        accessor: 'status',
-        Header: '상태',
+        accessorKey: 'status',
+        header: '상태',
     },
 ]
 
 export const paymentUpdateColumnHeaders = [
     {
-        accessor: 'approvalType',
-        Header: 'Type',
+        accessorKey: 'approvalType',
+        header: 'Type',
     },
     {
-        accessor: 'name',
-        Header: '이름',
+        accessorKey: 'name',
+        header: '이름',
     },
     {
-        accessor: 'email',
-        Header: 'Email',
+        accessorKey: 'email',
+        header: 'Email',
     },
     {
-        accessor: 'start',
-        Header: '시작일',
+        accessorKey: 'start',
+        header: '시작일',
     },
     {
-        accessor: 'cardNo',
-        Header: '카드번호',
+        accessorKey: 'cardNo',
+        header: '카드번호',
     },
     {
-        accessor: 'reason',
-        Header: '사유',
+        accessorKey: 'reason',
+        header: '사유',
     },
     {
-        accessor: 'etc',
-        Header: '기타',
+        accessorKey: 'etc',
+        header: '기타',
     },
     {
-        accessor: 'status',
-        Header: '상태',
+        accessorKey: 'status',
+        header: '상태',
     },
     {
-        accessor: 'content',
-        Header: '증빙',
+        accessorKey: 'content',
+        header: '증빙',
     },
 ]
 
