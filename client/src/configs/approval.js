@@ -105,6 +105,10 @@ export const attendUpdateColumnHeaders = [
         accessorKey: 'status',
         header: '상태',
     },
+    {
+        accessorKey: 'createdAt',
+        header: '작성',
+    },
 ]
 
 export const paymentUpdateColumnHeaders = [
@@ -144,6 +148,10 @@ export const paymentUpdateColumnHeaders = [
         accessorKey: 'content',
         header: '증빙',
     },
+    {
+        accessorKey: 'createdAt',
+        header: '작성',
+    }
 ]
 
 export const csvHeaders = [

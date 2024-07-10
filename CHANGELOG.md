@@ -1,3 +1,7 @@
+* 24/07/10
+    - 2.1.9 (client, api) <br>
+        nodejs 18.19 > 20.15.1 <br>
+
 * 24/07/07
     - 2.1.8 (client) <br>
         ReactTable > @tanstack/react-table <br>

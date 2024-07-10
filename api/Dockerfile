@@ -1,11 +1,11 @@
-FROM node:18.19.0-alpine
+FROM node:20.15.1-alpine
 ARG REGISTRY
 
 RUN apk add --no-cache tzdata
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 RUN npm config set registry ${REGISTRY}
-RUN npm install -g npm@10.2.0
+RUN npm install -g npm@10.8.1
 RUN mkdir /webApp
 WORKDIR /webApp
 
