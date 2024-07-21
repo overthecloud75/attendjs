@@ -2,62 +2,77 @@ export const columnHeaders = [
     {
         accessorKey: 'employeeId',
         header: 'ID',
+        enableSorting: true,
     },
     {
         accessorKey: 'name',
         header: '이름',
+        enableSorting: true,
     },
     {
         accessorKey: 'attend',
         header: 'Attend',
+        enableSorting: true,
     },
     {
         accessorKey: 'isMobile',
         header: 'Mobile',
+        enableSorting: true,
     },
     {
         accessorKey: 'date',
         header: 'Date',
+        enableSorting: true,
     },
     {
         accessorKey: 'time',
         header: 'Time',
+        enableSorting: true,
     },
     {
         accessorKey: 'ip',
         header: 'IP',
+        enableSorting: true,
     },
     {
         accessorKey: 'platform',
         header: 'Platform',
+        enableSorting: true,
     },
     {
         accessorKey: 'user_agent',
         header: 'USER_AGENT',
+        enableSorting: true,
     },
     {
         accessorKey: 'width',
         header: 'Width',
+        enableSorting: true,
     },
     {
         accessorKey: 'height',
         header: 'Height',
+        enableSorting: true,
     },
     {
         accessorKey: 'latitude',
         header: 'Latitude',
+        enableSorting: true,
     },
     {
         accessorKey: 'longitude',
         header: 'Longitude',
+        enableSorting: true,
     },
     {
         accessorKey: 'accuracy',
         header: 'Accuracy',
+        enableSorting: true,
     },
     {
         accessorKey: 'cloudflareCheck',
         header: 'CloudFlare',
+        enableSorting: true,
     },
 ]
 
@@ -65,30 +80,37 @@ export const mobileColumnHeaders = [
     {
         accessorKey: 'employeeId',
         header: 'ID',
+        enableSorting: true,
     },
     {
         accessorKey: 'name',
         header: '이름',
+        enableSorting: true,
     },
     {
         accessorKey: 'attend',
         header: 'Attend',
+        enableSorting: true,
     },
     {
         accessorKey: 'isMobile',
         header: 'Mobile',
+        enableSorting: true,
     },
     {
         accessorKey: 'time',
         header: 'Time',
+        enableSorting: true,
     },
     {
         accessorKey: 'platform',
         header: 'Platform',
+        enableSorting: true,
     },
     {
         accessorKey: 'cloudflareCheck',
         header: 'CloudFlare',
+        enableSorting: true,
     }
 ]
 

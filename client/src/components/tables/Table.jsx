@@ -134,6 +134,7 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                                 <Th 
                                     key={header.id} 
                                     colSpan={header.colSpan}
+                                    onClick={header.column.getToggleSortingHandler()}
                                 >
                                     {flexRender(
                                         header.column.columnDef.header,

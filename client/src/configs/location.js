@@ -2,18 +2,22 @@ export const columnHeaders = [
     {
         accessorKey: 'location',
         header: '근무지',
+        enableSorting: true,
     },
     {
         accessorKey: 'latitude',
         header: '위도',
+        enableSorting: true,
     },
     {
         accessorKey: 'longitude',
         header: '경도',
+        enableSorting: true,
     },
     {
         accessorKey: 'dev',
         header: '편차',
+        enableSorting: true,
     },
 ]
 
@@ -21,18 +25,22 @@ export const mobileColumnHeaders = [
     {
         accessorKey: 'location',
         header: '근무지',
+        enableSorting: true,
     },
     {
         accessorKey: 'latitude',
         header: '위도',
+        enableSorting: true,
     },
     {
         accessorKey: 'longitude',
         header: '경도',
+        enableSorting: true,
     },
     {
         accessorKey: 'dev',
         header: '편차',
+        enableSorting: true,
     },
 ]
 

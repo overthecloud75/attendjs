@@ -1,4 +1,8 @@
 * 24/07/10
+    - 2.2.0 (client) <br>
+        table sorting <br>
+
+* 24/07/10
     - 2.1.9 (client, api) <br>
         nodejs 18.19 > 20.15.1 <br>
 
