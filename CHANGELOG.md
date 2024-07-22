@@ -1,4 +1,8 @@
-* 24/07/10
+* 24/07/22 
+    - 2.2.1 (client) <br>
+        change Naver map host <br>
+
+* 24/07/20
     - 2.2.0 (client) <br>
         table sorting <br>
 

@@ -1,6 +1,5 @@
 attrs==22.1.0
-dnspython==2.3.0
 korean-lunar-calendar==0.2.1
-pymongo==4.6.2
+pymongo==4.7.3
 pyodbc==4.0.32
 typing-extensions==4.3.0
