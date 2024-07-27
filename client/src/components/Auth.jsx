@@ -57,7 +57,7 @@ const Auth = ({mode}) => {
         if (navigator.userAgentData) {setPlatform(navigator.userAgentData.platform)}
         requestAuth(mode, 'get', '', dispatch, navigate, setErrorMsg, setLoading)
     // eslint-disable-next-line
-    }, [mode, platform])
+    }, [mode])
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -114,6 +114,6 @@ const Auth = ({mode}) => {
             </div>
         </div>
     )
-  }
+}
   
-  export default Auth
+export default Auth

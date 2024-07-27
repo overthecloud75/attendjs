@@ -1,3 +1,7 @@
+* 24/07/27
+    - 2.2.2 (client) <br>
+        little fix <br>
+
 * 24/07/22 
     - 2.2.1 (client) <br>
         change Naver map host <br>
