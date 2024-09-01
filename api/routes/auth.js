@@ -97,7 +97,9 @@ router.get('/password', csrfToken)
  *              properties:
  *                  email:
  *                      type: string
- *                  password:
+ *                  currentPassword:
+ *                      type: string
+ *                  newPassword:
  *                      type: string
  *      responses:
  *          200:
