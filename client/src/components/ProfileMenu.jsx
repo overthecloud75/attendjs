@@ -34,16 +34,23 @@ const ProfileMenu = ({anchorEl, setAnchorEl, setMenu}) => {
         >
             <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem onClick={handleClose}>My account</MenuItem>
-            <Link to='/register' style={{ textDecoration: 'none' }}>
-                <MenuItem onClick={handleClose}>Register</MenuItem>
-            </Link>
             {user.isLogin?(
-                <Link to='/' style={{ textDecoration: 'none' }}>
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                </Link>):(
-                <Link to='/login' style={{ textDecoration: 'none' }}>
-                    <MenuItem onClick={handleClose}>Login</MenuItem>
-                </Link>)
+                <>
+                    <Link to='/reset-password' style={{ textDecoration: 'none' }}>
+                        <MenuItem onClick={handleClose}>Reset Password</MenuItem>
+                    </Link>
+                    <Link to='/' style={{ textDecoration: 'none' }}>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    </Link>
+                </>):(
+                <>
+                    <Link to='/register' style={{ textDecoration: 'none' }}>
+                        <MenuItem onClick={handleClose}>Register</MenuItem>
+                    </Link>
+                    <Link to='/login' style={{ textDecoration: 'none' }}>
+                        <MenuItem onClick={handleClose}>Login</MenuItem>
+                    </Link>
+                </>)
             }
         </Menu>
     )

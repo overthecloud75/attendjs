@@ -1,3 +1,7 @@
+* 24/09/01
+    - 2.2.3 (client, api) <br>
+        reset password <br>
+
 * 24/07/27
     - 2.2.2 (client) <br>
         little fix <br>

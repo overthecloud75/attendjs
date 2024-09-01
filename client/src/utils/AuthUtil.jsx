@@ -31,9 +31,25 @@ export const requestAuth = async (mode, method, value, dispatch, navigate, setEr
                 axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
             }
         }
-        setLoading(false)
     } catch (err) {
         setErrorMsg(err.response.data.message)
-        setLoading(false)
-    } 
+    }
+    setLoading(false)
+}
+
+export const requestPassword = async (method, value, navigate, setErrorMsg, setLoading) => {
+    const url = '/api/auth/password'
+    setLoading(true)
+    try {
+        if (method === 'post') {
+            await axios.post(url, value)
+            navigate('/attend')
+        } else {
+            const res = await axios.get(url)
+            axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
+        }
+    } catch (err) {
+        setErrorMsg(err.response.data.message)
+    }
+    setLoading(false)
 }

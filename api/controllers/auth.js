@@ -95,6 +95,30 @@ export const login = async (req, res, next) => {
     }
 }
 
+export const password = async (req, res, next) => {
+    const email = sanitizeData(req.body.email, 'email')
+    console.log(req.body.email, req.body.newPassword)
+    try {
+        const user = await getUserByEmail(email)
+        if (!user) return next(createError(403, 'Wrong password or email!'))
+
+        const isPasswordCorrect = await bcrypt.compare(
+            req.body.currentPassword,
+            user.password
+        )
+        if (!isPasswordCorrect)
+            return next(createError(403, 'Wrong password or email!'))
+
+        const salt = bcrypt.genSaltSync(10)
+        const hash = bcrypt.hashSync(req.body.newPassword, salt)
+
+        await User.updateOne({email}, {$set: {password: hash}}, {runValidators: true})
+        res.status(200).send('Password has been changed.')    
+    } catch (err) {
+        next(err)
+    }
+}
+
 export const logout = async (req, res, next) => {
     try {
         res.clearCookie('access_token').status(200).json([])

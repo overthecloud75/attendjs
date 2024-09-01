@@ -6,6 +6,7 @@ import './style.scss'
 import Attend from './pages/Attend'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import ResetPassword from './pages/ResetPassword'
 import Wifi from './pages/Wifi'
 import GPS from './pages/GPS'
 import Location from './pages/Location'
@@ -39,6 +40,7 @@ function App() {
                     <Route exact path='/' element={<Home menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/register' element={<Register menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/login' element={<Login menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/reset-password' element={<ResetPassword menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/attend' element={<Attend menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/wifi-attend' element={<Wifi menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/gps-attend' element={<GPS menu={menu} setMenu={setMenu}/>}/>
