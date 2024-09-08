@@ -4,9 +4,11 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import './style.scss'
 import Attend from './pages/Attend'
-import Register from './pages/Register'
-import Login from './pages/Login'
-import ResetPassword from './pages/ResetPassword'
+import Register from './pages/auth/Register'
+import Login from './pages/auth/Login'
+import ResetPassword from './pages/auth/ResetPassword'
+import LostPassword from './pages/auth/LostPassword'
+import ResetPasswordWithOtp from './pages/auth/ResetPasswordWithOtp'
 import Wifi from './pages/Wifi'
 import GPS from './pages/GPS'
 import Location from './pages/Location'
@@ -38,9 +40,11 @@ function App() {
             >
                 <Routes>
                     <Route exact path='/' element={<Home menu={menu} setMenu={setMenu}/>}/>
-                    <Route exact path='/register' element={<Register menu={menu} setMenu={setMenu}/>}/>
-                    <Route exact path='/login' element={<Login menu={menu} setMenu={setMenu}/>}/>
-                    <Route exact path='/reset-password' element={<ResetPassword menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/auth/register' element={<Register menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/auth/login' element={<Login menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/auth/reset-password' element={<ResetPassword menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/auth/lost-password' element={<LostPassword menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/auth/reset-password-with-otp' element={<ResetPasswordWithOtp menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/attend' element={<Attend menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/wifi-attend' element={<Wifi menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/gps-attend' element={<GPS menu={menu} setMenu={setMenu}/>}/>

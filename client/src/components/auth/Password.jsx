@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
-import { requestPassword } from '../utils/AuthUtil'
-import { getUser } from '../storage/userSlice.js'
+import { requestPassword } from '../../utils/AuthUtil.jsx'
+import { getUser } from '../../storage/userSlice.js'
 
 const Password = () => {
     const user = getUser()
@@ -15,6 +15,7 @@ const Password = () => {
 
     useEffect(() => {
         requestPassword('get', '', navigate, setErrorMsg, setLoading)
+    // eslint-disable-next-line
     }, [])
 
     const handleSubmit = async (event) => {

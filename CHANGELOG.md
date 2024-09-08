@@ -1,3 +1,7 @@
+* 24/09/08
+    - 2.2.4 (client, api) <br>
+        lost password <br>
+
 * 24/09/01
     - 2.2.3 (client, api) <br>
         reset password <br>

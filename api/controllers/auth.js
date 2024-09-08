@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import CryptoJS from 'crypto-js'
 import { formatToTimeZone } from 'date-fns-timezone'
+import { authenticator } from 'otplib'
 import distance from 'gps-distance'
 import { MOBILE_IP_LIST } from '../config/working.js'
 import User from '../models/User.js'
@@ -10,8 +11,10 @@ import Login from '../models/Login.js'
 import Location from '../models/Location.js'
 import { getEmployeeByEmail } from './employee.js'
 import { createError } from '../utils/error.js'
-import { registerConfirmationEmail } from '../utils/email.js'
+import { registerConfirmationEmail, CheckOtpEmail } from '../utils/email.js'
 import { sanitizeData } from '../utils/util.js'
+
+authenticator.options = { digits: 6 }
 
 export const register = async (req, res, next) => {
     try {
@@ -97,7 +100,6 @@ export const login = async (req, res, next) => {
 
 export const password = async (req, res, next) => {
     const email = sanitizeData(req.body.email, 'email')
-    console.log(req.body.email, req.body.newPassword)
     try {
         const user = await getUserByEmail(email)
         if (!user) return next(createError(403, 'Wrong password or email!'))
@@ -114,6 +116,43 @@ export const password = async (req, res, next) => {
 
         await User.updateOne({email}, {$set: {password: hash}}, {runValidators: true})
         res.status(200).send('Password has been changed.')    
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const lostPassword = async (req, res, next) => {
+    const email = sanitizeData(req.body.email, 'email')
+    try {
+        const user = await getUserByEmail(email)
+        if (!user) return next(createError(403, 'Wrong email!'))
+        const otpSecret = authenticator.generateSecret()          // OTP 시크릿 생성
+        const otp = authenticator.generate(otpSecret)             // OTP 생성
+        await User.updateOne({email}, {$set: {otp}}, {runValidators: true})
+        CheckOtpEmail(user.name, email, otp)
+        res.status(200).send('Otp has been sent.')    
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const passwordWithOtp = async (req, res, next) => {
+    const email = sanitizeData(req.body.email, 'email')
+    try {
+        const user = await getUserByEmail(email)
+        if (!user) return next(createError(403, 'Wrong email!'))
+        if (user.otp !== req.body.otp) return next(createError(403, 'Wrong OTP!'))
+
+        const salt = bcrypt.genSaltSync(10)
+        const hash = bcrypt.hashSync(req.body.password, salt)
+
+        const cloudflareToken = req.body.token
+        const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
+        const cloudflareCheck = await handleCloudflarePost(ip, cloudflareToken)
+        
+        if (cloudflareCheck === 'X') return next(createError(500, 'Something Wrong!'))
+        await User.updateOne({email}, {$set: {password: hash}}, {runValidators: true})
+        res.status(200).send('Password has been changed.')     
     } catch (err) {
         next(err)
     }

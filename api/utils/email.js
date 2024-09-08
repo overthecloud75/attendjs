@@ -45,6 +45,23 @@ export const registerConfirmationEmail = async (name, email, confirmationCode) =
     }
 }
 
+export const CheckOtpEmail = async (name, email, otp) => {
+    logger.info('send check otp email')  
+    try {
+        const transport = makeTransport()
+        await transport.sendMail({
+            from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
+            to: email,
+            subject: '[SmartWork] Please reset your password with otp',
+            html: `<h2>Hello ${name}</h2>
+                <p>You can reset your password with otp.</p>
+                <h3>OTP : ${otp}</h3>`
+        })
+    } catch(err) {
+        logger.error(err)
+    }
+}
+
 export const attendRequestEmail = async (approval, summary) => {
     logger.info('send attend request email')  
     try {

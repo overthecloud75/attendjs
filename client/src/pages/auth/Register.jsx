@@ -1,6 +1,6 @@
-import Navbar from '../components/Navbar'
-import Auth from '../components/Auth'
-import Footer from '../components/Footer'
+import Navbar from '../../components/Navbar'
+import Auth from '../../components/auth/Auth'
+import Footer from '../../components/Footer'
 
 const Register = ({menu, setMenu}) => {   
     return (

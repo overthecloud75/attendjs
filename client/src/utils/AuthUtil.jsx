@@ -53,3 +53,37 @@ export const requestPassword = async (method, value, navigate, setErrorMsg, setL
     }
     setLoading(false)
 }
+
+export const requestLostPassword = async (method, value, navigate, setErrorMsg, setLoading) => {
+    const url = '/api/auth/lost-password'
+    setLoading(true)
+    try {
+        if (method === 'post') {
+            await axios.post(url, value)
+            navigate('/auth/reset-password-with-otp', {state: value})
+        } else {
+            const res = await axios.get(url)
+            axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
+        }
+    } catch (err) {
+        setErrorMsg(err.response.data.message)
+    }
+    setLoading(false)
+}
+
+export const requestPasswordWithOtp = async (method, value, navigate, setErrorMsg, setLoading) => {
+    const url = '/api/auth/password-with-otp'
+    setLoading(true)
+    try {
+        if (method === 'post') {
+            await axios.post(url, value)
+            navigate('/auth/login')
+        } else {
+            const res = await axios.get(url)
+            axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
+        }
+    } catch (err) {
+        setErrorMsg(err.response.data.message)
+    }
+    setLoading(false)
+}

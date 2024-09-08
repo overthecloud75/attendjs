@@ -1,5 +1,5 @@
 import express from 'express'
-import { register, login, password, logout, setAttend, search } from '../controllers/auth.js'
+import { register, login, password, lostPassword, passwordWithOtp, logout, setAttend, search } from '../controllers/auth.js'
 import { csrfToken } from '../controllers/form.js'
 import { verifyUser, verifyAdmin } from '../utils/verifyToken.js'
 
@@ -78,7 +78,7 @@ router.post('/login', login)
  *                          status:
  *                              type: string
  */
-router.get('/password', csrfToken)
+router.get('/password', verifyUser, csrfToken)
 
 /**
  * @swagger
@@ -132,6 +132,11 @@ router.post('/password', verifyUser, password)
  *                          status:
  *                              type: string
  */
+
+router.get('/lost-password', csrfToken)
+router.post('/lost-password', lostPassword)
+router.get('/password-with-otp', csrfToken)
+router.post('/password-with-otp', passwordWithOtp)
 router.get('/logout', logout)
 router.post('/setAttend', verifyUser, setAttend)
 router.get('/search', verifyAdmin, search)

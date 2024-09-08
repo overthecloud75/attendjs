@@ -26,7 +26,6 @@ export const write = async (req, res, next) => {
         const id = req.body.id
         const title = req.body.title
         const content = req.body.content
-        console.log(req.user)
 
         const newBoard = Board({id, name: req.user.name, title, content, employeeId: req.user.employeeId})
         await newBoard.save()

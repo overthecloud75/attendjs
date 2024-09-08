@@ -3,9 +3,9 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
-import { requestAuth } from '../utils/AuthUtil'
-import { getWindowDimension } from '../utils/EventUtil'
-import { siteKey } from '../configs/apiKey'
+import { requestAuth } from '../../utils/AuthUtil'
+import { getWindowDimension } from '../../utils/EventUtil'
+import { siteKey } from '../../configs/apiKey'
 
 const getLocation = async () => {
     // location 정보 저장
@@ -108,9 +108,10 @@ const Auth = ({mode}) => {
                     {!loading && errorMsg && <span>{errorMsg}</span>}
                 </form>
                 {mode==='login'?
-                    (<p>You don't have an account? <Link to='/register'>Register</Link></p>):
-                    (<p>You do have an account? <Link to='/login'>Login</Link></p>)
+                    (<p>You don't have an account? <Link to='/auth/register'>Register</Link></p>):
+                    (<p>You do have an account? <Link to='/auth/login'>Login</Link></p>)
                 }
+                <p>You don't remember the password? <Link to='/auth/lost-password'>Lost Password</Link></p>
             </div>
         </div>
     )

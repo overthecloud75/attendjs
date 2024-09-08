@@ -36,7 +36,7 @@ const ProfileMenu = ({anchorEl, setAnchorEl, setMenu}) => {
             <MenuItem onClick={handleClose}>My account</MenuItem>
             {user.isLogin?(
                 <>
-                    <Link to='/reset-password' style={{ textDecoration: 'none' }}>
+                    <Link to='/auth/reset-password' style={{ textDecoration: 'none' }}>
                         <MenuItem onClick={handleClose}>Reset Password</MenuItem>
                     </Link>
                     <Link to='/' style={{ textDecoration: 'none' }}>
@@ -44,10 +44,10 @@ const ProfileMenu = ({anchorEl, setAnchorEl, setMenu}) => {
                     </Link>
                 </>):(
                 <>
-                    <Link to='/register' style={{ textDecoration: 'none' }}>
+                    <Link to='/auth/register' style={{ textDecoration: 'none' }}>
                         <MenuItem onClick={handleClose}>Register</MenuItem>
                     </Link>
-                    <Link to='/login' style={{ textDecoration: 'none' }}>
+                    <Link to='/auth/login' style={{ textDecoration: 'none' }}>
                         <MenuItem onClick={handleClose}>Login</MenuItem>
                     </Link>
                 </>)
