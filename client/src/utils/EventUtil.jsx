@@ -134,11 +134,4 @@ export const postPaymentApproval = async (data) => {
     }
 }
 
-export const getWindowDimension = () => {
-    const { innerWidth: width, innerHeight: height } = window
-    return {
-        width,
-        height
-    }
-}
 

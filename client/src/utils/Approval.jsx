@@ -1,10 +1,8 @@
 import axios from 'axios'
 import { getToday } from '../utils/DateUtil'
-import { getUser } from '../storage/userSlice'
 
-export const approvalAttendUpdate = async (previousStatus, value, setValue, updateData) => {
+export const approvalAttendUpdate = async (user, previousStatus, value, setValue, updateData) => {
     const url = '/api/approval/update'
-    const user = getUser()
     if (previousStatus === value.status) { 
         alert('status가 바뀌지 않았습니다.')
     } else if (previousStatus === 'Cancel') {
@@ -27,9 +25,8 @@ export const approvalAttendUpdate = async (previousStatus, value, setValue, upda
     }
 }
 
-export const approvalPaymentUpdate = async (previousStatus, value, setValue, updateData) => {
+export const approvalPaymentUpdate = async (user, previousStatus, value, setValue, updateData) => {
     const url = '/api/payment/update'
-    const user = getUser()
     if (previousStatus === value.status) { 
         alert('status가 바뀌지 않았습니다.')
     } else if (previousStatus === 'Cancel') {

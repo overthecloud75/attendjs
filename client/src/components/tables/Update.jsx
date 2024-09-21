@@ -1,27 +1,15 @@
-import { useState } from 'react'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import MenuItem from '@mui/material/MenuItem';
+import { useState, useMemo } from 'react'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem } from '@mui/material'
 import axios from 'axios'
 import { AdminEditableTitles, UserEditableTitles, EditableSelects } from '../../configs/pages.js'
 import { options } from '../../configs/options.js'
 import { getUser } from '../../storage/userSlice.js'
 
-const getEditableTitles = (user) => {
-    let editableTitles = AdminEditableTitles
-    if (!user.isAdmin) {
-        editableTitles = UserEditableTitles
-    }
-    return editableTitles
-}
+const getEditableTitles = (user) => user.isAdmin ? AdminEditableTitles : UserEditableTitles
 
 const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
-    const user = getUser()
-    const editableTitles = getEditableTitles(user)
+    const user = useMemo(() => getUser(), [])
+    const editableTitles = useMemo(() => getEditableTitles(user), [user])
 
     const [focus, setFocus] = useState('info')
     const [value, setValue] = useState(rowData)
@@ -49,12 +37,7 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
     }
 
     const handleUpdate = async () => {
-        let url 
-        if (writeMode) {
-            url = '/api/' + page + '/write'
-        } else {
-            url = '/api/' + page + '/update'
-        }
+        const url = `/api/${page}/${writeMode ? 'write' : 'update'}`
         try {
             const res = await axios.post(url, value)
             setValue(res.data)
@@ -67,8 +50,8 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
     }
 
     const handleDelete = async () => {
-        const url = '/api/' + page + '/delete'
         if(!window.confirm('정말로 삭제하시겠습니다.?')) return
+        const url = `/api/${page}/delete`
         try {
             await axios.post(url, value)
             deleteData()

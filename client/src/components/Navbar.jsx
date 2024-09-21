@@ -5,7 +5,7 @@ import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlin
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
 import ListOutlinedIcon from '@mui/icons-material/ListOutlined'
-import Avatar from '@mui/material/Avatar'
+import { Avatar } from '@mui/material'
 import { getUser } from '../storage/userSlice.js'
 import ProfileMenu from './ProfileMenu'
 
@@ -67,9 +67,7 @@ const Navbar = ({menu, setMenu}) => {
     return (
         <Container>
             <Wrapper>
-                <Icon
-                    onClick={handleMenu}
-                >
+                <Icon onClick={handleMenu}>
                     <MenuIcon/>
                 </Icon>
                 <Items>
@@ -95,9 +93,7 @@ const Navbar = ({menu, setMenu}) => {
                             <ListOutlinedIcon/>
                         </Icon>
                     </Item>
-                    <Item
-                        onClick={handleClick}
-                    >
+                    <Item onClick={handleClick}>
                         <Avatar/>
                     </Item>
                 </Items>

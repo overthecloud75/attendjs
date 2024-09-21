@@ -1,7 +1,6 @@
 import { useState, Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
+import { Box,  CircularProgress} from '@mui/material'
 import './style.scss'
 import Attend from './pages/Attend'
 import Register from './pages/auth/Register'
@@ -31,13 +30,11 @@ function App() {
     const [menu, setMenu] = useState(false)
     return (
         <BrowserRouter>
-            <Suspense 
-                fallback={                            
-                    <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                        <CircularProgress/>
-                    </Box>
-                }
-            >
+            <Suspense fallback={                            
+                <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                    <CircularProgress/>
+                </Box>
+            }>
                 <Routes>
                     <Route exact path='/' element={<Home menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/register' element={<Register menu={menu} setMenu={setMenu}/>}/>
@@ -67,4 +64,4 @@ function App() {
     )
 }
 
-export default App;
+export default App

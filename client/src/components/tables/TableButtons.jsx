@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import Approval from '../Approval.jsx'
@@ -17,21 +17,15 @@ const Container = styled.div`
     font-size: 14px;
 `
 
-const getEditablePages = (user) => {
-    let editablePages = AdminEditablePages
-    if (!user.isAdmin) {
-        editablePages = UserEditablePages
-    }
-    return editablePages
-}
+const getEditablePages = (user) => user.isAdmin ? AdminEditablePages : UserEditablePages
 
 // useTable에다가 작성한 columns와 data를 전달한 후 아래 4개의 props를 받아온다
 // initialState https://github.com/TanStack/table/discussions/2029
 
 const TableButtons = ({url, data, csvHeaders, fileName, writeMode, setWriteMode, setOpenEditWrite, setSelectedRowData, setOpenUpdate}) => {
-    const user = getUser()
-    const editablePages = getEditablePages(user)
-
+    const user = useMemo(() => getUser(), [])
+    const editablePages = useMemo(() => getEditablePages(user), [user])
+    
     const navigate = useNavigate()
     const [openApproval, setOpenApproval] = useState(false)
     const [openPayment, setOpenPayment] = useState(false)

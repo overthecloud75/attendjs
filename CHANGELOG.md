@@ -1,3 +1,7 @@
+* 24/09/21
+    - 2.2.5 (client) <br>
+        code refactoring with AI assistant <br>
+
 * 24/09/08
     - 2.2.4 (client, api) <br>
         lost password <br>

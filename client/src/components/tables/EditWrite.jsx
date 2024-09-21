@@ -1,10 +1,5 @@
-import { useState } from 'react'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
+import { useState, useMemo } from 'react'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
 import axios from 'axios'
 import { format } from 'date-fns'
 import { getUser } from '../../storage/userSlice.js'
@@ -12,9 +7,14 @@ import Editor from './Editor'
 
 const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
     
-    const user = getUser()
+    const user = useMemo(() => getUser(), [])
     const [focus, setFocus] = useState('name')
-    const [value, setValue] = useState(writeMode?{id: '', name: user.name, title: '', content: ''}:rowData)
+    const [value, setValue] = useState(writeMode?{
+        id: '', 
+        name: user.name, 
+        title: '', 
+        content: ''
+    } : rowData)
     const handleClose = () => { setOpen(false) }
 
     const insertData = () => {
@@ -61,15 +61,9 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
     }
 
     const handleUpdate = async () => {
-        const valueStatus = checkValue()
-        if (!valueStatus) return 
 
-        let url 
-        if (writeMode) {
-            url = '/api/' + page + '/write'
-        } else {
-            url = '/api/' + page + '/update'
-        }
+        if (!checkValue()) return 
+        const url = `/api/${page}/${writeMode ? 'write' : 'update'}`
         try {
             const res = await axios.post(url, value)
             setValue(res.data)
@@ -82,8 +76,8 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
     }
 
     const handleDelete = async () => {
-        const url = '/api/' + page + '/delete'
         if(!window.confirm('정말로 삭제하시겠습니다.?')) return
+        const url = `/api/${page}/delete`
         try {
             await axios.post(url, value)
             deleteData()

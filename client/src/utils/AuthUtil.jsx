@@ -2,9 +2,8 @@ import axios from 'axios'
 import { loginUser, clearUser } from '../storage/userSlice.js'
 import CryptoJS from 'crypto-js'
 
-export const requestAuth = async (mode, method, value, dispatch, navigate, setErrorMsg, setLoading, location='') => {
+export const requestAuth = async (mode, method, value, dispatch, navigate, setErrorMsg, location='') => {
     const url = '/api/auth/' + mode 
-    setLoading(true)
     try {
         if (method === 'post') {
             const res = await axios.post(url, value)
@@ -34,12 +33,10 @@ export const requestAuth = async (mode, method, value, dispatch, navigate, setEr
     } catch (err) {
         setErrorMsg(err.response.data.message)
     }
-    setLoading(false)
 }
 
-export const requestPassword = async (method, value, navigate, setErrorMsg, setLoading) => {
+export const requestPassword = async (method, value, navigate, setErrorMsg) => {
     const url = '/api/auth/password'
-    setLoading(true)
     try {
         if (method === 'post') {
             await axios.post(url, value)
@@ -51,12 +48,10 @@ export const requestPassword = async (method, value, navigate, setErrorMsg, setL
     } catch (err) {
         setErrorMsg(err.response.data.message)
     }
-    setLoading(false)
 }
 
-export const requestLostPassword = async (method, value, navigate, setErrorMsg, setLoading) => {
+export const requestLostPassword = async (method, value, navigate, setErrorMsg) => {
     const url = '/api/auth/lost-password'
-    setLoading(true)
     try {
         if (method === 'post') {
             await axios.post(url, value)
@@ -68,12 +63,10 @@ export const requestLostPassword = async (method, value, navigate, setErrorMsg, 
     } catch (err) {
         setErrorMsg(err.response.data.message)
     }
-    setLoading(false)
 }
 
-export const requestPasswordWithOtp = async (method, value, navigate, setErrorMsg, setLoading) => {
+export const requestPasswordWithOtp = async (method, value, navigate, setErrorMsg) => {
     const url = '/api/auth/password-with-otp'
-    setLoading(true)
     try {
         if (method === 'post') {
             await axios.post(url, value)
@@ -85,5 +78,4 @@ export const requestPasswordWithOtp = async (method, value, navigate, setErrorMs
     } catch (err) {
         setErrorMsg(err.response.data.message)
     }
-    setLoading(false)
 }

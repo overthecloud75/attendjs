@@ -1,8 +1,7 @@
 import { useState, useEffect, Suspense, lazy } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
-import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
+import { Box, CircularProgress } from '@mui/material'
 import useFetch from '../../hooks/useFetch'
 import Search from './Search'
 import { SearchPages } from '../../configs/pages'
@@ -24,26 +23,25 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
     )
 
     useEffect(() => {
-        const fetchData = () => {
-            if (error) {
-                const errorStatus = error.response.data.status
-                if (errorStatus === 401) { 
-                    // 401 Unauthorized
-                    sessionStorage.removeItem('user')
-                    navigate('/login')
-                } else if (errorStatus === 429) {
-                    // 429 too many requests
-                    navigate('/too-many-requests')
-                }
+        if (error) {
+            const errorStatus = error.response.data.status
+            if (errorStatus === 401) { 
+                // 401 Unauthorized
+                sessionStorage.removeItem('user')
+                navigate('/login')
+            } else if (errorStatus === 429) {
+                // 429 too many requests
+                navigate('/too-many-requests')
             }
         }
-        fetchData()
     // eslint-disable-next-line
-    }, [error])
+    }, [error, navigate])
+
+    const showSearch = SearchPages.includes(page)
 
     return (
         <>
-            {SearchPages.includes(page)&&<Search
+            {showSearch&&<Search
                 page={page}
                 searchKeyword={searchKeyword}
                 name={name}
@@ -54,13 +52,11 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
                 setClickCount={setClickCount}
                 setFileName={setFileName}
             />}
-            <Suspense 
-                fallback={
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <CircularProgress/>
-                    </Box>
-                }
-            >
+            <Suspense fallback={
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress/>
+                </Box>
+            }>
                 <Table 
                     url={page}
                     columns={columnHeaders}

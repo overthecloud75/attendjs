@@ -1,50 +1,36 @@
-import { useState } from 'react'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import MenuItem from '@mui/material/MenuItem';
+import { useState, useMemo } from 'react'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem } from '@mui/material'
 import { EditableSelects } from '../../configs/pages.js'
 import { approvalAttendUpdate, approvalPaymentUpdate } from '../../utils/Approval.jsx'
 import { attendOptions, paymentOptions } from '../../configs/options.js'
 import { attendUpdateColumnHeaders, paymentUpdateColumnHeaders } from '../../configs/approval.js'
 import Editor from './Editor'
+import { getUser } from '../../storage/userSlice.js'
 
 const getOptions = (approvalType) => {
-    let options
     switch (approvalType) {
         case 'attend':
-            options = attendOptions
-            break 
+            return attendOptions
         case 'payment':
-            options = paymentOptions
-            break 
+            return paymentOptions
         default:
-            options = paymentOptions
-            break 
+            return paymentOptions
     }
-    return options 
 }
 
 const getColumns = (approvalType) => {
-    let coloums
     switch (approvalType) {
         case 'attend':
-            coloums = attendUpdateColumnHeaders
-            break 
+            return attendUpdateColumnHeaders
         case 'payment':
-            coloums = paymentUpdateColumnHeaders
-            break 
+            return paymentUpdateColumnHeaders
         default:
-            coloums = paymentUpdateColumnHeaders
-            break 
+            return paymentUpdateColumnHeaders
     }
-    return coloums
 }
 
 const ApprovalUpdate = ({data, setData, open, setOpen, rowData}) => {
+    const user = useMemo(() => getUser(), [])
     const previousStatus = rowData.status
     const approvalType = rowData.approvalType
     const options = getOptions(approvalType)
@@ -66,10 +52,10 @@ const ApprovalUpdate = ({data, setData, open, setOpen, rowData}) => {
         try {
             switch (approvalType) {
                 case 'attend':
-                    await approvalAttendUpdate(previousStatus, value, setValue, updateData)
+                    await approvalAttendUpdate(user, previousStatus, value, setValue, updateData)
                     break
                 default:
-                    await approvalPaymentUpdate(previousStatus, value, setValue, updateData)
+                    await approvalPaymentUpdate(user, previousStatus, value, setValue, updateData)
                     break 
             }
         } catch (err) {

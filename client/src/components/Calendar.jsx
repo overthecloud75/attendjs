@@ -1,16 +1,15 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import FullCalendar from '@fullcalendar/react' 
 import dayGridPlugin from '@fullcalendar/daygrid' 
 import interactionPlugin from '@fullcalendar/interaction'
-import Box from '@mui/material/Box'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
+import { Box, Tabs, Tab } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { getColor, getSpecialHolidays, getEventsInCalendar, getWindowDimension, addEventInCalendar, deleteEventInCalendar } from '../utils/EventUtil'
+import { getColor, getSpecialHolidays, getEventsInCalendar, addEventInCalendar, deleteEventInCalendar } from '../utils/EventUtil'
 import Approval from './Approval'
 import { getUser } from '../storage/userSlice'
+import { useWindowDimension } from '../hooks/useWindowDimension'
 import { MOBILE } from '../configs/mobile'
 import './Calendar.css';
 
@@ -21,7 +20,7 @@ const Wrapper = styled.div`
 const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
 
     const calendarRef = useRef()
-    const user = getUser()
+    const user = useMemo(() => getUser(), [])
 
     const [headerToolbar, setHeaderToolbar] = useState({
         start: 'title', 
@@ -30,6 +29,7 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
     })
     const [eventsData, setEventsData] = useState([])
     const [thisMonth, setThisMonth] = useState('')
+    const { width } = useWindowDimension()
 
     useEffect(() => {
         const calendarApiView = calendarRef.current.getApi().view
@@ -45,7 +45,6 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
                 }
             } else {
                 setEventsData(events.data)
-                const {width} = getWindowDimension()
                 if (width < MOBILE.size) {
                     setWeekends(false)
                     setHeaderToolbar({start: '', center: '', end: 'today prev,next'})

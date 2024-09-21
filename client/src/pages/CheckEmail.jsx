@@ -5,7 +5,7 @@ const CheckEmail = ({menu, setMenu}) => {
     return (
         <div>
             <Navbar menu={menu} setMenu={setMenu}/> 
-            <div>Plz Check Your Email to activate your account!</div>
+            <h3 style={{textAlign: "center"}}>Plz Check Your Email to activate your account!</h3>
             <Footer/>
         </div>
     )

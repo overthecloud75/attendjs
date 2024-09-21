@@ -1,20 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import RadioGroup from '@mui/material/RadioGroup'
-import Radio from '@mui/material/Radio'
-import FormControlLabel from '@mui/material/FormControlLabel'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, RadioGroup, Radio, FormControlLabel, Box, CircularProgress } from '@mui/material'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
 import { useTranslation } from 'react-i18next'
 import { getApproval, postApproval } from '../utils/EventUtil'
 import { WORKING } from '../configs/working'
@@ -145,6 +135,8 @@ const Approval = ({navigate, open, setOpen}) => {
     const handleChange = (event) => {
         if (event.target.id ==='etc' && event.target.value.length > 5){ 
             alert('5글자 이하로 적어주세요.')
+        } else if (event.target.id ==='etc' && event.target.value.length === 0){
+            alert('사유를 적어 주세요.')
         } else {
             setValue({...value, [event.target.id]: event.target.value}) 
         }

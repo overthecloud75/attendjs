@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { naverMapAPIKey } from '../configs/apiKey'
 
-const Container = styled.div`
-`
+const Container = styled.div``
 
 const Title= styled.div`
     display: flex;
@@ -56,13 +55,14 @@ const NMap = ({state}) => {
         <Container>
         {state&&<Title>Your location is {state.where.minDistance * 1000}m distant from {state.where.place}</Title>}
         {state&&state.where.attend?
-            (<Title>Don't worry. <mark>checked</mark></Title>):
-            (<Title><mark>Unchecked.</mark> plz login again</Title>)
+            <Title>Don't worry. <mark>checked</mark></Title>:
+            <Title><mark>Unchecked.</mark> plz login again</Title>
         }
-            {scriptLoading?
-                <div id='map' style={{display:'none'}}/>:
-                (<div id='map' style={{width:'100%', height:'400px'}}/>
-            )}
+            <div id='map' style={{
+                display: scriptLoading ? 'none' : 'block',
+                width: '100%', 
+                height: '400px'
+            }}/>
         </Container>
     )
 }

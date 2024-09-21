@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styled from 'styled-components'
 import { Tooltip } from 'react-tooltip'
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'
@@ -13,7 +14,6 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 import NoteAltIcon from '@mui/icons-material/NoteAlt'
 import FolderIcon from '@mui/icons-material/Folder'
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
 import { getUser } from '../storage/userSlice.js'
 
 const Wrapper = styled.div`
@@ -231,7 +231,7 @@ const SidebarItems = ({itemList, titleIndex, activeTitleIndex, activeItemIndex, 
                 {(item.auth || user.isAdmin) &&
                     <Item
                         onClick={() => handleClick(titleIndex, itemIndex)}
-                        active={activeTitleIndex===titleIndex&&activeItemIndex===itemIndex?1:0}    
+                        active={activeTitleIndex===titleIndex&&activeItemIndex===itemIndex}    
                     >
                         <Icon
                             data-tooltip-id={window.innerWidth<600 && item.title}
@@ -240,7 +240,7 @@ const SidebarItems = ({itemList, titleIndex, activeTitleIndex, activeItemIndex, 
                             {item.icon}    
                         </Icon>
                         <Span>{item.title}</Span>
-                        <Tooltip id={item.title} place='top' type='dark' effect='float'/>
+                        <Tooltip id={item.title} place='top' type='dark' effect='float' />
                     </Item>
                 }
             </Link>
