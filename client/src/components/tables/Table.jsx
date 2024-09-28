@@ -9,7 +9,7 @@ import {
 import styled from 'styled-components'
 import { v } from '../../variable.js'
 import Pagination from './Pagination.jsx'
-import Update from './Update.jsx'
+import Update from './UpdateDialog.jsx'
 import ApprovalUpdate from './ApprovalUpdate.jsx'
 import EditWrite from './EditWrite.jsx'
 import { UserEditablePages, UpdatablePages } from '../../configs/pages.js'

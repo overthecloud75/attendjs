@@ -1,4 +1,4 @@
-import Navbar from '../../components/Navbar'
+import Navbar from '../../components/bar/Navbar'
 import Email from '../../components/auth/Email'
 import Footer from '../../components/Footer'
 

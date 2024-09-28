@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { loginUser, clearUser } from '../storage/userSlice.js'
+import { loginUser, clearUser } from '../storage/userSlice'
 import CryptoJS from 'crypto-js'
 
 export const requestAuth = async (mode, method, value, dispatch, navigate, setErrorMsg, location='') => {

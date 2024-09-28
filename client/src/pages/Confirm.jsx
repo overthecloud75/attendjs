@@ -1,6 +1,6 @@
 import { useParams} from 'react-router-dom'
-import Sidebar from '../components/Sidebar'
-import Navbar from '../components/Navbar'
+import Sidebar from '../components/bar/Sidebar'
+import Navbar from '../components/bar/Navbar'
 import CheckConfirm from '../components/CheckConfirm'
 import Footer from '../components/Footer'
 

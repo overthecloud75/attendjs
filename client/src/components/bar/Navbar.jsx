@@ -6,8 +6,8 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
 import ListOutlinedIcon from '@mui/icons-material/ListOutlined'
 import { Avatar } from '@mui/material'
-import { getUser } from '../storage/userSlice.js'
-import ProfileMenu from './ProfileMenu'
+import { getUser } from '../../storage/userSlice'
+import ProfileMenu from '../bar/ProfileMenu'
 
 const Container = styled.div`
     height: 50px;
@@ -99,6 +99,7 @@ const Navbar = ({menu, setMenu}) => {
                 </Items>
             </Wrapper>
             <ProfileMenu 
+                user={user}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
                 setMenu={setMenu}

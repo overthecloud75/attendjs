@@ -1,4 +1,4 @@
-import Navbar from '../../components/Navbar'
+import Navbar from '../../components/bar/Navbar'
 import AuthWithOtp from '../../components/auth/AuthWithOtp'
 import Footer from '../../components/Footer'
 

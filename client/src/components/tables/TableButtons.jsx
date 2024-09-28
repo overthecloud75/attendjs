@@ -5,7 +5,7 @@ import Approval from '../Approval.jsx'
 import Payment from './Payment.jsx'
 import CsvDownload from './CsvDownload'
 import { AdminEditablePages, UserEditablePages } from '../../configs/pages'
-import { getUser } from '../../storage/userSlice.js'
+import { getUser } from '../../storage/userSlice'
 
 // https://github.com/CodeFocusChannel/Table-Styling-React/blob/master/src/components/styled-components-table/styles.js
 

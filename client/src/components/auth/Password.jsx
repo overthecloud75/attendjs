@@ -1,17 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect, useMemo } from 'react'
-import styled from 'styled-components'
 import { Box, CircularProgress } from '@mui/material'
-import { requestPassword } from '../../utils/AuthUtil.jsx'
-import { getUser } from '../../storage/userSlice.js'
-
-const Container = styled.div`
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-`
+import { requestPassword } from '../../utils/AuthUtil'
+import { getUser } from '../../storage/userSlice'
 
 const Password = () => {
     const user = useMemo(() => getUser(), [])
@@ -42,27 +33,25 @@ const Password = () => {
     }
 
     return (
-        <Container>
-            <div className='formContainer'>
-                <div className='formWrapper'>
-                    <span className='logo'>SmartWork</span>
-                    <span className='title'>Reset Password</span>
-                    <form onSubmit={handleSubmit}>
-                        <input id='currentPassword' type='password' placeholder='current password' />
-                        <input id='newPassword' type='password' placeholder='new password' />
-                        <input id='newPassword2' type='password' placeholder='new password' />
-                        <button disabled={loading}>Reset Password</button>
-                        {loading && 
-                            <span>
-                                <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                                    <CircularProgress/>
-                                </Box>
-                            </span>}
-                        {!loading && errorMsg && <span>{errorMsg}</span>}
-                    </form>
-                </div>
+        <div className='formContainer'>
+            <div className='formWrapper'>
+                <span className='logo'>SmartWork</span>
+                <span className='title'>Reset Password</span>
+                <form onSubmit={handleSubmit}>
+                    <input id='currentPassword' type='password' placeholder='current password' />
+                    <input id='newPassword' type='password' placeholder='new password' />
+                    <input id='newPassword2' type='password' placeholder='new password' />
+                    <button disabled={loading}>Reset Password</button>
+                    {loading && 
+                        <span>
+                            <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                                <CircularProgress/>
+                            </Box>
+                        </span>}
+                    {!loading && errorMsg && <span>{errorMsg}</span>}
+                </form>
             </div>
-        </Container>
+        </div>
     )
 }
   

@@ -1,5 +1,5 @@
-import Sidebar from '../components/Sidebar'
-import Navbar from '../components/Navbar'
+import Sidebar from '../components/bar/Sidebar'
+import Navbar from '../components/bar/Navbar'
 import Calendar from '../components/Calendar'
 import Footer from '../components/Footer'
 

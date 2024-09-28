@@ -1,11 +1,11 @@
 import { useState, useMemo } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem } from '@mui/material'
 import { EditableSelects } from '../../configs/pages.js'
-import { approvalAttendUpdate, approvalPaymentUpdate } from '../../utils/Approval.jsx'
+import { approvalAttendUpdate, approvalPaymentUpdate } from '../../utils/Approval'
 import { attendOptions, paymentOptions } from '../../configs/options.js'
 import { attendUpdateColumnHeaders, paymentUpdateColumnHeaders } from '../../configs/approval.js'
 import Editor from './Editor'
-import { getUser } from '../../storage/userSlice.js'
+import { getUser } from '../../storage/userSlice'
 
 const getOptions = (approvalType) => {
     switch (approvalType) {

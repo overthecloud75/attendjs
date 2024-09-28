@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
 import axios from 'axios'
 import { format } from 'date-fns'
-import { getUser } from '../../storage/userSlice.js'
+import { getUser } from '../../storage/userSlice'
 import Editor from './Editor'
 
 const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import styled from 'styled-components'
 import { Tooltip } from 'react-tooltip'
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'
@@ -14,7 +13,7 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 import NoteAltIcon from '@mui/icons-material/NoteAlt'
 import FolderIcon from '@mui/icons-material/Folder'
 import { Link } from 'react-router-dom'
-import { getUser } from '../storage/userSlice.js'
+import { getUser } from '../../storage/userSlice'
 
 const Wrapper = styled.div`
     flex: 1;
@@ -83,9 +82,6 @@ const Item = styled.li`
     &:hover {
         background-color: #ece8ff;
     }
-
-    border: ${props => props.active ? '1px solid black' : 'none'};
-    border-radius: ${props => props.active ? '20px' : 'none'};
 
     @media screen and (max-width: 600px) {
         display: flex;
@@ -191,7 +187,7 @@ const itemDict =
             auth: true
         }
     ],
-    Communaity : [
+    Community : [
         {
             to: '/approvalhistory',
             icon: <AssignmentTurnedInIcon/>,
@@ -219,7 +215,7 @@ const itemDict =
     ]
 }
 
-const SidebarItems = ({itemList, titleIndex, activeTitleIndex, activeItemIndex, handleClick}) => {
+const SidebarItems = ({itemList, titleIndex}) => {
     const user = getUser()
     return (
         itemList.map((item, itemIndex) => (
@@ -227,14 +223,11 @@ const SidebarItems = ({itemList, titleIndex, activeTitleIndex, activeItemIndex, 
                 to={item.to} 
                 style={{ textDecoration: 'none' }}
                 key={itemIndex}
-                >
+            >
                 {(item.auth || user.isAdmin) &&
-                    <Item
-                        onClick={() => handleClick(titleIndex, itemIndex)}
-                        active={activeTitleIndex===titleIndex&&activeItemIndex===itemIndex}    
-                    >
+                    <Item>
                         <Icon
-                            data-tooltip-id={window.innerWidth<600 && item.title}
+                            data-tooltip-id={window.innerWidth<600 ? item.title : undefined}
                             data-tooltip-content={item.title}
                         >
                             {item.icon}    
@@ -249,12 +242,6 @@ const SidebarItems = ({itemList, titleIndex, activeTitleIndex, activeItemIndex, 
 }
 
 const SidebarCategories = () => {
-    const [activeTitleIndex, setActiveTitleIndex] = useState(-1)
-    const [activeItemIndex, setActiveItemIndex] = useState(-1)
-    const handleClick = (titleIndex, itemIndex) => {
-        setActiveTitleIndex(titleIndex)
-        setActiveItemIndex(itemIndex)
-    }
     return (
         Object.keys(itemDict).map((title, titleIndex) => (
             <div
@@ -264,9 +251,6 @@ const SidebarCategories = () => {
                 <SidebarItems
                     itemList = {itemDict[title]}
                     titleIndex = {titleIndex}
-                    activeTitleIndex = {activeTitleIndex} 
-                    activeItemIndex = {activeItemIndex}
-                    handleClick = {handleClick}
                 />
             </div>
         )) 

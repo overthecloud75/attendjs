@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
-import Sidebar from '../components/Sidebar'
-import Navbar from '../components/Navbar'
+import Sidebar from '../components/bar/Sidebar'
+import Navbar from '../components/bar/Navbar'
 import Advertisement from '../components/Advertisement'
 import Feature from '../components/Feature'
 import Footer from '../components/Footer'

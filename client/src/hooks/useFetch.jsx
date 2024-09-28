@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { format } from 'date-fns'
-import { getUser } from '../storage/userSlice.js'
+import { getUser } from '../storage/userSlice'
 
 const useFetch = (page, url, params, clickCount) => {
     const [data, setData] = useState([])

@@ -1,20 +1,11 @@
 import { useDispatch } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
-import styled from 'styled-components'
 import { useState, useEffect, useRef } from 'react'
 import { Box, CircularProgress } from '@mui/material'
 import { requestAuth } from '../../utils/AuthUtil'
 import { useWindowDimension } from '../../hooks/useWindowDimension'
 import { useLocation } from '../../hooks/useLocation'
 import { siteKey } from '../../configs/apiKey'
-
-const Container = styled.div`
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-`
 
 const Auth = ({mode}) => {
     const dispatch = useDispatch()
@@ -82,33 +73,31 @@ const Auth = ({mode}) => {
     }
 
     return (
-        <Container>
-            <div className='formContainer'>
-                <div className='formWrapper'>
-                    <span className='logo'>SmartWork</span>
-                    <span className='title'>{mode}</span>
-                    <form onSubmit={handleSubmit}>
-                        {(mode!=='login')&&(<input id='name' type='text' placeholder='name' />)}
-                        <input id='email' type='email' placeholder='email' />
-                        <input id='password' type='password' placeholder='password' />
-                        {(mode === 'login') && (<div id='cf-turnstile' />)}
-                        <button disabled={loading}>{mode==='login'?'Sign in':'Sign up'}</button>
-                        {loading && 
-                            <span>
-                                <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                                    <CircularProgress/>
-                                </Box>
-                            </span>}
-                        {!loading && errorMsg && <span>{errorMsg}</span>}
-                    </form>
-                    {mode==='login'?
-                        (<p>You don't have an account? <Link to='/auth/register'>Register</Link></p>):
-                        (<p>You do have an account? <Link to='/auth/login'>Login</Link></p>)
-                    }
-                    <p>You don't remember the password? <Link to='/auth/lost-password'>Lost Password</Link></p>
-                </div>
+        <div className='formContainer'>
+            <div className='formWrapper'>
+                <span className='logo'>SmartWork</span>
+                <span className='title'>{mode}</span>
+                <form onSubmit={handleSubmit}>
+                    {(mode!=='login')&&(<input id='name' type='text' placeholder='name' />)}
+                    <input id='email' type='email' placeholder='email' />
+                    <input id='password' type='password' placeholder='password' />
+                    {(mode === 'login') && (<div id='cf-turnstile' />)}
+                    <button disabled={loading}>{mode==='login'?'Sign in':'Sign up'}</button>
+                    {loading && 
+                        <span>
+                            <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                                <CircularProgress/>
+                            </Box>
+                        </span>}
+                    {!loading && errorMsg && <span>{errorMsg}</span>}
+                </form>
+                {mode==='login'?
+                    (<p>You don't have an account? <Link to='/auth/register'>Register</Link></p>):
+                    (<p>You do have an account? <Link to='/auth/login'>Login</Link></p>)
+                }
+                <p>You don't remember the password? <Link to='/auth/lost-password'>Lost Password</Link></p>
             </div>
-        </Container>
+        </div>
     )
 }
   
