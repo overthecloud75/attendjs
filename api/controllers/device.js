@@ -3,7 +3,7 @@ import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req, res, next) => {
     try {
-        const mac = req.query.mac
+        const { mac } = req.query
         const startDate = sanitizeData(req.query.startDate, 'date')
         const endDate = sanitizeData(req.query.endDate, 'date')
         let devices
@@ -20,12 +20,7 @@ export const search = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
     try {
-        const _id = req.body._id
-        const info = req.body.info
-        const type = req.body.type
-        const location = req.body.location
-        const charge = req.body.charge
-        const owner = req.body.owner
+        const { _id, info, type, location, charge, owner } = req.body
         await Device.updateOne({_id}, {$set: {info, type, location, charge, owner}}, {runValidators: true})
         res.status(204).send()
     } catch (err) {

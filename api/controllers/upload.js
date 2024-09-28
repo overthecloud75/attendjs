@@ -5,9 +5,7 @@ import { createError } from '../utils/error.js'
 
 export const postImageUpload = async (req, res, next) => {
     try {
-        const originalName = req.file.originalname
-        const destination = req.file.destination
-        const fileName = req.file.filename
+        const { originalName, destination, fileName } = req.file
         const filePath = destination + fileName 
 
         let width, height
@@ -18,10 +16,10 @@ export const postImageUpload = async (req, res, next) => {
             width = metadata.width
             height = metadata.height
         } catch (err) {
-            next(err)
+            throw createError(400, err)
         }
 
-        const newUpload = Upload({employeeId: req.user.employeeId, originalName, destination, fileName, width, height})
+        const newUpload = new Upload({employeeId: req.user.employeeId, originalName, destination, fileName, width, height})
         const result = await newUpload.save()
         res.status(200).json({filename: result._id})
     } catch (err) {
@@ -31,13 +29,14 @@ export const postImageUpload = async (req, res, next) => {
 
 export const getImage = async (req, res, next) => {
     try {
-        const upload = await Upload.findOne({_id: req.params.file})
-        if (upload) {
-            const absolutePath = path.resolve(upload.destination + upload.fileName)
-            res.status(200).sendFile(absolutePath)
-        } else {
-            return next(createError(404, 'Something Wrong!'))
-        }
+        const { file } = req.params
+        const upload = await Upload.findOne({_id: file})
+
+        if (!upload) throw createError(404, 'Image Not Found')
+        const absolutePath = path.resolve(upload.destination + upload.fileName)
+        res.sendFile(absolutePath, (err) => {
+            if (err) throw createError(404, err)
+        })
     } catch (err) {
         next(err)
     }

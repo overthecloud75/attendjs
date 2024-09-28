@@ -18,59 +18,49 @@ authenticator.options = { digits: 6 }
 
 export const register = async (req, res, next) => {
     try {
-        const name = req.body.name 
-        const email = sanitizeData(req.body.email, 'email')
+        const { name, email: rawEmail, password } = req.body
+        const email = sanitizeData(rawEmail, 'email')
+
+        const employee = await validateNewUser(name, email)
 
         const token = jwt.sign({email}, process.env.JWT)
         const salt = bcrypt.genSaltSync(10)
-        const hash = bcrypt.hashSync(req.body.password, salt)
+        const hash = bcrypt.hashSync(password, salt)
 
-        const employee = await getEmployeeByEmail(email)
-        if (!employee) {
-            return next(createError(403, 'Fobidden'))
-        } else if (employee.name !== name) {
-            return next(createError(403, 'User not found!'))
-        } else if (employee.regular==='퇴사') {
-            return next(createError(403, 'Employee not found!'))
-        }
-    
-        const user = await getUserByEmail(email)
-        if (user) {
-            return next(createError(403, 'The User is already created'))
-        }
-        const userCount = await User.countDocuments()
-
-        let isAdmin 
-        if (userCount !== 0) {
-            isAdmin = false
-        } else {
-            isAdmin = true
-        }
-        const newUser = User({name, email, employeeId: employee.employeeId, password: hash, isAdmin, confirmationCode: token})
+        const isAdmin = await User.countDocuments() === 0
+        const newUser = new User({name, email, employeeId: employee.employeeId, password: hash, isAdmin, confirmationCode: token})
         await newUser.save()
         res.status(200).send('User has been created.')
-        registerConfirmationEmail(req.body.name, email, token)
+        registerConfirmationEmail(name, email, token)
     } catch (err) {
         next(err)
     }
 }
 
+const validateNewUser = async (name, email) => {
+    const employee = await getEmployeeByEmail(email)
+    if (!employee) {
+        throw createError(403, 'Forbidden')
+    }
+    if (employee.name !== name) {
+        throw createError(403, 'User not found!')
+    }
+    if (employee.regular === '퇴사') {
+        throw createError(403, 'Employee not found!')
+    } 
+    const existingUser = await getUserByEmail(email)
+    if (existingUser) {
+        throw createError(403, 'The User is already created')
+    }
+    return employee
+}
+
 export const login = async (req, res, next) => {
-    const email = sanitizeData(req.body.email, 'email')
     try {
-        const user = await getUserByEmail(email)
-        if (!user) return next(createError(403, 'Wrong password or email!'))
+        const { email: rawEmail, password, platform, width, height, token: cloudflareToken } = req.body
+        const email = sanitizeData(rawEmail, 'email')
 
-        const isPasswordCorrect = await bcrypt.compare(
-            req.body.password,
-            user.password
-        )
-        if (!isPasswordCorrect)
-            return next(createError(403, 'Wrong password or email!'))
-
-        if (user.status != 'Active') {
-            return next(createError(401, 'Pending Account. Please Verify Your Email!'))
-        }
+        const user = await validateUserCredentials(email, password)
         
         const {department} = await getEmployeeByEmail(email)
         const token = jwt.sign(
@@ -78,13 +68,9 @@ export const login = async (req, res, next) => {
             process.env.JWT
         )
         
-        const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
+        const ip = getClientIp(req)
         const user_agent = req.headers['user-agent']
-        const platform = req.body.platform
-        const width = req.body.width
-        const height = req.body.height 
-        const cloudflareToken = req.body.token
-        
+    
         const cloudflareCheck = await handleCloudflarePost(ip, cloudflareToken)
         const {where, hash} = await saveLogin(user, ip, user_agent, platform, width, height, cloudflareCheck)
         
@@ -98,22 +84,36 @@ export const login = async (req, res, next) => {
     }
 }
 
+const validateUserCredentials = async (email, password) => {
+    const user = await getUserByEmail(email)
+    if (!user) throw createError(403, 'Wrong password or email!')
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password)
+    if (!isPasswordCorrect) throw createError(403, 'Wrong password or email!')
+
+    if (user.status !== 'Active') {
+        throw createError(401, 'Pending Account. Please Verify Your Email!')
+    }
+
+    return user
+}
+
 export const password = async (req, res, next) => {
-    const email = sanitizeData(req.body.email, 'email')
     try {
+        const { email: rawEmail, currentPassword, newPassword } = req.body
+        const email = sanitizeData(rawEmail, 'email')
+
         const user = await getUserByEmail(email)
-        if (!user) return next(createError(403, 'Wrong password or email!'))
+        if (!user) throw createError(403, 'Wrong password or email!')
 
         const isPasswordCorrect = await bcrypt.compare(
-            req.body.currentPassword,
+            currentPassword,
             user.password
         )
-        if (!isPasswordCorrect)
-            return next(createError(403, 'Wrong password or email!'))
+        if (!isPasswordCorrect) throw createError(403, 'Wrong password or email!')
 
         const salt = bcrypt.genSaltSync(10)
-        const hash = bcrypt.hashSync(req.body.newPassword, salt)
-
+        const hash = bcrypt.hashSync(newPassword, salt)
         await User.updateOne({email}, {$set: {password: hash}}, {runValidators: true})
         res.status(200).send('Password has been changed.')    
     } catch (err) {
@@ -122,10 +122,11 @@ export const password = async (req, res, next) => {
 }
 
 export const lostPassword = async (req, res, next) => {
-    const email = sanitizeData(req.body.email, 'email')
     try {
+        const { email: rawEmail } = req.body
+        const email = sanitizeData(rawEmail, 'email')
         const user = await getUserByEmail(email)
-        if (!user) return next(createError(403, 'Wrong email!'))
+        if (!user) throw createError(403, 'Wrong email!')
         const otpSecret = authenticator.generateSecret()          // OTP 시크릿 생성
         const otp = authenticator.generate(otpSecret)             // OTP 생성
         await User.updateOne({email}, {$set: {otp}}, {runValidators: true})
@@ -137,20 +138,19 @@ export const lostPassword = async (req, res, next) => {
 }
 
 export const passwordWithOtp = async (req, res, next) => {
-    const email = sanitizeData(req.body.email, 'email')
     try {
+        const { email: rawEmail, password, otp, token: cloudflareToken } = req.body
+        const email = sanitizeData(rawEmail, 'email')
         const user = await getUserByEmail(email)
-        if (!user) return next(createError(403, 'Wrong email!'))
-        if (user.otp !== req.body.otp) return next(createError(403, 'Wrong OTP!'))
+        if (!user) throw createError(403, 'Wrong email!')
+        if (user.otp !== otp) throw createError(403, 'Wrong OTP!')
 
         const salt = bcrypt.genSaltSync(10)
-        const hash = bcrypt.hashSync(req.body.password, salt)
+        const hash = bcrypt.hashSync(password, salt)
 
-        const cloudflareToken = req.body.token
-        const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
+        const ip =  getClientIp(req)
         const cloudflareCheck = await handleCloudflarePost(ip, cloudflareToken)
-        
-        if (cloudflareCheck === 'X') return next(createError(500, 'Something Wrong!'))
+        if (cloudflareCheck === 'X') throw createError(500, 'Something Wrong!')
         await User.updateOne({email}, {$set: {password: hash}}, {runValidators: true})
         res.status(200).send('Password has been changed.')     
     } catch (err) {
@@ -168,9 +168,9 @@ export const logout = async (req, res, next) => {
 
 export const confirmCode = async (req, res, next) => {
     try {
-        const confirmationCode = req.params.confirmationCode
+        const { confirmationCode } = req.params
         const user = await User.findOne({confirmationCode})
-        if (!user) return next(createError(404, 'User not found!'))
+        if (!user) throw createError(404, 'User not found!')
 
         const status = 'Active'
         await User.updateOne({confirmationCode}, {$set: {status}}, {runValidators: true})
@@ -182,7 +182,7 @@ export const confirmCode = async (req, res, next) => {
 
 export const setAttend = async (req, res, next) => {
     try {
-        const ip = req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
+        const ip = getClientIp(req)
         const user_agent = req.headers['user-agent']
         const {isMobile} = checkMobile(ip, user_agent)
 
@@ -196,7 +196,7 @@ export const setAttend = async (req, res, next) => {
 
 export const search = async (req, res, next) => {
     try {
-        const name = req.query.name 
+        const { name } = req.query
         const startDate = sanitizeData(req.query.startDate, 'date')
         const endDate = sanitizeData(req.query.endDate, 'date')
         let logins 
@@ -212,18 +212,11 @@ export const search = async (req, res, next) => {
 }
 
 const checkMobile = (ip, user_agent) => {
-    const ip_split = ip.split('.')
-    const ip16 = ip_split[0] + '.' + ip_split[1]
+    const ip16 = ip.split('.').slice(0, 2).join('.')
     // const ip24 = ip_split[0] + '.' + ip_split[1] + '.' + ip_split[2]
+    const isMobile = MOBILE_IP_LIST.includes(ip16) && (user_agent.includes('iPhone') || user_agent.includes('Android')) ? 'O' : 'X'
 
-    let isMobile = 'X' 
-    let isRemotePlace = false
-    if (MOBILE_IP_LIST.includes(ip16)) {
-        if (user_agent.includes('iPhone') || user_agent.includes('Android')) {isMobile = 'O'}
-    }
-    if (process.env.REMOTE_IP===ip16) {
-        isRemotePlace = true
-    }
+    const isRemotePlace = ip16 === process.env.REMOTE_IP
     return {isMobile, isRemotePlace}
 }
 
@@ -264,17 +257,14 @@ const whereIs = async (location, isMobile) => {
 }
 
 const saveLogin = async (user, ip, user_agent, platform, width, height, cloudflareCheck) => {
-    const employeeId = user.employeeId
-    const name = user.name 
+    const {employeeId, name} = user
     const {date, time} = dateAndTime()
 
     const {isMobile, isRemotePlace} = checkMobile(ip, user_agent)
     const where = attendRemotePlace(isRemotePlace, isMobile, cloudflareCheck)
     const hash = getRandomInt()
 
-    let attend
-    if (where.attend) {attend = 'O'
-    } else {attend = 'X'}
+    const attend = where.attend ? 'O' : 'X'
     const login = new Login({employeeId, name, date, time, ip, isMobile, platform, user_agent, width, height, latitude: -1, longitude: -1, accuracy: 1, attend, hash, cloudflareCheck, timestamp: Date.now()})
     
     await setGpsOn(employeeId, name, date, time, where)
@@ -285,18 +275,13 @@ const saveLogin = async (user, ip, user_agent, platform, width, height, cloudfla
 
 const updateLogin = async (user, ip, isMobile, user_agent, hashLocation) => {
 
-    const employeeId = user.employeeId
-    const name = user.name
-
+    const {employeeId, name} = user
     const {date, time} = dateAndTime()
     const lastLogin = await Login.findOne({employeeId, date}).sort({time: -1})
     const location = decryptLocation(lastLogin, hashLocation)
     const where = await whereIs(location, isMobile)
 
-    let attend
-    if (where.attend) {attend = 'O'
-    } else {attend = 'X'}
-
+    const attend = where.attend ? 'O' : 'X'
     await Login.updateOne({timestamp: lastLogin.timestamp, employeeId, name}, {$set: {ip, isMobile, user_agent, latitude: location.latitude, longitude: location.longitude, accuracy: location.accuracy, attend}}, {runValidators: true})
     await setGpsOn(employeeId, name, date, time, where)
 
@@ -342,24 +327,23 @@ const getUserByEmail = async (email) => {
 
 // https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
 const handleCloudflarePost = async (ip, cloudflareToken) => {
-    let cloudflareCheck = 'X'
-    if (cloudflareToken) {
-        let formData = new FormData();
-        formData.append('secret', process.env.CLOUDFLRAE_SECRET_KEY)
-        formData.append('response', cloudflareToken)
-        formData.append('remoteip', ip)
+    if (!cloudflareToken) return 'X'
+    const formData = new FormData()
+    formData.append('secret', process.env.CLOUDFLRAE_SECRET_KEY)
+    formData.append('response', cloudflareToken)
+    formData.append('remoteip', ip)
 
-        const result = await fetch(process.env.CLOUDFLRAE_URL, {
-            body: formData,
-            method: 'POST',
-        })
+    const result = await fetch(process.env.CLOUDFLRAE_URL, {
+        body: formData,
+        method: 'POST',
+    })
 
-        const outcome = await result.json()
-        if (outcome.success) {
-            cloudflareCheck = 'O'
-        }
-    }
-    return cloudflareCheck 
+    const { success } = await result.json()
+    return success ? 'O' : 'X'
+}
+
+const getClientIp = (req) => {
+    return req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
 }
 
 

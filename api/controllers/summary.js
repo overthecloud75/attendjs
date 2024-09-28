@@ -4,40 +4,44 @@ import Employee from '../models/Employee.js'
 import { getToday, getDefaultAnnualLeave } from '../utils/util.js'
 import { WORKING, getReverseStatus } from '../config/working.js'
 
+const RETIRED_STATUS = '퇴사'
+
 export const search = async (req, res, next) => {
     try {
-        let summary = {}
         const attends = await getAttends(req)
-
-        for (const attend of attends) {
-            if (!(String(attend.employeeId) in summary)) {
-                summary[attend.employeeId] = {
-                    employeeId: attend.employeeId, 
-                    name: attend.name, 
-                    days: 0,
-                    workingHours: 0
-                }
-                WORKING.inStatus.forEach(inStatus => {summary[attend.employeeId][inStatus] = 0})
-                for (const outStatus in WORKING.outStatus){
-                    summary[attend.employeeId][outStatus] = 0 
-                }
-            }
-            summary[attend.employeeId].days++  
-            summary[attend.employeeId].workingHours = summary[attend.employeeId].workingHours + attend.workingHours
-            if (attend.status) { summary[attend.employeeId][attend.status]++ }
-           
-            if (attend.reason === '출근') { summary[attend.employeeId]['정상출근']++ 
-            } else if (attend.reason) {
-                summary[attend.employeeId][attend.reason]++
-            }
-        }
-
+        const summary = summarizeAttends(attends)
         const summaryList = summaryWorkingHours(summary)
-
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(summaryList)
     } catch (err) {
         next(err)
     }
+}
+
+const summarizeAttends = (attends) => {
+    const summary = {}
+    for (const attend of attends) {
+        const { employeeId, name, workingHours, status, reason } = attend
+        if (!(String(employeeId) in summary)) {
+            summary[employeeId] = initializeSummary(employeeId, name)
+        }
+        updateSummary(summary[employeeId], workingHours, status, reason)
+    }
+    return summary
+}
+
+const initializeSummary = (employeeId, name) => {
+    const summary = { employeeId, name, days: 0, workingHours: 0 }
+    WORKING.inStatus.forEach(inStatus => { summary[inStatus] = 0 })
+    Object.keys(WORKING.outStatus).forEach(outStatus => { summary[outStatus] = 0 })
+    return summary
+}
+
+const updateSummary = (summary, workingHours, status, reason) => {
+    summary.days++
+    summary.workingHours += workingHours
+    if (status) summary[status]++
+    if (reason === '출근') summary['정상출근']++
+    else if (reason) summary[reason]++
 }
 
 // https://www.saramin.co.kr/zf_user/tools/holi-calculator
@@ -64,12 +68,8 @@ export const getLeftLeave = async (req,res,next) => {
 
 export const getLeftLeaveList = async (req,res,next) => {
     try {
-        const employees = await Employee.find({regular: {$ne: '퇴사'}}).sort({name: 1})
-        let summaryList = []
-        for (const employee of employees) {
-            const summary = await getLeftLeaveSummary(employee)
-            if (summary) {summaryList.push(summary)}
-        }
+        const employees = await Employee.find({regular: {$ne: RETIRED_STATUS}}).sort({name: 1})
+        const summaryList = await Promise.all(employees.map(getLeftLeaveSummary))
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(summaryList)
     } catch (err) {
         next(err)
@@ -77,31 +77,37 @@ export const getLeftLeaveList = async (req,res,next) => {
 }
 
 export const getLeftLeaveSummary = async ({employeeId, name, beginDate}) => {
+    if (!beginDate) return null
+
     const reverseStatus = getReverseStatus()
-    let summary 
-    if (beginDate) {
-        const {defaultAnnualLeave, baseDate, baseMonth} = getDefaultAnnualLeave(beginDate)
-        summary = {name, beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave}
-        
-        for (const inStatus of WORKING.inStatus){
-            if (inStatus in WORKING.offDay) {summary[inStatus] = 0} 
+  
+    const {defaultAnnualLeave, baseDate, baseMonth} = getDefaultAnnualLeave(beginDate)
+    const summary = initializeLeftLeaveSummary(name, beginDate, baseDate, baseMonth, defaultAnnualLeave)
+    const attends = await Report.find({employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1})
+    updateLeftLeaveSummary(summary, attends, reverseStatus)
+    return summary
+}
+
+const initializeLeftLeaveSummary = (name, beginDate, baseDate, baseMonth, defaultAnnualLeave) => {
+    const summary = { name, beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave }
+    WORKING.inStatus.concat(Object.keys(WORKING.outStatus)).forEach(status => {
+        if (status in WORKING.offDay) summary[status] = 0
+    })
+    return summary
+}
+
+const updateLeftLeaveSummary = (summary, attends, reverseStatus) => {
+    for (const attend of attends) {
+        const { status, reason } = attend
+        if (status && status in WORKING.offDay) {
+            summary[status]++
+            summary.leftAnnualLeave -= WORKING.offDay[status]
         }
-        for (const outStatus in WORKING.outStatus){
-            if (outStatus in WORKING.offDay) {summary[outStatus] = 0}
-        }
-        const attends = await Report.find({employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1})
-        for (const attend of attends) {
-            if (attend.status && attend.status in WORKING.offDay) {
-                summary[attend.status]++
-                summary.leftAnnualLeave = summary.leftAnnualLeave - WORKING.offDay[attend.status]
-            }
-            if (attend.reason && attend.reason in WORKING.offDay) {
-                summary[reverseStatus[attend.reason]]++
-                summary.leftAnnualLeave = summary.leftAnnualLeave - WORKING.offDay[attend.reason]
-            }
+        if (reason && reason in WORKING.offDay) {
+            summary[reverseStatus[reason]]++
+            summary.leftAnnualLeave -= WORKING.offDay[reason]
         }
     }
-    return summary
 }
 
 const summaryWorkingHours = (summary) => {
@@ -119,4 +125,3 @@ const summaryWorkingHours = (summary) => {
     }
     return summaryList 
 }
-

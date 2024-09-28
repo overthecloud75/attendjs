@@ -54,8 +54,6 @@ const ProfileMenu = ({user, anchorEl, setAnchorEl, setMenu}) => {
                         </MenuItem>
                     </Box>
                 ):(<Box>
-                        <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
                         <MenuItem onClick={handleClose} component={Link} to='/auth/register' style={{ textDecoration: 'none' }}>
                             Register
                         </MenuItem>

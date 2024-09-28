@@ -3,21 +3,19 @@ import Device from '../models/Device.js'
 import { sanitizeData } from '../utils/util.js'
 
 const insertOwner = (deviceOns, deviceDict) => {
-    for (let deviceOn of deviceOns) {
-        if (deviceOn['mac'] in deviceDict) {
-            deviceOn['owner'] = deviceDict[deviceOn['mac']]
-        }
-    }
-    return deviceOns 
+    return deviceOns.map(deviceOn => ({
+        ...deviceOn,
+        owner: deviceDict[deviceOn.mac] || null
+    }))
 }
 
 export const search = async (req,res,next) => {
     try {
-        const ip = req.query.ip
+        const { ip } = req.query
         const startDate = sanitizeData(req.query.startDate, 'date')
         const endDate = sanitizeData(req.query.endDate, 'date')
 
-        const devices = await Device.find({owner: {$ne:null}}).lean()
+        const devices = await Device.find({owner: {$ne:null}})
         let deviceDict = {}
         for (const device of devices) {
             deviceDict[device['mac']] = device['owner']

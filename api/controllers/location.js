@@ -2,7 +2,7 @@ import Location from '../models/Location.js'
 
 export const search = async (req, res, next) => {
     try {
-        const location = req.query.name
+        const { name: location } = req.query
         let locations
         if (location) {
             locations = await Location.find({location}).sort({location: 1})
@@ -17,11 +17,7 @@ export const search = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
     try {
-        const _id = req.body._id 
-        const location = req.body.location
-        const latitude = req.body.latitude
-        const longitude = req.body.longitude
-        const dev = req.body.dev
+        const { _id, location, latitude, longitude, dev }= req.body
         await Location.updateOne({_id}, {$set: {location, latitude, longitude, dev}}, {runValidators: true})
         res.status(200).json({message:'updated'})
     } catch (err) {
@@ -31,11 +27,7 @@ export const update = async (req, res, next) => {
 
 export const write = async (req, res, next) => {
     try {
-        const location = req.body.location
-        const latitude = req.body.latitude
-        const longitude = req.body.longitude
-        const dev = req.body.dev
-
+        const { location, latitude, longitude, dev } = req.body
         const newLocation = Location({location, latitude, longitude, dev})
         await newLocation.save()
         res.status(200).json(newLocation)
@@ -46,7 +38,7 @@ export const write = async (req, res, next) => {
 
 export const deleteLocation = async (req, res, next) => {
     try {
-        const _id = req.body._id
+        const { _id } = req.body
         const location = await Location.deleteOne({_id})
         res.status(200).json(location)
     } catch (err) {

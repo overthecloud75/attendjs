@@ -1,4 +1,8 @@
 * 24/09/28
+    - 2.2.7 (api) <br>
+        code refactoring with AI assistant <br>
+
+* 24/09/28
     - 2.2.6 (client) <br>
         profileDialog.jsx <br>
 

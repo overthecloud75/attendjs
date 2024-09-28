@@ -11,7 +11,7 @@ export const search = async (req, res, next) => {
 }
 
 export const getAttends = async (req) => {
-    const name = req.query.name 
+    const { name }  = req.query 
     const startDate = sanitizeData(req.query.startDate, 'date')
     const endDate = sanitizeData(req.query.endDate, 'date')
     

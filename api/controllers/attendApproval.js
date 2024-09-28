@@ -4,6 +4,14 @@ import { getToday } from '../utils/util.js'
 import { createError } from '../utils/error.js'
 // import { sanitizeData } from '../utils/util.js'
 
+const LIMIT = 200
+
+const STATUS = {
+    PENDING: 'Pending',
+    ACTIVE: 'Active',
+    CANCEL: 'Cancel'
+}
+
 export const search = async (req, res, next) => {
     try {
         const approvalHistory = await getApprovalHistory(req)
@@ -15,48 +23,54 @@ export const search = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
     try {
-        const _id = req.body._id
-        const status = req.body.status
+        const { _id, status } = req.body
         if (!_id) return next(createError(404, 'Approval not found!'))
-        let approval = await Approval.findOne({_id})
+        const approval = await Approval.findOne({_id})
         if (!approval) return next(createError(404, 'Approval not found!'))
                
         const today = getToday()
-        if (approval.status === status || approval.status === 'Cancel') {
-            return next(createError(400, 'Something wrong'))
-        } else if (req.user.isAdmin) {
-            if ((approval.status === 'Pending' || approval.status === 'Active') && status === 'Cancel') {
-                await makeCancel(approval)
-                approval.status = 'Cancel'
-            } else if (approval.status === 'Pending' && status === 'Active') {
-                await makeActive(approval)
-                approval.status = 'Active'
-            } else {return next(createError(400, 'Something wrong'))}
-        } else if ((approval.status ==='Pending' && status === 'Cancel') ||
-            (approval.status ==='Active' && status === 'Cancel' && approval.start > today)) {
-            await makeCancel(approval)
-            approval.status = 'Cancel'
-        } else {return next(createError(400, 'Something wrong'))}
-        res.status(200).json(approval)     
+        if (approval.status === status || approval.status === STATUS.CANCEL) {
+            return next(createError(400, 'Invalid status change'))
+        }   
+        const updatedApproval = await updateApprovalStatus(approval, status, req.user.isAdmin)
+        res.status(200).json(updatedApproval)
     } catch (err) {
         next(err)
     }
 }
 
-const getApprovalHistory = async (req) => {
-    let approvalHistory
+const updateApprovalStatus = async (approval, newStatus, isAdmin) => {
+    const today = getToday()
+    if (isAdmin) {
+        if ((approval.status === STATUS.PENDING || approval.status === STATUS.ACTIVE) && newStatus === STATUS.CANCEL) {
+            await makeCancel(approval)
+            approval.status = STATUS.CANCEL
+        } else if (approval.status === STATUS.PENDING && newStatus === STATUS.ACTIVE) {
+            await makeActive(approval)
+            approval.status = STATUS.ACTIVE
+        } else {
+            throw createError(400, 'Invalid status change for admin')
+        }
+    } else if ((approval.status === STATUS.PENDING && newStatus === STATUS.CANCEL) ||
+               (approval.status === STATUS.ACTIVE && newStatus === STATUS.CANCEL && approval.start > today)) {
+        await makeCancel(approval)
+        approval.status = STATUS.CANCEL
+    } else {
+        throw createError(400, 'Invalid status change for user')
+    }
+    return approval
+}
 
-    const name = req.query.name 
+const getApprovalHistory = async (req) => {
+    const { name } = req.query
+    const { isAdmin, email } = req.user
     // const startDate = sanitizeData(req.query.startDate, 'date')
     // const endDate = sanitizeData(req.query.endDate, 'date')
-    if (req.user.isAdmin) {
-        if (name) {
-            approvalHistory = await Approval.find({name}).sort({createdAt: -1}).limit(200)
-        } else {
-            approvalHistory = await Approval.find({}).sort({createdAt: -1}).limit(200)
-        }
-    } else { 
-        approvalHistory = await Approval.find({email: req.user.email}).sort({createdAt: -1}).limit(200)
+    let query = {}
+    if (isAdmin) {
+        if (name) query.name = name
+    } else {
+        query.email = email
     }
-    return approvalHistory
+    return Approval.find(query).sort({ createdAt: -1 }).limit(LIMIT)
 }
