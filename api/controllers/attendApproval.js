@@ -28,7 +28,6 @@ export const update = async (req, res, next) => {
         const approval = await Approval.findOne({_id})
         if (!approval) return next(createError(404, 'Approval not found!'))
                
-        const today = getToday()
         if (approval.status === status || approval.status === STATUS.CANCEL) {
             return next(createError(400, 'Invalid status change'))
         }   

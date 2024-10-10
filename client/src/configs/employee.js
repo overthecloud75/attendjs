@@ -16,7 +16,7 @@ export const columnHeaders = [
     },
     {
         accessorKey: 'email',
-        header: 'email',
+        header: 'Email',
         enableSorting: true,
     },
     {
@@ -64,7 +64,7 @@ export const mobileColumnHeaders = [
     },
     {
         accessorKey: 'email',
-        header: 'email',
+        header: 'Email',
         enableSorting: true,
     },
     {
@@ -85,7 +85,7 @@ export const csvHeaders = [
     },
     {
         key: 'email',
-        label: 'email',
+        label: 'Email',
     },
     {
         key: 'department',

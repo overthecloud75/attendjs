@@ -13,6 +13,7 @@ import GPS from './pages/GPS'
 import Location from './pages/Location'
 import Summary from './pages/Summary'
 import Device from './pages/Device'
+import CreditCard from './pages/CreditCard'
 import Employee from './pages/Employee'
 import LoginHistory from './pages/LoginHistory'
 import ApprovalHistory from './pages/ApprovalHistory'
@@ -49,6 +50,7 @@ function App() {
                     <Route exact path='/schedule' element={<Schedule menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/location' element={<Location menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/device' element={<Device menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/creditcard' element={<CreditCard menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/employee' element={<Employee menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/loginhistory' element={<LoginHistory menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/approvalhistory' element={<ApprovalHistory menu={menu} setMenu={setMenu}/>}/>

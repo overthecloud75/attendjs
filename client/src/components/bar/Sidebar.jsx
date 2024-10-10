@@ -7,6 +7,7 @@ import SummarizeIcon from '@mui/icons-material/Summarize'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import PlaceIcon from '@mui/icons-material/Place'
 import ComputerIcon from '@mui/icons-material/Computer'
+import CreditCardIcon from '@mui/icons-material/CreditCard'
 import PeopleIcon from '@mui/icons-material/People'
 import BookIcon from '@mui/icons-material/Book'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
@@ -184,6 +185,12 @@ const itemDict =
             to: '/device',
             icon: <ComputerIcon/>,
             title: 'Device',
+            auth: true
+        },
+        {
+            to: '/creditcard',
+            icon: <CreditCardIcon/>,
+            title: 'CreditCard',
             auth: true
         }
     ],

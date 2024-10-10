@@ -55,7 +55,8 @@ export const reportUpdate = async (action, event, start, end) => {
     const today = getToday()
     if (!employee) throw createError(404, 'Employee not found')
     const { employeeId, status } = employee
-    const reports = await Report.find({name, employeeId, date: {$gte: start, $lt: end}}).sort({date: 1})
+    // monogodb document instance를 javascript 객체로 변환 
+    const reports = await Report.find({name, employeeId, date: {$gte: start, $lt: end}}).sort({date: 1}).lean()
     for (const report of reports) {
         const { date } = report 
         if (date >= today) break
@@ -69,7 +70,6 @@ export const reportUpdate = async (action, event, start, end) => {
 
 const updateReport = async (report, eventStatus, employeeStatus) => {
     if (eventStatus === '출근' && report.reason) return null
-
     const updatedReport = { ...report }
     updatedReport.reason = eventStatus
 
@@ -80,6 +80,5 @@ const updateReport = async (report, eventStatus, employeeStatus) => {
         updatedReport.workingHours = calculateWorkingHours(report.begin, report.end)
         updatedReport.state = getState(employeeStatus, report.begin, report.end)
     }
-
     return updatedReport
 }

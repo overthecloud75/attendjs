@@ -16,6 +16,7 @@ import attendRoute from './routes/attend.js'
 import summaryRoute from './routes/summary.js'
 import eventRoute from './routes/event.js'
 import deviceRoute from './routes/device.js'
+import creditcardRoute from './routes/creditcard.js'
 import locationRoute from './routes/location.js'
 import employeeRoute from './routes/employee.js'
 import approvalRoute from './routes/approval.js'
@@ -83,6 +84,7 @@ app.use('/api/summary', summaryRoute)
 app.use('/api/event', eventRoute)
 app.use('/api/location', locationRoute)
 app.use('/api/device', deviceRoute)
+app.use('/api/creditcard', creditcardRoute)
 app.use('/api/employee', employeeRoute)
 app.use('/api/approval', approvalRoute)
 app.use('/api/payment', paymentRoute)

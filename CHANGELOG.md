@@ -1,3 +1,7 @@
+* 24/10/10
+    - 2.2.8 (api) <br>
+        error fix <br>
+
 * 24/09/28
     - 2.2.7 (api) <br>
         code refactoring with AI assistant <br>
