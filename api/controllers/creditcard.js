@@ -12,13 +12,41 @@ export const search = async (req, res, next) => {
     }
 }
 
+export const write = async (req, res, next) => {
+    try {
+        const { date: dateString, price: priceString, people: peopleString, use } = req.body
+        const date = sanitizeData(dateString, 'date')
+        const price = Number(priceString)
+        const people = Number(peopleString)
+        const { name, email, cardNo } = req.user
+        const perPrice = Math.round(price /people)
+        const creditcard = CreditCard({date, name, email, cardNo, price, people, perPrice, use})
+        await creditcard.save()
+        res.status(200).json(creditcard)
+    } catch (err) {
+        next(err)
+    }
+}
+
 export const update = async (req, res, next) => {
     try {
-        const { price, people, use } = req.body
-        const { name, email } = req.user
-        const perPrice = (Number(price) / Number(people)).parseInt()
-        await CreditCard.updateOne({_id}, {$set: {name, email, price, people, perPrice, use}}, {runValidators: true})
+        const { _id, date: dateString, price: priceString, people: peopleString, use } = req.body
+        const date = sanitizeData(dateString, 'date')
+        const price = Number(priceString)
+        const people = Number(peopleString)
+        const perPrice = Math.round(price /people)
+        await CreditCard.updateOne({_id}, {$set: {date, price, people, perPrice, use}}, {runValidators: true})
         res.status(204).send()
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const deleteCreditCard = async (req,res,next) => {
+    try {
+        const { _id } = req.body
+        const creditcard = await CreditCard.deleteOne({_id})
+        res.status(200).json(creditcard)
     } catch (err) {
         next(err)
     }
@@ -26,11 +54,11 @@ export const update = async (req, res, next) => {
 
 const getCreditCardHistory = async (req) => {
     const { name } = req.query
-    const { isAdmin, email } = req.user
+    const { email, department } = req.user
     // const startDate = sanitizeData(req.query.startDate, 'date')
     // const endDate = sanitizeData(req.query.endDate, 'date')
     let query = {}
-    if (isAdmin) {
+    if (department==='관리팀') {
         if (name) query.name = name
     } else {
         query.email = email

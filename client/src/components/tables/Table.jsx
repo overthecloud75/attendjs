@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import { v } from '../../variable.js'
 import Pagination from './Pagination.jsx'
 import Update from './UpdateDialog.jsx'
+import CardUpdate from './CardUpdate.jsx'
 import ApprovalUpdate from './ApprovalUpdate.jsx'
 import EditWrite from './EditWrite.jsx'
 import { UserEditablePages, UpdatablePages } from '../../configs/pages.js'
@@ -128,21 +129,21 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                 <THead>
                     {table.getHeaderGroups().map(headerGroup => {
                         return (
-                        <HeadTr key={headerGroup.id}>
-                            <Th>No</Th>
-                            {headerGroup.headers.map(header => (
-                                <Th 
-                                    key={header.id} 
-                                    colSpan={header.colSpan}
-                                    onClick={header.column.getToggleSortingHandler()}
-                                >
-                                    {flexRender(
-                                        header.column.columnDef.header,
-                                        header.getContext()
-                                    )}
-                                </Th>
-                            ))}
-                        </HeadTr>
+                            <HeadTr key={headerGroup.id}>
+                                <Th>No</Th>
+                                {headerGroup.headers.map(header => (
+                                    <Th 
+                                        key={header.id} 
+                                        colSpan={header.colSpan}
+                                        onClick={header.column.getToggleSortingHandler()}
+                                    >
+                                        {flexRender(
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                        )}
+                                    </Th>
+                                ))}
+                            </HeadTr>
                     )})}
                 </THead>
                 <TBody>
@@ -188,6 +189,16 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                     open={openUpdate}
                     setOpen={setOpenUpdate}
                     rowData={selectedRowData}
+                />:(url==='creditcard'?
+                <CardUpdate
+                    writeMode={writeMode}
+                    page={url}
+                    columns={columns}
+                    data={data}
+                    setData={setData}
+                    open={openUpdate}
+                    setOpen={setOpenUpdate}
+                    rowData={selectedRowData}
                 />:
                 <Update
                     writeMode={writeMode}
@@ -199,7 +210,7 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                     setOpen={setOpenUpdate}
                     rowData={selectedRowData}
                 />
-            )}
+            ))}
             {openEditWrite&&
                 <EditWrite
                     writeMode={writeMode}

@@ -2,8 +2,8 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } 
 
 const ProfileDialog = ({user, openDialog, handleCloseDialog}) => {
 
-    const userKeys = Object.keys(user).slice(0, 3)
-    const userValues = Object.values(user).slice(0, 3)
+    const userKeys = Object.keys(user).slice(0, 5)
+    const userValues = Object.values(user).slice(0, 5)
 
     return (
         <Dialog open={openDialog} onClose={handleCloseDialog}>

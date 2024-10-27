@@ -15,9 +15,9 @@ export const search = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
     try {
-        const { _id, beginDate: rawBeginDate, email, department, rank, position, regular, mode, attendMode } = req.body
+        const { _id, beginDate: rawBeginDate, email, department, rank, position, regular, mode, attendMode, cardNo } = req.body
         const beginDate = sanitizeData(rawBeginDate, 'date')
-        await Employee.updateOne({_id}, {$set: {beginDate, email, department, rank, position, regular, mode, attendMode}}, { runValidators: true})
+        await Employee.updateOne({_id}, {$set: {beginDate, email, department, rank, position, regular, mode, attendMode, cardNo}}, { runValidators: true})
         // 퇴사하는 경우 id 삭제 
         if (regular === RETIRED_STATUS ) {
             await User.deleteOne({email})
@@ -30,11 +30,10 @@ export const update = async (req, res, next) => {
 
 export const write = async (req,res,next) => {
     try {
-        const { employeeId: rawEmployeeId, name, beginDate: rawBeginDate, email, department, rank, position, regular, mode, attendMode } = req.body
+        const { employeeId: rawEmployeeId, name, beginDate: rawBeginDate, email, department, rank, position, regular, mode, attendMode, cardNo } = req.body
         const employeeId = Number(rawEmployeeId)
         const beginDate = sanitizeData(rawBeginDate, 'date')
-
-        const newEmployee = new Employee({employeeId, name, beginDate, email, department, rank, position, regular, mode, attendMode})
+        const newEmployee = new Employee({employeeId, name, beginDate, email, department, rank, position, regular, mode, attendMode, cardNo})
         await newEmployee.save()
         res.status(200).json(newEmployee)
     } catch (err) {
@@ -54,13 +53,18 @@ export const deleteEmployee = async (req,res,next) => {
 
 const getEmployees = async (req) => {
     const name = req.query.name
+    const isAdmin = req.user.isAdmin
     // const startDate = sanitizeData(req.query.startDate, 'date')
     // const endDate = sanitizeData(req.query.endDate, 'date')
     let employees
     if (name) {
-        employees = await Employee.find({name, regular: {$ne: RETIRED_STATUS}}).sort({name: 1})
+        employees = await Employee.find({name, regular: {$ne: RETIRED_STATUS}}, {cardNo: 0}).sort({name: 1})
     } else { 
-        employees = await Employee.find({regular: {$ne: RETIRED_STATUS}}).sort({name: 1})
+        if (isAdmin) {
+            employees = await Employee.find({regular: {$ne: RETIRED_STATUS}}).sort({name: 1})
+        } else {
+            employees = await Employee.find({regular: {$ne: RETIRED_STATUS}}, {cardNo: 0}).sort({name: 1})
+        }
     }
     return employees
 }

@@ -2,6 +2,10 @@ import mongoose from 'mongoose'
 
 const CreditCardSchema = new mongoose.Schema(
     {
+        date: {
+            type: String,
+            required: true, 
+        }, 
         name: {
             type: String,
             required: true,
@@ -29,8 +33,9 @@ const CreditCardSchema = new mongoose.Schema(
         use: {
             type: String,
             required: true,
-        }
+        },
     },
+    { timestamps: true }
 )
 
 export default mongoose.model('CreditCard', CreditCardSchema)

@@ -34,8 +34,10 @@ const TableButtons = ({url, data, csvHeaders, fileName, writeMode, setWriteMode,
         setWriteMode(true)
         if (['board', 'report'].includes(url)) {
             setOpenEditWrite(true)
-        } else if (AdminEditablePages.includes(url)) {
-            setSelectedRowData({})
+        } else if (url === 'creditcard') {
+            setSelectedRowData({name: user.name, email: user.email, card: user.cardNo})
+            setOpenUpdate(true)
+        } else if (editablePages.includes(url)) {
             setOpenUpdate(true)
         }
     }
@@ -66,18 +68,18 @@ const TableButtons = ({url, data, csvHeaders, fileName, writeMode, setWriteMode,
             )}
             <div className='buttons'>
                 {(url==='approval')&&(
-                    <button 
-                        className='defaultButton'
-                        onClick={handleAttendClick}
-                    >근태 결재
-                    </button>
-                )}
-                {(url==='approval')&&(
-                    <button 
-                        className='defaultButton'
-                        onClick={handlePaymentClick}
-                    >지출 결재
-                    </button>
+                    <>
+                        <button 
+                            className='defaultButton'
+                            onClick={handleAttendClick}
+                        >근태 결재
+                        </button>
+                        <button 
+                            className='defaultButton'
+                            onClick={handlePaymentClick}
+                        >지출 결재
+                        </button>
+                    </>
                 )}
                 {editablePages.includes(url)&&(
                     <button 

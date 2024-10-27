@@ -28,19 +28,23 @@ const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, s
         }
     // eslint-disable-next-line
     }, [radioValue, open])
+
     const handleEntering = () => {
         if (radioGroupRef.current != null) {
           radioGroupRef.current.focus()
         }
     }
+
     const handleCancel = () => {
         setRadioValue('휴가')
         onClose()
     }
+
     const handleOk = () => {
         setValue({...value, reason: radioValue})
         onClose()
     }
+
     const handleChange = (event) => {
         setRadioValue(event.target.value)
         if (event.target.value === '기타') {setEtcOpen(true)}
@@ -142,57 +146,41 @@ const Approval = ({navigate, open, setOpen}) => {
         }
     }
 
+    const renderTextField = (id, label, value) => (
+        <TextField
+            margin='dense'
+            id={id}
+            name={label}
+            label={label}
+            fullWidth
+            variant='standard'
+            value={value}
+        />
+    )
+
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>{t('button-attend-approval')}</DialogTitle>
             <DialogContent>
-                {leftLeave===''? 
+                {leftLeave === '' || leftStatus === '' || value.approver === '' ? (
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <CircularProgress/>
-                    </Box>:
-                    <TextField 
-                        margin='dense'
-                        id='attendance'
-                        name='남은연차'
-                        label='남은연자'
-                        fullWidth
-                        variant='standard'
-                        value={leftLeave}
-                    />
-                }
-                {leftStatus===''? 
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <CircularProgress/>
-                    </Box>:
-                    <TextField 
-                        margin='dense'
-                        id='leftstatus'
-                        name='근태현황'
-                        label='근태현황'
-                        fullWidth
-                        variant='standard'
-                        value={leftStatus}
-                    />
-                }
-                <TextField 
-                    margin='dense'
-                    id='approver'
-                    name='결재자'
-                    label='결재자'
-                    fullWidth
-                    variant='standard'
-                    value={value.approver}
-                />
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <>
+                        {renderTextField('attendance', '남은연차', leftLeave)}
+                        {renderTextField('leftstatus', '근태현황', leftStatus)}
+                        {renderTextField('approver', '결재자', value.approver)}
+                    </>
+                )}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePickWrapper style={{ width: '100%', justifyContent: 'space-between'}}>
-                        <DatePicker 
-                            style={{ flex: 1 }}
+                        <DatePicker        
                             label='시작일' 
                             format={'YYYY-MM-DD'}
                             onChange={(newValue) => setValue({...value, start: newValue.format('YYYY-MM-DD')})}
                         />
                         <DatePicker 
-                            style={{ flex: 1 }}
                             label='종료일' 
                             format={'YYYY-MM-DD'}
                             onChange={(newValue) => setValue({...value, end: newValue.format('YYYY-MM-DD')})}

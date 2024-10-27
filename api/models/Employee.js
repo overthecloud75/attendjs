@@ -28,6 +28,7 @@ const EmployeeSchema = new mongoose.Schema(
         },
         position: {
             type: String,
+            enum: ['팀원', '파트장', '팀장', '본부장', '대표이사']
         },
         email: {
             type: String,
@@ -47,7 +48,10 @@ const EmployeeSchema = new mongoose.Schema(
             type: String,
             enum: ['O', 'X'],
             default: 'O',
-        }
+        },
+        cardNo: {
+            type: String,
+        },
     },
 )
 

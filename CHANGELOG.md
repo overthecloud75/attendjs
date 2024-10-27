@@ -1,3 +1,7 @@
+* 24/10/27
+    - 2.2.9 (client, api) <br>
+        credit card histroy <br>
+
 * 24/10/10
     - 2.2.8 (api) <br>
         error fix <br>

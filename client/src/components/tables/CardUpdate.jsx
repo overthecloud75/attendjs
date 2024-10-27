@@ -1,18 +1,20 @@
 import { useState, useMemo } from 'react'
+import dayjs from 'dayjs'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem } from '@mui/material'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import axios from 'axios'
-import { AdminEditableTitles, UserEditableTitles, EditableSelects } from '../../configs/pages.js'
+import { CardEditableTitles, CardEditableSelects } from '../../configs/pages.js'
 import { options } from '../../configs/options.js'
-import { getUser } from '../../storage/userSlice.js'
+import { getUser } from '../../storage/userSlice'
+import { getToday } from '../../utils/DateUtil'
 
-const getEditableTitles = (user) => user.isAdmin ? AdminEditableTitles : UserEditableTitles
-
-const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
+const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
     const user = useMemo(() => getUser(), [])
-    const editableTitles = useMemo(() => getEditableTitles(user), [user])
-
     const [focus, setFocus] = useState('info')
-    const [value, setValue] = useState(rowData)
+    const [value, setValue] = useState(rowData.date?{...rowData, cardNo: user.cardNo}:{...rowData, date: getToday(), cardNo: user.cardNo})
     const handleClose = () => { setOpen(false) }
 
     const insertData = () => {
@@ -65,15 +67,23 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
         setFocus(event.target.name)
         setValue({...value, [event.target.name]: event.target.value})    
     }
-    // autofocus disappear after typing, 한글 입력 문제 
-    // https://stackoverflow.com/questions/42573017/in-react-es6-why-does-the-input-field-lose-focus-after-typing-a-character
 
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Update {page}</DialogTitle>
             <DialogContent>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DatePicker']}>
+                        <DatePicker 
+                            label='사용일' 
+                            format={'YYYY-MM-DD'}
+                            value={dayjs(value.date)}
+                            onChange={(newValue) => setValue({...value, date: newValue.format('YYYY-MM-DD')})}
+                        />
+                    </DemoContainer>
+                </LocalizationProvider>
                 {columns.map((item, index) => {
-                    if (EditableSelects.includes(item.accessorKey)&&options[item.accessorKey]) {
+                    if (CardEditableSelects.includes(item.accessorKey)&&options[item.accessorKey]) {
                         return (
                             <TextField
                                 autoFocus={focus===item.accessorKey}
@@ -99,7 +109,7 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
                                 ))}
                             </TextField>
                         )
-                    } else if (editableTitles.includes(item.accessorKey) || writeMode) {
+                    } else if (CardEditableTitles.includes(item.accessorKey)) {
                         return (
                             <TextField
                                 autoFocus={focus===item.accessorKey}
@@ -115,7 +125,7 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
                                 autoComplete='false'
                             />
                         )
-                    } else {
+                    } else if (item.accessorKey !== 'date') {
                         return (
                             <TextField
                                 margin='dense'
@@ -124,7 +134,7 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
                                 label={item.accessorKey}
                                 fullWidth
                                 variant='standard'
-                                value={rowData[item.accessorKey]?rowData[item.accessorKey]:''}
+                                value={value[item.accessorKey]?value[item.accessorKey]:''}
                                 key={index}
                                 InputProps={{readOnly: true}}
                                 autoComplete='false'
@@ -142,4 +152,4 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
     )
 }
 
-export default Update
+export default CardUpdate

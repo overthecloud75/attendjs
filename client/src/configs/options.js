@@ -8,7 +8,9 @@ export const paymentOptions = {
 }
 
 export const options = {
+    position: ['팀원', '파트장', '팀장', '본부장', '대표이사'], 
     regular: ['상근', '비상근', '병특', '퇴사'], 
     mode: ['내근', '파견'],
     attendMode: ['O', 'X'],
+    use: ['식권', '커피', '식사', '도서', '기타']
 }

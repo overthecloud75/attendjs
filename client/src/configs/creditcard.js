@@ -1,5 +1,10 @@
 export const columnHeaders = [
     {
+        accessorKey: 'date',
+        header: '사용일',
+        enableSorting: true,
+    },
+    {
         accessorKey: 'name',
         header: '이름',
         enableSorting: true,
@@ -25,7 +30,7 @@ export const columnHeaders = [
         enableSorting: true,
     },
     {
-        accessorKey: 'perprice',
+        accessorKey: 'perPrice',
         header: '단가',
         enableSorting: true,
     },
@@ -37,6 +42,11 @@ export const columnHeaders = [
 ]
 
 export const mobileColumnHeaders = [
+    {
+        accessorKey: 'date',
+        header: '사용일',
+        enableSorting: true,
+    },
     {
         accessorKey: 'name',
         header: '이름',
@@ -60,6 +70,11 @@ export const mobileColumnHeaders = [
 ]
 
 export const csvHeaders = [
+    {
+        key: 'date',
+        label: 'Date',
+    },
+
     {
         key: 'name',
         label: '이름',

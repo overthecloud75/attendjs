@@ -49,6 +49,11 @@ export const columnHeaders = [
         header: '적용',
         enableSorting: true,
     },
+    {
+        accessorKey: 'cardNo',
+        header: 'Card No',
+        enableSorting: true,
+    },
 ]
 
 export const mobileColumnHeaders = [

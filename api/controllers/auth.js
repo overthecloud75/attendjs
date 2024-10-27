@@ -62,12 +62,12 @@ export const login = async (req, res, next) => {
 
         const user = await validateUserCredentials(email, password)
         
-        const {department} = await getEmployeeByEmail(email)
+        let {department, cardNo} = await getEmployeeByEmail(email)
+        if (!cardNo) {cardNo = ''}
         const token = jwt.sign(
-            {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department},
+            {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department, cardNo},
             process.env.JWT
         )
-        
         const ip = getClientIp(req)
         const user_agent = req.headers['user-agent']
     
@@ -78,7 +78,7 @@ export const login = async (req, res, next) => {
             httpOnly: true, secure: true, sameSite: 'Strict'
         })
         .status(200)
-        .json({name: user.name, email, isAdmin: user.isAdmin, where, hash})
+        .json({name: user.name, email, isAdmin: user.isAdmin, department, cardNo, where, hash})
     } catch (err) {
         next(err)
     }
