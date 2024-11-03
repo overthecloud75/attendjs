@@ -5,7 +5,7 @@ import { createError } from '../utils/error.js'
 
 export const postImageUpload = async (req, res, next) => {
     try {
-        const { originalName, destination, fileName } = req.file
+        const { originalname: originalName, destination, filename: fileName } = req.file
         const filePath = destination + fileName 
 
         let width, height
@@ -18,7 +18,6 @@ export const postImageUpload = async (req, res, next) => {
         } catch (err) {
             throw createError(400, err)
         }
-
         const newUpload = new Upload({employeeId: req.user.employeeId, originalName, destination, fileName, width, height})
         const result = await newUpload.save()
         res.status(200).json({filename: result._id})

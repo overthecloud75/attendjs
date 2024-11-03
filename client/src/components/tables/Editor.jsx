@@ -29,7 +29,7 @@ const Editor = ({writeMode, value, setValue, isReadOnly}) => {
         return {
             upload: async () => {
                 try {
-                    const file = await loader.file;
+                    const file = await loader.file
                     const result = await postUpload(file)
                     if (!result.err) {
                         return {

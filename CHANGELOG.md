@@ -1,3 +1,7 @@
+* 24/11/03
+    - 2.3.0 (client, api) <br>
+        credit card receipt image upload <br>
+
 * 24/10/27
     - 2.2.9 (client, api) <br>
         credit card histroy <br>

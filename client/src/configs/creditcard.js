@@ -48,18 +48,13 @@ export const mobileColumnHeaders = [
         enableSorting: true,
     },
     {
-        accessorKey: 'name',
-        header: '이름',
-        enableSorting: true,
-    },
-    {
-        accessorKey: 'cardNo',
-        header: 'Card No',
-        enableSorting: true,
-    },
-    {
         accessorKey: 'price',
         header: '금액',
+        enableSorting: true,
+    },
+    {
+        accessorKey: 'people',
+        header: '인원',
         enableSorting: true,
     },
     {

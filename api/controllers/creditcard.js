@@ -20,9 +20,13 @@ export const write = async (req, res, next) => {
         const people = Number(peopleString)
         const { name, email, cardNo } = req.user
         const perPrice = Math.round(price /people)
-        const creditcard = CreditCard({date, name, email, cardNo, price, people, perPrice, use})
-        await creditcard.save()
-        res.status(200).json(creditcard)
+        if (cardNo) {
+            const creditcard = CreditCard({date, name, email, cardNo, price, people, perPrice, use})
+            await creditcard.save()
+            res.status(200).json(creditcard)
+        } else {
+            throw createError(400, 'Something Wrong!')
+        }
     } catch (err) {
         next(err)
     }

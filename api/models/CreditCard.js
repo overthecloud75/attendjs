@@ -32,8 +32,12 @@ const CreditCardSchema = new mongoose.Schema(
         },
         use: {
             type: String,
+            enum: ['식권', '커피', '식사', '도서', '사무용품', '소모품'],
             required: true,
         },
+        content: {
+            type: String, 
+        }
     },
     { timestamps: true }
 )

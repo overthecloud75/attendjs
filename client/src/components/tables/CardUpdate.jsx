@@ -10,6 +10,7 @@ import { CardEditableTitles, CardEditableSelects } from '../../configs/pages.js'
 import { options } from '../../configs/options.js'
 import { getUser } from '../../storage/userSlice'
 import { getToday } from '../../utils/DateUtil'
+import Editor from './Editor'
 
 const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
     const user = useMemo(() => getUser(), [])
@@ -41,10 +42,14 @@ const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, row
     const handleUpdate = async () => {
         const url = `/api/${page}/${writeMode ? 'write' : 'update'}`
         try {
-            const res = await axios.post(url, value)
-            setValue(res.data)
-            if (writeMode) {insertData()}
-            else {updateData()}   
+            if (value.cardNo) {
+                const res = await axios.post(url, value)
+                setValue(res.data)
+                if (writeMode) {insertData()}
+                else {updateData()}  
+            } else {
+                alert('신용카드 등록이 안 되었습니다.')
+            }
         } catch (err) {
             console.log(url, err)
         }
@@ -142,6 +147,11 @@ const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, row
                         )
                     }
                 })}
+                <Editor
+                    writeMode={writeMode}
+                    value={value}
+                    setValue={setValue}
+                />
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} variant='outlined'>Cancel</Button>
