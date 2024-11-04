@@ -1,3 +1,7 @@
+* 24/11/04
+    - 2.3.1 (client) <br>
+        image compression <br>
+
 * 24/11/03
     - 2.3.0 (client, api) <br>
         credit card receipt image upload <br>

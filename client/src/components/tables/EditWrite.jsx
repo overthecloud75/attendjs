@@ -45,7 +45,7 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
             alert('제목이 작성되지 않았습니다.')
             return false
         }
-        if (!window.confirm('정말로 저장하시겠습니다.?')) return false
+        if (!window.confirm('정말로 저장하시겠습니까?')) return false
         return true
     }
 
@@ -61,7 +61,6 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
     }
 
     const handleUpdate = async () => {
-
         if (!checkValue()) return 
         const url = `/api/${page}/${writeMode ? 'write' : 'update'}`
         try {
@@ -76,7 +75,7 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
     }
 
     const handleDelete = async () => {
-        if(!window.confirm('정말로 삭제하시겠습니다.?')) return
+        if(!window.confirm('정말로 삭제하시겠습니까?')) return
         const url = `/api/${page}/delete`
         try {
             await axios.post(url, value)

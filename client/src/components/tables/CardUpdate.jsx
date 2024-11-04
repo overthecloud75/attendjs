@@ -18,6 +18,27 @@ const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, row
     const [value, setValue] = useState(rowData.date?{...rowData, cardNo: user.cardNo}:{...rowData, date: getToday(), cardNo: user.cardNo})
     const handleClose = () => { setOpen(false) }
 
+    const checkValue = () => {
+        if (!value.date) {
+            alert('사용일이 작성되지 않습니다.')
+            return false
+        }
+        if (value.date > dayjs(new Date()).format('YYYY-MM-DD')) {
+            alert('사용일은 당일 이후 날짜는 가능하지 않습니다.')
+            return false
+        }
+        if (!value.cardNo) {
+            alert('카드번호가 작성되지 않았습니다.')
+            return false
+        }
+        if (!value.use) {
+            alert('사용내용이 작성되지 않습니다.')
+            return false
+        }
+        if (!window.confirm('정말로 저장하시겠습니까?')) return false
+        return true
+    }
+
     const insertData = () => {
         let tableData = [...data]
         let newValue = value 
@@ -40,16 +61,14 @@ const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, row
     }
 
     const handleUpdate = async () => {
+        const valueStatus = checkValue()
+        if (!valueStatus) return 
         const url = `/api/${page}/${writeMode ? 'write' : 'update'}`
         try {
-            if (value.cardNo) {
-                const res = await axios.post(url, value)
-                setValue(res.data)
-                if (writeMode) {insertData()}
-                else {updateData()}  
-            } else {
-                alert('신용카드 등록이 안 되었습니다.')
-            }
+            const res = await axios.post(url, value)
+            setValue(res.data)
+            if (writeMode) {insertData()}
+            else {updateData()}  
         } catch (err) {
             console.log(url, err)
         }
@@ -57,7 +76,7 @@ const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, row
     }
 
     const handleDelete = async () => {
-        if(!window.confirm('정말로 삭제하시겠습니다.?')) return
+        if(!window.confirm('정말로 삭제하시겠습니다?')) return
         const url = `/api/${page}/delete`
         try {
             await axios.post(url, value)

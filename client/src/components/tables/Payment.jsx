@@ -1,12 +1,7 @@
 import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
@@ -68,7 +63,7 @@ const Payment = ({writeMode, open, setOpen}) => {
             alert('이미지가 삽입되지 않았습니다.')
             return false
         }
-        if (!window.confirm('정말로 상신하시겠습니다.?')) return false
+        if (!window.confirm('정말로 상신하시겠습니까?')) return false
         return true
     }
 

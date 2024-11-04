@@ -22,7 +22,7 @@ const imageUpload = multer(
     { 
         storage, 
         fileFilter: (req, file, cb) => {
-            if (['image/jpeg', 'image/jpg', 'image/png'].includes(file.mimetype)) 
+            if (['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file.mimetype)) 
                 cb(null, true)
             else 
                 cb(new Error('The filetype is not supported'), false)
