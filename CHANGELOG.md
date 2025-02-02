@@ -1,3 +1,7 @@
+* 25/02/02
+    - 2.3.2 (client, api) <br>
+        apply messenger in attend <br>
+
 * 24/11/04
     - 2.3.1 (client) <br>
         image compression <br>

@@ -25,6 +25,7 @@ import boardRoute from './routes/board.js'
 import reportRoute from './routes/report.js'
 import confirmRoute from './routes/confirm.js'
 import uploadRoute from './routes/upload.js'
+import chatRoute from './routes/chat.js'
 import swaggerRoute from './routes/swagger.js'
 
 const app = express()
@@ -92,6 +93,7 @@ app.use('/api/board', boardRoute)
 app.use('/api/report', reportRoute)
 app.use('/api/confirm', confirmRoute)
 app.use('/api/upload', uploadRoute)
+app.use('/api/chat', chatRoute)
 app.use('/swagger', swaggerRoute)
 
 app.use((err, req, res, next) => {

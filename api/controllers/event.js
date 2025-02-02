@@ -107,13 +107,14 @@ export const postApproval = async (req, res, next) => {
         const { reason, etc } = req.body
         const start = sanitizeData(req.body.start, 'date')
         const end = sanitizeData(req.body.end, 'date')
-        const employee = await getEmployeeByEmail(req.user.email)
+        const email = req.user.email
+        const employee = await getEmployeeByEmail(email)
         const approver = await getApprover(employee)
         const reasons = getReasons()
         if (!reasons.includes(reason)) {
             throw createError(400, 'Something Wrong!')
         }
-        const checkTheSameApproval = await Approval.findOne({email: req.user.email, start, end, reason, etc})
+        const checkTheSameApproval = await Approval.findOne({email, start, end, reason, etc})
         if (checkTheSameApproval && checkTheSameApproval.status !== APPROVAL_STATUS.CANCEL) {
             res.status(200).send('Already there is the same approval.')
         } else {

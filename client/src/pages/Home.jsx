@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom'
+import 'react-chat-widget-react-18/lib/styles.css'
 import Sidebar from '../components/bar/Sidebar'
 import Navbar from '../components/bar/Navbar'
 import Advertisement from '../components/Advertisement'

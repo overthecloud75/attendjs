@@ -30,4 +30,4 @@ export const getReverseStatus = () => {
     return reverseStatus 
 }
 
-export const projectVersion = '1.6.6'
+export const projectVersion = '2.3.2'
