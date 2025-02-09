@@ -97,6 +97,11 @@ a:link {
     font-size: 18px !important; /* 아이콘 크기 줄이기 */
 }
 
+.rcw-open-launcher {
+    width: 20px !important;    /* 아이콘의 가로 크기 */
+    height: 20px !important;   /* 아이콘의 세로 크기 */
+}
+
 /* 헤더의 높이를 줄이기 */
 .rcw-header {
     height: 20px !important; /* 헤더의 높이 줄이기 */
@@ -147,4 +152,15 @@ a:link {
 /* 메시지 버블 내부 패딩 */
 .rcw-message-text {
     padding: 6px 10px !important;
+}
+
+.rcw-badge {
+    display: flex !important;
+    justify-content: center !important;  
+    align-items: center !important;
+    font-size: 10px !important;  /* 글자 크기 */
+    width: 15px !important;      /* 배지 크기 */
+    height: 15px !important;    /* 배지 크기 */
+    top: -3px !important;
+    right: -3px !important;
 }

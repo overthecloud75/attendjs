@@ -1,7 +1,8 @@
 * 25/02/09
-    - 2.3.3 (client, api) <br>
-        apply typing... in chat when waiting <br>
+    - 2.3.4 (client) <br>
         adjust width, background color at auth <br>
+    - 2.3.3 (client) <br>
+        apply typing... in chat when waiting <br>
         code refactoring with AI assistant <br>
 
 * 25/02/02

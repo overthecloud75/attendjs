@@ -154,7 +154,6 @@ export const passwordWithOtp = async (req, res, next) => {
         await User.updateOne({email}, {$set: {password: hash}}, {runValidators: true})
         res.status(200).send('Password has been changed.')     
     } catch (err) {
-        console.log(err)
         next(err)
     }
 }
