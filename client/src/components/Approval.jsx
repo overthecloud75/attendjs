@@ -1,13 +1,15 @@
 import { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, RadioGroup, Radio, FormControlLabel, Box, CircularProgress } from '@mui/material'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, RadioGroup, Radio, FormControlLabel} from '@mui/material'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { useTranslation } from 'react-i18next'
-import { getApproval, postApproval } from '../utils/EventUtil'
+import { postApproval } from '../utils/EventUtil'
 import { WORKING } from '../configs/working'
+import { LoadingSpinner } from '../utils/GeneralUtil'
+import { useApproval } from '../hooks/useApproval'
 
 const options = Object.keys(WORKING.outStatus)
 
@@ -85,65 +87,45 @@ const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, s
     )
 }
 
+const validateApproval = (value) => {
+    if (value.reason === '출근' && value.end >= dayjs(new Date()).format('YYYY-MM-DD')) {
+        alert('출근 신청은 당일 이전 날짜에서만 가능합니다.')
+        return false
+    }
+    return window.confirm('정말로 상신하시겠습니다.?')
+}
+
 const Approval = ({navigate, open, setOpen}) => {
-    const [value, setValue] = useState({
-        approver: '', 
-        start: dayjs(new Date()).format('YYYY-MM-DD'), 
-        end: dayjs(new Date()).format('YYYY-MM-DD'), 
-        reason: '휴가', 
-        etc: ''
-    })
     const {t} = useTranslation()
-    const [leftLeave, setLeftLeave] = useState('')
-    const [leftStatus, setLeftStatus] = useState('')
     const [radioValue, setRadioValue] = useState('휴가')
     const [radioOpen, setRadioOpen] = useState(false)
     const [etcOpen, setEtcOpen] = useState(false)
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await getApproval()
-            if (!result.err) {
-                const summary = result.resData.summary 
-                setValue({...value, approver: result.resData.approver.name})
-                setLeftLeave(`${summary.leftAnnualLeave}`)
-                setLeftStatus(`미출근 ${summary['미출근']}, 지각 ${summary['지각']}, 휴가 ${summary['휴가'] + summary['반차'] * 0.5}`)
-            }
-        }
-        fetchData()
-    // eslint-disable-next-line
-    }, [open])
-
-    const checkValue = () => {
-        if (value.reason==='출근' && value.end >= dayjs(new Date()).format('YYYY-MM-DD')) {
-            alert('출근 신청은 당일 이전 날짜에서만 가능합니다.')
-            return false
-        }
-        if (!window.confirm('정말로 상신하시겠습니다.?')) return false
-        return true
-    }
+    const { value, setValue, leftLeave, leftStatus } = useApproval() 
 
     const handleClose = () => { setOpen(false) }
-    const handleRadioClose = () => { 
-        setRadioOpen(false)
-    }
+    const handleRadioClose = () => { setRadioOpen(false)}
 
     const handleUpdate = async () => {
-        const valueStatus = checkValue()
-        if (!valueStatus) return 
+        if (!validateApproval(value)) return 
         await postApproval(value)
         setOpen(false)
         navigate('/approvalhistory')
     }
 
     const handleChange = (event) => {
-        if (event.target.id ==='etc' && event.target.value.length > 5){ 
-            alert('5글자 이하로 적어주세요.')
-        } else if (event.target.id ==='etc' && event.target.value.length === 0){
-            alert('사유를 적어 주세요.')
-        } else {
-            setValue({...value, [event.target.id]: event.target.value}) 
-        }
+        const { id, value: inputValue } = event.target
+        if (id === 'etc') {
+            if (inputValue.length > 5) {
+                alert('5글자 이하로 적어주세요.')
+                return
+            }
+            if (inputValue.length === 0) {
+                alert('사유를 적어 주세요.')
+                return
+            }
+        }  
+        setValue({...value, [id]: inputValue})
     }
 
     const renderTextField = (id, label, value) => (
@@ -163,9 +145,7 @@ const Approval = ({navigate, open, setOpen}) => {
             <DialogTitle>{t('button-attend-approval')}</DialogTitle>
             <DialogContent>
                 {leftLeave === '' || leftStatus === '' || value.approver === '' ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <CircularProgress />
-                    </Box>
+                    <LoadingSpinner/>
                 ) : (
                     <>
                         {renderTextField('attendance', '남은연차', leftLeave)}

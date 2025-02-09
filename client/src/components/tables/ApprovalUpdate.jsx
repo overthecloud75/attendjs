@@ -31,42 +31,38 @@ const getColumns = (approvalType) => {
 
 const ApprovalUpdate = ({data, setData, open, setOpen, rowData}) => {
     const user = useMemo(() => getUser(), [])
-    const previousStatus = rowData.status
-    const approvalType = rowData.approvalType
+    const { status: previousStatus, approvalType } = rowData
     const options = getOptions(approvalType)
     const columns = getColumns(approvalType)
 
     const [focus, setFocus] = useState('info')
     const [value, setValue] = useState(rowData)
+    
     const handleClose = () => { setOpen(false) }
 
     const updateData = () => {
-        let tableData = []
-        data.map((prev) => (
-            prev._id === value._id?tableData.push(value):tableData.push(prev)
-        ))
+        const tableData = data.map(prev => 
+            prev._id === value._id ? value : prev
+        )
         setData(tableData)
     }
 
     const handleUpdate = async () => {
         try {
-            switch (approvalType) {
-                case 'attend':
-                    await approvalAttendUpdate(user, previousStatus, value, setValue, updateData)
-                    break
-                default:
-                    await approvalPaymentUpdate(user, previousStatus, value, setValue, updateData)
-                    break 
-            }
-        } catch (err) {
-            console.log(err)
+            const updateFunction = approvalType === 'attend' 
+                ? approvalAttendUpdate 
+                : approvalPaymentUpdate
+            await updateFunction(user, previousStatus, value, setValue, updateData)
+        } catch (error) {
+            console.log(error)
         }
         handleClose()
     }
 
     const handleChange = (event) => {
-        setFocus(event.target.name)
-        setValue({...value, [event.target.name]: event.target.value})    
+        const { name, value: newValue } = event.target
+        setFocus(name)
+        setValue(prev => ({...prev, [name]: newValue}))    
     }
     // autofocus disappear after typing, 한글 입력 문제 
     // https://stackoverflow.com/questions/42573017/in-react-es6-why-does-the-input-field-lose-focus-after-typing-a-character
@@ -79,6 +75,7 @@ const ApprovalUpdate = ({data, setData, open, setOpen, rowData}) => {
                     if (EditableSelects.includes(item.accessorKey)&&options[item.accessorKey]) {
                         return (
                             <TextField
+                                key={index}
                                 autoFocus={focus===item.accessorKey}
                                 select
                                 margin='dense'
@@ -88,7 +85,6 @@ const ApprovalUpdate = ({data, setData, open, setOpen, rowData}) => {
                                 fullWidth
                                 variant='outlined'
                                 defaultValue={value[item.accessorKey]?value[item.accessorKey]:''}
-                                key={index}
                                 onChange={handleChange}
                                 autoComplete='false'
                             >  
@@ -106,12 +102,14 @@ const ApprovalUpdate = ({data, setData, open, setOpen, rowData}) => {
                         return (
                             item.accessorKey==='content'?
                                 <Editor
+                                    key={index}
                                     writeMode={false}
                                     value={value}
                                     setValue={setValue}
                                     isReadOnly={true}
                                 /> :
                                 <TextField
+                                    key={index}
                                     margin='dense'
                                     id={item.accessorKey}
                                     name={item.accessorKey}
@@ -119,7 +117,6 @@ const ApprovalUpdate = ({data, setData, open, setOpen, rowData}) => {
                                     fullWidth
                                     variant='standard'
                                     value={rowData[item.accessorKey]?rowData[item.accessorKey]:''}
-                                    key={index}
                                     InputProps={{readOnly: true}}
                                     autoComplete='false'
                                 />

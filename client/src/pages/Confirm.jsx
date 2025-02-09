@@ -6,7 +6,7 @@ import Footer from '../components/Footer'
 
 const Confirm = ({menu, setMenu}) => {
 
-    let { confirmationCode } = useParams();
+    let { confirmationCode } = useParams()
 
     return (     
         <div className='container'>

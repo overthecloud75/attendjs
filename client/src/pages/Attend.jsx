@@ -1,28 +1,23 @@
-import { useState, useEffect } from 'react'
-import { Widget, addResponseMessage } from 'react-chat-widget-react-18'
+import { Widget } from 'react-chat-widget-react-18'
 import 'react-chat-widget-react-18/lib/styles.css'
-import { chat } from '../utils/ChatUtil'
+import { useChat } from '../hooks/useChat'
+import { useResponsive } from '../hooks/useResponsive'
 import Sidebar from '../components/bar/Sidebar'
 import Navbar from '../components/bar/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/attend'
 import Footer from '../components/Footer'
 
+const CHAT_CONFIG = {
+    title: 'SmartWork Chat',
+    subtitle: '',
+    showTimeStamp: false
+}
+
 const Attend = ({menu, setMenu}) => {
 
-    const [messages, setMessages] = useState([])
-
-    useEffect(() => {
-        addResponseMessage('Welcome to SmartWork chat!')
-    }, [])
-
-    const handleNewUserMessage = async (newMessage) => {
-        const {resData, err} = await chat({messages, newMessage})
-        if (!err) {
-            addResponseMessage(resData)
-            setMessages([...messages, {role: 'user', content: newMessage}, {role: 'assistant', content: resData}])
-        }
-    }
+    const { handleNewUserMessage } = useChat()
+    const { isMobile } = useResponsive()
 
     return (     
         <div className='container'>
@@ -33,16 +28,14 @@ const Attend = ({menu, setMenu}) => {
                     searchKeyword='name'
                     page='attend'
                     url='/api/attend/search'
-                    columnHeaders={window.innerWidth>600?columnHeaders:mobileColumnHeaders}
+                    columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
                     csvHeaders={csvHeaders}
                 />
                 {menu && <Footer/>}
             </div>
             <Widget
-                title='SmartWork Chat'
-                subtitle=''
+                {...CHAT_CONFIG}
                 handleNewUserMessage={handleNewUserMessage}
-                showTimeStamp={false}
             />
         </div>  
     )

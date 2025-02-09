@@ -55,8 +55,15 @@ a:link {
     width: 120px;
 }
 
-iframe {
-    width: 280px!important;
+#cf-turnstile {
+    width: 300px !important; /* 원하는 크기로 조정 */
+    max-width: 100%;
+}
+
+#cf-turnstile iframe {
+    width: 300px !important;
+    height: 50px !important;
+    max-width: 100%;
 }
 
 @media (max-width: 600px) {
@@ -76,4 +83,68 @@ iframe {
         padding: 5px;
         width: 70px;
     }
+}
+
+/* 위젯 열기 버튼의 크기 줄이기 */
+.rcw-launcher {
+    width: 40px !important; /* 버튼의 가로 크기 */
+    height: 40px !important; /* 버튼의 세로 크기 */
+    border-radius: 50% !important; /* 원형 모양 유지 */
+}
+
+/* 버튼 아이콘 크기 조정 (예: 채팅 아이콘) */
+.rcw-launcher-icon {
+    font-size: 18px !important; /* 아이콘 크기 줄이기 */
+}
+
+/* 헤더의 높이를 줄이기 */
+.rcw-header {
+    height: 20px !important; /* 헤더의 높이 줄이기 */
+    padding: 5px 5px !important; /* 헤더 내 여백 줄이기 */
+}
+
+/* 헤더 내부의 제목 폰트 크기 및 패딩 줄이기 */
+.rcw-title {
+    font-size: 14px !important; /* 제목 폰트 크기 */
+    padding: 0px !important; /* 제목 내부 여백 */
+}
+
+/* Chat 위젯의 전체 글꼴 크기 변경 */
+.rcw-conversation-container {
+    font-size: 12px !important;
+}
+
+/* 사용자 메시지 */
+.rcw-message-text {
+    font-size: 12px !important;
+}
+
+/* 입력창 (placeholder 포함) */
+.rcw-input {
+    font-size: 12px !important;
+}
+
+/* 전체 채팅 컨테이너 패딩 줄이기 */
+.rcw-conversation-container {
+    padding: 5px !important;
+}
+
+/* 메시지 텍스트의 내부 패딩 줄이기 */
+.rcw-message {
+    padding: 5px 8px !important;
+}
+
+/* 사용자 입력창 (입력 필드) 패딩 줄이기 */
+.rcw-input {
+    padding: 5px !important;
+}
+
+/* 입력창 주변 컨테이너 패딩 */
+.rcw-input-container {
+    padding: 5px !important;
+}
+
+/* 메시지 버블 내부 패딩 */
+.rcw-message-text {
+    padding: 6px 10px !important;
 }

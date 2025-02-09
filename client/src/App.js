@@ -1,6 +1,5 @@
 import { useState, Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Box,  CircularProgress} from '@mui/material'
 import './style.scss'
 import Attend from './pages/Attend'
 import Register from './pages/auth/Register'
@@ -19,6 +18,7 @@ import LoginHistory from './pages/LoginHistory'
 import ApprovalHistory from './pages/ApprovalHistory'
 import TooManyRequests from './pages/TooManyRequests'
 import NotFound from './pages/NotFound'
+import { LoadingSpinner } from './utils/GeneralUtil'
 
 const Home = lazy(() => import('./pages/Home'))
 const Schedule = lazy(() => import('./pages/Schedule'))
@@ -31,11 +31,7 @@ function App() {
     const [menu, setMenu] = useState(false)
     return (
         <BrowserRouter>
-            <Suspense fallback={                            
-                <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                    <CircularProgress/>
-                </Box>
-            }>
+            <Suspense fallback={<LoadingSpinner/>}>
                 <Routes>
                     <Route exact path='/' element={<Home menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/register' element={<Register menu={menu} setMenu={setMenu}/>}/>

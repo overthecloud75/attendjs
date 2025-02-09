@@ -15,6 +15,24 @@ const DatePickWrapper = styled.div`
     position: relative;
 `
 
+const FORM_FIELDS = {
+    APPROVER: 'approver',
+    CONSENTER: 'consenter',
+    START: 'start',
+    CARD_NO: 'cardNo',
+    REASON: 'reason',
+    ETC: 'etc',
+    CONTENT: 'content'
+  }
+  
+const VALIDATION_MESSAGES = {
+    [FORM_FIELDS.START]: '사용일이 작성되지 않습니다.',
+    [FORM_FIELDS.CARD_NO]: '카드번호가 작성되지 않았습니다.',
+    [FORM_FIELDS.REASON]: '사용내용이 작성되지 않습니다.',
+    [FORM_FIELDS.ETC]: '사용금액이 작성되지 않습니다.',
+    [FORM_FIELDS.CONTENT]: '이미지가 삽입되지 않았습니다.'
+}
+
 const Payment = ({writeMode, open, setOpen}) => {
     const [value, setValue] = useState({
         approver: '', 
@@ -29,38 +47,29 @@ const Payment = ({writeMode, open, setOpen}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await getPaymentApproval()
-            if (!result.err) {
-                setValue({...value, approver: result.resData.approver.name, consenter: result.resData.consenter.name })
+            const {data, error} = await getPaymentApproval()
+            if (!error) {
+                setValue({...value, approver: data.approver.name, consenter: data.consenter.name })
             }
         }
         fetchData()
     // eslint-disable-next-line
     }, [open])
 
-    const checkValue = () => {
-        if (!value.start) {
-            alert('사용일이 작성되지 않습니다.')
-            return false
-        }
+    const validateForm = () => {
         if (value.start > dayjs(new Date()).format('YYYY-MM-DD')) {
             alert('사용일은 당일 이후 날짜는 가능하지 않습니다.')
             return false
         }
-        if (!value.cardNo) {
-            alert('카드번호가 작성되지 않았습니다.')
-            return false
+        const requiredFields = [FORM_FIELDS.START, FORM_FIELDS.CARD_NO, FORM_FIELDS.REASON, FORM_FIELDS.ETC, FORM_FIELDS.CONTENT]
+        for (const field of requiredFields) {
+            if (!value[field]) {
+                alert(VALIDATION_MESSAGES[field])
+                return false
+            }
         }
-        if (!value.reason) {
-            alert('사용내용이 작성되지 않습니다.')
-            return false
-        }
-        if (!value.etc) {
-            alert('사용금액이 작성되지 않습니다.')
-            return false
-        }
-        if (!value.content) {
-            alert('이미지가 삽입되지 않았습니다.')
+        if (value.start > dayjs(new Date()).format('YYYY-MM-DD')) {
+            alert('사용일은 당일 이후 날짜는 가능하지 않습니다.')
             return false
         }
         if (!window.confirm('정말로 상신하시겠습니까?')) return false
@@ -70,14 +79,13 @@ const Payment = ({writeMode, open, setOpen}) => {
     const handleClose = () => { setOpen(false) }
 
     const handleUpdate = async () => {
-        const valueStatus = checkValue()
-        if (!valueStatus) return 
+        if (!validateForm()) return 
         await postPaymentApproval(value)
-        setOpen(false)
+        handleClose()
     }
 
     const handleChange = (event) => {
-        setValue({...value, [event.target.id]: event.target.value}) 
+        setValue(prev => ({...prev, [event.target.id]: event.target.value})) 
     }
 
     return (
@@ -86,8 +94,7 @@ const Payment = ({writeMode, open, setOpen}) => {
             <DialogContent>
                 <TextField 
                     margin='dense'
-                    id='approver'
-                    name='결재자'
+                    id={FORM_FIELDS.APPROVER}
                     label='결재자'
                     fullWidth
                     variant='standard'
@@ -95,8 +102,7 @@ const Payment = ({writeMode, open, setOpen}) => {
                 />
                 <TextField 
                     margin='dense'
-                    id='consenter'
-                    name='합의자'
+                    id={FORM_FIELDS.CONSENTER}
                     label='합의자'
                     fullWidth
                     variant='standard'
@@ -107,14 +113,16 @@ const Payment = ({writeMode, open, setOpen}) => {
                         <DatePicker 
                             label='사용일' 
                             format={'YYYY-MM-DD'}
-                            onChange={(newValue) => setValue({...value, start: newValue.format('YYYY-MM-DD')})}
+                            onChange={(newValue) => setValue(prev => ({
+                                ...prev, 
+                                start: newValue.format('YYYY-MM-DD')
+                            }))}
                         />
                     </DatePickWrapper>
                 </LocalizationProvider>
                 <TextField 
                     margin='dense'
-                    id='cardNo'
-                    name='카드번호'
+                    id={FORM_FIELDS.CARD_NO}
                     label='카드번호'
                     fullWidth
                     variant='outlined'
@@ -123,8 +131,7 @@ const Payment = ({writeMode, open, setOpen}) => {
                 />
                 <TextField 
                     margin='dense'
-                    id='reason'
-                    name='사용내용'
+                    id={FORM_FIELDS.REASON}
                     label='사용내용'
                     fullWidth
                     variant='outlined'
@@ -133,8 +140,7 @@ const Payment = ({writeMode, open, setOpen}) => {
                 />
                 <TextField 
                     margin='dense'
-                    id='etc'
-                    name='사용금액'
+                    id={FORM_FIELDS.ETC}
                     label='사용금액'
                     fullWidth
                     variant='outlined'

@@ -1,3 +1,4 @@
+import { useResponsive } from '../hooks/useResponsive'
 import Sidebar from '../components/bar/Sidebar'
 import Navbar from '../components/bar/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
@@ -5,6 +6,9 @@ import Footer from '../components/Footer'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/approval'
 
 const ApprovalHistory = ({menu, setMenu}) => {
+
+    const { isMobile } = useResponsive()
+
     return (     
         <div className='container'>
             {menu && <Sidebar/>}
@@ -14,7 +18,7 @@ const ApprovalHistory = ({menu, setMenu}) => {
                     searchKeyword='name'
                     page='approval'
                     url='/api/approval/search'
-                    columnHeaders={window.innerWidth>600?columnHeaders:mobileColumnHeaders}
+                    columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
                     csvHeaders={csvHeaders}
                 />
                 {menu && <Footer/>}

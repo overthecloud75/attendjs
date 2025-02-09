@@ -133,11 +133,11 @@ export const getApprover = async (employee) => {
     let approver
     switch (employee.position) {
         case '팀원':
-            approver = await Employee.findOne({position: '팀장', department: employee.department})
-            if (!approver) { approver = await Employee.findOne({position: '본부장'})}
+            approver = await Employee.findOne({position: '팀장', department: employee.department, regular: { $ne: '퇴사' }})
+            if (!approver) { approver = await Employee.findOne({position: '본부장', regular: { $ne: '퇴사' }})}
             break 
         case '팀장':
-            approver = await Employee.findOne({position: '본부장'})
+            approver = await Employee.findOne({position: '본부장', regular: { $ne: '퇴사' }})
             break
         case '본부장':
             approver = employee
@@ -146,14 +146,17 @@ export const getApprover = async (employee) => {
             approver = employee
             break
         default:
-            approver = await Employee.findOne({position: '본부장'})
+            approver = await Employee.findOne({position: '본부장', regular: { $ne: '퇴사' }})
     }
     const baseApprover = {name: approver.name, department: approver.department, email: approver.email, employeeId: approver.employeeId}
     return baseApprover
 }
 
 export const getConsenter = async (employee) => {
-    const consenter = await Employee.findOne({position: '팀장', department: '관리팀'})
+    let consenter = await Employee.findOne({position: '팀장', department: '관리팀', regular: { $ne: '퇴사' }})
+    if (!consenter) {
+        consenter = await Employee.findOne({position: '대표이사', regular: { $ne: '퇴사' }})
+    }
     return consenter
 }
 

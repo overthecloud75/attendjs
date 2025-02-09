@@ -1,81 +1,116 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useState, useEffect, useRef } from 'react'
-import { Box, CircularProgress } from '@mui/material'
+import { useState, useEffect } from 'react'
 import { requestPasswordWithOtp } from '../../utils/AuthUtil'
-import { siteKey } from '../../configs/apiKey'
+import { useTurnstile } from '../../hooks/useTurnstile'
+import { LoadingSpinner } from '../../utils/GeneralUtil'
 
 const AuthWithOtp = () => {
-
     const { state } = useLocation()
     const navigate = useNavigate()
 
+    const [formData, setFormData] = useState({
+        email: state?.email || '',
+        otp: '',
+        password: '',
+        password2: ''
+    })
     const [loading, setLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
-    const [token, setToken] = useState('')
-    const turnstileRef = useRef(null)
+
+    const { token } = useTurnstile('login')
 
     useEffect(() => {
-        setLoading(true)
-        let widgetId = null
-        if (!turnstileRef.current) {
-            widgetId = window.turnstile.render('#cf-turnstile', {
-                sitekey: siteKey,
-                callback: function(token) {
-                    setToken(token)
-                },
-            })
-            turnstileRef.current = true
+        const initAuth = async () => {
+            setLoading(true)
+            await requestPasswordWithOtp('GET', '', navigate, setErrorMsg)
+            setLoading(false)
         }
-        requestPasswordWithOtp('get', '', navigate, setErrorMsg)
-        setLoading(false)
+        initAuth()
+    }, [navigate])
 
-        // Cleanup 함수
-        return () => {
-            if (widgetId) {
-                window.turnstile.remove(widgetId)
-            }
-            const turnstileElement = document.getElementById('cf-turnstile')
-            if (turnstileElement) {
-                turnstileElement.innerHTML = ''
-            }
-            turnstileRef.current = false
+    const handleInputChange = (e) => {
+        const { id, value } = e.target
+        setFormData(prev => ({
+            ...prev,
+            [id]: value
+        }))
+    }
+
+    const validateForm = () => {
+        if (formData.password !== formData.password2) {
+            setErrorMsg('비밀번호가 일치하지 않습니다.')
+            return false
         }
-    // eslint-disable-next-line
-    }, [])
+        if (!formData.email || !formData.otp || !formData.password) {
+            setErrorMsg('모든 필드를 입력해주세요.')
+            return false
+        }
+        return true
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        const email = document.getElementById('email').value
-        const otp = document.getElementById('otp').value
-        const password = document.getElementById('password').value
-        const password2 = document.getElementById('password2').value
-        setLoading(true)
-        if (password === password2) {
-            requestPasswordWithOtp('post', {email, otp, password, token}, navigate, setErrorMsg)
-        } else {
-            alert('비밀번호가 일치 하지 않습니다.')
+        if (!validateForm()) return
+        try {
+            setLoading(true)
+            await requestPasswordWithOtp(
+                'post', 
+                {
+                    email: formData.email, 
+                    otp: formData.otp, 
+                    password: formData.password, 
+                    token
+                }, 
+                navigate, 
+                setErrorMsg
+            )
+        } catch (error) {
+            setErrorMsg(error)
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
     }
 
     return (
         <div className='formContainer'>
             <div className='formWrapper'>
                 <span className='logo'>SmartWork</span>
-                <span className='title'>Reset Password With OTP</span>
+                <span className='title'>비밀번호 재설정</span>
                 <form onSubmit={handleSubmit}>
-                    <input id='email' type='email' placeholder='email' value={ state?.email || '' }/>
-                    <input id='otp' placeholder='otp' />
-                    <input id='password' type='password' placeholder='password' />
-                    <input id='password2' type='password' placeholder='password' />
+                    <input 
+                        id='email' 
+                        type='email' 
+                        placeholder='email' 
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                    />
+                     <input
+                        id='otp'
+                        placeholder='OTP 코드'
+                        value={formData.otp}
+                        onChange={handleInputChange}
+                        required
+                    />
+                    <input
+                        id='password'
+                        type='password'
+                        placeholder='새 비밀번호'
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        required
+                    />
+                    <input
+                        id='password2'
+                        type='password'
+                        placeholder='새 비밀번호 확인'
+                        value={formData.password2}
+                        onChange={handleInputChange}
+                        required
+                    />
                     <div id='cf-turnstile'/>
-                    <button disabled={loading}>Reset Password</button>
-                    {loading && 
-                        <span>
-                            <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                                <CircularProgress/>
-                            </Box>
-                        </span>}
+                    <button disabled={loading}>비밀번호 재설정</button>
+                    {loading && <LoadingSpinner />}
                     {!loading && errorMsg && <span>{errorMsg}</span>}
                 </form>
             </div>

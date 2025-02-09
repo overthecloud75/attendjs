@@ -1,45 +1,66 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { Box, CircularProgress } from '@mui/material'
 import { requestLostPassword } from '../../utils/AuthUtil'
+import { LoadingSpinner } from '../../utils/GeneralUtil'
 
 const Email = () => {
     const navigate = useNavigate()
 
+    const [formData, setFormData] = useState({
+        email: ''
+    })
     const [loading, setLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
 
     useEffect(() => {
-        setLoading(true)
-        requestLostPassword('get', '', navigate, setErrorMsg)
-        setLoading(false)
-    // eslint-disable-next-line
-    }, [])
+        const initAuth = async () => {
+            setLoading(true)
+            await requestLostPassword('GET', '', navigate, setErrorMsg)
+            setLoading(false)
+        }
+        initAuth()
+    }, [navigate])
+
+    const handleInputChange = (e) => {
+        const { id, value } = e.target
+        setFormData(prev => ({
+            ...prev,
+            [id]: value
+        }))
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        const email = document.getElementById('email').value
-        setLoading(true)
-        if (email) {
-            requestLostPassword('post', {email}, navigate, setErrorMsg)
-        } 
-        setLoading(false)
+        if (!formData.email) {
+            setErrorMsg('이메일을 입력해주세요.')
+            return
+        }
+        try {
+            setLoading(true)
+            await requestLostPassword('POST', formData, navigate, setErrorMsg)
+        } catch (error) {
+            setErrorMsg(error)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
         <div className='formContainer'>
             <div className='formWrapper'>
                 <span className='logo'>SmartWork</span>
-                <span className='title'>Verify Email</span>
+                <span className='title'>이메일 확인</span>
                 <form onSubmit={handleSubmit}>
-                    <input id='email' type='email' placeholder='email' />
-                    <button disabled={loading}>Confirm Email</button>
-                    {loading && 
-                        <span>
-                            <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                                <CircularProgress/>
-                            </Box>
-                        </span>}
+                    <input 
+                        id='email' 
+                        type='email' 
+                        placeholder='email'
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                    />
+                    <button disabled={loading}>이메일 확인</button>
+                    {loading && <LoadingSpinner />}
                     {!loading && errorMsg && <span>{errorMsg}</span>}
                 </form>
             </div>

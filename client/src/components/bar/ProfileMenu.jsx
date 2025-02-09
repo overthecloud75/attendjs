@@ -7,8 +7,6 @@ import ProfileDialog from '../bar/ProfileDialog'
 
 const ProfileMenu = ({user, anchorEl, setAnchorEl, setMenu}) => {
     // eslint-disable-next-line
-    const [loading, setLoading] = useState(false)
-    // eslint-disable-next-line
     const [errorMsg, setErrorMsg] = useState('')
     const [openDialog, setOpenDialog] = useState(false)
 
@@ -17,15 +15,13 @@ const ProfileMenu = ({user, anchorEl, setAnchorEl, setMenu}) => {
     const open = Boolean(anchorEl)
     const handleClose = () => {setAnchorEl(null)}
     const handleLogout = async () => {
-        setLoading(true)
-        requestAuth('logout', 'get', '', dispatch, navigate, setErrorMsg)
+        requestAuth('logout', 'GET', '', dispatch, navigate, setErrorMsg)
         setMenu(false)
         handleClose()
-        setLoading(false)
     }
     const handleProfileClick = () => {
-        handleClose();
-        setOpenDialog(true);
+        handleClose()
+        setOpenDialog(true)
     }
     const handleCloseDialog = () => {
         setOpenDialog(false)

@@ -81,7 +81,8 @@ const Editor = ({writeMode, value, setValue, isReadOnly}) => {
     return ( 
         <CKEditor
             editor={ ClassicEditor }
-            config={{ 
+            config={{
+                licenseKey: 'GPL', 
                 extraPlugins: [uploadImagePlugin],
             }}
             data={ value.content }
