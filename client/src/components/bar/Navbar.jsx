@@ -11,15 +11,16 @@ import ProfileMenu from '../bar/ProfileMenu'
 
 const Container = styled.div`
     height: 50px;
-    border-bottom: 0.5px solid rgb(231, 228, 228);
+    border-bottom: 1px solid #eee;
     display: flex;
     align-items: center;
     font-size: 14px;
     color: #555;
+    background-color: white;
 `
 const Wrapper = styled.div`
     width: 100%;
-    padding: 20px;
+    padding: 0 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -27,15 +28,27 @@ const Wrapper = styled.div`
 const Items = styled.div`
     display: flex;
     align-items: center;
+    gap: 15px;
 `
 const Item = styled.div`
     display: flex;
     align-items: center;
-    margin-right: 20px;
     position: relative;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: rgba(0,0,0,0.04);
+    }
 `
 const Icon = styled.div`
-    font-size: 20px;   
+    font-size: 20px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;   
 `
 const Counter = styled.div`
     width: 15px;
@@ -49,8 +62,8 @@ const Counter = styled.div`
     font-size: 10px;
     font-weight: bold;
     position: absolute;
-    top: -5px;
-    right: -5px;
+    top: -3px;
+    right: -3px;
 `
 
 const Navbar = ({menu, setMenu}) => {

@@ -9,11 +9,11 @@ const CheckConfirm = ({url}) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let res = await axios.get(url)
-                axios.defaults.headers.post['X-CSRF-Token'] = res.headers.csrftoken
-                setData(res.data)
-            } catch (err) {
-                setError(err)
+                let response = await axios.get(url)
+                axios.defaults.headers.post['X-CSRF-Token'] = response.headers.csrftoken
+                setData(response.data)
+            } catch (error) {
+                setError(error)
             }
         }
         fetchData()

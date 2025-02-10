@@ -18,7 +18,7 @@ import { getUser } from '../../storage/userSlice'
 
 const Wrapper = styled.div`
     flex: 1;
-    border-right: 0.5px solid rgb(230, 227, 227);
+    border-right: 1px solid #eee;
     min-height: 100vh;
     background-color: white;
 `
@@ -28,6 +28,7 @@ const Top = styled.div`
     height: 50px; 
     align-items: center;
     justify-content: center;
+    border-bottom: 1px solid #eee;
 `
 
 const Middle = styled.div`
@@ -85,7 +86,6 @@ const Item = styled.li`
     }
 
     @media screen and (max-width: 600px) {
-        display: flex;
         height: 30px;
         padding: 0px;
         justify-content: center;
@@ -95,13 +95,22 @@ const Item = styled.li`
 const Icon = styled.div`
     font-size: 30px;
     color: #7451f8;
+
+    ${Item}:hover & {
+        color: #4a23d9;
+    }
 ` 
 
 const Span = styled.span`
     font-size: 13px;
     font-weight: 600;
-    color: #888;
+    color: #666;
     margin-left: 10px;
+
+    ${Item}:hover & {
+        color: #4a23d9;
+    }
+
     @media screen and (max-width: 600px) {
         display: none;
         margin-left: 0px;

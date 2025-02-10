@@ -1,4 +1,8 @@
 * 25/02/09
+    - 2.3.5 (client) <br>
+        UI enhancement <br>
+
+* 25/02/09
     - 2.3.4 (client) <br>
         adjust width, background color at auth <br>
     - 2.3.3 (client) <br>

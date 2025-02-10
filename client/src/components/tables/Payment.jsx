@@ -12,6 +12,7 @@ import Editor from './Editor'
 const DatePickWrapper = styled.div`
     display: flex;
     justify-content: center;
+    width: 100%;
     position: relative;
 `
 
@@ -109,7 +110,7 @@ const Payment = ({writeMode, open, setOpen}) => {
                     value={value.consenter}
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePickWrapper style={{ width: '100%' }}>
+                    <DatePickWrapper>
                         <DatePicker 
                             label='사용일' 
                             format={'YYYY-MM-DD'}
@@ -117,6 +118,7 @@ const Payment = ({writeMode, open, setOpen}) => {
                                 ...prev, 
                                 start: newValue.format('YYYY-MM-DD')
                             }))}
+                            sx={{ width: '100%' }}
                         />
                     </DatePickWrapper>
                 </LocalizationProvider>

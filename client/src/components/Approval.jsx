@@ -15,7 +15,8 @@ const options = Object.keys(WORKING.outStatus)
 
 const DatePickWrapper = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    width: 100%;
     position: relative;
 `
 
@@ -154,16 +155,18 @@ const Approval = ({navigate, open, setOpen}) => {
                     </>
                 )}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePickWrapper style={{ width: '100%', justifyContent: 'space-between'}}>
+                    <DatePickWrapper>
                         <DatePicker        
                             label='시작일' 
                             format={'YYYY-MM-DD'}
                             onChange={(newValue) => setValue({...value, start: newValue.format('YYYY-MM-DD')})}
+                            sx={{ width: '49%' }}
                         />
                         <DatePicker 
                             label='종료일' 
                             format={'YYYY-MM-DD'}
                             onChange={(newValue) => setValue({...value, end: newValue.format('YYYY-MM-DD')})}
+                            sx={{ width: '49%' }}
                         />
                     </DatePickWrapper>
                 </LocalizationProvider>
@@ -192,8 +195,8 @@ const Approval = ({navigate, open, setOpen}) => {
                     <TextField 
                         margin='dense'
                         id='etc'
-                        name='etc'
-                        label='etc'
+                        name='기타'
+                        label='기타'
                         fullWidth
                         variant='outlined'
                         value={value.etc}

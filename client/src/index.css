@@ -85,6 +85,7 @@ a:link {
     }
 }
 
+
 /* 위젯 열기 버튼의 크기 줄이기 */
 .rcw-launcher {
     width: 40px !important; /* 버튼의 가로 크기 */
@@ -102,6 +103,9 @@ a:link {
     height: 20px !important;   /* 아이콘의 세로 크기 */
 }
 
+.rcw-widget-container {
+    max-width: 380px !important;
+}
 /* 헤더의 높이를 줄이기 */
 .rcw-header {
     height: 20px !important; /* 헤더의 높이 줄이기 */
@@ -119,11 +123,6 @@ a:link {
     font-size: 12px !important;
 }
 
-/* 사용자 메시지 */
-.rcw-message-text {
-    font-size: 12px !important;
-}
-
 /* 입력창 (placeholder 포함) */
 .rcw-input {
     font-size: 12px !important;
@@ -136,7 +135,17 @@ a:link {
 
 /* 메시지 텍스트의 내부 패딩 줄이기 */
 .rcw-message {
-    padding: 5px 8px !important;
+    display: block !important;
+    padding: 5px 0px !important;
+    margin: 0px !important;
+    white-space: normal !important;
+}
+
+.rcw-client {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-end !important;;
+    margin-left: auto !important;
 }
 
 /* 사용자 입력창 (입력 필드) 패딩 줄이기 */
@@ -151,7 +160,17 @@ a:link {
 
 /* 메시지 버블 내부 패딩 */
 .rcw-message-text {
-    padding: 6px 10px !important;
+    font-size: 12px !important;
+}
+
+.rcw-response .rcw-message-text {
+    padding: 5px 5px !important;
+    max-width: 85% !important;
+}
+
+.rcw-client .rcw-message-text {
+    padding: 5px 5px !important;
+    max-width: 85% !important;
 }
 
 .rcw-badge {

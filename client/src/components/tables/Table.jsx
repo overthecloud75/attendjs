@@ -42,15 +42,15 @@ const THead = styled.thead`
 `
 
 const HeadTr = styled.tr`
-    background: #007AFF;
+    background: #e3f2fd;
 `
 
 const Th = styled.th`
     padding: ${v.smSpacing};
-    border: 1px solid;
-    color: white;
+    border: 0px solid;
+    color: blue;
     text-transform: capitalize;
-    font-weight: 600;
+    font-weight: 550;
     @media screen and (max-width: 600px) {
         padding-left: 0px;
         padding-right: 0px
