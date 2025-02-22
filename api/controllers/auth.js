@@ -59,7 +59,6 @@ export const login = async (req, res, next) => {
     try {
         const { email: rawEmail, password, platform, width, height, token: cloudflareToken } = req.body
         const email = sanitizeData(rawEmail, 'email')
-
         const user = await validateUserCredentials(email, password)
         
         let {department, cardNo} = await getEmployeeByEmail(email)
@@ -80,6 +79,7 @@ export const login = async (req, res, next) => {
         .status(200)
         .json({name: user.name, email, isAdmin: user.isAdmin, department, cardNo, where, hash})
     } catch (err) {
+        console.log(err)
         next(err)
     }
 }
@@ -343,7 +343,11 @@ const handleCloudflarePost = async (ip, cloudflareToken) => {
 }
 
 const getClientIp = (req) => {
-    return req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
+    if ('x-forwarded-for' in req.headers) 
+        {return req.headers['x-forwarded-for'].split(',')[0].split(':')[0]}
+    else {
+        return req.connection.remoteAddress
+    }
 }
 
 

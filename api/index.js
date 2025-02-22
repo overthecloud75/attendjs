@@ -66,7 +66,6 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(csrf({ cookie: true }))
 app.use(cors({ origin: [
-    'http://localhost:3000',
     process.env.DOMAIN
     ]}
 ))

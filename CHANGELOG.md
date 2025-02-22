@@ -1,4 +1,8 @@
-* 25/02/09
+* 25/02/22
+    - 2.3.6 (client) <br>
+        CRA > Vite <br>
+
+* 25/02/10
     - 2.3.5 (client) <br>
         UI enhancement <br>
 

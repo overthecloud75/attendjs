@@ -106,7 +106,7 @@ const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, row
                         />
                     </DemoContainer>
                 </LocalizationProvider>
-                {columns.map((item, index) => {
+                {columns.foreach((item, index) => {
                     if (CardEditableSelects.includes(item.accessorKey)&&options[item.accessorKey]) {
                         return (
                             <TextField
