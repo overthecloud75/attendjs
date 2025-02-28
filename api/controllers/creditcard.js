@@ -1,7 +1,7 @@
 import CreditCard from '../models/CreditCard.js'
 import { sanitizeData } from '../utils/util.js'
 
-const LIMIT = 200
+const LIMIT = 1000
 
 export const search = async (req, res, next) => {
     try {
@@ -63,12 +63,13 @@ export const deleteCreditCard = async (req,res,next) => {
 }
 
 const getCreditCardHistory = async (req) => {
-    const { name } = req.query
+    const { name, startDate: startDateStr, endDate: endDateStr } = req.query
+    const startDate = sanitizeData(startDateStr, 'date')
+    const endDate = sanitizeData(endDateStr, 'date')
     const { email, department } = req.user
-    // const startDate = sanitizeData(req.query.startDate, 'date')
-    // const endDate = sanitizeData(req.query.endDate, 'date')
-    let query = {}
-    if (department==='관리팀') {
+
+    let query = {date: {$gte: startDate, $lte: endDate}}
+    if (['관리팀', '대표'].includes(department)) {
         if (name) query.name = name
     } else {
         query.email = email

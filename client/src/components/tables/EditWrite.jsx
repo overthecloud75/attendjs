@@ -92,29 +92,28 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
             <DialogContent>
                 {columns.map((item, index) => {
                     return ( 
-                        value[item.accessor]!==undefined&& 
-                            (['createdAt', 'updatedAt', 'name'].includes(item.accessor)?(
+                        value[item.accessorKey]!==undefined&& 
+                            (['createdAt', 'updatedAt', 'name'].includes(item.accessorKey)?(
                                 <TextField
-                                    autoFocus={focus===item.accessor}
+                                    autoFocus={focus===item.accessorKey}
                                     margin='dense'
-                                    id={item.accessor}
-                                    label={item.accessor}
+                                    id={item.accessorKey}
+                                    label={item.accessorKey}
                                     fullWidth
                                     variant='standard'
-                                    value={value[item.accessor]?value[item.accessor]:''}
+                                    value={value[item.accessorKey]?value[item.accessorKey]:''}
                                     key={index}
-                                    InputProps={{readOnly: true}}
-                                    
+                                    InputProps={{readOnly: true}}                   
                                 />
                             ):(
                                 <TextField
-                                    autoFocus={focus===item.accessor}
+                                    autoFocus={focus===item.accessorKey}
                                     margin='dense'
-                                    id={item.accessor}
-                                    label={item.accessor}
+                                    id={item.accessorKey}
+                                    label={item.accessorKey}
                                     fullWidth
                                     variant='outlined'
-                                    value={value[item.accessor]?value[item.accessor]:''}
+                                    value={value[item.accessorKey]?value[item.accessorKey]:''}
                                     key={index}
                                     onChange={handleInputChange}
                                 />

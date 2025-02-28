@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import EmployeesImg from '../assets/images/employees.webp'
 
 const Container = styled.div`
     background-color: white;
@@ -16,7 +15,7 @@ const Image = styled.img`
 const Feature = () => {
     return (
         <Container>
-            <Image src={EmployeesImg}/>
+            <Image src="/employees.webp"/>
         </Container>
     )
 }

@@ -6,7 +6,6 @@ import { requestAuth } from '../../utils/AuthUtil'
 import ProfileDialog from '../bar/ProfileDialog' 
 
 const ProfileMenu = ({user, anchorEl, setAnchorEl, setMenu}) => {
-    // eslint-disable-next-line
     const [errorMsg, setErrorMsg] = useState('')
     const [openDialog, setOpenDialog] = useState(false)
 
@@ -18,6 +17,9 @@ const ProfileMenu = ({user, anchorEl, setAnchorEl, setMenu}) => {
         requestAuth('logout', 'GET', '', dispatch, navigate, setErrorMsg)
         setMenu(false)
         handleClose()
+        if (errorMsg) {
+            alert(errorMsg)
+        }
     }
     const handleProfileClick = () => {
         handleClose()

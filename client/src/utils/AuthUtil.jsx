@@ -63,7 +63,7 @@ export const requestAuth = async (
             navigate('/')
         }
     } catch (error) {
-        setErrorMsg( error?.response?.data?.message)
+        setErrorMsg(error?.response?.data?.message)
     }
 }
 

@@ -28,8 +28,8 @@ import uploadRoute from './routes/upload.js'
 import chatRoute from './routes/chat.js'
 import swaggerRoute from './routes/swagger.js'
 
-const app = express()
 dotenv.config()
+const app = express()
 
 app.set('trust proxy', process.env.TRUST_PROXY)
 const connect = async () => {
@@ -97,14 +97,9 @@ app.use('/swagger', swaggerRoute)
 
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500
-    let errorMessage = err.message || 'Something went wrong'
-    if (errorStatus === 500) {
-        errorMessage = 'Something went wrong!'
-    }
+    let errorMessage = err.status === 500 ? 'Something went wrong!' : err.message || 'Something went wrong'
     logger.error(reqFormat(req) + '-' + errorStatus + '-' + err)
-    return res.status(errorStatus).json({
-        message: errorMessage
-    })
+    return res.status(errorStatus).json({ message: errorMessage })
 })
 
 app.listen(8888, () => {

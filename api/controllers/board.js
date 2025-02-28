@@ -1,12 +1,16 @@
 import Board from '../models/Board.js'
 import { createError } from '../utils/error.js'
+import { getDate, sanitizeData } from '../utils/util.js'
 
 const BOARD_FIELDS = { id: 1, name: 1, title: 1, content: 1, createdAt: 1, updatedAt: 1 }
 
 export const search = async (req, res, next) => {
     try {
-        const { name } = req.query
-        const query = name ? { name } : {}
+        const { name, startDate: startDateStr, endDate: endDateStr } = req.query
+        const startDate = getDate(sanitizeData(startDateStr, 'date'))
+        const endDate = getDate(sanitizeData(endDateStr, 'date'))
+
+        const query = name ? { name, createdAt: {$gte: startDate, $lte: endDate}} : {createdAt: {$gte: startDate, $lte: endDate}}
         const boards = await Board.find(query, BOARD_FIELDS).sort({ createdAt: -1 })
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(boards)
     } catch (err) {

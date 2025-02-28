@@ -25,6 +25,11 @@ const getSeparateDay = () => {
     return {thisYear, monthDay}
 }
 
+export const getDate = (dateStr) => {
+    const [year, month, day] = dateStr.split('-').map(Number)
+    return new Date(year, month - 1, day)
+}
+
 const getEmployeementPeriod = (beginDate) => {
     const {thisYear, monthDay} = getSeparateDay()
     const thisMonth = Number(monthDay.split('-')[0])

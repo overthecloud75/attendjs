@@ -1,10 +1,9 @@
 import Approval from '../models/Approval.js'
 import { makeActive, makeCancel } from './event.js'
-import { getToday } from '../utils/util.js'
+import { getToday, getDate, sanitizeData } from '../utils/util.js'
 import { createError } from '../utils/error.js'
-// import { sanitizeData } from '../utils/util.js'
 
-const LIMIT = 200
+const LIMIT = 1000
 
 const STATUS = {
     PENDING: 'Pending',
@@ -61,11 +60,12 @@ const updateApprovalStatus = async (approval, newStatus, isAdmin) => {
 }
 
 const getApprovalHistory = async (req) => {
-    const { name } = req.query
+    const { name, startDate: startDateStr, endDate: endDateStr } = req.query
+    const startDate = getDate(sanitizeData(startDateStr, 'date'))
+    const endDate = getDate(sanitizeData(endDateStr, 'date'))
     const { isAdmin, email } = req.user
-    // const startDate = sanitizeData(req.query.startDate, 'date')
-    // const endDate = sanitizeData(req.query.endDate, 'date')
-    let query = {}
+
+    let query = {createdAt: {$gte: startDate, $lte: endDate}}
     if (isAdmin) {
         if (name) query.name = name
     } else {

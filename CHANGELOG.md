@@ -1,3 +1,7 @@
+* 25/03/01
+    - 2.3.7 (client, api) <br>
+        change approvalHistory default date range <br>
+
 * 25/02/22
     - 2.3.6 (client) <br>
         CRA > Vite <br>

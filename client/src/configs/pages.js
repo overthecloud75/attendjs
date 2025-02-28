@@ -7,3 +7,4 @@ export const EditableSelects = ['position', 'regular', 'mode', 'attendMode', 'st
 export const CardEditableTitles = ['price', 'people']
 export const CardEditableSelects = ['use']
 export const SearchPages = ['attend', 'wifi-attend', 'gps-attend', 'summary', 'device', 'creditcard', 'loginhistory', 'approval', 'board', 'report']
+export const SearchMonthPages = ['summary', 'creditcard', 'approval', 'board', 'report']

@@ -21,7 +21,7 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
 
     const calendarRef = useRef()
     const user = useMemo(() => getUser(), [])
-
+    
     const [headerToolbar, setHeaderToolbar] = useState({
         start: 'title', 
         center: '',

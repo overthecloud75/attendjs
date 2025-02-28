@@ -2,19 +2,36 @@ import { useState, Suspense, lazy } from 'react'
 import { format } from 'date-fns'
 import useFetch from '../../hooks/useFetch'
 import Search from './Search'
-import { SearchPages } from '../../configs/pages'
+import { SearchPages, SearchMonthPages } from '../../configs/pages'
 import { LoadingSpinner } from '../../utils/GeneralUtil'
 
 const Table = lazy(() => import('./Table'))
 
+const getInitialDate = (page) => {
+    if (SearchMonthPages.includes(page)) { 
+        const today = new Date()
+        const oneMonthAgo = new Date()
+        oneMonthAgo.setMonth(today.getMonth() - 1);
+        return [{
+            startDate: oneMonthAgo,
+            endDate: today,
+            key: 'selection'
+        }]
+    }
+    return [{
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection'
+    }]
+}
+
 const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) => {
     const [name, setName] = useState('')
-    const [date, setDate] = useState([{startDate: new Date(), endDate: new Date(), key: 'selection'}])
+    const [date, setDate] = useState(getInitialDate(page))
 
     const [clickCount, setClickCount] = useState(0)
     const [fileName, setFileName] = useState('download.csv')
 
-    // eslint-disable-next-line
     const {data, setData, loading } = useFetch(
         page, 
         url, 
