@@ -23,7 +23,6 @@ import { LoadingSpinner } from './utils/GeneralUtil'
 const Home = lazy(() => import('./pages/Home'))
 const Schedule = lazy(() => import('./pages/Schedule'))
 const Board = lazy(() => import('./pages/Board'))
-const Report = lazy(() => import('./pages/Report'))
 const CheckEmail = lazy(() => import('./pages/CheckEmail'))
 const Confirm = lazy(() => import('./pages/Confirm'))
 
@@ -51,7 +50,6 @@ function App() {
                     <Route exact path='/loginhistory' element={<LoginHistory menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/approvalhistory' element={<ApprovalHistory menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/board' element={<Board menu={menu} setMenu={setMenu}/>}/>
-                    <Route exact path='/report' element={<Report menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/check-email' element={<CheckEmail menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/confirm/:confirmationCode' element={<Confirm menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/too-many-requests' element={<TooManyRequests/>}/>

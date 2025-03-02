@@ -68,15 +68,15 @@ export const mobileColumnHeaders = [
         enableSorting: true,
     },
     {
-        accessorKey: 'mac',
-        header: 'MAC',
+        accessorKey: 'os',
+        header: 'OS',
         enableSorting: true,
     },
     {
-        accessorKey: 'vendor',
-        header: 'Vendor',
+        accessorKey: 'info',
+        header: 'Info',
         enableSorting: true,
-    },
+    }
 ]
 
 export const csvHeaders = [

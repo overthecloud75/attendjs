@@ -12,7 +12,6 @@ import PeopleIcon from '@mui/icons-material/People'
 import BookIcon from '@mui/icons-material/Book'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
 import NoteAltIcon from '@mui/icons-material/NoteAlt'
-import FolderIcon from '@mui/icons-material/Folder'
 import { Link } from 'react-router-dom'
 import { getUser } from '../../storage/userSlice'
 
@@ -215,12 +214,6 @@ const itemDict =
             icon: <NoteAltIcon/>,
             title: 'Board',
             auth: true
-        },
-        {
-            to: '/report',
-            icon: <FolderIcon/>,
-            title: 'Report',
-            auth: false
         },
         {
             to: '/loginhistory',

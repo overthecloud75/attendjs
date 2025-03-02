@@ -27,7 +27,7 @@ const NMap = ({state}) => {
         const handleLoad = () => {
             setScriptLoading(false)
             let map = new window.naver.maps.Map('map', {
-                center: new window.naver.maps.LatLng(state.where.placeLocation.latitude, state.where.placeLocation.longitude),
+                center: new window.naver.maps.LatLng(state.location.latitude, state.location.longitude),
                 zoom: 16
             })
             // eslint-disable-next-line
