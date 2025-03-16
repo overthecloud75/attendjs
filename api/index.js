@@ -22,7 +22,6 @@ import employeeRoute from './routes/employee.js'
 import approvalRoute from './routes/approval.js'
 import paymentRoute from './routes/payment.js'
 import boardRoute from './routes/board.js'
-import reportRoute from './routes/report.js'
 import confirmRoute from './routes/confirm.js'
 import uploadRoute from './routes/upload.js'
 import chatRoute from './routes/chat.js'
@@ -59,7 +58,6 @@ const limiter = rateLimit({
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 })
-
 // middlewares
 app.use(limiter) // Apply the rate limiting middleware to all requests
 app.use(cookieParser())
@@ -89,7 +87,6 @@ app.use('/api/employee', employeeRoute)
 app.use('/api/approval', approvalRoute)
 app.use('/api/payment', paymentRoute)
 app.use('/api/board', boardRoute)
-app.use('/api/report', reportRoute)
 app.use('/api/confirm', confirmRoute)
 app.use('/api/upload', uploadRoute)
 app.use('/api/chat', chatRoute)

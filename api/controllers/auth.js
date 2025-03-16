@@ -196,9 +196,9 @@ export const setAttend = async (req, res, next) => {
 
 export const search = async (req, res, next) => {
     try {
-        const { name } = req.query
-        const startDate = sanitizeData(req.query.startDate, 'date')
-        const endDate = sanitizeData(req.query.endDate, 'date')
+        const { name, startDate: sartDateStr, endDate: endDateStr } = req.query
+        const startDate = sanitizeData(sartDateStr, 'date')
+        const endDate = sanitizeData(endDateStr, 'date')
         let logins 
         if (name) {
             logins = await Login.find({name: name, date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: -1})}

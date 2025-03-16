@@ -3,9 +3,9 @@ import { sanitizeData } from '../utils/util.js'
 
 export const search = async (req, res, next) => {
     try {
-        const { name } = req.query
-        const startDate = sanitizeData(req.query.startDate, 'date')
-        const endDate = sanitizeData(req.query.endDate, 'date')
+        const { name, startDate: startDateStr, endDate: endDateStr } = req.query
+        const startDate = sanitizeData(startDateStr, 'date')
+        const endDate = sanitizeData(endDateStr, 'date')
 
         let attends 
         if (name) {

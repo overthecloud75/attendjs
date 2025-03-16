@@ -4,8 +4,20 @@ export const getToday = () => {
     const year = today.getFullYear()
     const month = ('0' + (today.getMonth() + 1)).slice(-2)
     const day = ('0' + today.getDate()).slice(-2)
-    const dateString = year + '-' + month  + '-' + day
-    return dateString 
+    const dateStr = year + '-' + month  + '-' + day
+    return dateStr 
+}
+
+export const getNextDay = (dateStr) => {
+    let [year, month, day] = dateStr.split('-').map(Number)
+    const newDate = new Date(year, month - 1, day)
+    const nextDate = new Date(newDate.getTime() + (24 * 60 * 60 * 1000))
+
+    year = nextDate.getFullYear()
+    month = String(nextDate.getMonth() + 1).padStart(2, '0')
+    day = String(nextDate.getDate()).padStart(2, '0')
+    const formattedDate = `${year}-${month}-${day}`
+    return formattedDate
 }
 
 export const getYearMonth = () => {
@@ -21,13 +33,19 @@ const getSeparateDay = () => {
     const month = ('0' + (today.getMonth() + 1)).slice(-2)
     const day = ('0' + today.getDate()).slice(-2)
     const monthDay = month + '-' + day
-    //const dateString = year + '-' + month  + '-' + day
+    //const dateStr = year + '-' + month  + '-' + day
     return {thisYear, monthDay}
 }
 
 export const getDate = (dateStr) => {
     const [year, month, day] = dateStr.split('-').map(Number)
     return new Date(year, month - 1, day)
+}
+
+export const getNextDate = (dateStr) => {
+    const date = new Date(dateStr)
+    date.setDate(date.getDate() + 1)
+    return date
 }
 
 const getEmployeementPeriod = (beginDate) => {
@@ -97,13 +115,27 @@ export const sanitizeData = (data, type) => {
         } else if (type === 'email') {
             regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
             if (data.match(regex) === null) {
-                return false
+                return ''
+            }
+        } else if (type === 'mobile') {
+            const digits = data.replace('-', '');
+            console.log('data', data, digits, type)
+            // 한국 휴대폰 번호 (10~11자리) 검사
+            if (!/^01[016789]\d{7,8}$/.test(digits)) {
+                return '' // 유효하지 않은 번호
+            } // 10자리 (예: 011-234-5678) 또는 11자리 (예: 010-1234-5678) 처리
+            if (digits.length === 10) {
+                return digits.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')
+            } else {
+                return digits.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
             }
         }
     } else if (type ==='date') {
         return getToday()
     } else if (type === 'email') {
-        return false
+        return ''
+    } else if (type === 'mobile') {
+        return ''
     }
     return data 
 }

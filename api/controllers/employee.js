@@ -15,9 +15,10 @@ export const search = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
     try {
-        const { _id, beginDate: rawBeginDate, email, department, rank, position, regular, mode, attendMode, cardNo } = req.body
+        const { _id, beginDate: rawBeginDate, email, mobileNo: mobileNoStr, department, rank, position, regular, mode, attendMode, cardNo } = req.body
         const beginDate = sanitizeData(rawBeginDate, 'date')
-        await Employee.updateOne({_id}, {$set: {beginDate, email, department, rank, position, regular, mode, attendMode, cardNo}}, { runValidators: true})
+        const mobileNo = sanitizeData(mobileNoStr, 'mobile')
+        await Employee.updateOne({_id}, {$set: {beginDate, email, mobileNo, department, rank, position, regular, mode, attendMode, cardNo}}, { runValidators: true})
         // 퇴사하는 경우 id 삭제 
         if (regular === RETIRED_STATUS ) {
             await User.deleteOne({email})

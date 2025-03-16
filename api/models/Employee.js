@@ -34,6 +34,10 @@ const EmployeeSchema = new mongoose.Schema(
             type: String,
             required: false,
         },
+        mobileNo: {
+            type: String,
+            required: false,
+        },
         regular: {
             type: String,
             enum: ['상근', '비상근', '병특', '퇴사'],

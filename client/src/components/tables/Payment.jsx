@@ -153,6 +153,8 @@ const Payment = ({writeMode, open, setOpen}) => {
                     writeMode={writeMode}
                     value={value}
                     setValue={setValue}
+                    readOnly={writeMode ? false : true}
+                    placeholder='여기에 영수증 사진을 upload 해주세요.'
                 />
             </DialogContent>
             <DialogActions>

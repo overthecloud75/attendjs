@@ -103,10 +103,11 @@ const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, row
                             format={'YYYY-MM-DD'}
                             value={dayjs(value.date)}
                             onChange={(newValue) => setValue({...value, date: newValue.format('YYYY-MM-DD')})}
+                            sx={{ width: '100%' }}
                         />
                     </DemoContainer>
                 </LocalizationProvider>
-                {columns.foreach((item, index) => {
+                {columns.map((item, index) => {
                     if (CardEditableSelects.includes(item.accessorKey)&&options[item.accessorKey]) {
                         return (
                             <TextField
@@ -170,6 +171,8 @@ const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, row
                     writeMode={writeMode}
                     value={value}
                     setValue={setValue}
+                    isReadOnly={writeMode ? false : true}
+                    placeholder='여기에 영수증 사진을 upload 해주세요.'
                 />
             </DialogContent>
             <DialogActions>

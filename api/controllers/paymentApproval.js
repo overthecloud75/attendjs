@@ -89,8 +89,8 @@ export const postPayment = async (req, res, next) => {
         4. paymentReqeustEmail 송부 
     */
     try {
-        const { reason, etc, cardNo, content } = req.body
-        const start = sanitizeData(req.body.start, 'date')
+        const { reason, etc, cardNo, content, start: startStr } = req.body
+        const start = sanitizeData(startStr, 'date')
         const end = start
         const employee = await getEmployeeByEmail(req.user.email)
         const approver = await getApprover(employee)

@@ -68,13 +68,13 @@ export const mobileColumnHeaders = [
         enableSorting: true,
     },
     {
-        accessorKey: 'os',
-        header: 'OS',
+        accessorKey: 'info',
+        header: 'Info',
         enableSorting: true,
     },
     {
-        accessorKey: 'info',
-        header: 'Info',
+        accessorKey: 'charge',
+        header: '담당',
         enableSorting: true,
     }
 ]

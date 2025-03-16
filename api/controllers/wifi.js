@@ -11,9 +11,9 @@ const insertOwner = (deviceOns, deviceDict) => {
 
 export const search = async (req,res,next) => {
     try {
-        const { ip } = req.query
-        const startDate = sanitizeData(req.query.startDate, 'date')
-        const endDate = sanitizeData(req.query.endDate, 'date')
+        const { ip, startDate: startDateStr, endDate: endDateStr } = req.query
+        const startDate = sanitizeData(startDateStr, 'date')
+        const endDate = sanitizeData(endDateStr, 'date')
 
         const devices = await Device.find({owner: {$ne:null}})
         let deviceDict = {}

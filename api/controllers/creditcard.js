@@ -14,10 +14,10 @@ export const search = async (req, res, next) => {
 
 export const write = async (req, res, next) => {
     try {
-        let { date: dateString, price: priceString, people: peopleString, use, content } = req.body
-        const date = sanitizeData(dateString, 'date')
-        const price = Number(priceString)
-        const people = Number(peopleString)
+        let { date: dateStr, price: priceStr, people: peopleStr, use, content } = req.body
+        const date = sanitizeData(dateStr, 'date')
+        const price = Number(priceStr)
+        const people = Number(peopleStr)
         const { name, email, cardNo } = req.user
         const perPrice = Math.round(price / people)
         if (!content) {
@@ -37,10 +37,10 @@ export const write = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
     try {
-        let { _id, date: dateString, price: priceString, people: peopleString, use, content } = req.body
-        const date = sanitizeData(dateString, 'date')
-        const price = Number(priceString)
-        const people = Number(peopleString)
+        let { _id, date: dateStr, price: priceStr, people: peopleStr, use, content } = req.body
+        const date = sanitizeData(dateStr, 'date')
+        const price = Number(priceStr)
+        const people = Number(peopleStr)
         const perPrice = Math.round(price / people)
         if (!content) {
             content = ''
@@ -52,7 +52,7 @@ export const update = async (req, res, next) => {
     }
 }
 
-export const deleteCreditCard = async (req,res,next) => {
+export const deleteCreditCard = async (req, res, next) => {
     try {
         const { _id } = req.body
         const creditcard = await CreditCard.deleteOne({_id})

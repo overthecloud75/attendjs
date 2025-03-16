@@ -20,6 +20,11 @@ export const columnHeaders = [
         enableSorting: true,
     },
     {
+        accessorKey: 'mobileNo',
+        header: '연락처',
+        enableSorting: true,
+    },
+    {
         accessorKey: 'department',
         header: '부서',
         enableSorting: true,

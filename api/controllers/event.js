@@ -4,7 +4,7 @@ import Approval from '../models/Approval.js'
 import { isValidObjectId } from '../models/utils.js'
 import { getEmployeeByEmail } from './employee.js'
 import { reportUpdate } from './eventReport.js'
-import { sanitizeData } from '../utils/util.js'
+import { sanitizeData, getNextDay } from '../utils/util.js'
 import { attendRequestEmail, attendConfirmationEmail } from '../utils/email.js'
 import { getLeftLeaveSummary } from './summary.js'
 import { createError } from '../utils/error.js'
@@ -241,7 +241,7 @@ const makeTitle = (approval) => {
 
 const makeEvent = async (title, approval) => {
     // reason이 출근인 경우 calendar에 기록 안 함 
-    const end = getNextDate(approval.end)
+    const end = getNextDay(approval.end)
     if (approval.reason !== '출근') {
         const newEvent = new Event({title, start: approval.start, end, department: approval.department, employeeId: approval.employeeId})
         await newEvent.save()
@@ -251,24 +251,9 @@ const makeEvent = async (title, approval) => {
 
 const deleteEvent = async (approval) => {
     const start = approval.start 
-    const end = getNextDate(approval.end)
+    const end = getNextDay(approval.end)
     const title = makeTitle(approval)
     await Event.deleteOne({employeeId: approval.employeeId, start, end, title})
-}
-
-export const getNextDate = (date) => {
-    const dateSplit = date.split('-')
-    let year = Number(dateSplit[0])
-    let month = Number(dateSplit[1])
-    let day = Number(dateSplit[2])
-    const newDate = new Date(year, month - 1, day)
-    const nextDate = new Date(newDate.getTime() + (24 * 60 * 60 * 1000))
-
-    year = nextDate.getFullYear();
-    month = String(nextDate.getMonth() + 1).padStart(2, '0');
-    day = String(nextDate.getDate()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`
-    return formattedDate
 }
 
 

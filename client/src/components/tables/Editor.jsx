@@ -38,7 +38,7 @@ const convertToWebP = async (file) => {
     }
 }
 
-const Editor = ({writeMode, value, setValue, isReadOnly}) => {
+const Editor = ({writeMode, value, setValue, isReadOnly, placeholder='여기에 내용을 입력하세요...'}) => {
     const handleEditReady = (editor) => {
         if (writeMode) {setValue({...value, id: editor.id})}
         editor.editing.view.change((writer) => {
@@ -84,7 +84,9 @@ const Editor = ({writeMode, value, setValue, isReadOnly}) => {
             config={{
                 licenseKey: 'GPL', 
                 extraPlugins: [uploadImagePlugin],
+                placeholder: placeholder,
             }}
+
             data={ value.content }
             onReady={ editor => handleEditReady(editor)}
             onChange={ (e, editor) => handleEditChange(e, editor)}

@@ -124,7 +124,7 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                 setOpenUpdate={setOpenUpdate}
             />
             <TableSheet
-                style={url==='device'?{width:'130%'}:{width:'100%'}}
+                style={{width:'100%'}}
             >
                 <THead>
                     {table.getHeaderGroups().map(headerGroup => {
