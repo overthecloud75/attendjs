@@ -1,3 +1,7 @@
+* 25/04/12
+    - 2.4.0 (client, api) <br>
+        API Token <br>
+
 * 25/03/16
     - 2.3.9 (client, api) <br>
         employee mobileNo <br>

@@ -36,6 +36,10 @@ const UserSchema = new mongoose.Schema(
         otp : {
             type: String,
             required: false,
+        },
+        apiKey : {
+            type: String,
+            required: false
         }
     },
     { timestamps: true }

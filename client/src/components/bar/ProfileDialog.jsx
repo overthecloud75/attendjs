@@ -1,12 +1,12 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material'
 
-const ProfileDialog = ({user, openDialog, handleCloseDialog}) => {
+const ProfileDialog = ({user, open, handleClose}) => {
 
-    const userKeys = Object.keys(user).slice(0, 5)
-    const userValues = Object.values(user).slice(0, 5)
+    const userKeys = Object.keys(user).slice(0, 4)
+    const userValues = Object.values(user).slice(0, 4)
 
     return (
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <Dialog open={open} onClose={handleClose} fullWidth>
             <DialogTitle>프로필 상세 정보</DialogTitle>
             <DialogContent>
                 {userKeys.map((item, index) => {
@@ -27,7 +27,7 @@ const ProfileDialog = ({user, openDialog, handleCloseDialog}) => {
                 )}
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCloseDialog} variant='outlined'>Close</Button>
+                <Button onClick={handleClose} variant='outlined'>Close</Button>
             </DialogActions>
         </Dialog>
     )

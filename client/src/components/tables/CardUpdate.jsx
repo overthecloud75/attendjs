@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import dayjs from 'dayjs'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem } from '@mui/material'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -8,15 +8,25 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import axios from 'axios'
 import { CardEditableTitles, CardEditableSelects } from '../../configs/pages.js'
 import { options } from '../../configs/options.js'
-import { getUser } from '../../storage/userSlice'
 import { getToday } from '../../utils/DateUtil'
+import { getCreditCardNo } from '../../utils/EventUtil'
 import Editor from './Editor'
 
 const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, rowData}) => {
-    const user = useMemo(() => getUser(), [])
     const [focus, setFocus] = useState('info')
-    const [value, setValue] = useState(rowData.date?{...rowData, cardNo: user.cardNo}:{...rowData, date: getToday(), cardNo: user.cardNo})
+    const [value, setValue] = useState(rowData.date?{...rowData}:{...rowData, date: getToday()})
     const handleClose = () => { setOpen(false) }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const {data, error} = await getCreditCardNo()
+            if (!error) {
+                setValue({...value, cardNo: data.cardNo})
+            }
+        }
+        if (writeMode) { fetchData() }
+    // eslint-disable-next-line
+    }, [open])
 
     const checkValue = () => {
         if (!value.date) {

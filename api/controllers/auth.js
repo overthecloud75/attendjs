@@ -64,7 +64,7 @@ export const login = async (req, res, next) => {
         let {department, cardNo} = await getEmployeeByEmail(email)
         if (!cardNo) {cardNo = ''}
         const token = jwt.sign(
-            {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department, cardNo},
+            {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department},
             process.env.JWT
         )
         const ip = getClientIp(req)
@@ -77,7 +77,7 @@ export const login = async (req, res, next) => {
             httpOnly: true, secure: true, sameSite: 'Strict'
         })
         .status(200)
-        .json({name: user.name, email, isAdmin: user.isAdmin, department, cardNo, where, hash})
+        .json({name: user.name, email, isAdmin: user.isAdmin, department, where, hash})
     } catch (err) {
         console.log(err)
         next(err)
@@ -206,6 +206,46 @@ export const search = async (req, res, next) => {
             logins = await Login.find({date: {$gte: startDate, $lte: endDate}}).sort({date: 1, time: -1, name: 1})
         }
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(logins)
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const getApiKey = async (req, res, next) => {
+    try {
+        const { email } = req.user
+        const user = await getUserByEmail(email)
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json({apiKey: user.apiKey})
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const updateApiKey = async (req, res, next) => {
+    try {
+        const { email } = req.user
+        const apiKey = generateApiKey()
+        await User.updateOne({email}, {$set: {apiKey}}, {runValidators: true})
+        res.status(200).json({apiKey})
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const validateToken = async (req, res, next) => {
+    try {
+        const authHeader = req.headers['authorization']
+        if (!authHeader || !authHeader.toLowerCase().startsWith('bearer ')) {
+            throw createError(401, 'Invalid or missing Authorization header')
+        }
+        const apiKey = authHeader.slice(7).trim()
+
+        if (!apiKey) {
+            throw createError(401, 'Token is missing')
+        }
+        const user = await User.findOne({apiKey})
+        if (!user) { throw createError(401, 'Invalid Token')}
+        else { return res.status(200).json({ message: 'OK' }) }
     } catch (err) {
         next(err)
     }
@@ -349,5 +389,12 @@ const getClientIp = (req) => {
         return req.connection.remoteAddress
     }
 }
+
+const generateApiKey = (length = 16) => {
+    const randomBytes = CryptoJS.lib.WordArray.random(length)
+    return randomBytes.toString(CryptoJS.enc.Hex)
+}
+  
+
 
 

@@ -92,6 +92,9 @@ const validateApproval = (value) => {
     if (value.reason === '출근' && value.end >= dayjs(new Date()).format('YYYY-MM-DD')) {
         alert('출근 신청은 당일 이전 날짜에서만 가능합니다.')
         return false
+    } else if (value.reason === '기타' && value.etc.length === 0) {
+        alert('사유를 적어 주세요.')
+        return false 
     }
     return window.confirm('정말로 상신하시겠습니다.?')
 }
@@ -121,8 +124,12 @@ const Approval = ({navigate, open, setOpen}) => {
                 alert('5글자 이하로 적어주세요.')
                 return
             }
-            if (inputValue.length === 0) {
-                alert('사유를 적어 주세요.')
+            if (/\//.test(inputValue)) {
+                alert('특수 문자는 허용되지 않습니다.')
+                return
+            }
+            if (/ /.test(inputValue)) {
+                alert('공백은 허용되지 않습니다.')
                 return
             }
         }  

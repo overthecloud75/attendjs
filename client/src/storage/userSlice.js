@@ -27,7 +27,6 @@ export const userSlice = createSlice({
         email: user.email || '',
         isAdmin: user.IsAdmin || false,
         department: user.department || '',
-        cardNo: user.cardNo || '',
         isLogin: user.isLogin || false,
         expiry: user.expiry || 0 
     },
@@ -40,7 +39,6 @@ export const userSlice = createSlice({
             state.email = action.payload.email
             state.isAdmin = action.payload.isAdmin
             state.department = action.payload.department
-            state.cardNo = action.payload.cardNo
             state.isLogin = true
             state.expiry = now.getTime() + 86400000
             sessionStorage.setItem('user', JSON.stringify(state))
@@ -54,7 +52,6 @@ export const userSlice = createSlice({
             state.email = ''
             state.isAdmin = false
             state.department = ''
-            state.cardNo = ''
             state.isLogin = false 
             state.expiry = 0
             sessionStorage.removeItem('user')

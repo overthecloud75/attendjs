@@ -71,7 +71,7 @@ const getEmployees = async (req) => {
 }
 
 export const getEmployeeByEmail = async (email) => {
-    // 퇴사자가 아닌 경우에만 이메일 중복 허용하지 않음 
+    // 퇴사자가 아닌 경우 이메일 중복 허용하지 않음 
     const employee = await Employee.findOne({email, regular: {$ne: RETIRED_STATUS}})
     return employee 
 }

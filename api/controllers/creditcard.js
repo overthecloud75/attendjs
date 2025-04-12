@@ -1,3 +1,4 @@
+import { getEmployeeByEmail } from './employee.js'
 import CreditCard from '../models/CreditCard.js'
 import { sanitizeData } from '../utils/util.js'
 
@@ -5,8 +6,18 @@ const LIMIT = 1000
 
 export const search = async (req, res, next) => {
     try {
-        const creditcardHistory = await getCreditCardHistory(req)
+        const creditcardHistory = await getCreditCardUseHistory(req)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(creditcardHistory)
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const getCreditCardNo = async (req, res, next) => {
+    try {
+        const { email } = req.user
+        const employee = await getEmployeeByEmail(email)
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json({cardNo: employee.cardNo})
     } catch (err) {
         next(err)
     }
@@ -18,13 +29,14 @@ export const write = async (req, res, next) => {
         const date = sanitizeData(dateStr, 'date')
         const price = Number(priceStr)
         const people = Number(peopleStr)
-        const { name, email, cardNo } = req.user
+        const { name, email } = req.user
+        const employee = await getEmployeeByEmail(email)
         const perPrice = Math.round(price / people)
         if (!content) {
             content = ''
         }
-        if (cardNo) {
-            const creditcard = CreditCard({date, name, email, cardNo, price, people, perPrice, use, content})
+        if (employee.cardNo) {
+            const creditcard = CreditCard({date, name, email, cardNo: employee.cardNo, price, people, perPrice, use, content})
             await creditcard.save()
             res.status(200).json(creditcard)
         } else {
@@ -52,7 +64,7 @@ export const update = async (req, res, next) => {
     }
 }
 
-export const deleteCreditCard = async (req, res, next) => {
+export const deleteCreditCardUse = async (req, res, next) => {
     try {
         const { _id } = req.body
         const creditcard = await CreditCard.deleteOne({_id})
@@ -62,7 +74,7 @@ export const deleteCreditCard = async (req, res, next) => {
     }
 }
 
-const getCreditCardHistory = async (req) => {
+const getCreditCardUseHistory = async (req) => {
     const { name, startDate: startDateStr, endDate: endDateStr } = req.query
     const startDate = sanitizeData(startDateStr, 'date')
     const endDate = sanitizeData(endDateStr, 'date')

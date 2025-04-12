@@ -24,16 +24,8 @@ const makeApiRequest = async (method, endpoint, payload = null) => {
 
 export const getColor = (event) => {
     let title = event.title.split('/')
-    if (title.length === 1) {
-        title = title[0].split(' ')
-    }
     if (title.length > 1) {
         let eventTitle = title[1]
-        for (const s in WORKING.status) { 
-            if (title[1].includes(s)) {
-                eventTitle = s
-            }
-        }
         if (eventTitle in WORKING.offDay){
             event.color = 'yellow'
             event.textColor = 'black'
@@ -90,4 +82,14 @@ export const postPaymentApproval = async (data) => {
     return makeApiRequest('POST', 'payment', data)
 }
 
+export const getCreditCardNo = async () => {
+    return makeApiRequest('GET', 'creditcard/cardNo')
+}
 
+export const getApiKey = async () => {
+    return makeApiRequest('GET', 'auth/apiKey')
+}
+
+export const updateApiKey = async () => {
+    return makeApiRequest('POST', 'auth/apiKey')
+}

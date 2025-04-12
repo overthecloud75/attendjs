@@ -4,10 +4,12 @@ import { useNavigate, Link } from 'react-router-dom'
 import { Menu, MenuItem, Box } from '@mui/material'
 import { requestAuth } from '../../utils/AuthUtil'
 import ProfileDialog from '../bar/ProfileDialog' 
+import APIDialog from './APIDialog'
 
 const ProfileMenu = ({user, anchorEl, setAnchorEl, setMenu}) => {
     const [errorMsg, setErrorMsg] = useState('')
-    const [openDialog, setOpenDialog] = useState(false)
+    const [openProfileDialog, setOpenProfileDialog] = useState(false)
+    const [openAPIDialog, setOpenAPIDialog] = useState(false)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -23,10 +25,19 @@ const ProfileMenu = ({user, anchorEl, setAnchorEl, setMenu}) => {
     }
     const handleProfileClick = () => {
         handleClose()
-        setOpenDialog(true)
+        setOpenProfileDialog(true)
     }
-    const handleCloseDialog = () => {
-        setOpenDialog(false)
+    const handleAPIClick = () => {
+        handleClose()
+        setOpenAPIDialog(true)
+    }
+
+    const handleCloseProfileDialog = () => {
+        setOpenProfileDialog(false)
+    }
+
+    const handleCloseAPIDialog = () => {
+        setOpenAPIDialog(false)
     }
 
     return (
@@ -43,7 +54,7 @@ const ProfileMenu = ({user, anchorEl, setAnchorEl, setMenu}) => {
                 {user.isLogin?(
                     <Box>
                         <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
+                        <MenuItem onClick={handleAPIClick}>API Key</MenuItem>
                         <MenuItem onClick={handleClose} component={Link} to='/auth/reset-password' style={{ textDecoration: 'none' }}>
                             Reset Password
                         </MenuItem>
@@ -63,8 +74,12 @@ const ProfileMenu = ({user, anchorEl, setAnchorEl, setMenu}) => {
             </Menu>
             <ProfileDialog
                 user={user}
-                openDialog={openDialog}
-                handleCloseDialog={handleCloseDialog}
+                open={openProfileDialog}
+                handleClose={handleCloseProfileDialog}
+            />
+            <APIDialog
+                open={openAPIDialog}
+                handleClose={handleCloseAPIDialog}
             />
         </>
     )
