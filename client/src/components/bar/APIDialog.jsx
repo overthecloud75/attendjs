@@ -5,9 +5,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { getApiKey, updateApiKey } from '../../utils/EventUtil'
 
-const APIDialog = ({open, handleClose}) => {
+const APIDialog = ({open, apiKey, handleClose}) => {
 
-    const [value, setValue] = useState('')
+    const [value, setValue] = useState(apiKey)
     const [showKey, setShowKey] = useState(false)
     const [copySuccess, setCopySuccess] = useState(false)
 
@@ -18,8 +18,7 @@ const APIDialog = ({open, handleClose}) => {
                 setValue(data.apiKey)
             }
         }
-        fetchData()
-    // eslint-disable-next-line
+        if (open) { fetchData() }
     }, [open])
 
     const handleUpdate = async () => {

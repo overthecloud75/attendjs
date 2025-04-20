@@ -52,7 +52,7 @@ export const requestAuth = async (
     location=''
 ) => {
     try {
-        const response =  await makeRequest(mode, method, value)
+        const response = await makeRequest(mode, method, value)
         if (mode === 'login' && method === 'POST') {
             dispatch(loginUser(response.data))
             await handleLoginSuccess(response.data, location, navigate)
@@ -63,7 +63,7 @@ export const requestAuth = async (
             navigate('/')
         }
     } catch (error) {
-        setErrorMsg(error?.response?.data?.message)
+        setErrorMsg(error)
     }
 }
 

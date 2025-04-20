@@ -18,6 +18,7 @@ const Auth = ({mode}) => {
     })
     const [loading, setLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
+    console.log('errorMsg', errorMsg)
     const { getLocation } = useLocation()
     const { width, height } = useWindowDimension()
 

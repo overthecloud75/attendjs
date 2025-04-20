@@ -16,7 +16,7 @@ const ProfileMenu = ({user, anchorEl, setAnchorEl, setMenu}) => {
     const open = Boolean(anchorEl)
     const handleClose = () => {setAnchorEl(null)}
     const handleLogout = async () => {
-        requestAuth('logout', 'GET', '', dispatch, navigate, setErrorMsg)
+        await requestAuth('logout', 'GET', '', dispatch, navigate, setErrorMsg)
         setMenu(false)
         handleClose()
         if (errorMsg) {

@@ -1,3 +1,7 @@
+* 25/04/19
+    - 2.4.1 (client, api) <br>
+        little fix <br>
+
 * 25/04/12
     - 2.4.0 (client, api) <br>
         API Token <br>

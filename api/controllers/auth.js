@@ -5,6 +5,7 @@ import { formatToTimeZone } from 'date-fns-timezone'
 import { authenticator } from 'otplib'
 import distance from 'gps-distance'
 import { MOBILE_IP_LIST } from '../config/working.js'
+import { logger } from '../config/winston.js'
 import User from '../models/User.js'
 import GPSOn from '../models/GPSOn.js'
 import Login from '../models/Login.js'
@@ -86,10 +87,10 @@ export const login = async (req, res, next) => {
 
 const validateUserCredentials = async (email, password) => {
     const user = await getUserByEmail(email)
-    if (!user) throw createError(403, 'Wrong password or email!')
+    if (!user) throw createError(401, 'Wrong password or email!')
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password)
-    if (!isPasswordCorrect) throw createError(403, 'Wrong password or email!')
+    if (!isPasswordCorrect) throw createError(401, 'Wrong password or email!')
 
     if (user.status !== 'Active') {
         throw createError(401, 'Pending Account. Please Verify Your Email!')
@@ -104,13 +105,13 @@ export const password = async (req, res, next) => {
         const email = sanitizeData(rawEmail, 'email')
 
         const user = await getUserByEmail(email)
-        if (!user) throw createError(403, 'Wrong password or email!')
+        if (!user) throw createError(401, 'Wrong password or email!')
 
         const isPasswordCorrect = await bcrypt.compare(
             currentPassword,
             user.password
         )
-        if (!isPasswordCorrect) throw createError(403, 'Wrong password or email!')
+        if (!isPasswordCorrect) throw createError(401, 'Wrong password or email!')
 
         const salt = bcrypt.genSaltSync(10)
         const hash = bcrypt.hashSync(newPassword, salt)
@@ -126,7 +127,7 @@ export const lostPassword = async (req, res, next) => {
         const { email: rawEmail } = req.body
         const email = sanitizeData(rawEmail, 'email')
         const user = await getUserByEmail(email)
-        if (!user) throw createError(403, 'Wrong email!')
+        if (!user) throw createError(401, 'Wrong email!')
         const otpSecret = authenticator.generateSecret()          // OTP 시크릿 생성
         const otp = authenticator.generate(otpSecret)             // OTP 생성
         await User.updateOne({email}, {$set: {otp}}, {runValidators: true})
@@ -142,8 +143,8 @@ export const passwordWithOtp = async (req, res, next) => {
         const { email: rawEmail, password, otp, token: cloudflareToken } = req.body
         const email = sanitizeData(rawEmail, 'email')
         const user = await getUserByEmail(email)
-        if (!user) throw createError(403, 'Wrong email!')
-        if (user.otp !== otp) throw createError(403, 'Wrong OTP!')
+        if (!user) throw createError(401, 'Wrong email!')
+        if (user.otp !== otp) throw createError(401, 'Wrong OTP!')
 
         const salt = bcrypt.genSaltSync(10)
         const hash = bcrypt.hashSync(password, salt)
@@ -234,6 +235,7 @@ export const updateApiKey = async (req, res, next) => {
 
 export const validateToken = async (req, res, next) => {
     try {
+        logger.info(req.headers)
         const authHeader = req.headers['authorization']
         if (!authHeader || !authHeader.toLowerCase().startsWith('bearer ')) {
             throw createError(401, 'Invalid or missing Authorization header')
