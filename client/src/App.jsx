@@ -7,6 +7,7 @@ import Login from './pages/auth/Login'
 import ResetPassword from './pages/auth/ResetPassword'
 import LostPassword from './pages/auth/LostPassword'
 import ResetPasswordWithOtp from './pages/auth/ResetPasswordWithOtp'
+import Callback from './pages/auth/Callback'
 import Wifi from './pages/Wifi'
 import GPS from './pages/GPS'
 import Location from './pages/Location'
@@ -38,6 +39,7 @@ function App() {
                     <Route exact path='/auth/reset-password' element={<ResetPassword menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/lost-password' element={<LostPassword menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/reset-password-with-otp' element={<ResetPasswordWithOtp menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/auth/callback' element={<Callback menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/attend' element={<Attend menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/wifi-attend' element={<Wifi menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/gps-attend' element={<GPS menu={menu} setMenu={setMenu}/>}/>

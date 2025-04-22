@@ -1,3 +1,7 @@
+* 25/04/22
+    - 2.4.2 (client, api) <br>
+        apply MS365 sso login <br>
+
 * 25/04/19
     - 2.4.1 (client, api) <br>
         little fix <br>

@@ -109,7 +109,7 @@ const AuthWithOtp = () => {
                         required
                     />
                     <div id='cf-turnstile'/>
-                    <button disabled={loading}>비밀번호 재설정</button>
+                    <button disabled={loading} style={{borderRadius: '8px', cursor: 'pointer'}}>비밀번호 재설정</button>
                     {loading && <LoadingSpinner />}
                     {!loading && errorMsg && <span>{errorMsg}</span>}
                 </form>

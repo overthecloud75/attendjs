@@ -59,7 +59,7 @@ const Email = () => {
                         onChange={handleInputChange}
                         required
                     />
-                    <button disabled={loading}>이메일 확인</button>
+                    <button disabled={loading} style={{borderRadius: '8px', cursor: 'pointer'}}>이메일 확인</button>
                     {loading && <LoadingSpinner />}
                     {!loading && errorMsg && <span>{errorMsg}</span>}
                 </form>

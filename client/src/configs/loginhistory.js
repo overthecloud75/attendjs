@@ -74,6 +74,11 @@ export const columnHeaders = [
         header: 'CloudFlare',
         enableSorting: true,
     },
+    {
+        accessorKey: 'loginType',
+        header: 'login 유형',
+        enableSorting: true,
+    },
 ]
 
 export const mobileColumnHeaders = [

@@ -53,7 +53,7 @@ export const requestAuth = async (
 ) => {
     try {
         const response = await makeRequest(mode, method, value)
-        if (mode === 'login' && method === 'POST') {
+        if ((mode === 'login' || mode === 'callback') && method === 'POST') {
             dispatch(loginUser(response.data))
             await handleLoginSuccess(response.data, location, navigate)
         } else if (mode === 'register' && method === 'POST') {
@@ -90,3 +90,4 @@ export const requestLostPassword = async (method, value, navigate, setErrorMsg) 
 export const requestPasswordWithOtp = async (method, value, navigate, setErrorMsg) => {
     await handlePasswordRequest('password-with-otp', method, value, navigate, setErrorMsg, '/auth/login')
 }
+

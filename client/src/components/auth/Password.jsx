@@ -88,7 +88,7 @@ const Password = () => {
                         value={formData.newPassword2}
                         onChange={handleChange}
                     />
-                    <button disabled={loading}>비빌번호 변경</button>
+                    <button disabled={loading} style={{borderRadius: '8px', cursor: 'pointer'}}>비빌번호 변경</button>
                     {loading && <LoadingSpinner />}
                     {!loading && errorMsg && <span>{errorMsg}</span>}
                 </form>

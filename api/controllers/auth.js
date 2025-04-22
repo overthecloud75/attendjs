@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs'
+import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import CryptoJS from 'crypto-js'
 import { formatToTimeZone } from 'date-fns-timezone'
@@ -62,8 +63,7 @@ export const login = async (req, res, next) => {
         const email = sanitizeData(rawEmail, 'email')
         const user = await validateUserCredentials(email, password)
         
-        let {department, cardNo} = await getEmployeeByEmail(email)
-        if (!cardNo) {cardNo = ''}
+        const {department} = await getEmployeeByEmail(email)
         const token = jwt.sign(
             {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department},
             process.env.JWT
@@ -95,7 +95,6 @@ const validateUserCredentials = async (email, password) => {
     if (user.status !== 'Active') {
         throw createError(401, 'Pending Account. Please Verify Your Email!')
     }
-
     return user
 }
 
@@ -253,6 +252,38 @@ export const validateToken = async (req, res, next) => {
     }
 }
 
+export const authCallback = async (req, res, next) => {
+    try {
+        const { code, session_state, redirect_uri, width, height, platform } = req.body
+        if (code && session_state && redirect_uri) {
+            const accessToken = await ssoLoginWithCode(code, session_state, redirect_uri) 
+            const response = await getUserInfoFromMS365(accessToken)
+            const email = response.data.mail
+
+            const user = await getUserByEmail(email)
+            const {department} = await getEmployeeByEmail(email)
+            const token = jwt.sign(
+                {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department},
+                process.env.JWT
+            )
+            const ip = getClientIp(req)
+            const user_agent = req.headers['user-agent']
+        
+            const {where, hash} = await saveLogin(user, ip, user_agent, platform, width, height, 'X', 'sso')
+            
+            res.cookie('access_token', token, {
+                httpOnly: true, secure: true, sameSite: 'Strict'
+            })
+            .status(200)
+            .json({name: user.name, email, isAdmin: user.isAdmin, department, where, hash})
+        } else {
+            throw createError(401, 'Invalid Code')
+        }
+    } catch (err) {
+        next(err)
+    }
+}
+
 const checkMobile = (ip, user_agent) => {
     const ip16 = ip.split('.').slice(0, 2).join('.')
     // const ip24 = ip_split[0] + '.' + ip_split[1] + '.' + ip_split[2]
@@ -262,12 +293,12 @@ const checkMobile = (ip, user_agent) => {
     return {isMobile, isRemotePlace}
 }
 
-const attendRemotePlace = (isRemotePlace, isMobile, cloudflareCheck) => {
+const attendRemotePlace = (isRemotePlace, isMobile, cloudflareCheck, loginType) => {
     let attend = false 
     let place = ''
     let minDistance = 10000
     const placeLocation = {latitude: -1, longitude: -1}
-    if (isRemotePlace && cloudflareCheck==='O') {
+    if (isRemotePlace && (cloudflareCheck==='O' || loginType==='sso')) {
         attend = true
         place = process.env.REMOTE_PLACE
         minDistance = 0 
@@ -298,16 +329,16 @@ const whereIs = async (location, isMobile) => {
     return {attend, place, minDistance, placeLocation, isMobile}
 }
 
-const saveLogin = async (user, ip, user_agent, platform, width, height, cloudflareCheck) => {
+const saveLogin = async (user, ip, user_agent, platform, width, height, cloudflareCheck, loginType='general') => {
     const {employeeId, name} = user
     const {date, time} = dateAndTime()
 
     const {isMobile, isRemotePlace} = checkMobile(ip, user_agent)
-    const where = attendRemotePlace(isRemotePlace, isMobile, cloudflareCheck)
+    const where = attendRemotePlace(isRemotePlace, isMobile, cloudflareCheck, loginType)
     const hash = getRandomInt()
 
     const attend = where.attend ? 'O' : 'X'
-    const login = new Login({employeeId, name, date, time, ip, isMobile, platform, user_agent, width, height, latitude: -1, longitude: -1, accuracy: 1, attend, hash, cloudflareCheck, timestamp: Date.now()})
+    const login = new Login({employeeId, name, date, time, ip, isMobile, platform, user_agent, width, height, latitude: -1, longitude: -1, accuracy: 1, attend, hash, cloudflareCheck, loginType, timestamp: Date.now()})
     
     await setGpsOn(employeeId, name, date, time, where)
     await login.save()
@@ -371,11 +402,11 @@ const getUserByEmail = async (email) => {
 const handleCloudflarePost = async (ip, cloudflareToken) => {
     if (!cloudflareToken) return 'X'
     const formData = new FormData()
-    formData.append('secret', process.env.CLOUDFLRAE_SECRET_KEY)
+    formData.append('secret', process.env.CLOUDFLARE_SECRET_KEY)
     formData.append('response', cloudflareToken)
     formData.append('remoteip', ip)
 
-    const result = await fetch(process.env.CLOUDFLRAE_URL, {
+    const result = await fetch(process.env.CLOUDFLARE_URL, {
         body: formData,
         method: 'POST',
     })
@@ -395,6 +426,34 @@ const getClientIp = (req) => {
 const generateApiKey = (length = 16) => {
     const randomBytes = CryptoJS.lib.WordArray.random(length)
     return randomBytes.toString(CryptoJS.enc.Hex)
+}
+
+const ssoLoginWithCode = async (code, session_state, redirect_uri) => {
+    try {
+        const response = await axios.post(
+            `https://login.microsoftonline.com/${process.env.TENANT_ID}/oauth2/v2.0/token`,
+            new URLSearchParams({
+                client_id: process.env.CLIENT_ID,
+                client_secret: process.env.CLIENT_SECRET,
+                grant_type: 'authorization_code',
+                code: code,
+                redirect_uri: redirect_uri,
+            }).toString(),
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        )
+        return response.data.access_token
+    } catch (err) {
+        throw createError(401, err.message)
+    }
+}
+
+const getUserInfoFromMS365 = async (accessToken) => {
+    const response = await axios.get('https://graph.microsoft.com/v1.0/me', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+    return response
 }
   
 

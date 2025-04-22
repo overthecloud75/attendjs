@@ -68,6 +68,11 @@ const LoginSchema = new mongoose.Schema(
             type: String,
             enum: ['O', 'X'],
         },
+        loginType: {
+            type: String, 
+            enum: ['general', 'sso'],
+            default: 'general'
+        },
         timestamp: {
             type: Number, 
             required: false, 

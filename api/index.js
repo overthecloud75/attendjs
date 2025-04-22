@@ -62,7 +62,17 @@ const limiter = rateLimit({
 app.use(limiter) // Apply the rate limiting middleware to all requests
 app.use(cookieParser())
 app.use(express.json())
-app.use(csrf({ cookie: true }))
+
+const csrfProtection = csrf({ cookie: true })
+
+app.use((req, res, next) => {
+    const exemptPaths = ['/api/auth/callback']
+    if (exemptPaths.includes(req.path)) {
+        return next()
+    } 
+    csrfProtection(req, res, next)
+})
+
 app.use(cors({ origin: [
     process.env.DOMAIN
     ]}
