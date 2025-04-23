@@ -21,7 +21,11 @@ const AuthCallback = ({mode}) => {
         const code = params.get('code')
         const session_state = params.get('session_state')
         const redirect_uri = window.location.origin + authorityRedirectPath
-        handleSubmit({code, session_state, redirect_uri})
+        if (code && session_state) {
+            handleSubmit({code, session_state, redirect_uri})
+        } else {
+            setErrorMsg('Invalid Code')
+        }
     }, [mode, dispatch, navigate])
 
     const handleSubmit = async (formData) => {
@@ -79,7 +83,7 @@ const AuthCallback = ({mode}) => {
                             cursor: 'pointer',
                         }}
                     >
-                        {mode==='login'?'Sign in':'Sign up'}
+                        Sign in
                     </button>
                     <button
                         disabled={loading}

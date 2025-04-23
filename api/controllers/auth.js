@@ -260,10 +260,12 @@ export const authCallback = async (req, res, next) => {
             const response = await getUserInfoFromMS365(accessToken)
             const email = response.data.mail
 
+            let isAdmin = false
             const user = await getUserByEmail(email)
-            const {department} = await getEmployeeByEmail(email)
+            if (user) { isAdmin = user.isAdmin}
+            const { name, employeeId, department} = await getEmployeeByEmail(email)
             const token = jwt.sign(
-                {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department},
+                {name, employeeId, isAdmin, email, department},
                 process.env.JWT
             )
             const ip = getClientIp(req)

@@ -66,7 +66,7 @@ app.use(express.json())
 const csrfProtection = csrf({ cookie: true })
 
 app.use((req, res, next) => {
-    const exemptPaths = ['/api/auth/callback']
+    const exemptPaths = ['api/auth/setAttend', '/api/auth/callback']
     if (exemptPaths.includes(req.path)) {
         return next()
     } 
