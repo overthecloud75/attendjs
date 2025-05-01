@@ -1,6 +1,8 @@
 import winston from 'winston'
 import winstonDaily from 'winston-daily-rotate-file'
 
+import { getClientIP } from '../utils/util.js'
+
 const logDir = 'logs'  // logs 디렉토리 하위에 로그 파일 저장
 const { combine, timestamp, printf } = winston.format
 
@@ -15,13 +17,12 @@ export const reqFormat = (req) => {
     if (headers.referer) {
         referer = headers.referer
     }
-    let x_forwarded_for = req.connection.remoteAddress
-    if ('x-forwarded-for' in headers) {x_forwarded_for = headers['x-forwarded-for'].split(',')[0].split(':')[0]}
+    const ip = getClientIP(req)
     let info
     try {
-        info = x_forwarded_for + '-' + req.method + '-' + decodeURI(req.originalUrl) + '-' + referer + '-' + headers['user-agent']
+        info = ip + '-' + req.method + '-' + decodeURI(req.originalUrl) + '-' + referer + '-' + headers['user-agent']
     } catch (err) {
-        info = x_forwarded_for + '-' + req.method + '-' + req.originalUrl + '-' + referer + '-' + headers['user-agent']
+        info = ip + '-' + req.method + '-' + req.originalUrl + '-' + referer + '-' + headers['user-agent']
         logger.error(err + ' ' + info)
     }
     return info

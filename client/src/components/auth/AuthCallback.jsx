@@ -56,14 +56,7 @@ const AuthCallback = ({mode}) => {
         <div className='formContainer'>
             <div className='formWrapper'>
                 <span className='logo'>SmartWork</span>
-                <span className='title'>{mode}</span>
                 <form onSubmit={handleSubmit}>
-                    {(mode !=='login' )&& (
-                        <input 
-                            id='name' 
-                            type='text' 
-                            placeholder='name'
-                        />)}
                     <input 
                         id='email' 
                         type='email' 

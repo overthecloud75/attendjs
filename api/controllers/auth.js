@@ -14,7 +14,7 @@ import Location from '../models/Location.js'
 import { getEmployeeByEmail } from './employee.js'
 import { createError } from '../utils/error.js'
 import { registerConfirmationEmail, CheckOtpEmail } from '../utils/email.js'
-import { sanitizeData } from '../utils/util.js'
+import { getClientIP, sanitizeData } from '../utils/util.js'
 
 authenticator.options = { digits: 6 }
 
@@ -52,7 +52,7 @@ const validateNewUser = async (name, email) => {
     } 
     const existingUser = await getUserByEmail(email)
     if (existingUser) {
-        throw createError(403, 'The User is already created')
+        throw createError(409, 'The User is already created')
     }
     return employee
 }
@@ -68,7 +68,7 @@ export const login = async (req, res, next) => {
             {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department},
             process.env.JWT
         )
-        const ip = getClientIp(req)
+        const ip = getClientIP(req)
         const user_agent = req.headers['user-agent']
     
         const cloudflareCheck = await handleCloudflarePost(ip, cloudflareToken)
@@ -148,7 +148,7 @@ export const passwordWithOtp = async (req, res, next) => {
         const salt = bcrypt.genSaltSync(10)
         const hash = bcrypt.hashSync(password, salt)
 
-        const ip =  getClientIp(req)
+        const ip =  getClientIP(req)
         const cloudflareCheck = await handleCloudflarePost(ip, cloudflareToken)
         if (cloudflareCheck === 'X') throw createError(500, 'Something Wrong!')
         await User.updateOne({email}, {$set: {password: hash}}, {runValidators: true})
@@ -182,7 +182,7 @@ export const confirmCode = async (req, res, next) => {
 
 export const setAttend = async (req, res, next) => {
     try {
-        const ip = getClientIp(req)
+        const ip = getClientIP(req)
         const user_agent = req.headers['user-agent']
         const {isMobile} = checkMobile(ip, user_agent)
 
@@ -234,7 +234,6 @@ export const updateApiKey = async (req, res, next) => {
 
 export const validateToken = async (req, res, next) => {
     try {
-        logger.info(req.headers)
         const authHeader = req.headers['authorization']
         if (!authHeader || !authHeader.toLowerCase().startsWith('bearer ')) {
             throw createError(401, 'Invalid or missing Authorization header')
@@ -268,7 +267,7 @@ export const authCallback = async (req, res, next) => {
                 {name, employeeId, isAdmin, email, department},
                 process.env.JWT
             )
-            const ip = getClientIp(req)
+            const ip = getClientIP(req)
             const user_agent = req.headers['user-agent']
         
             const {where, hash} = await saveLogin(user, ip, user_agent, platform, width, height, 'X', 'sso')
@@ -415,14 +414,6 @@ const handleCloudflarePost = async (ip, cloudflareToken) => {
 
     const { success } = await result.json()
     return success ? 'O' : 'X'
-}
-
-const getClientIp = (req) => {
-    if ('x-forwarded-for' in req.headers) 
-        {return req.headers['x-forwarded-for'].split(',')[0].split(':')[0]}
-    else {
-        return req.connection.remoteAddress
-    }
 }
 
 const generateApiKey = (length = 16) => {

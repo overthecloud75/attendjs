@@ -60,7 +60,6 @@ export const reportUpdate = async (action, event, start, end) => {
     for (const report of reports) {
         const { date } = report 
         if (date >= today) break
-
         const updatedReport = await updateReport(report, eventStatus, status)
         if (updatedReport) {
             await Report.updateOne({ name, employeeId, date: report.date }, { $set: updatedReport }, { runValidators: true })
@@ -69,7 +68,7 @@ export const reportUpdate = async (action, event, start, end) => {
 }
 
 const updateReport = async (report, eventStatus, employeeStatus) => {
-    if (eventStatus === '출근' && report.reason) return null
+    if (eventStatus === '출근' && report.reason) return null // full proof 
     const updatedReport = { ...report }
     updatedReport.reason = eventStatus
 

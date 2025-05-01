@@ -1,3 +1,8 @@
+* 25/05/01
+    - 2.4.3 (client, api) <br>
+        modify rate limit setting <br>
+        little error fix <br>
+
 * 25/04/22
     - 2.4.2 (client, api) <br>
         apply MS365 sso login <br>

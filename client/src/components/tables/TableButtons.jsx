@@ -31,6 +31,7 @@ const TableButtons = ({url, data, csvHeaders, fileName, writeMode, setWriteMode,
     const [openPayment, setOpenPayment] = useState(false)
 
     const handleWriteClick = () => {
+        setSelectedRowData({})
         setWriteMode(true)
         if (['board', 'report'].includes(url)) {
             setOpenEditWrite(true)

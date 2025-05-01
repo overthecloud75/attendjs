@@ -26,11 +26,11 @@ import confirmRoute from './routes/confirm.js'
 import uploadRoute from './routes/upload.js'
 import chatRoute from './routes/chat.js'
 import swaggerRoute from './routes/swagger.js'
+import { getClientIP } from './utils/util.js'
 
 dotenv.config()
 const app = express()
 
-app.set('trust proxy', process.env.TRUST_PROXY)
 const connect = async () => {
     try {
         await mongoose.connect(
@@ -53,10 +53,11 @@ mongoose.connection.on('connected', () => {
 })
 
 const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 15 minutes
-	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	windowMs: 5 * 60 * 1000, // 5 minutes
+	max: 100, // Limit each IP to 100 requests per `window` (here, per 5 minutes)
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    keyGenerator: (req, res) => getClientIP(req)
 })
 // middlewares
 app.use(limiter) // Apply the rate limiting middleware to all requests
@@ -66,7 +67,7 @@ app.use(express.json())
 const csrfProtection = csrf({ cookie: true })
 
 app.use((req, res, next) => {
-    const exemptPaths = ['api/auth/setAttend', '/api/auth/callback']
+    const exemptPaths = ['/api/auth/setAttend', '/api/auth/callback']
     if (exemptPaths.includes(req.path)) {
         return next()
     } 

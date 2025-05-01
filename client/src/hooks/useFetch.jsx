@@ -21,11 +21,11 @@ const useFetch = (page, url, params, clickCount) => {
     }
 
     const handleError = (error) => {
-        const errorStatus = error.response?.data?.status
+        const errorStatus = error.response?.status
         switch (errorStatus) {
             case 401:
                 sessionStorage.removeItem('user')
-                navigate('/login')
+                navigate('/auth/login')
                 break
             case 429:
                 navigate('/too-many-requests')

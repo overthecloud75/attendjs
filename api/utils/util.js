@@ -104,6 +104,14 @@ export const separateIP = (x_forwarded_for) => {
     }
 }
 
+export const getClientIP = (req) => {
+    if ('x-forwarded-for' in req.headers) 
+        {return req.headers['x-forwarded-for'].split(',')[0].split(':')[0]}
+    else {
+        return req.connection.remoteAddress
+    }
+}
+
 export const sanitizeData = (data, type) => {
     let regex 
     if (data) {
@@ -139,3 +147,4 @@ export const sanitizeData = (data, type) => {
     }
     return data 
 }
+
