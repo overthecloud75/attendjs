@@ -1,3 +1,7 @@
+* 25/05/06
+    - 2.4.4 (client, api) <br>
+        apply the latest pkg <br>
+
 * 25/05/01
     - 2.4.3 (client, api) <br>
         modify rate limit setting <br>
