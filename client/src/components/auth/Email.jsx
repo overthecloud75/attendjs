@@ -46,23 +46,25 @@ const Email = () => {
     }
 
     return (
-        <div className='formContainer'>
-            <div className='formWrapper'>
-                <span className='logo'>SmartWork</span>
-                <span className='title'>이메일 확인</span>
-                <form onSubmit={handleSubmit}>
-                    <input 
-                        id='email' 
-                        type='email' 
-                        placeholder='email'
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                    />
-                    <button disabled={loading} style={{borderRadius: '8px', cursor: 'pointer'}}>이메일 확인</button>
-                    {loading && <LoadingSpinner />}
-                    {!loading && errorMsg && <span>{errorMsg}</span>}
-                </form>
+        <div style={{ flex : 1 }}>
+            <div className='formContainer'>
+                <div className='formWrapper'>
+                    <span className='logo'>SmartWork</span>
+                    <span className='title'>이메일 확인</span>
+                    <form onSubmit={handleSubmit}>
+                        <input 
+                            id='email' 
+                            type='email' 
+                            placeholder='email'
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <button disabled={loading} style={{borderRadius: '8px', cursor: 'pointer'}}>이메일 확인</button>
+                        {loading && <LoadingSpinner />}
+                        {!loading && errorMsg && <span>{errorMsg}</span>}
+                    </form>
+                </div>
             </div>
         </div>
     )

@@ -47,30 +47,22 @@ const ProfileMenu = ({user, anchorEl, setAnchorEl, setMenu}) => {
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
+                slotProps={{
+                    list: {
+                        'aria-labelledby': 'basic-button',
+                    }
                 }}
             >
-                {user.isLogin?(
-                    <Box>
-                        <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
-                        <MenuItem onClick={handleAPIClick}>API Key</MenuItem>
-                        <MenuItem onClick={handleClose} component={Link} to='/auth/reset-password' style={{ textDecoration: 'none' }}>
-                            Reset Password
-                        </MenuItem>
-                        <MenuItem onClick={handleLogout} component={Link} to='/' style={{ textDecoration: 'none' }}>
-                            Logout
-                        </MenuItem>
-                    </Box>
-                ):(<Box>
-                        <MenuItem onClick={handleClose} component={Link} to='/auth/register' style={{ textDecoration: 'none' }}>
-                            Register
-                        </MenuItem>
-                        <MenuItem onClick={handleClose} component={Link} to='/auth/login' style={{ textDecoration: 'none' }}>
-                            Login
-                        </MenuItem>
-                    </Box>
-                )}
+                <Box>
+                    <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
+                    <MenuItem onClick={handleAPIClick}>API Key</MenuItem>
+                    <MenuItem onClick={handleClose} component={Link} to='/auth/reset-password' style={{ textDecoration: 'none' }}>
+                        Reset Password
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout} component={Link} to='/auth/login' style={{ textDecoration: 'none' }}>
+                        Logout
+                    </MenuItem>
+                </Box>
             </Menu>
             <ProfileDialog
                 user={user}

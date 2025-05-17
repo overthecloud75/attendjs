@@ -75,68 +75,71 @@ const Auth = ({mode}) => {
     }
 
     return (
-        <div className='formContainer'>
-            <div className='formWrapper'>
-                <span className='logo'>SmartWork</span>
-                <span className='title'>{mode}</span>
-                <form onSubmit={handleSubmit}>
-                    {(mode !=='login' )&& (
+        <div style={{ flex : 1 }}>
+            <div className='formContainer'>
+                <div className='formWrapper'>
+                    <span className='logo'>SmartWork</span>
+                    <span className='title'>{mode}</span>
+                    <form onSubmit={handleSubmit}>
+                        {(mode !=='login' )&& (
+                            <input 
+                                id='name' 
+                                type='text' 
+                                placeholder='name'
+                                value={formData.name}
+                                onChange={handleInputChange}
+                            />)}
                         <input 
-                            id='name' 
-                            type='text' 
-                            placeholder='name'
-                            value={formData.name}
+                            id='email' 
+                            type='email' 
+                            placeholder='email'
+                            value={formData.email}
                             onChange={handleInputChange}
-                        />)}
-                    <input 
-                        id='email' 
-                        type='email' 
-                        placeholder='email'
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                    />
-                    <input 
-                        id='password' 
-                        type='password' 
-                        placeholder='password'
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        required
-                    />
-                    {(mode === 'login') && (<div id='cf-turnstile' />)}
-                    <button 
-                        disabled={loading}
-                        style={{
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        {mode==='login'?'Sign in':'Sign up'}
-                    </button>
-                    {(mode === 'login') && (
-                        <button
-                            onClick={handleSSOLogin}
+                            required
+                        />
+                        <input 
+                            id='password' 
+                            type='password' 
+                            placeholder='password'
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        {(mode === 'login') && (<div id='cf-turnstile' />)}
+                        <button 
                             disabled={loading}
                             style={{
-                                backgroundColor: '#2F2F91',
-                                color: 'white',
-                                border: 'none',
                                 borderRadius: '8px',
                                 cursor: 'pointer',
                             }}
                         >
-                            🔐 Microsoft 계정으로 로그인
+                            {mode==='login'?'Sign in':'Sign up'}
                         </button>
-                    )}
-                    {loading && <LoadingSpinner />}
-                    {!loading && errorMsg && <span>{errorMsg}</span>}
-                </form>
-                {mode === 'login' ?
-                    (<p>You don't have an account? <Link to='/auth/register'>Register</Link></p>):
-                    (<p>You do have an account? <Link to='/auth/login'>Login</Link></p>)
-                }
-                <p>You don't remember the password? <Link to='/auth/lost-password'>Lost Password</Link></p>
+                        {mode === 'login' ?
+                            (<p>You don't have an account? <Link to='/auth/register'>Register</Link></p>):
+                            (<p>You do have an account? <Link to='/auth/login'>Login</Link></p>)
+                        }
+                        <p>You don't remember the password? <Link to='/auth/lost-password'>Lost Password</Link></p>
+                        <div class='text-center'>또는</div>
+                        {(mode === 'login') && (
+                            <button
+                                onClick={handleSSOLogin}
+                                disabled={loading}
+                                style={{
+                                    backgroundColor: '#2F2F91',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                🔐 Microsoft 계정으로 로그인
+                            </button>
+                        )}
+                        {loading && <LoadingSpinner />}
+                        {!loading && errorMsg && <span>{errorMsg}</span>}
+                    </form>     
+                </div>
             </div>
         </div>
     )

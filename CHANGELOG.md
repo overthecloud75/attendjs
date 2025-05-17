@@ -1,3 +1,7 @@
+* 25/05/17
+    - 2.4.5 (client) <br>
+        Login Page UI <br>
+
 * 25/05/06
     - 2.4.4 (client, api) <br>
         apply the latest pkg <br>

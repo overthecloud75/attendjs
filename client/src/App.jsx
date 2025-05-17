@@ -1,5 +1,5 @@
 import { useState, Suspense, lazy } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import './style.scss'
 import Attend from './pages/Attend'
 import Register from './pages/auth/Register'
@@ -20,26 +20,29 @@ import ApprovalHistory from './pages/ApprovalHistory'
 import TooManyRequests from './pages/TooManyRequests'
 import NotFound from './pages/NotFound'
 import { LoadingSpinner } from './utils/GeneralUtil'
+import { getUser } from './storage/userSlice'
 
-const Home = lazy(() => import('./pages/Home'))
+const Map = lazy(() => import('./pages/Map'))
 const Schedule = lazy(() => import('./pages/Schedule'))
 const Board = lazy(() => import('./pages/Board'))
 const CheckEmail = lazy(() => import('./pages/CheckEmail'))
 const Confirm = lazy(() => import('./pages/Confirm'))
 
 function App() { 
+    const user = getUser()
     const [menu, setMenu] = useState(false)
     return (
         <BrowserRouter>
             <Suspense fallback={<LoadingSpinner/>}>
                 <Routes>
-                    <Route exact path='/' element={<Home menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/' element={user.isLogin ? <Navigate to='/attend' /> : <Login menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/register' element={<Register menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/login' element={<Login menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/reset-password' element={<ResetPassword menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/lost-password' element={<LostPassword menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/reset-password-with-otp' element={<ResetPasswordWithOtp menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/callback' element={<Callback menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/map' element={<Map menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/attend' element={<Attend menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/wifi-attend' element={<Wifi menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/gps-attend' element={<GPS menu={menu} setMenu={setMenu}/>}/>

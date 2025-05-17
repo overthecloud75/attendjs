@@ -1,22 +1,28 @@
 import styled from 'styled-components'
 
-const Container = styled.div`
-    background-color: white;
-    display: flex;
-    margin: 20px 0px 0px 0px;
-    justify-content: center;
-`
-
 const Image = styled.img`
-    width: 95%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    object-position: center;
 `
 
 const Feature = () => {
     return (
-        <Container>
-            <Image src="/employees.webp"/>
-        </Container>
+        <div style={{ 
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: -1,
+            opacity: 0.3
+        }}>
+            <Image src='/employees.webp'/>
+        </div>
     )
 }
 

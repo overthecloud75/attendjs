@@ -22,10 +22,11 @@ const makeRequest = async (endpoint, method, data = null) => {
 
 // 로그인 성공 후 처리 함수
 const handleLoginSuccess = async (responseData, location, navigate) => {
+    console.log('response', responseData)
     const { where, hash } = responseData
 
     if (where.attend) {
-        navigate('/', { state: { location, where } })
+        navigate('/map', { state: { location, where } })
         return
     }
     
@@ -35,10 +36,10 @@ const handleLoginSuccess = async (responseData, location, navigate) => {
             hash.toString()
         ).toString()
         const resAttend = await makeRequest('setAttend', 'POST', { location: ciphertext })
-        navigate('/', { state: { location, where: resAttend.data.where } })
+        navigate('/map', { state: { location, where: resAttend.data.where } })
         return
     }
-    
+    console.log('attend')
     navigate('/attend')
 }
 

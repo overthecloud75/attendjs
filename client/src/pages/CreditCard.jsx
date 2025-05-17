@@ -4,9 +4,11 @@ import Navbar from '../components/bar/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/creditcard'
 import Footer from '../components/Footer'
+import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
 
 const CreditCard = ({menu, setMenu}) => {
 
+    useRedirectIfNotAuthenticated()
     const { isMobile } = useResponsive()
 
     return (    

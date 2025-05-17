@@ -7,6 +7,7 @@ import Navbar from '../components/bar/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/attend'
 import Footer from '../components/Footer'
+import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
 
 const CHAT_CONFIG = {
     title: 'SmartWork Chat',
@@ -16,6 +17,7 @@ const CHAT_CONFIG = {
 
 const Attend = ({menu, setMenu}) => {
 
+    useRedirectIfNotAuthenticated()
     const { handleNewUserMessage } = useChat()
     const { isMobile } = useResponsive()
 

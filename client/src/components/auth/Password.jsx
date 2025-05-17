@@ -62,36 +62,38 @@ const Password = () => {
     }
 
     return (
-        <div className='formContainer'>
-            <div className='formWrapper'>
-                <span className='logo'>SmartWork</span>
-                <span className='title'>비밀번호 재설정</span>
-                <form onSubmit={handleSubmit}>
-                    <input 
-                        id='currentPassword' 
-                        type='password' 
-                        placeholder='현재 비밀번호'
-                        value={formData.currentPassword}
-                        onChange={handleChange}
-                    />
-                     <input
-                        id='newPassword'
-                        type='password'
-                        placeholder='새 비밀번호'
-                        value={formData.newPassword}
-                        onChange={handleChange}
-                    />
-                    <input
-                        id='newPassword2'
-                        type='password'
-                        placeholder='새 비밀번호 확인'
-                        value={formData.newPassword2}
-                        onChange={handleChange}
-                    />
-                    <button disabled={loading} style={{borderRadius: '8px', cursor: 'pointer'}}>비빌번호 변경</button>
-                    {loading && <LoadingSpinner />}
-                    {!loading && errorMsg && <span>{errorMsg}</span>}
-                </form>
+        <div style={{ flex : 1 }}>
+            <div className='formContainer'>
+                <div className='formWrapper'>
+                    <span className='logo'>SmartWork</span>
+                    <span className='title'>비밀번호 재설정</span>
+                    <form onSubmit={handleSubmit}>
+                        <input 
+                            id='currentPassword' 
+                            type='password' 
+                            placeholder='현재 비밀번호'
+                            value={formData.currentPassword}
+                            onChange={handleChange}
+                        />
+                        <input
+                            id='newPassword'
+                            type='password'
+                            placeholder='새 비밀번호'
+                            value={formData.newPassword}
+                            onChange={handleChange}
+                        />
+                        <input
+                            id='newPassword2'
+                            type='password'
+                            placeholder='새 비밀번호 확인'
+                            value={formData.newPassword2}
+                            onChange={handleChange}
+                        />
+                        <button disabled={loading} style={{borderRadius: '8px', cursor: 'pointer'}}>비빌번호 변경</button>
+                        {loading && <LoadingSpinner />}
+                        {!loading && errorMsg && <span>{errorMsg}</span>}
+                    </form>
+                </div>
             </div>
         </div>
     )

@@ -1,12 +1,21 @@
-import Navbar from '../../components/bar/Navbar'
 import Email from '../../components/auth/Email'
+import Advertisement from '../../components/Advertisement'
+import Feature from '../../components/Feature'
 import Footer from '../../components/Footer'
 
-const LostPassword = ({menu, setMenu}) => {   
+const LostPassword = () => {   
     return (
         <div>
-            <Navbar menu={menu} setMenu={setMenu}/> 
-            <Email/>
+            <Feature />
+            <div style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                minHeight: 'calc(100vh - 140px)',
+            }}>
+                <Advertisement/>
+                <Email/>
+            </div>
             <Footer/>
         </div>
     )

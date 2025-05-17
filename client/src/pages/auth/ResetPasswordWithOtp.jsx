@@ -1,16 +1,25 @@
-import Navbar from '../../components/bar/Navbar'
 import AuthWithOtp from '../../components/auth/AuthWithOtp'
+import Advertisement from '../../components/Advertisement'
+import Feature from '../../components/Feature'
 import Footer from '../../components/Footer'
 
-const ResetPasswordWithOtp = ({menu, setMenu}) => {   
+const ResetPasswordWithOtp = () => {   
     return (
         <div>
-            <Navbar menu={menu} setMenu={setMenu}/> 
-            <h3 style={{textAlign: "center"}}>Plz Check Your Email to check OTP!</h3>
-            <AuthWithOtp/>
+            <Feature />
+            <div style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                minHeight: 'calc(100vh - 140px)',
+            }}>
+                <Advertisement/>
+                <AuthWithOtp/>
+            </div>
             <Footer/>
         </div>
     )
 }
   
 export default ResetPasswordWithOtp
+

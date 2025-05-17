@@ -16,7 +16,6 @@ const Container = styled.div`
     align-items: center;
     font-size: 14px;
     color: #555;
-    background-color: white;
 `
 const Wrapper = styled.div`
     width: 100%;

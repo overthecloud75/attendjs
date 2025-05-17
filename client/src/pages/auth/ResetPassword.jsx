@@ -1,12 +1,21 @@
-import Navbar from '../../components/bar/Navbar'
 import Password from '../../components/auth/Password'
+import Advertisement from '../../components/Advertisement'
+import Feature from '../../components/Feature'
 import Footer from '../../components/Footer'
 
-const ResetPassword = ({menu, setMenu}) => {   
+const ResetPassword = () => {   
     return (
         <div>
-            <Navbar menu={menu} setMenu={setMenu}/> 
-            <Password/>
+            <Feature />
+            <div style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                minHeight: 'calc(100vh - 140px)',
+            }}>
+                <Advertisement/>
+                <Password/>
+            </div>
             <Footer/>
         </div>
     )

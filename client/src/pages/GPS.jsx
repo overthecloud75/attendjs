@@ -4,9 +4,11 @@ import Navbar from '../components/bar/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/gps'
 import Footer from '../components/Footer'
+import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
 
 const GPS = ({menu, setMenu}) => {
 
+    useRedirectIfNotAuthenticated()
     const { isMobile } = useResponsive()
 
     return (   

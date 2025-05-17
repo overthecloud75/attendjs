@@ -53,46 +53,48 @@ const AuthCallback = ({mode}) => {
     }
 
     return (
-        <div className='formContainer'>
-            <div className='formWrapper'>
-                <span className='logo'>SmartWork</span>
-                <form onSubmit={handleSubmit}>
-                    <input 
-                        id='email' 
-                        type='email' 
-                        placeholder='email'
-                        required
-                    />
-                    <input 
-                        id='password' 
-                        type='password' 
-                        placeholder='password'
-                        required
-                    />
-                    <button 
-                        disabled={loading}
-                        style={{
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        Sign in
-                    </button>
-                    <button
-                        disabled={loading}
-                        style={{
-                            backgroundColor: '#2F2F91',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        🔐 Microsoft 계정으로 로그인
-                    </button>
-                    {loading && <LoadingSpinner />}
-                    {!loading && errorMsg && <span>{errorMsg}</span>}
-                </form>
+        <div style={{ flex : 1 }}>
+            <div className='formContainer'>
+                <div className='formWrapper'>
+                    <span className='logo'>SmartWork</span>
+                    <form onSubmit={handleSubmit}>
+                        <input 
+                            id='email' 
+                            type='email' 
+                            placeholder='email'
+                            required
+                        />
+                        <input 
+                            id='password' 
+                            type='password' 
+                            placeholder='password'
+                            required
+                        />
+                        <button 
+                            disabled={loading}
+                            style={{
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            Sign in
+                        </button>
+                        <button
+                            disabled={loading}
+                            style={{
+                                backgroundColor: '#2F2F91',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            🔐 Microsoft 계정으로 로그인
+                        </button>
+                        {loading && <LoadingSpinner />}
+                        {!loading && errorMsg && <span>{errorMsg}</span>}
+                    </form>
+                </div>
             </div>
         </div>
     )

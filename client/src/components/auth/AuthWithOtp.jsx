@@ -72,47 +72,52 @@ const AuthWithOtp = () => {
     }
 
     return (
-        <div className='formContainer'>
-            <div className='formWrapper'>
-                <span className='logo'>SmartWork</span>
-                <span className='title'>비밀번호 재설정</span>
-                <form onSubmit={handleSubmit}>
-                    <input 
-                        id='email' 
-                        type='email' 
-                        placeholder='email' 
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                    />
-                     <input
-                        id='otp'
-                        placeholder='OTP 코드'
-                        value={formData.otp}
-                        onChange={handleInputChange}
-                        required
-                    />
-                    <input
-                        id='password'
-                        type='password'
-                        placeholder='새 비밀번호'
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        required
-                    />
-                    <input
-                        id='password2'
-                        type='password'
-                        placeholder='새 비밀번호 확인'
-                        value={formData.password2}
-                        onChange={handleInputChange}
-                        required
-                    />
-                    <div id='cf-turnstile'/>
-                    <button disabled={loading} style={{borderRadius: '8px', cursor: 'pointer'}}>비밀번호 재설정</button>
-                    {loading && <LoadingSpinner />}
-                    {!loading && errorMsg && <span>{errorMsg}</span>}
-                </form>
+        <div style={{ flex : 1 }}>
+            <h3 style={{ textAlign: 'center' }}>
+                Plz Check Your Email to check OTP!
+            </h3>
+            <div className='formContainer'>
+                <div className='formWrapper'>
+                    <span className='logo'>SmartWork</span>
+                    <span className='title'>비밀번호 재설정</span>
+                    <form onSubmit={handleSubmit}>
+                        <input 
+                            id='email' 
+                            type='email' 
+                            placeholder='email' 
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <input
+                            id='otp'
+                            placeholder='OTP 코드'
+                            value={formData.otp}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <input
+                            id='password'
+                            type='password'
+                            placeholder='새 비밀번호'
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <input
+                            id='password2'
+                            type='password'
+                            placeholder='새 비밀번호 확인'
+                            value={formData.password2}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <div id='cf-turnstile'/>
+                        <button disabled={loading} style={{borderRadius: '8px', cursor: 'pointer'}}>비밀번호 재설정</button>
+                        {loading && <LoadingSpinner />}
+                        {!loading && errorMsg && <span>{errorMsg}</span>}
+                    </form>
+                </div>
             </div>
         </div>
     )

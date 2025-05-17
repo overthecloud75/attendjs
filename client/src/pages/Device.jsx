@@ -4,9 +4,11 @@ import Navbar from '../components/bar/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/device'
 import Footer from '../components/Footer'
+import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
 
 const Device = ({menu, setMenu}) => {
 
+    useRedirectIfNotAuthenticated()
     const { isMobile } = useResponsive()
 
     return (    

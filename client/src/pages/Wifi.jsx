@@ -4,9 +4,11 @@ import Navbar from '../components/bar/Navbar'
 import TableWithSearch from '../components/tables/TableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/wifi'
 import Footer from '../components/Footer'
+import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
 
 const Wifi = ({menu, setMenu}) => {
 
+    useRedirectIfNotAuthenticated()
     const { isMobile } = useResponsive()
 
     return (   
