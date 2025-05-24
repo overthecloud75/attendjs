@@ -11,7 +11,7 @@ const ResetPassword = () => {
                 position: 'relative',
                 display: 'flex',
                 alignItems: 'center',
-                minHeight: 'calc(100vh - 140px)',
+                minHeight: '100vh'
             }}>
                 <Advertisement/>
                 <Password/>

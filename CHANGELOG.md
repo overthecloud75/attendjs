@@ -1,3 +1,7 @@
+* 25/05/24
+    - 2.4.6 (client) <br>
+        error fix (window.turnstile not loaded) <br>
+
 * 25/05/17
     - 2.4.5 (client) <br>
         Login Page UI <br>

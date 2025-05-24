@@ -31,9 +31,6 @@ const Title = styled.h1`
     text-align: center;
     width: 100%;
     font-size: 40px;
-    @media screen and (max-width: 500px) {
-        font-size: 20px;
-    }
 `
 
 const TitleDesc = styled.div`
@@ -41,9 +38,6 @@ const TitleDesc = styled.div`
     padding: 0;
     text-align: center;
     font-size: 25px;
-    @media screen and (max-width: 500px) {
-        font-size: 15px;
-    }
 `
 
 const Advertisement = () => {

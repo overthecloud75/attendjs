@@ -11,8 +11,7 @@ const Callback = () => {
                 position: 'relative',
                 display: 'flex',
                 alignItems: 'center',
-                minHeight: 'calc(100vh - 140px)',
-                zIndex: 2
+                minHeight: '100vh',
             }}>
                 <Advertisement/>
                 <AuthCallback

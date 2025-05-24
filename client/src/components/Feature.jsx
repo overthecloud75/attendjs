@@ -19,7 +19,7 @@ const Feature = () => {
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: -1,
-            opacity: 0.3
+            opacity: 0.2
         }}>
             <Image src='/employees.webp'/>
         </div>

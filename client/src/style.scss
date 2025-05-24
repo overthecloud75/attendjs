@@ -1,9 +1,13 @@
 .formContainer {
-    margin: 5% auto;
+    margin: 5% 10% 5% 5%;
     display: flex;
     max-width: 450px;
     border-radius: 10px;
     border: 1px solid gray;
+  
+    @media screen and (max-width: 800px) {
+        margin: 5% auto;
+    }
   
     .formWrapper {
         padding: 20px 20px;
