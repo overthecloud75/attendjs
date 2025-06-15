@@ -184,7 +184,7 @@ const itemDict =
                 to: '/summary',
                 icon: <SummarizeIcon/>,
                 title: 'Summary',
-                auth: true
+                auth: false
             },
             {
                 to: '/schedule',

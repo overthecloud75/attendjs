@@ -84,15 +84,15 @@ export const getLeftLeaveSummary = async ({employeeId, name, beginDate}) => {
    
     const {defaultAnnualLeave, baseDate, baseMonth} = getDefaultAnnualLeave(beginDate)
     const nextYearDay = getNextYear(baseDate)
-    const summary = initializeLeftLeaveSummary(name, beginDate, baseDate, baseMonth, defaultAnnualLeave)
+    const summary = initializeLeftLeaveSummary(name, employeeId, beginDate, baseDate, baseMonth, defaultAnnualLeave)
     const attends = await Report.find({employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1})
     const approvalHistory = await getApprovalLeaveHistoryByEmployeeId(employeeId, getToday(), nextYearDay)
     updateLeftLeaveSummary(summary, attends, reverseStatus, approvalHistory, nextYearDay)
     return summary
 }
 
-const initializeLeftLeaveSummary = (name, beginDate, baseDate, baseMonth, defaultAnnualLeave) => {
-    const summary = { name, beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave, notUsed: 0, pending: 0 }
+const initializeLeftLeaveSummary = (name, employeeId, beginDate, baseDate, baseMonth, defaultAnnualLeave) => {
+    const summary = { name, employeeId, beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave, notUsed: 0, pending: 0 }
     WORKING.inStatus.concat(Object.keys(WORKING.outStatus)).forEach(status => {
         if (status in WORKING.offDay) summary[status] = 0
     })

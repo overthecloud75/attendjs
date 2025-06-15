@@ -10,33 +10,18 @@ export const columnHeaders = [
         enableSorting: true,
     },
     {
-        accessorKey: 'days',
+        accessorKey: 'baseDate',
         header: '기준일',
         enableSorting: true,
     },
     {
-        accessorKey: 'workingDays',
-        header: '근무일',
+        accessorKey: 'defaultAnnualLeave',
+        header: '총연차',
         enableSorting: true,
     },
     {
-        accessorKey: 'workingHours',
-        header: '시간',
-        enableSorting: true,
-    },
-    {
-        accessorKey: '미출근',
-        header: '미출근',
-        enableSorting: true,
-    },
-    {
-        accessorKey: '정상출근',
-        header: '출근',
-        enableSorting: true,
-    },
-    {
-        accessorKey: '지각',
-        header: '지각',
+        accessorKey: 'leftAnnualLeave',
+        header: '남은 연자',
         enableSorting: true,
     },
     {
@@ -50,20 +35,25 @@ export const columnHeaders = [
         enableSorting: true,
     },
     {
-        accessorKey: '외근',
-        header: '외근',
+        accessorKey: '미출근',
+        header: '미출근',
         enableSorting: true,
     },
     {
-        accessorKey: '재택',
-        header: '재택',
+        accessorKey: '지각',
+        header: '지각',
         enableSorting: true,
     },
     {
-        accessorKey: '기타',
-        header: '기타',
+        accessorKey: 'notUsed',
+        header: '사용 대기 연차',
         enableSorting: true,
-    }
+    },
+    {
+        accessorKey: 'pending',
+        header: '승인 대기 연차',
+        enableSorting: true,
+    },
 ]
 
 export const mobileColumnHeaders = [
@@ -78,35 +68,15 @@ export const mobileColumnHeaders = [
         enableSorting: true,
     },
     {
-        accessorKey: 'days',
-        header: '기준일',
+        accessorKey: 'defaultAnnualLeave',
+        header: '총연차',
         enableSorting: true,
     },
     {
-        accessorKey: 'workingDays',
-        header: '근무일',
+        accessorKey: 'leftAnnualLeave',
+        header: '남은 연차',
         enableSorting: true,
-    },
-    {
-        accessorKey: 'workingHours',
-        header: '시간',
-        enableSorting: true,
-    },
-    {
-        accessorKey: '미출근',
-        header: '미출근',
-        enableSorting: true,
-    },
-    {
-        accessorKey: '정상출근',
-        header: '출근',
-        enableSorting: true,
-    },
-    {
-        accessorKey: '지각',
-        header: '지각',
-        enableSorting: true,
-    },
+    }
 ]
 
 export const csvHeaders = [
@@ -119,28 +89,12 @@ export const csvHeaders = [
         label: 'Name',
     },
     {
-        key: 'days',
-        label: '기준일',
+        key: 'defaultAnnualLeave',
+        label: '총연차',
     },
     {
-        key: 'workingDays',
-        label: '근무일',
-    },
-    {
-        key: 'workingHours',
-        label: '시간',
-    },
-    {
-        key: '미출근',
-        label: '미출근',
-    },
-    {
-        key: '정상출근',
-        label: '출근',
-    },
-    {
-        key: '지각',
-        label: '지각',
+        key: 'leftAnnualLeave',
+        label: '남은 연자',
     },
     {
         key: '휴가',
@@ -151,15 +105,19 @@ export const csvHeaders = [
         label: '반차',
     },
     {
-        key: '외근',
-        label: '외근',
+        key: '미출근',
+        label: '미출근',
     },
     {
-        key: '재택',
-        label: '재택',
+        key: '지각',
+        label: '지각',
     },
     {
-        key: '기타',
-        label: '기타',
+        key: 'notUsed',
+        label: '사용 대기 연차',
+    },
+    {
+        key: 'pending',
+        label: '승인 대기 연차',
     }
 ]

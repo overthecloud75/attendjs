@@ -1,6 +1,6 @@
 import express from 'express'
 import { search, getLeftLeave, getLeftLeaveList } from '../controllers/summary.js'
-import { verifyUser } from '../utils/verifyToken.js'
+import { verifyAdmin, verifyUser } from '../utils/verifyToken.js'
 
 const router = express.Router()
 
@@ -72,6 +72,6 @@ router.get('/leftleave', verifyUser, getLeftLeave)
  *                          status:
  *                              type: string
  */
-router.get('/leftleavelist', verifyUser, getLeftLeaveList)
+router.get('/leftleavelist', verifyAdmin, getLeftLeaveList)
 
 export default router

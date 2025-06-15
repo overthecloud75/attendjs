@@ -75,6 +75,6 @@ const getApprovalHistory = async (req) => {
 }
 
 export const getApprovalLeaveHistoryByEmployeeId = async (employeeId, start, end) => {
-    const query = {employeeId, start: {$gt: start, $lt: end}, reason: {$in: ['휴가', '반차']}}
+    const query = {employeeId, start: {$gt: start, $lt: end}, reason: {$in: ['휴가', '반차']}, status: { $ne: 'Cancel' }}
     return Approval.find(query).sort({ createdAt: -1 })
 }

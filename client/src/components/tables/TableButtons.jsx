@@ -91,7 +91,7 @@ const TableButtons = ({url, data, csvHeaders, fileName, writeMode, setWriteMode,
                 )}
                 <CsvDownload
                     data={data}
-                    headers={csvHeaders}
+                    csvHeaders={csvHeaders}
                     fileName={fileName}
                 />
             </div>

@@ -30,7 +30,7 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
     const [date, setDate] = useState(getInitialDate(page))
 
     const [clickCount, setClickCount] = useState(0)
-    const [fileName, setFileName] = useState('download.csv')
+    const [fileName, setFileName] = useState(page + '.csv')
 
     const {data, setData, loading } = useFetch(
         page, 

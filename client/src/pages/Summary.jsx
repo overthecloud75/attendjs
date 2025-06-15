@@ -19,7 +19,7 @@ const Summary = ({menu, setMenu}) => {
                 <TableWithSearch 
                     searchKeyword='name'
                     page ='summary'
-                    url='/api/summary/search'
+                    url='/api/summary/leftleavelist'
                     columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
                     csvHeaders={csvHeaders}
                 />

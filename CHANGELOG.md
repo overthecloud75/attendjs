@@ -1,4 +1,6 @@
-* 25/06/14
+* 25/06/15
+    - 2.4.8 (client) <br>
+        summary > leftLeaveList <br>
     - 2.4.7 (client) <br>
         Dashboard <br>
 

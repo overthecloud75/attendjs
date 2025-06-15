@@ -143,7 +143,6 @@ const Calendar = () => {
                         textColor='secondary'
                         indicatorColor='secondary'
                     >
-                        <Tab value='private' label='Private' />
                         <Tab value='team' label='Team' />
                         <Tab value='company' label='Company' />        
                     </Tabs>)
