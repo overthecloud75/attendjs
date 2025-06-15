@@ -1,8 +1,9 @@
 import { getAttends } from './attend.js'
 import Report from '../models/Report.js'
 import Employee from '../models/Employee.js'
-import { getToday, getDefaultAnnualLeave } from '../utils/util.js'
+import { getToday, getNextDay, getNextYear, getDefaultAnnualLeave } from '../utils/util.js'
 import { WORKING, getReverseStatus } from '../config/working.js'
+import { getApprovalLeaveHistoryByEmployeeId } from './attendApproval.js'
 
 const RETIRED_STATUS = '퇴사'
 
@@ -80,23 +81,25 @@ export const getLeftLeaveSummary = async ({employeeId, name, beginDate}) => {
     if (!beginDate) return null
 
     const reverseStatus = getReverseStatus()
-  
+   
     const {defaultAnnualLeave, baseDate, baseMonth} = getDefaultAnnualLeave(beginDate)
+    const nextYearDay = getNextYear(baseDate)
     const summary = initializeLeftLeaveSummary(name, beginDate, baseDate, baseMonth, defaultAnnualLeave)
     const attends = await Report.find({employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1})
-    updateLeftLeaveSummary(summary, attends, reverseStatus)
+    const approvalHistory = await getApprovalLeaveHistoryByEmployeeId(employeeId, getToday(), nextYearDay)
+    updateLeftLeaveSummary(summary, attends, reverseStatus, approvalHistory, nextYearDay)
     return summary
 }
 
 const initializeLeftLeaveSummary = (name, beginDate, baseDate, baseMonth, defaultAnnualLeave) => {
-    const summary = { name, beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave }
+    const summary = { name, beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave, notUsed: 0, pending: 0 }
     WORKING.inStatus.concat(Object.keys(WORKING.outStatus)).forEach(status => {
         if (status in WORKING.offDay) summary[status] = 0
     })
     return summary
 }
 
-const updateLeftLeaveSummary = (summary, attends, reverseStatus) => {
+const updateLeftLeaveSummary = (summary, attends, reverseStatus, approvalHistory, nextYearDay) => {
     for (const attend of attends) {
         const { status, reason } = attend
         if (status && status in WORKING.offDay) {
@@ -107,6 +110,27 @@ const updateLeftLeaveSummary = (summary, attends, reverseStatus) => {
             summary[reverseStatus[reason]]++
             summary.leftAnnualLeave -= WORKING.offDay[reason]
         }
+    }
+    for (const approval of approvalHistory){
+        let baseDay = approval.start 
+        while (baseDay <= approval.end && baseDay < nextYearDay) {
+            if (approval.status === 'Active') {
+                if (approval.reason === '휴가') {
+                    summary.notUsed = summary.notUsed + 1
+                } else if (approval.reason === '반차') {
+                    summary.notUsed = summary.notUsed + 0.5
+                }
+            }
+            else if (approval.status === 'Pending') {
+                if (approval.reason === '휴가') {
+                    summary.pending = summary.pending + 1
+                } else if (approval.reason === '반차') {
+                    summary.pending = summary.pending + 0.5
+                }
+            }
+            baseDay = getNextDay(baseDay)
+        }
+        summary.leftAnnualLeave = summary.leftAnnualLeave - summary.notUsed
     }
 }
 

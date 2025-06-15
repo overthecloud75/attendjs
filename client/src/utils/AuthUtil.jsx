@@ -22,11 +22,10 @@ const makeRequest = async (endpoint, method, data = null) => {
 
 // 로그인 성공 후 처리 함수
 const handleLoginSuccess = async (responseData, location, navigate) => {
-    console.log('response', responseData)
     const { where, hash } = responseData
 
     if (where.attend) {
-        navigate('/map', { state: { location, where } })
+        navigate('/dashboard')
         return
     }
     
@@ -39,8 +38,7 @@ const handleLoginSuccess = async (responseData, location, navigate) => {
         navigate('/map', { state: { location, where: resAttend.data.where } })
         return
     }
-    console.log('attend')
-    navigate('/attend')
+    navigate('/dashboard')
 }
 
 export const requestAuth = async (

@@ -1,6 +1,3 @@
-import { Widget } from 'react-chat-widget-react-18'
-import 'react-chat-widget-react-18/lib/styles.css'
-import { useChat } from '../hooks/useChat'
 import { useResponsive } from '../hooks/useResponsive'
 import Sidebar from '../components/bar/Sidebar'
 import Navbar from '../components/bar/Navbar'
@@ -9,21 +6,14 @@ import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/atten
 import Footer from '../components/Footer'
 import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
 
-const CHAT_CONFIG = {
-    title: 'SmartWork Chat',
-    subtitle: '',
-    showTimeStamp: false
-}
-
 const Attend = ({menu, setMenu}) => {
 
     useRedirectIfNotAuthenticated()
-    const { handleNewUserMessage } = useChat()
     const { isMobile } = useResponsive()
 
     return (     
         <div className='container'>
-            {menu && <Sidebar/>}
+            {menu && <Sidebar menu={menu} setMenu={setMenu}/>}
             <div className='wrapper'>
                 <Navbar menu={menu} setMenu={setMenu}/> 
                 <TableWithSearch 
@@ -35,10 +25,6 @@ const Attend = ({menu, setMenu}) => {
                 />
                 {menu && <Footer/>}
             </div>
-            <Widget
-                {...CHAT_CONFIG}
-                handleNewUserMessage={handleNewUserMessage}
-            />
         </div>  
     )
 }

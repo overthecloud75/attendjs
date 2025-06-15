@@ -20,6 +20,18 @@ export const getNextDay = (dateStr) => {
     return formattedDate
 }
 
+export const getNextYear = (dateStr) => {
+    let [year, month, day] = dateStr.split('-').map(Number)
+    const newDate = new Date(year, month - 1, day)
+    const nextDate = new Date(newDate.getTime() + (24 * 60 * 60 * 1000))
+
+    year = nextDate.getFullYear() + 1
+    month = String(nextDate.getMonth() + 1).padStart(2, '0')
+    day = String(nextDate.getDate()).padStart(2, '0')
+    const formattedDate = `${year}-${month}-${day}`
+    return formattedDate
+}
+
 export const getYearMonth = () => {
     const today = new Date()
     const year = today.getFullYear()

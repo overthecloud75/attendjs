@@ -11,7 +11,7 @@ import Approval from './Approval'
 import { getUser } from '../storage/userSlice'
 import { useWindowDimension } from '../hooks/useWindowDimension'
 import { MOBILE } from '../configs/mobile'
-import './Calendar.css';
+import './Calendar.css'
 
 const Wrapper = styled.div`
     padding: 10px;

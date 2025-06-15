@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 import { Tooltip } from 'react-tooltip'
+import CloseIcon from '@mui/icons-material/Close'
+import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'
 import WifiFindIcon from '@mui/icons-material/WifiFind'
 import GpsFixedIcon from '@mui/icons-material/GpsFixed'
@@ -26,7 +28,7 @@ const Top = styled.div`
     display: flex;  
     height: 50px; 
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     border-bottom: 1px solid #eee;
 `
 
@@ -91,6 +93,15 @@ const Item = styled.li`
     }
 ` 
 
+const Close = styled.div`
+    font-size: 30px;
+    color: #7451f8;
+
+    &:hover {
+        background-color: rgba(0,0,0,0.04);
+    }
+` 
+
 const Icon = styled.div`
     font-size: 30px;
     color: #7451f8;
@@ -146,6 +157,12 @@ const itemDict =
     {
         Attendance : [
             {
+                to: '/dashboard', 
+                icon: <AccountBoxIcon/>,
+                title: 'Dashboard',
+                auth: true
+            },
+            {
                 to: '/attend', 
                 icon: <DirectionsRunIcon/>,
                 title: 'Attend',
@@ -161,7 +178,7 @@ const itemDict =
                 to: '/gps-attend',
                 icon: <GpsFixedIcon/>,
                 title: 'GPS-Attend',
-                auth: true
+                auth: true 
             }, 
             {
                 to: '/summary',
@@ -266,13 +283,20 @@ const SidebarCategories = () => {
     ) 
 }
 
-const Sidebar = () => {
+const Sidebar = ({menu, setMenu}) => {
+    const user = getUser()
+    const handleMenu = () => {
+        user.isLogin&&setMenu(!menu)
+    }
     return (
         <Wrapper>
             <Top>
                 <Link to='/' style={{ textDecoration: 'none' }}>
                     <Logo>SmartWork</Logo>
                 </Link>
+                <Close>
+                    <CloseIcon onClick={handleMenu}/>
+                </Close>
             </Top>
             <Middle>
                 <Items>

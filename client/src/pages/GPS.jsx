@@ -13,7 +13,7 @@ const GPS = ({menu, setMenu}) => {
 
     return (   
         <div className='container'>
-            {menu && <Sidebar/>}
+            {menu && <Sidebar menu={menu} setMenu={setMenu}/>}
             <div className='wrapper'>
                 <Navbar menu={menu} setMenu={setMenu}/> 
                 <TableWithSearch 

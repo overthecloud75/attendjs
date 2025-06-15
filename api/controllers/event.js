@@ -1,10 +1,11 @@
 import Event from '../models/Event.js'
 import Employee from '../models/Employee.js'
 import Approval from '../models/Approval.js'
+import Report from '../models/Report.js'
 import { isValidObjectId } from '../models/utils.js'
 import { getEmployeeByEmail } from './employee.js'
 import { reportUpdate } from './eventReport.js'
-import { sanitizeData, getNextDay } from '../utils/util.js'
+import { sanitizeData, getNextDay, getToday } from '../utils/util.js'
 import { attendRequestEmail, attendConfirmationEmail } from '../utils/email.js'
 import { getLeftLeaveSummary } from './summary.js'
 import { createError } from '../utils/error.js'
@@ -36,20 +37,23 @@ export const getEventsInCalendar = async (req, res, next) => {
 const fetchEvents = async (start, end, option, user) => {
     const baseQuery = { start: { $gte: start, $lt: end } }
     let events = []
+    let attendStatus = []
+    const notExistEmployeeIdEvent = await Event.find({ ...baseQuery, employeeId: { $exists: false } }).sort({ start: 1 })
 
     switch (option) {
         case 'private':
-            events = await Event.find({ ...baseQuery, employeeId: user.employeeId }).sort({ start: 1 })
+            const employeeId = user.employeeId
+            events = await Event.find({ ...baseQuery, employeeId }).sort({ start: 1 })
+            attendStatus = await getEventFromStatus(start, employeeId)
             break
         case 'company':
             events = await Event.find(baseQuery).sort({ start: 1 })
             break
         case 'team':
             events = await Event.find({ ...baseQuery, department: user.department }).sort({ start: 1 })
-            const notExistEmployeeIdEvent = await Event.find({ ...baseQuery, employeeId: { $exists: false } }).sort({ start: 1 })
-            events = [...events, ...notExistEmployeeIdEvent]
             break
     }
+    events = [...events, ...notExistEmployeeIdEvent, ...attendStatus]
     return events
 }
 
@@ -256,6 +260,16 @@ const deleteEvent = async (approval) => {
     await Event.deleteOne({employeeId: approval.employeeId, start, end, title})
 }
 
-
+const getEventFromStatus = async (start, employeeId) => {
+    const today = getToday()
+    let attendStatus = []
+    if (start <= today) {
+        const attends = await Report.find({date: {$gte: start, $lte: today}, employeeId, status: { $in: ['미출근', '지각'] }}).sort({ date: 1})
+        for (const attend of attends) {
+            attendStatus.push({title: attend['status'], start: attend['date'], end: getNextDay(attend['date'])})
+        }
+    }
+    return attendStatus
+}
 
 

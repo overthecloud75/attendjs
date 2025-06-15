@@ -1,10 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import MenuIcon from '@mui/icons-material/Menu'
-import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlined'
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
-import ListOutlinedIcon from '@mui/icons-material/ListOutlined'
 import { Avatar } from '@mui/material'
 import { getUser } from '../../storage/userSlice'
 import ProfileMenu from '../bar/ProfileMenu'
@@ -48,6 +45,10 @@ const Icon = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;   
+
+    &:hover {
+        background-color: rgba(0,0,0,0.04);
+    }
 `
 const Counter = styled.div`
     width: 15px;
@@ -79,31 +80,18 @@ const Navbar = ({menu, setMenu}) => {
     return (
         <Container>
             <Wrapper>
-                <Icon onClick={handleMenu}>
-                    <MenuIcon/>
-                </Icon>
+                {!menu?
+                    <Icon onClick={handleMenu}>
+                        <MenuIcon/>
+                    </Icon>:
+                    <div/>
+                }
                 <Items>
-                    <Item>
-                        <Icon>
-                            <FullscreenExitOutlinedIcon/>
-                        </Icon>
-                    </Item>
-                    <Item>
-                        <Icon>
-                            <NotificationsNoneOutlinedIcon/>
-                        </Icon>
-                        <Counter>1</Counter>
-                    </Item>
                     <Item>
                         <Icon> 
                             <ChatBubbleOutlineOutlinedIcon/>
                         </Icon>
                         <Counter>2</Counter>
-                    </Item>
-                    <Item>
-                        <Icon>
-                            <ListOutlinedIcon/>
-                        </Icon>
                     </Item>
                     <Item onClick={handleClick}>
                         <Avatar/>

@@ -55,8 +55,8 @@ const NMap = ({state}) => {
         <Container>
         {state&&<Title>Your location is {state.where.minDistance * 1000}m distant from {state.where.place}</Title>}
         {state&&state.where.attend?
-            <Title>Don't worry. <mark>checked</mark></Title>:
-            <Title><mark>Unchecked.</mark> plz login again</Title>
+            <Title>Don't worry.&nbsp;<mark>checked</mark></Title>:
+            <Title><mark>Unchecked.&nbsp;</mark> plz login again</Title>
         }
             <div id='map' style={{
                 display: scriptLoading ? 'none' : 'block',

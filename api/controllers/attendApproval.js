@@ -63,13 +63,18 @@ const getApprovalHistory = async (req) => {
     const { name, startDate: startDateStr, endDate: endDateStr } = req.query
     const startDate = getDate(sanitizeData(startDateStr, 'date'))
     const endDate = getNextDate(sanitizeData(endDateStr, 'date'))
-    const { isAdmin, email } = req.user
+    const { isAdmin, employeeId } = req.user
 
     let query = {createdAt: {$gte: startDate, $lte: endDate}}
     if (isAdmin) {
         if (name) query.name = name
     } else {
-        query.email = email
+        query.employeeId = employeeId
     }
     return Approval.find(query).sort({ createdAt: -1 }).limit(LIMIT)
+}
+
+export const getApprovalLeaveHistoryByEmployeeId = async (employeeId, start, end) => {
+    const query = {employeeId, start: {$gt: start, $lt: end}, reason: {$in: ['휴가', '반차']}}
+    return Approval.find(query).sort({ createdAt: -1 })
 }

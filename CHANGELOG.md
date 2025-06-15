@@ -1,3 +1,7 @@
+* 25/06/14
+    - 2.4.7 (client) <br>
+        Dashboard <br>
+
 * 25/05/24
     - 2.4.6 (client) <br>
         error fix (window.turnstile not loaded) <br>
