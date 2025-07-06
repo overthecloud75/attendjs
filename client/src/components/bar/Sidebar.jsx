@@ -85,6 +85,10 @@ const Item = styled.li`
     &:hover {
         background-color: #ece8ff;
     }
+    
+    &.invisible {
+        display: none;
+    }
 
     @media screen and (max-width: 600px) {
         height: 30px;
@@ -160,43 +164,50 @@ const itemDict =
                 to: '/dashboard', 
                 icon: <AccountBoxIcon/>,
                 title: 'Dashboard',
-                auth: true
+                auth: true,
+                visible: true
             },
             {
                 to: '/attend', 
                 icon: <DirectionsRunIcon/>,
                 title: 'Attend',
-                auth: true
+                auth: true,
+                visible: true
             },
             {    
                 to: '/wifi-attend',
                 icon: <WifiFindIcon/>,
                 title: 'Wifi-Attend',
-                auth: false
+                auth: false, 
+                visible: false
             }, 
             {    
                 to: '/gps-attend',
                 icon: <GpsFixedIcon/>,
                 title: 'GPS-Attend',
-                auth: true 
+                auth: true,
+                visible: true
             }, 
             {
                 to: '/summary',
                 icon: <SummarizeIcon/>,
                 title: 'Summary',
-                auth: false
+                auth: false,
+                visible: true
             },
             {
                 to: '/schedule',
                 icon: <CalendarMonthIcon/>,
                 title: 'Schedule',
-                auth: true
+                auth: true,
+                visible: true
             },
             {
                 to: '/location',
                 icon: <PlaceIcon/>,
                 title: 'Location',
-                auth: false
+                auth: false,
+                visible: true
             }
         ],
     Management : [
@@ -204,19 +215,22 @@ const itemDict =
             to: '/employee',
             icon: <PeopleIcon/>,
             title: 'Employee',
-            auth: true
+            auth: true,
+            visible: true
         },
         {
             to: '/device',
             icon: <ComputerIcon/>,
             title: 'Device',
-            auth: true
+            auth: true,
+            visible: true
         },
         {
             to: '/creditcard',
             icon: <CreditCardIcon/>,
             title: 'CreditCard',
-            auth: true
+            auth: true,
+            visible: true
         }
     ],
     Community : [
@@ -224,19 +238,22 @@ const itemDict =
             to: '/approvalhistory',
             icon: <AssignmentTurnedInIcon/>,
             title: 'ApprovalHistory',
-            auth: true
+            auth: true,
+            visible: true
         },
         {
             to: '/board',
             icon: <NoteAltIcon/>,
             title: 'Board',
-            auth: true
+            auth: true,
+            visible: true
         },
         {
             to: '/loginhistory',
             icon: <BookIcon/>,
             title: 'LoginHistory',
-            auth: false
+            auth: false,
+            visible: true
         },
     ]
 }
@@ -251,7 +268,7 @@ const SidebarItems = ({itemList, titleIndex}) => {
                 key={itemIndex}
             >
                 {(item.auth || user.isAdmin) &&
-                    <Item>
+                    <Item className={item.visible ? '' : 'invisible'}>
                         <Icon
                             data-tooltip-id={window.innerWidth<600 ? item.title : undefined}
                             data-tooltip-content={item.title}

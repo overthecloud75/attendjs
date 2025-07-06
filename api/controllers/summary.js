@@ -82,17 +82,17 @@ export const getLeftLeaveSummary = async ({employeeId, name, beginDate}) => {
 
     const reverseStatus = getReverseStatus()
    
-    const {defaultAnnualLeave, baseDate, baseMonth} = getDefaultAnnualLeave(beginDate)
+    const {defaultAnnualLeave, employeementPeriod, baseDate, baseMonth} = getDefaultAnnualLeave(beginDate)
     const nextYearDay = getNextYear(baseDate)
-    const summary = initializeLeftLeaveSummary(name, employeeId, beginDate, baseDate, baseMonth, defaultAnnualLeave)
+    const summary = initializeLeftLeaveSummary(name, employeeId, beginDate, baseDate, baseMonth, defaultAnnualLeave, employeementPeriod)
     const attends = await Report.find({employeeId, date: {$gte: baseDate, $lte: getToday()}}).sort({date: 1})
     const approvalHistory = await getApprovalLeaveHistoryByEmployeeId(employeeId, getToday(), nextYearDay)
     updateLeftLeaveSummary(summary, attends, reverseStatus, approvalHistory, nextYearDay)
     return summary
 }
 
-const initializeLeftLeaveSummary = (name, employeeId, beginDate, baseDate, baseMonth, defaultAnnualLeave) => {
-    const summary = { name, employeeId, beginDate, baseDate, baseMonth, defaultAnnualLeave, leftAnnualLeave: defaultAnnualLeave, notUsed: 0, pending: 0 }
+const initializeLeftLeaveSummary = (name, employeeId, beginDate, baseDate, baseMonth, defaultAnnualLeave, employeementPeriod) => {
+    const summary = { name, employeeId, beginDate, baseDate, baseMonth, defaultAnnualLeave, employeementPeriod, leftAnnualLeave: defaultAnnualLeave, notUsed: 0, pending: 0 }
     WORKING.inStatus.concat(Object.keys(WORKING.outStatus)).forEach(status => {
         if (status in WORKING.offDay) summary[status] = 0
     })
@@ -130,8 +130,8 @@ const updateLeftLeaveSummary = (summary, attends, reverseStatus, approvalHistory
             }
             baseDay = getNextDay(baseDay)
         }
-        summary.leftAnnualLeave = summary.leftAnnualLeave - summary.notUsed
     }
+    summary.leftAnnualLeave = summary.leftAnnualLeave - summary.notUsed
 }
 
 const summaryWorkingHours = (summary) => {

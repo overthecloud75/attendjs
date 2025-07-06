@@ -1,5 +1,4 @@
 import { Card, CardContent, Typography, Box, LinearProgress } from '@mui/material'
-import { useLeftLeave } from '../../hooks/useLeftLeave'
 
 // 커스텀 게이지 바
 function LeaveProgressBar(props) {
@@ -22,9 +21,7 @@ function LeaveProgressBar(props) {
     )
 }
 
-const LeaveSummary = () => {
-    const { leftLeave } = useLeftLeave() 
-
+const LeaveSummary = ({leftLeave}) => {
     const used = leftLeave['반차'] * 0.5 + leftLeave['휴가']
     const usedPercentage = (used / leftLeave.defaultAnnualLeave) * 100
 

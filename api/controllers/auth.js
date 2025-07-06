@@ -6,7 +6,6 @@ import { formatToTimeZone } from 'date-fns-timezone'
 import { authenticator } from 'otplib'
 import distance from 'gps-distance'
 import { MOBILE_IP_LIST } from '../config/working.js'
-import { logger } from '../config/winston.js'
 import User from '../models/User.js'
 import GPSOn from '../models/GPSOn.js'
 import Login from '../models/Login.js'
@@ -63,7 +62,7 @@ export const login = async (req, res, next) => {
         const email = sanitizeData(rawEmail, 'email')
         const user = await validateUserCredentials(email, password)
         
-        const {department} = await getEmployeeByEmail(email)
+        const {beginDate, department, rank, regular} = await getEmployeeByEmail(email)
         const token = jwt.sign(
             {name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department},
             process.env.JWT
@@ -78,7 +77,7 @@ export const login = async (req, res, next) => {
             httpOnly: true, secure: true, sameSite: 'Strict'
         })
         .status(200)
-        .json({name: user.name, email, isAdmin: user.isAdmin, department, where, hash})
+        .json({name: user.name, email, isAdmin: user.isAdmin, department, rank, regular, beginDate, where, hash})
     } catch (err) {
         console.log(err)
         next(err)

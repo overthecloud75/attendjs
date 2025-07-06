@@ -103,6 +103,7 @@ const GetCalendar = ({navigate, weekends, setWeekends, tapValue}) => {
             eventClick={user.isAdmin?handleEventClick:false}
             datesSet={handleDates}
             contentHeight='auto'
+            locale='ko'
         />
     )
 }

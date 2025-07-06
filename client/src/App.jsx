@@ -31,7 +31,7 @@ const Confirm = lazy(() => import('./pages/Confirm'))
 
 function App() { 
     const user = getUser()
-    const [menu, setMenu] = useState(false)
+    const [menu, setMenu] = useState(true)
     return (
         <BrowserRouter>
             <Suspense fallback={<LoadingSpinner/>}>

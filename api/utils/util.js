@@ -100,7 +100,7 @@ export const getDefaultAnnualLeave = (beginDate) => {
         if (employeementPeriod % 2 == 0) {defaultAnnualLeave = defaultAnnualLeave - 1}
     }
     if (defaultAnnualLeave > 25) {defaultAnnualLeave = 25}
-    return {defaultAnnualLeave, baseDate, baseMonth} 
+    return {defaultAnnualLeave, employeementPeriod, baseDate, baseMonth} 
 }
 
 export const separateIP = (x_forwarded_for) => {
