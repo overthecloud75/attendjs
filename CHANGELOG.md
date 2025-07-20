@@ -1,3 +1,8 @@
+* 25/07/20
+    - 2.4.9 (client) <br>
+        sidebar (Admin) <br>
+        search name in summary <br>
+
 * 25/06/15
     - 2.4.8 (client) <br>
         summary > leftLeaveList <br>

@@ -69,7 +69,13 @@ export const getLeftLeave = async (req,res,next) => {
 
 export const getLeftLeaveList = async (req,res,next) => {
     try {
-        const employees = await Employee.find({regular: {$ne: RETIRED_STATUS}}).sort({name: 1})
+        const { name }  = req.query
+        let employees 
+        if (name) {
+            employees = await Employee.find({name})
+        } else {
+            employees = await Employee.find({regular: {$ne: RETIRED_STATUS}}).sort({name: 1})
+        }
         const summaryList = await Promise.all(employees.map(getLeftLeaveSummary))
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(summaryList)
     } catch (err) {

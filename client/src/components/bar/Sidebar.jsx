@@ -189,26 +189,12 @@ const itemDict =
                 visible: true
             }, 
             {
-                to: '/summary',
-                icon: <SummarizeIcon/>,
-                title: 'Summary',
-                auth: false,
-                visible: true
-            },
-            {
                 to: '/schedule',
                 icon: <CalendarMonthIcon/>,
                 title: 'Schedule',
                 auth: true,
                 visible: true
             },
-            {
-                to: '/location',
-                icon: <PlaceIcon/>,
-                title: 'Location',
-                auth: false,
-                visible: true
-            }
         ],
     Management : [
         {
@@ -246,6 +232,22 @@ const itemDict =
             icon: <NoteAltIcon/>,
             title: 'Board',
             auth: true,
+            visible: true
+        },        
+    ],
+    Admin : [
+        {
+            to: '/summary',
+            icon: <SummarizeIcon/>,
+            title: 'Summary',
+            auth: false,
+            visible: true
+        },
+        {
+            to: '/location',
+            icon: <PlaceIcon/>,
+            title: 'Location',
+            auth: false,
             visible: true
         },
         {
