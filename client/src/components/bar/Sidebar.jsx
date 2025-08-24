@@ -19,31 +19,63 @@ import { getUser } from '../../storage/userSlice'
 
 const Wrapper = styled.div`
     flex: 1;
-    border-right: 1px solid #eee;
+    border-right: 1px solid #e1e5e9;
     min-height: 100vh;
-    background-color: white;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
 `
 
 const Top = styled.div`
     display: flex;  
-    height: 50px; 
+    height: 70px; 
     align-items: center;
     justify-content: space-around;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e1e5e9;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    @media screen and (max-width: 600px) {
+        height: 50px;
+    }
 `
 
 const Middle = styled.div`
-    padding-left: 10px;
+    padding: 20px 0;
+    overflow-y: auto;
+    max-height: calc(100vh - 140px);
+    
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 2px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 2px;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+    
     @media screen and (max-width: 600px) {
-        padding-left: 0px;
+        padding: 10px 0;
     }
 `
 
 const Bottom = styled.div`
     display: flex;  
-    margin: 10px;
+    margin: 20px;
     align-items: center;
     justify-content: center;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
     @media screen and (max-width: 600px) {
         margin: 0px;
     }
@@ -51,8 +83,10 @@ const Bottom = styled.div`
 
 const Logo = styled.span`
     font-size: 20px;
-    font-weight: bold;
-    color: #6439ff;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
     @media screen and (max-width: 600px) {
         font-size: 7px;
     }
@@ -65,11 +99,24 @@ const Items = styled.ul`
 `
 
 const Title = styled.div`
-    font-size: 10px;
-    font-weight: bold;
-    color: #999;
-    margin-top: 15px;
-    margin-bottom: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    margin: 25px 20px 10px 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 20px;
+        height: 2px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 1px;
+    }
     @media screen and (max-width: 600px) {
         display: none;
     }
@@ -79,11 +126,22 @@ const Item = styled.li`
     display: flex;
     align-items: center;
     height: 50px;
-    padding: 5px;
+    padding: 0 20px;
     cursor: pointer;
-
+    margin: 2px 10px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    
+    background: ${props => props.active ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'transparent'};
+    color: ${props => props.active ? 'white' : '#64748b'};
+    
     &:hover {
-        background-color: #ece8ff;
+        background: ${props => props.active 
+            ? 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)' 
+            : 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)'};
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     
     &.invisible {
@@ -98,11 +156,16 @@ const Item = styled.li`
 ` 
 
 const Close = styled.div`
-    font-size: 30px;
-    color: #7451f8;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 
     &:hover {
-        background-color: rgba(0,0,0,0.04);
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
     }
 ` 
 
@@ -132,21 +195,28 @@ const Span = styled.span`
 `
 
 const Color = styled.div`
-    width: 20px;
-    height: 20px;
-    border-radius: 5px;
-    border: 1px solid #7451f8;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid #e1e5e9;
     cursor: pointer;
-    margin: 5px;
+    margin: 0 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     &:nth-child(1){
-        background-color: whitesmoke;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
     }
     &:nth-child(2){
-        background-color: #333;
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     }
     &:nth-child(3){
-        background-color: darkblue;
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    }
+
+    &:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     @media screen and (max-width: 600px) {

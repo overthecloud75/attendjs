@@ -78,11 +78,11 @@ class Scanner:
 
             connected = False
             for status, interface in zip(status_list, interface_list):
-                if interface == 'wi-fi' and (status == '연결됨' or status == 'connected'):
+                if interface == 'wi-fi' and (status in ['연결됨', 'connected']):
                     connected = True
         else:
             try:
-                output = subprocess.check_output(["iwconfig", WIFI['NAME_OF_ROUTER']])
+                output = subprocess.check_output(['iwconfig', WIFI['NAME_OF_ROUTER']])
                 if b"ESSID:off/any" in output:
                     connected = False
                 else:

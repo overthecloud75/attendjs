@@ -18,7 +18,7 @@ def check_holiday(date):
     lunar_month_day = get_lunar_day(year, month_day)
     if month_day in WORKING['holidays'] or lunar_month_day in WORKING['lunarHolidays']:
         is_holiday = True
-    elif date.weekday() == 5 or date.weekday() == 6:
+    elif date.weekday() in [5, 6]:
         is_holiday = True
     elif date.weekday() == 0:
         # 대체공휴일 적용
@@ -27,9 +27,9 @@ def check_holiday(date):
 
         two_days_ago = datetime_to_date(date - timedelta(days=2))
         lunar_two_days_ago = get_lunar_day(year, two_days_ago)
-        if yesterday in WORKING['alternativeVacation'] or two_days_ago in WORKING['alternativeVacation']:
+        if any(day in WORKING['alternativeVacation'] for day in [yesterday, two_days_ago]):
             is_holiday = True
-        if lunar_yesterday in ['0101', '0815'] or lunar_two_days_ago in ['0101', '0815']:
+        if any(day in ['0101', '0815'] for day in [lunar_yesterday, lunar_two_days_ago]):
             is_holiday = True
         
     if not is_holiday and USE_LUNAR_NEW_YEAR and int(month) < 3:

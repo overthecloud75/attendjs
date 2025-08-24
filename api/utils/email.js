@@ -53,9 +53,19 @@ export const CheckOtpEmail = async (name, email, otp) => {
             from: 'HR_MANAGER' + '<' + process.env.ACCOUNT_EMAIL + '>',
             to: email,
             subject: '[SmartWork] Please reset your password with otp',
-            html: `<h2>Hello ${name}</h2>
-                <p>You can reset your password with otp.</p>
-                <h3>OTP : ${otp}</h3>`
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #333;">안녕하세요. ${name}님</h2>
+                <p style="color: #666; line-height: 1.6;">
+                    비밀번호 재설정을 요청하셨습니다. 아래 OTP를 사용하여 비밀번호를 재설정해주세요.
+                </p>
+                <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;">
+                    <h3 style="color: #007bff; margin: 0; font-size: 24px;">OTP: ${otp}</h3>
+                </div>
+                <p style="color: #666; font-size: 14px;">
+                    이 OTP는 보안을 위해 제한된 시간 동안만 유효합니다.
+                </p>
+                </div>`
         })
     } catch(err) {
         logger.error(err)

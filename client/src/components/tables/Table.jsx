@@ -22,57 +22,175 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 0 5px 0 5px;
     font-size: 14px;
-    @media screen and (max-width: 600px) {
-        font-size: 11px;
+`
+
+const TableWrapper = styled.div`
+    overflow-x: auto;
+    border-radius: 16px;
+    margin: 0 5px 0 5px;
+    
+    &::-webkit-scrollbar {
+        height: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
     }
 `
 
 const TableSheet = styled.table`
+    width: 100%;
     border-collapse: collapse;
     text-align: center;
-    border-radius: ${v.borderRadius};
-    overflow-x: auto;
+    font-size: 14px;
+    
+    @media screen and (max-width: 768px) {
+        font-size: 11px;
+    }
 `
 
 const THead = styled.thead`
     position: sticky;
+    top: 0;
     z-index: 100;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 `
 
 const HeadTr = styled.tr`
-    background: #e3f2fd;
+    background: transparent;
 `
 
 const Th = styled.th`
     padding: ${v.smSpacing};
-    border: 0px solid;
-    color: blue;
+    border: none;
+    color: white;
     text-transform: capitalize;
-    font-weight: 550;
-    @media screen and (max-width: 600px) {
+    font-weight: 600;
+    font-size: 14px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    &:first-child {
+        border-top-left-radius: 16px;
+    }
+    
+    &:last-child {
+        border-top-right-radius: 16px;
+    }
+    
+    @media screen and (max-width: 768px) {
         padding-left: 0px;
         padding-right: 0px
+        font-size: 11px;
     }
 `
 
 const Td = styled.td`
     padding: ${v.smSpacing};
-    border-bottom: 1px solid #F2F2F2; 
-    color #2E2E2E; 
+    border-bottom: 1px solid #f1f5f9;
+    color: #1e293b;
     font-weight: 400;
-    @media screen and (max-width: 600px) {
+    transition: all 0.3s ease;
+
+    @media screen and (max-width: 768px) {
         padding-left: 0px;
         padding-right: 0px
     }
 `
 
 const TBody = styled.tbody`
+    background-color: transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    
+    &:last-child td {
+        border-bottom: none;
+    }
 `
 
 const BodyTr = styled.tr`
     background-color: transparent;
+`
+
+const StatusBadge = styled.span`
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    
+    &.active {
+        background: #dcfce7;
+        color: #166534;
+    }
+    
+    &.pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+    
+    &.inactive {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    
+    &.approved {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+    
+    &.rejected {
+        background: #fecaca;
+        color: #dc2626;
+    }
+`
+
+const EmptyState = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: #64748b;
+    text-align: center;
+`
+
+const EmptyIcon = styled.div`
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+`
+
+const EmptyText = styled.p`
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    margin-bottom: 8px;
+`
+
+const EmptySubtext = styled.p`
+    font-size: 14px;
+    margin: 0;
+    opacity: 0.7;
 `
 
 // https://geuni620.github.io/blog/2023/12/2/tanstack-table/
@@ -112,64 +230,74 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
 
     return (
         <Container>
-            <TableButtons
-                url={url}   
-                data={data}
-                csvHeaders={csvHeaders}
-                fileName={fileName}
-                writeMode={writeMode}
-                setWriteMode={setWriteMode}
-                setOpenEditWrite={setOpenEditWrite}
-                setSelectedRowData={setSelectedRowData}
-                setOpenUpdate={setOpenUpdate}
-            />
-            <TableSheet
-                style={{width:'100%'}}
-            >
-                <THead>
-                    {table.getHeaderGroups().map(headerGroup => {
-                        return (
-                            <HeadTr key={headerGroup.id}>
-                                <Th>No</Th>
-                                {headerGroup.headers.map(header => (
-                                    <Th 
-                                        key={header.id} 
-                                        colSpan={header.colSpan}
-                                        onClick={header.column.getToggleSortingHandler()}
-                                    >
-                                        {flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
+            {data && data.length > 0 && (
+                <TableButtons
+                    url={url}   
+                    data={data}
+                    csvHeaders={csvHeaders}
+                    fileName={fileName}
+                    writeMode={writeMode}
+                    setWriteMode={setWriteMode}
+                    setOpenEditWrite={setOpenEditWrite}
+                    setSelectedRowData={setSelectedRowData}
+                    setOpenUpdate={setOpenUpdate}
+                />)
+            }
+            {data && data.length > 0 ? (
+                <TableWrapper>
+                    <TableSheet>
+                        <THead>
+                            {table.getHeaderGroups().map(headerGroup => {
+                                return (
+                                    <HeadTr key={headerGroup.id}>
+                                        <Th>No</Th>
+                                        {headerGroup.headers.map(header => (
+                                            <Th 
+                                                key={header.id} 
+                                                colSpan={header.colSpan}
+                                                onClick={header.column.getToggleSortingHandler()}
+                                            >
+                                                {flexRender(
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )}
+                                            </Th>
+                                        ))}
+                                    </HeadTr>
+                            )})}
+                        </THead>
+                        <TBody>
+                            {table.getRowModel().rows.map((row, rowIndex) => {
+                                return (
+                                    <BodyTr key={row.id}>
+                                        <Td 
+                                            onClick={(e) => handleUpdateClick(e, row.original)}
+                                            style={{textDecoration: 'underline'}}
+                                        >
+                                            { table.getState().pagination.pageIndex * table.getState().pagination.pageSize + rowIndex + 1 }
+                                        </Td>
+                                        {row.getVisibleCells().map(cell => (
+                                            <Td key={cell.id}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </Td>  
+                                            )   
                                         )}
-                                    </Th>
-                                ))}
-                            </HeadTr>
-                    )})}
-                </THead>
-                <TBody>
-                    {table.getRowModel().rows.map((row, rowIndex) => {
-                        return (
-                            <BodyTr key={row.id}>
-                                <Td 
-                                    onClick={(e) => handleUpdateClick(e, row.original)}
-                                    style={{textDecoration: 'underline'}}
-                                >
-                                    { table.getState().pagination.pageIndex * table.getState().pagination.pageSize + rowIndex + 1 }
-                                </Td>
-                                {row.getVisibleCells().map(cell => (
-                                    <Td key={cell.id}>
-                                        {flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                        )}
-                                    </Td>  
-                                    )   
-                                )}
-                            </BodyTr>
-                        )
-                    })}
-                </TBody>
-            </TableSheet>
+                                    </BodyTr>
+                                )
+                            })}
+                        </TBody>
+                    </TableSheet>
+                </TableWrapper>
+            ) :  (
+                <EmptyState>
+                    <EmptyIcon>📊</EmptyIcon>
+                    <EmptyText>데이터가 없습니다</EmptyText>
+                    <EmptySubtext>새로운 데이터를 추가해보세요</EmptySubtext>
+                </EmptyState>
+            )}
             <Pagination
                 gotoPage={table.setPageIndex}
                 canPreviousPage={table.getCanPreviousPage()}

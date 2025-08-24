@@ -8,9 +8,6 @@ ACCOUNT = {
     'password': 'your password'
 }
 
-# CC = 'test@email.com'
-CC = None 
-
 # ip 범위
 SCAN_RANGE_LIST = ['192.168.0.0/24']
 

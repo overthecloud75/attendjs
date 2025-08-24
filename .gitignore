@@ -109,4 +109,5 @@ api/config/process.js
 api/uploads
 api/payments
 todo.md
+build.log
 

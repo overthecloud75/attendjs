@@ -73,11 +73,11 @@ const AuthWithOtp = () => {
 
     return (
         <div style={{ flex : 1 }}>
-            <h3 style={{ textAlign: 'center' }}>
-                Plz Check Your Email to check OTP!
-            </h3>
             <div className='formContainer'>
                 <div className='formWrapper'>
+                    <h3 style={{ textAlign: 'center' }}>
+                        Plz Check Your Email to check OTP!
+                    </h3>
                     <span className='logo'>SmartWork</span>
                     <span className='title'>비밀번호 재설정</span>
                     <form onSubmit={handleSubmit}>

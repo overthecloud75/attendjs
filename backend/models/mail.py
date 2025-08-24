@@ -2,16 +2,16 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 try:
-    from mainconfig import ACCOUNT, MAIL_SERVER, CC
+    from mainconfig import ACCOUNT, MAIL_SERVER
 except Exception as e:
-    from testconfig import ACCOUNT, MAIL_SERVER, CC
+    from testconfig import ACCOUNT, MAIL_SERVER
     
-def send_email(email=None, subject=None, body=None, include_cc=False):
+def send_email(email=None, subject=None, body=None, cc=None,include_cc=False):
     mimemsg = MIMEMultipart()
     mimemsg['From'] = 'HR_MANAGER' + '<' + ACCOUNT['email'] + '>'
     mimemsg['To'] = email
-    if include_cc and CC:
-        mimemsg['Cc'] = CC
+    if include_cc and cc:
+        mimemsg['Cc'] = cc
     mimemsg['Subject'] = subject
     mimemsg.attach(MIMEText(body, 'plain'))
     try:

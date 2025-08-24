@@ -71,8 +71,11 @@ class Report(BasicModel):
                 self._update_overnight(date=date)
         elif hour > overnight_time + 2 and hour <= overnight_time + 3:
             self._check_attend(date, hour)
-             # notice        
-            self._notice_email(date=date)
+            # notice  
+            try:
+                self._notice_email(date=date)
+            except Exception as e:
+                self.logger.error('{}, {}'.format(e, date))
         elif hour > overnight_time + 3:
             self._check_attend(date, hour)
 
@@ -347,7 +350,8 @@ class Report(BasicModel):
                         '\n' \
                         '연차, 외근 등의 사유가 있는 경우 %s 를 통해 출근 품의를 진행하면 근태가 정정이 됩니다. ' \
                         %(name, name, report['date'], self._convert_begin(report['begin']), report['workingHours'], str(status), SITE_URL + 'schedule')
-                    sent = send_email(email=email, subject=subject, body=body, include_cc=True)     
+                    cc = self.employee.get_approver(employee)['email']
+                    sent = send_email(email=email, subject=subject, body=body, cc=cc,include_cc=True)     
                     if sent:
                         return {'date': self.today, 'name': name, 'email': email, 'reportDate': report['date'], 'status': status}
                     else:

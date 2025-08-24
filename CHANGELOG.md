@@ -1,3 +1,7 @@
+* 25/08/24
+    - 2.5.0 (client, api, backend) <br>
+       UI enhancement <br>
+       
 * 25/07/20
     - 2.4.9 (client) <br>
         sidebar (Admin) <br>
