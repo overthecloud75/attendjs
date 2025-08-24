@@ -1,6 +1,8 @@
 * 25/08/24
+    - 2.5.1 (client) <br>
+        ProfileDialog UI enhancement <br>
     - 2.5.0 (client, api, backend) <br>
-       UI enhancement <br>
+        UI enhancement <br>
        
 * 25/07/20
     - 2.4.9 (client) <br>
