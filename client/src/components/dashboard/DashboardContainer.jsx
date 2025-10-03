@@ -3,17 +3,25 @@ import UserInfoCard from './UserInfoCard'
 import TodayStatusCard from './TodayStatusCard'
 import LeaveSummary from './LeaveSummary'
 import WorkCalendar from './WorkCalendar'
-import { useResponsive } from '../../hooks/useResponsive'
 import { useLeftLeave } from '../../hooks/useLeftLeave'
 
 const DashboardContainer  = () => {
 
-    const {isMobile} = useResponsive()
     const { leftLeave } = useLeftLeave() 
 
     return (
-        <Container maxWidth='xl' sx={{ mt: 1 }}>
-            <Typography variant='h4' gutterBottom sx={{fontSize: isMobile ? '1.5rem' : '2.5rem'}}>
+        <Container maxWidth='xl' sx={{ mt: 2 }}>
+           <Typography
+                variant='h4'
+                gutterBottom
+                sx={{
+                    fontSize: {
+                        xs: '1.3rem', // 모바일
+                        sm: '1.5rem', // 태블릿
+                        md: '1.8rem', // 데스크탑
+                    },
+                }}
+            >
                 내 근태 현황
             </Typography>
 

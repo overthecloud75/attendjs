@@ -9,12 +9,12 @@ import SearchIcon from '@mui/icons-material/Search'
 import { DateRange } from 'react-date-range'
 
 const Wrapper = styled.div`
+    position: absolute;
     width: 80%;
     display: flex;
     z-index: 1000;
     margin-left: 60px;
-    position: absolute;
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: 1450px) {
         display: none;
     }
 `
@@ -234,7 +234,7 @@ const Search = ({page, searchKeyword, name, setName, date, setDate, clickCount, 
                             {`${format(date[0].startDate, 'yyyy-MM-dd')} ~ ${format(date[0].endDate, 'yyyy-MM-dd')}`}
                         </DateText>
                         {openDate && 
-                            <DatePickerContainer>
+                            <DatePickerContainer onClick={(e) => e.stopPropagation()}>
                                 <DateRange
                                     editableDateInputs={true}
                                     onChange={item => setDate([item.selection])}
@@ -245,7 +245,7 @@ const Search = ({page, searchKeyword, name, setName, date, setDate, clickCount, 
                             </DatePickerContainer>
                         }
                     </DateField>   
-                    <SearchButton type="submit">
+                    <SearchButton type='submit'>
                         <SearchIcon style={{ fontSize: 18 }} />
                         검색
                     </SearchButton>

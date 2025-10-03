@@ -6,10 +6,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { useTranslation } from 'react-i18next'
-import { postApproval } from '../utils/EventUtil'
-import { WORKING } from '../configs/working'
-import { LoadingSpinner } from '../utils/GeneralUtil'
-import { useApproval } from '../hooks/useApproval'
+import { postApproval } from '../../utils/EventUtil'
+import { WORKING } from '../../configs/working'
+import { LoadingSpinner } from '../../utils/GeneralUtil'
+import { useApproval } from '../../hooks/useApproval'
 
 const options = Object.keys(WORKING.outStatus)
 
@@ -20,36 +20,36 @@ const DatePickWrapper = styled.div`
     position: relative;
 `
 
-const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, setEtcOpen, ...other}) => {
+const RadioForm = ({open, onClose, value, setValue, selectedReason, setSelectedReason, setEtcOpen, ...other}) => {
     
     const radioGroupRef = useRef(null)
     const {t} = useTranslation()
 
     useEffect(() => {
         if (!open) {
-          setRadioValue(radioValue)
+            setSelectedReason(selectedReason)
         }
     // eslint-disable-next-line
-    }, [radioValue, open])
+    }, [selectedReason, open])
 
     const handleEntering = () => {
         if (radioGroupRef.current != null) {
-          radioGroupRef.current.focus()
+            radioGroupRef.current.focus()
         }
     }
 
     const handleCancel = () => {
-        setRadioValue('휴가')
+        setSelectedReason('휴가')
         onClose()
     }
 
     const handleOk = () => {
-        setValue({...value, reason: radioValue})
+        setValue({...value, reason: selectedReason})
         onClose()
     }
 
     const handleChange = (event) => {
-        setRadioValue(event.target.value)
+        setSelectedReason(event.target.value)
         if (event.target.value === '기타') {setEtcOpen(true)}
         else {setEtcOpen(false)}
     }
@@ -67,7 +67,7 @@ const RadioForm = ({open, onClose, value, setValue, radioValue, setRadioValue, s
                 <RadioGroup
                     ref={radioGroupRef}
                     name='radio_menu'
-                    value={radioValue}
+                    value={selectedReason}
                     onChange={handleChange}
                 >
                     {options.map((option) => (
@@ -101,14 +101,14 @@ const validateApproval = (value) => {
 
 const Approval = ({navigate, open, setOpen}) => {
     const {t} = useTranslation()
-    const [radioValue, setRadioValue] = useState('휴가')
-    const [radioOpen, setRadioOpen] = useState(false)
+    const [selectedReason, setSelectedReason] = useState('휴가')
+    const [reasonDialogOpen, setReasonDialogOpen] = useState(false)
     const [etcOpen, setEtcOpen] = useState(false)
 
     const { value, setValue, leftLeave, leftStatus } = useApproval() 
 
     const handleClose = () => { setOpen(false) }
-    const handleRadioClose = () => { setRadioOpen(false)}
+    const handleReasonDialogClose = () => { setReasonDialogOpen(false) }
 
     const handleUpdate = async () => {
         if (!validateApproval(value)) return 
@@ -120,31 +120,20 @@ const Approval = ({navigate, open, setOpen}) => {
     const handleChange = (event) => {
         const { id, value: inputValue } = event.target
         if (id === 'etc') {
-            if (inputValue.length > 5) {
-                alert('5글자 이하로 적어주세요.')
-                return
-            }
-            if (/\//.test(inputValue)) {
-                alert('특수 문자는 허용되지 않습니다.')
-                return
-            }
-            if (/ /.test(inputValue)) {
-                alert('공백은 허용되지 않습니다.')
-                return
-            }
+            if (inputValue.length > 5) return alert('5글자 이하로 적어주세요.')
+            if (/[\/ ]/.test(inputValue)) return alert('특수 문자와 공백은 허용되지 않습니다.')
         }  
         setValue({...value, [id]: inputValue})
     }
 
-    const renderTextField = (id, label, value) => (
+    const renderTextField = (id, label, fieldValue) => (
         <TextField
             margin='dense'
             id={id}
-            name={label}
             label={label}
             fullWidth
             variant='standard'
-            value={value}
+            value={fieldValue}
         />
     )
 
@@ -184,21 +173,19 @@ const Approval = ({navigate, open, setOpen}) => {
                     label='사유'
                     fullWidth
                     variant='outlined'
-                    value={radioValue}
-                    onClick={() => setRadioOpen(true)}
+                    value={selectedReason}
+                    onClick={() => setReasonDialogOpen(true)}
                 />
                 <RadioForm
-                    id='radio_menu'
-                    keepMounted
-                    open={radioOpen}
-                    onClose={handleRadioClose}
-                    setValue={setValue}
+                    open={reasonDialogOpen}
+                    onClose={handleReasonDialogClose}
                     value={value}
-                    radioValue={radioValue}
-                    setRadioValue={setRadioValue}
+                    setValue={setValue}
+                    selectedReason={selectedReason}
+                    setSelectedReason={setSelectedReason}
                     setEtcOpen={setEtcOpen}
                 />
-                {!radioOpen&&etcOpen&&
+                {!reasonDialogOpen && etcOpen && 
                     <TextField 
                         margin='dense'
                         id='etc'

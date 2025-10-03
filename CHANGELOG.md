@@ -1,3 +1,7 @@
+* 25/10/03
+    - 2.5.2 (client) <br>
+        dashboard improvements <br>
+
 * 25/08/24
     - 2.5.1 (client) <br>
         ProfileDialog UI enhancement <br>

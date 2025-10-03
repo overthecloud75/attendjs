@@ -6,7 +6,6 @@ import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'
 import WifiFindIcon from '@mui/icons-material/WifiFind'
 import GpsFixedIcon from '@mui/icons-material/GpsFixed'
 import SummarizeIcon from '@mui/icons-material/Summarize'
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import PlaceIcon from '@mui/icons-material/Place'
 import ComputerIcon from '@mui/icons-material/Computer'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
@@ -77,6 +76,7 @@ const Bottom = styled.div`
     border-radius: 12px;
     border: 1px solid #e1e5e9;
     @media screen and (max-width: 600px) {
+        padding: 5px;
         margin: 0px;
     }
 `
@@ -220,6 +220,8 @@ const Color = styled.div`
     }
 
     @media screen and (max-width: 600px) {
+        width: 15px;
+        height: 15px;
         margin-left: 0px;
         margin-right: 0px;
         justify-content: center;
@@ -257,14 +259,7 @@ const itemDict =
                 title: 'GPS-Attend',
                 auth: true,
                 visible: true
-            }, 
-            {
-                to: '/schedule',
-                icon: <CalendarMonthIcon/>,
-                title: 'Schedule',
-                auth: true,
-                visible: true
-            },
+            }
         ],
     Management : [
         {

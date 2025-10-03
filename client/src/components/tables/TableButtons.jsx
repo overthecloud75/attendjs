@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import Approval from '../Approval.jsx'
+import Approval from '../dashboard/Approval.jsx'
 import Payment from './Payment.jsx'
 import CsvDownload from './CsvDownload'
 import { AdminEditablePages, UserEditablePages } from '../../configs/pages'

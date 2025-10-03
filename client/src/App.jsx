@@ -22,16 +22,17 @@ import TooManyRequests from './pages/TooManyRequests'
 import NotFound from './pages/NotFound'
 import { LoadingSpinner } from './utils/GeneralUtil'
 import { getUser } from './storage/userSlice'
+import { useResponsive } from './hooks/useResponsive'
 
 const Map = lazy(() => import('./pages/Map'))
-const Schedule = lazy(() => import('./pages/Schedule'))
 const Board = lazy(() => import('./pages/Board'))
 const CheckEmail = lazy(() => import('./pages/CheckEmail'))
 const Confirm = lazy(() => import('./pages/Confirm'))
 
 function App() { 
     const user = getUser()
-    const [menu, setMenu] = useState(true)
+    const { isMobile } = useResponsive()
+    const [menu, setMenu] = useState(isMobile?false:true)
     return (
         <BrowserRouter>
             <Suspense fallback={<LoadingSpinner/>}>
@@ -49,7 +50,6 @@ function App() {
                     <Route exact path='/wifi-attend' element={<Wifi menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/gps-attend' element={<GPS menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/summary' element={<Summary menu={menu} setMenu={setMenu}/>}/>
-                    <Route exact path='/schedule' element={<Schedule menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/location' element={<Location menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/device' element={<Device menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/creditcard' element={<CreditCard menu={menu} setMenu={setMenu}/>}/>

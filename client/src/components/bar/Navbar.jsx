@@ -16,7 +16,6 @@ const Container = styled.div`
     color: #555;
     background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    position: sticky;
     top: 0;
     backdrop-filter: blur(10px);
     @media screen and (max-width: 600px) {

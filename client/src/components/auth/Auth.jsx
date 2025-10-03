@@ -120,7 +120,7 @@ const Auth = ({mode}) => {
                             (<p>You do have an account? <Link to='/auth/login'>Login</Link></p>)
                         }
                         <p>You don't remember the password? <Link to='/auth/lost-password'>Lost Password</Link></p>
-                        <div class='text-center'>또는</div>
+                        <div className='text-center'>또는</div>
                         {(mode === 'login') && (
                             <button
                                 onClick={handleSSOLogin}
