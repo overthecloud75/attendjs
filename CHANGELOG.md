@@ -1,3 +1,7 @@
+* 25/10/04
+    - 2.5.3 (client) <br>
+        StatusBadge in table <br>
+
 * 25/10/03
     - 2.5.2 (client) <br>
         dashboard improvements <br>

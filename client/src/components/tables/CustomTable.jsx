@@ -6,6 +6,10 @@ import {
     getPaginationRowModel, 
     getSortedRowModel 
 } from '@tanstack/react-table'
+import { 
+    Box,
+    Typography,
+} from '@mui/material'
 import styled from 'styled-components'
 import { v } from '../../variable.js'
 import Pagination from './Pagination.jsx'
@@ -14,7 +18,7 @@ import CardUpdate from './CardUpdate.jsx'
 import ApprovalUpdate from './ApprovalUpdate.jsx'
 import EditWrite from './EditWrite.jsx'
 import { UserEditablePages, UpdatablePages } from '../../configs/pages.js'
-import TableButtons from './TableButtons.jsx'
+import CustomTableButtons from './CustomTableButtons.jsx'
 
 const Container = styled.div`
     width: 100%;
@@ -115,13 +119,9 @@ const Td = styled.td`
 `
 
 const TBody = styled.tbody`
-    background-color: transparent;
-    transition: all 0.3s ease;
     cursor: pointer;
-    
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    
     &:last-child td {
         border-bottom: none;
     }
@@ -130,71 +130,8 @@ const TBody = styled.tbody`
 const BodyTr = styled.tr`
     background-color: transparent;
 `
-
-const StatusBadge = styled.span`
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    
-    &.active {
-        background: #dcfce7;
-        color: #166534;
-    }
-    
-    &.pending {
-        background: #fef3c7;
-        color: #92400e;
-    }
-    
-    &.inactive {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-    
-    &.approved {
-        background: #dbeafe;
-        color: #1e40af;
-    }
-    
-    &.rejected {
-        background: #fecaca;
-        color: #dc2626;
-    }
-`
-
-const EmptyState = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 20px;
-    color: #64748b;
-    text-align: center;
-`
-
-const EmptyIcon = styled.div`
-    font-size: 48px;
-    margin-bottom: 16px;
-    opacity: 0.5;
-`
-
-const EmptyText = styled.p`
-    font-size: 16px;
-    font-weight: 500;
-    margin: 0;
-    margin-bottom: 8px;
-`
-
-const EmptySubtext = styled.p`
-    font-size: 14px;
-    margin: 0;
-    opacity: 0.7;
-`
-
 // https://geuni620.github.io/blog/2023/12/2/tanstack-table/
-const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
+const CustomTable = ({url, columns, data, setData, csvHeaders, fileName}) => {
     // update시 page 설정
     const [selectedRowData, setSelectedRowData] = useState({})
     const [pagination, setPagination] = useState({
@@ -229,20 +166,18 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
     }
 
     return (
-        <Container>
-            {data && data.length > 0 && (
-                <TableButtons
-                    url={url}   
-                    data={data}
-                    csvHeaders={csvHeaders}
-                    fileName={fileName}
-                    writeMode={writeMode}
-                    setWriteMode={setWriteMode}
-                    setOpenEditWrite={setOpenEditWrite}
-                    setSelectedRowData={setSelectedRowData}
-                    setOpenUpdate={setOpenUpdate}
-                />)
-            }
+        <Container>  
+            <CustomTableButtons
+                url={url}   
+                data={data}
+                csvHeaders={csvHeaders}
+                fileName={fileName}
+                writeMode={writeMode}
+                setWriteMode={setWriteMode}
+                setOpenEditWrite={setOpenEditWrite}
+                setSelectedRowData={setSelectedRowData}
+                setOpenUpdate={setOpenUpdate}
+            />
             {data && data.length > 0 ? (
                 <TableWrapper>
                     <TableSheet>
@@ -292,11 +227,11 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
                     </TableSheet>
                 </TableWrapper>
             ) :  (
-                <EmptyState>
-                    <EmptyIcon>📊</EmptyIcon>
-                    <EmptyText>데이터가 없습니다</EmptyText>
-                    <EmptySubtext>새로운 데이터를 추가해보세요</EmptySubtext>
-                </EmptyState>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 6, color: '#64748b', textAlign: 'center' }}>
+                    <Typography sx={{ fontSize: 48, mb: 2, opacity: 0.5 }}>📊</Typography>
+                    <Typography sx={{ fontSize: 16, fontWeight: 500, mb: 1 }}>데이터가 없습니다</Typography>
+                    <Typography sx={{ fontSize: 14, opacity: 0.7 }}>새로운 데이터를 추가해보세요</Typography>
+                </Box>
             )}
             <Pagination
                 gotoPage={table.setPageIndex}
@@ -355,4 +290,4 @@ const Table = ({url, columns, data, setData, csvHeaders, fileName}) => {
     )
 }
 
-export default Table
+export default CustomTable

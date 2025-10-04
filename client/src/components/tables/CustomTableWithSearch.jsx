@@ -5,7 +5,7 @@ import Search from './Search'
 import { SearchPages, SearchMonthPages } from '../../configs/pages'
 import { LoadingSpinner } from '../../utils/GeneralUtil'
 
-const Table = lazy(() => import('./Table'))
+const CustomTable = lazy(() => import('./CustomTable'))
 
 const getInitialDate = (page) => {
     if (SearchMonthPages.includes(page)) { 
@@ -25,7 +25,7 @@ const getInitialDate = (page) => {
     }]
 }
 
-const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) => {
+const CustomTableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) => {
     const [name, setName] = useState('')
     const [date, setDate] = useState(getInitialDate(page))
 
@@ -62,7 +62,7 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
             }
             <Suspense fallback={<LoadingSpinner/>}> 
                 {loading ? <LoadingSpinner/> : (
-                    <Table 
+                    <CustomTable 
                         url={page}
                         columns={columnHeaders}
                         data={data}
@@ -77,4 +77,4 @@ const TableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) 
     )
 }
 
-export default TableWithSearch
+export default CustomTableWithSearch

@@ -3,7 +3,7 @@ import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, M
 import { EditableSelects } from '../../configs/pages.js'
 import { approvalAttendUpdate, approvalPaymentUpdate } from '../../utils/Approval'
 import { attendOptions, paymentOptions } from '../../configs/options.js'
-import { attendUpdateColumnHeaders, paymentUpdateColumnHeaders } from '../../configs/approval.js'
+import { attendUpdateColumnHeaders, paymentUpdateColumnHeaders } from '../../configs/approval.jsx'
 import Editor from './Editor'
 import { getUser } from '../../storage/userSlice'
 
@@ -117,7 +117,11 @@ const ApprovalUpdate = ({data, setData, open, setOpen, rowData}) => {
                                     fullWidth
                                     variant='standard'
                                     value={rowData[item.accessorKey]?rowData[item.accessorKey]:''}
-                                    InputProps={{readOnly: true}}
+                                    slotProps={{
+                                        input: {
+                                          readOnly: true,
+                                        },
+                                    }}
                                     autoComplete='false'
                                 />
                         )

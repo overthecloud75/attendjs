@@ -34,27 +34,6 @@ a:link {
     align-content: center;
 }
 
-.buttons {
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    gap: 4px;
-    margin: 12px;
-}
-
-.defaultButton {
-    background-color: #0071c2;
-    color: white;
-    font-weight: 500;
-    border: none;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 120px;
-}
-
 #cf-turnstile {
     width: 300px !important; /* 원하는 크기로 조정 */
     max-width: 100%;
@@ -73,15 +52,6 @@ a:link {
 
     .wrapper {
         flex: 13;
-    }
-
-    .buttons {
-        margin: 6px;
-    }
-
-    .defaultButton {
-        padding: 5px;
-        width: 70px;
     }
 }
 

@@ -1,3 +1,34 @@
+import { Chip } from '@mui/material'
+
+const StatusBadge = ({ value }) => {
+    const status = value?.toLowerCase()
+
+    const colorMap = {
+        active: { bg: '#166534' },
+        pending: { bg: '#92400e' },
+        inProgress: { bg: '#991b1b' },
+        cancel: { bg: '#dc2626' },
+    }
+
+    const { bg } = colorMap[status] || { bg: '#f1f5f9'}
+
+    return (
+        <Chip
+            label={value}
+            sx={{
+                fontSize: '10px',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                backgroundColor: bg,
+                color: 'white',
+                height: 18,   
+            }}
+            onClick={() => {}}
+        />
+    )
+}
+
+
 export const columnHeaders = [
     {
         accessorKey: 'approvalType',
@@ -43,6 +74,7 @@ export const columnHeaders = [
         accessorKey: 'status',
         header: '상태',
         enableSorting: true,
+        cell: ({ getValue }) => <StatusBadge value={getValue()} />
     },
     {
         accessorKey: 'createdAt',
@@ -86,6 +118,7 @@ export const mobileColumnHeaders = [
         accessorKey: 'status',
         header: '상태',
         enableSorting: true,
+        cell: ({ getValue }) => <StatusBadge value={getValue()} />
     },
 ]
 

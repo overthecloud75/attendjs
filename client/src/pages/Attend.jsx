@@ -1,7 +1,7 @@
 import { useResponsive } from '../hooks/useResponsive'
 import Sidebar from '../components/bar/Sidebar'
 import Navbar from '../components/bar/Navbar'
-import TableWithSearch from '../components/tables/TableWithSearch'
+import CoustomTableWithSearch from '../components/tables/CustomTableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/attend'
 import Footer from '../components/Footer'
 import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
@@ -16,7 +16,7 @@ const Attend = ({menu, setMenu}) => {
             {menu && <Sidebar menu={menu} setMenu={setMenu}/>}
             <div className='wrapper'>
                 <Navbar menu={menu} setMenu={setMenu}/> 
-                <TableWithSearch 
+                <CoustomTableWithSearch 
                     searchKeyword='name'
                     page='attend'
                     url='/api/attend/search'

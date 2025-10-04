@@ -1,9 +1,9 @@
 import { useResponsive } from '../hooks/useResponsive'
 import Sidebar from '../components/bar/Sidebar'
 import Navbar from '../components/bar/Navbar'
-import TableWithSearch from '../components/tables/TableWithSearch'
+import CoustomTableWithSearch from '../components/tables/CustomTableWithSearch.jsx'
 import Footer from '../components/Footer'
-import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/approval'
+import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/approval.jsx'
 import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
 
 const ApprovalHistory = ({menu, setMenu}) => {
@@ -16,7 +16,7 @@ const ApprovalHistory = ({menu, setMenu}) => {
             {menu && <Sidebar menu={menu} setMenu={setMenu}/>}
             <div className='wrapper'>
                 <Navbar menu={menu} setMenu={setMenu}/> 
-                <TableWithSearch 
+                <CoustomTableWithSearch 
                     searchKeyword='name'
                     page='approval'
                     url='/api/approval/search'

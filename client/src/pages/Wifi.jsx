@@ -1,7 +1,7 @@
 import { useResponsive } from '../hooks/useResponsive'
 import Sidebar from '../components/bar/Sidebar'
 import Navbar from '../components/bar/Navbar'
-import TableWithSearch from '../components/tables/TableWithSearch'
+import CoustomTableWithSearch from '../components/tables/CustomTableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/wifi'
 import Footer from '../components/Footer'
 import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
@@ -16,7 +16,7 @@ const Wifi = ({menu, setMenu}) => {
             {menu && <Sidebar menu={menu} setMenu={setMenu}/>}
             <div className='wrapper'>
                 <Navbar menu={menu} setMenu={setMenu}/>  
-                <TableWithSearch 
+                <CoustomTableWithSearch 
                     searchKeyword='ip'
                     page='wifi-attend'
                     url='/api/wifi-attend/search'

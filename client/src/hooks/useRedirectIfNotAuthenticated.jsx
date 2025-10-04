@@ -10,5 +10,5 @@ export const useRedirectIfNotAuthenticated = (redirectTo = '/auth/login') => {
         if (!user.isLogin) {
             navigate(redirectTo, { replace: true });
         }
-    }, [navigate, redirectTo]);
+    }, [navigate, redirectTo])
 }
