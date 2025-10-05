@@ -20,9 +20,9 @@ export const accessLogFormat = (req, res, duration) => {
     const ip = getClientIP(req)
     let info
     try {
-        info = res.statusCode + ip + '-' + req.method + '-' + decodeURI(req.originalUrl) + '-' + referer + '-' + headers['user-agent'] + '-' + duration
+        info = res.statusCode + '-' + ip + '-' + req.method + '-' + decodeURI(req.originalUrl) + '-' + referer + '-' + headers['user-agent'] + '-' + duration
     } catch (err) {
-        info = res.statusCode + ip + '-' + req.method + '-' + req.originalUrl + '-' + referer + '-' + headers['user-agent'] + '-' + duration
+        info = res.statusCode + '-' + ip + '-' + req.method + '-' + req.originalUrl + '-' + referer + '-' + headers['user-agent'] + '-' + duration
         logger.error(err + ' ' + info)
     }
     return info

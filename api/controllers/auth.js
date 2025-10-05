@@ -22,14 +22,23 @@ export const register = async (req, res, next) => {
         const { name, email: rawEmail, password } = req.body
         const email = sanitizeData(rawEmail, 'email')
 
-        const employee = await validateNewUser(name, email)
+        const userCount = await User.countDocuments()
+        
+        let isAdmin
+        let employeeId
+        if (userCount === 0) {
+            isAdmin = true
+            employeeId = 0 
+        } else {
+            const employee = await validateNewUser(name, email)
+            employeeId = employee.employeeId
+        }
 
         const token = jwt.sign({email}, process.env.JWT)
         const salt = bcrypt.genSaltSync(10)
         const hash = bcrypt.hashSync(password, salt)
 
-        const isAdmin = await User.countDocuments() === 0
-        const newUser = new User({name, email, employeeId: employee.employeeId, password: hash, isAdmin, confirmationCode: token})
+        const newUser = new User({name, email, employeeId, password: hash, isAdmin, confirmationCode: token})
         await newUser.save()
         res.status(200).send('User has been created.')
         registerConfirmationEmail(name, email, token)
