@@ -6,7 +6,7 @@ import cors from 'cors'
 import rateLimit from 'express-rate-limit'
 import csrf from 'csurf'
 
-import { logger, reqFormat } from './config/winston.js'
+import { logger, accessLogFormat } from './config/winston.js'
 import pingRoute from './routes/ping.js'
 import authRoute from './routes/auth.js'
 import usersRoute from './routes/users.js'
@@ -78,8 +78,14 @@ app.use(cors({ origin: [
     process.env.DOMAIN
     ]}
 ))
+
 app.use((req, res, next) => {
-    logger.info(reqFormat(req))
+    const start = Date.now();
+    // 응답 완료 시 실행
+    res.on('finish', () => {
+        const duration = Date.now() - start // ms
+        logger.info(accessLogFormat(req, res, duration))
+    })
     next()
 })
 
@@ -106,7 +112,7 @@ app.use('/swagger', swaggerRoute)
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500
     let errorMessage = err.status === 500 ? 'Something went wrong!' : err.message || 'Something went wrong'
-    logger.error(reqFormat(req) + '-' + errorStatus + '-' + err)
+    logger.error(err)
     return res.status(errorStatus).json({ message: errorMessage })
 })
 

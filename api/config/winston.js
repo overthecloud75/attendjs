@@ -11,7 +11,7 @@ const logFormat = printf(info => {
     return `${info.timestamp} ${info.level}: ${info.message}`
 })
 
-export const reqFormat = (req) => {
+export const accessLogFormat = (req, res, duration) => {
     const headers = req.headers
     let referer = ' '
     if (headers.referer) {
@@ -20,17 +20,14 @@ export const reqFormat = (req) => {
     const ip = getClientIP(req)
     let info
     try {
-        info = ip + '-' + req.method + '-' + decodeURI(req.originalUrl) + '-' + referer + '-' + headers['user-agent']
+        info = res.statusCode + ip + '-' + req.method + '-' + decodeURI(req.originalUrl) + '-' + referer + '-' + headers['user-agent'] + '-' + duration
     } catch (err) {
-        info = ip + '-' + req.method + '-' + req.originalUrl + '-' + referer + '-' + headers['user-agent']
+        info = res.statusCode + ip + '-' + req.method + '-' + req.originalUrl + '-' + referer + '-' + headers['user-agent'] + '-' + duration
         logger.error(err + ' ' + info)
     }
     return info
 }
-/*
- * Log Level
- * error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
- */
+
 export const logger = winston.createLogger({
     format: combine(
         timestamp({
@@ -58,14 +55,4 @@ export const logger = winston.createLogger({
             zippedArchive: true,
         }),
     ],
-});
-
-// Production 환경이 아닌 경우(dev 등) 
-//if (process.env.NODE_ENV !== 'production') {
-//    logger.add(new winston.transports.Console({
-//        format: winston.format.combine(
-//            winston.format.colorize(),  // 색깔 넣어서 출력
-//            winston.format.simple(),  // `${info.level}: ${info.message} JSON.stringify({ ...rest })` 포맷으로 출력
-//        )
-//    }));
-//}
+})
