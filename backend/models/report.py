@@ -321,43 +321,81 @@ class Report(BasicModel):
                     if insert_data:
                         collection.insert_one(insert_data)
 
+        def _render_notice_email(self, name, report):
+            """근태 안내 메일 HTML 생성"""
+            action_html = f"""
+                <h2 style="margin-top:0;">안녕하세요, {name}님</h2>
+                <p style="color:#444;">근태 관련하여 아래와 같은 사유가 있어 안내 메일을 송부합니다.</p>
+            """
+
+            table_html = f"""
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">이름</td>
+                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{name}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">날짜</td>
+                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{report['date']}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">출근 시각</td>
+                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{self._convert_begin(report['begin'])}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">근무 시간</td>
+                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{report['workingHours']}</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px;">사유</td>
+                    <td style="padding:8px;">{report['status']}</td>
+                </tr>
+            """
+
+            footer_html = f"""
+                <div style="margin-top:24px; text-align:center;">
+                    연차, 외근 등의 사유가 있는 경우<br>
+                    아래 버튼을 통해 출근 품의를 진행하면 근태가 정정됩니다.
+                </div>
+            """
+
+        return renderBaseTemplate(action_html, table_html, footer_html)
+
     def _send_notice_email(self, employee={}, email=None):
         '''
             1. email이 있고 regular 여부가 WORKING['update']에 포함되어 있는 경우만 메일 송부 
         '''
-        name = employee['name']
-        employee_id = employee['employeeId']
-        if 'email' in employee:
-            email = employee['email']
-        if email and employee['regular'] in WORKING['update']:
+        if not employee:
+            return False
+
+        name = employee.get('name')
+        employee_id = employee.get('employeeId')
+        # employee에 email이 있을 경우 우선 사용
+        email = employee.get('email', email)
+
+        if not email or employee.get('regular') not in WORKING['update']:
+            return False
+
+        try:
             report = self.collection.find_one({'employeeId': employee_id, 'date': {'$lt': self.today}}, sort=[('date', -1)])
-            if report:
-                status = report['status']
-                if status in EMAIL_NOTICE_BASE:
-                    self.logger.info('send_notice_email, {}, {}'.format(self.today, name))
-                    # https://techexpert.tips/ko/python-ko/파이썬-office-365를-사용하여-이메일-보내기
-                    # https://nowonbun.tistory.com/684 (참조자)
-                    subject = '[근태 관리] ' + report['date'] + ' ' + name + ' ' + str(status)
-                    body = '\n' \
-                        ' 안녕하세요 %s님 \n' \
-                        '근태 관련하여 다음의 사유가 있어 메일을 송부합니다. \n ' \
-                        '\n' \
-                        '- 이름: %s \n' \
-                        '- 날짜: %s \n' \
-                        '- 출근 시각: %s \n' \
-                        '- 근무 시간: %s \n' \
-                        '- 사유: %s \n' \
-                        '\n' \
-                        '연차, 외근 등의 사유가 있는 경우 %s 를 통해 출근 품의를 진행하면 근태가 정정이 됩니다. ' \
-                        %(name, name, report['date'], self._convert_begin(report['begin']), report['workingHours'], str(status), SITE_URL + 'schedule')
-                    cc = self.employee.get_approver(employee)['email']
-                    sent = send_email(email=email, subject=subject, body=body, cc=cc,include_cc=True)     
-                    if sent:
-                        return {'date': self.today, 'name': name, 'email': email, 'reportDate': report['date'], 'status': status}
-                    else:
-                        return sent
-                else:
-                    return False
+            if not report:
+                return False
+
+            status = report.get('status')
+            if status not in EMAIL_NOTICE_BASE:
+                return False
+
+            self.logger.info(f"[NOTICE EMAIL] {self.today} {name}")
+            subject = f"[근태 관리] {report['date']} {name} {status}"
+            html_body = self._render_notice_email(name, report)
+            cc = self.employee.get_approver(employee)['email']
+            sent = send_email(email=email, subject=subject, body=html_body, cc=cc,include_cc=True)     
+            if sent:
+                return {'date': self.today, 'name': name, 'email': email, 'reportDate': report['date'], 'status': status}
+            else:
+                return sent
+        except Exception as e:
+            self.logger.error(f'메일 발송 중 오류 발생: {e}')
+            return False
 
     def _schedule(self, date=None):
         collection = db['events']

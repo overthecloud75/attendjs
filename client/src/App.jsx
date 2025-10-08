@@ -27,7 +27,6 @@ import { useResponsive } from './hooks/useResponsive'
 const Map = lazy(() => import('./pages/Map'))
 const Board = lazy(() => import('./pages/Board'))
 const CheckEmail = lazy(() => import('./pages/CheckEmail'))
-const Confirm = lazy(() => import('./pages/Confirm'))
 
 function App() { 
     const user = getUser()
@@ -58,7 +57,6 @@ function App() {
                     <Route exact path='/approvalhistory' element={<ApprovalHistory menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/board' element={<Board menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/check-email' element={<CheckEmail menu={menu} setMenu={setMenu}/>}/>
-                    <Route exact path='/confirm/:confirmationCode' element={<Confirm menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/too-many-requests' element={<TooManyRequests/>}/>
                     <Route path='*' element={<NotFound/>} />
                 </Routes>

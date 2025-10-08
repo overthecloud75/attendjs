@@ -1,15 +1,19 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
 import { Paper, Typography, FormControlLabel, Checkbox } from '@mui/material'
-import { getEventsInCalendar } from '../../utils/EventUtil'
+import { getColor, getSpecialHolidays, getEventsInCalendar, addEventInCalendar, deleteEventInCalendar } from '../../utils/EventUtil'
 import { useWindowDimension } from '../../hooks/useWindowDimension'
 import { MOBILE } from '../../configs/mobile'
 import './Calendar.css'
 import { useResponsive } from '../../hooks/useResponsive'
+import { getUser } from '../../storage/userSlice'
 
 const WorkCalendar = () => {
+
+    const user = useMemo(() => getUser(), [])
 
     const navigate = useNavigate()
     const { isMobile } = useResponsive()
@@ -29,6 +33,16 @@ const WorkCalendar = () => {
     const { width } = useWindowDimension()
 
     useEffect(() => {
+        if (width < MOBILE.size) {
+            setWeekends(false)
+            setHeaderToolbar({ start: '', center: '', end: 'today prev,next' })
+        } else {
+            setWeekends(true)
+            setHeaderToolbar({ start: 'title', center: '', end: 'today prev,next' })
+        }
+    }, [width])
+
+    useEffect(() => {
         const calendarApiView = calendarRef.current?.getApi()?.view
         if (!calendarApiView) return
 
@@ -44,10 +58,6 @@ const WorkCalendar = () => {
                 }
             } else {
                 setEventsData(events.data)
-                if (width < MOBILE.size) {
-                    setWeekends(false)
-                    setHeaderToolbar({start: '', center: '', end: 'today prev,next'})
-                }
             }
         }
         if (thisMonth) {fetchData()}
@@ -60,6 +70,36 @@ const WorkCalendar = () => {
     const handleTypeChange = (type) => {
         if (selectedType !== type) {
             setSelectedType(type)
+        }
+    }
+
+    const handleDateSelect = async (selectInfo) => {
+        const specialHolidays = getSpecialHolidays()
+        let title = prompt(`'${specialHolidays}' 중 하나만 입력 가능합니다.`)
+        let calendarApi = selectInfo.view.calendar
+
+        calendarApi.unselect() // clear date selection
+
+        if (title) {
+            let event = {
+                title,
+                start: selectInfo.startStr,
+                end: selectInfo.endStr
+            }
+            const result = await addEventInCalendar(event)
+            if (!result.err) {
+                event = getColor(event)
+                calendarApi.addEvent(event)
+            }
+        }
+    }
+
+    const handleEventClick = async (clickInfo) => {
+        if (window.confirm(`'${clickInfo.event.title}' 정말로 event를 지우기를 원하시나요?`)) {
+            const result = await deleteEventInCalendar(clickInfo.event)
+            if (!result.err) {
+                clickInfo.event.remove()
+            }
         }
     }
 
@@ -103,11 +143,15 @@ const WorkCalendar = () => {
             </div>
             <FullCalendar
                 ref={calendarRef}
-                plugins={[dayGridPlugin]}
+                plugins={[dayGridPlugin, interactionPlugin]}
                 headerToolbar={headerToolbar}
                 initialView='dayGridMonth'
+                editable={user.isAdmin}
+                selectable={user.isAdmin}
                 events={eventsData}
                 weekends={weekends}
+                select={user.isAdmin?handleDateSelect:false}
+                eventClick={user.isAdmin?handleEventClick:false}
                 datesSet={handleDates}
                 contentHeight={'auto'}
                 locale='ko'

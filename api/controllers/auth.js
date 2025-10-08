@@ -12,7 +12,7 @@ import Login from '../models/Login.js'
 import Location from '../models/Location.js'
 import { getEmployeeByEmail } from './employee.js'
 import { createError } from '../utils/error.js'
-import { registerConfirmationEmail, CheckOtpEmail } from '../utils/email.js'
+import { sendRegistrationConfirmationEmail, sendPasswordResetOtpEmail } from '../utils/email.js'
 import { getClientIP, sanitizeData } from '../utils/util.js'
 
 authenticator.options = { digits: 6 }
@@ -41,7 +41,7 @@ export const register = async (req, res, next) => {
         const newUser = new User({name, email, employeeId, password: hash, isAdmin, confirmationCode: token})
         await newUser.save()
         res.status(200).send('User has been created.')
-        registerConfirmationEmail(name, email, token)
+        sendRegistrationConfirmationEmail(name, email, token)
     } catch (err) {
         next(err)
     }
@@ -138,7 +138,7 @@ export const lostPassword = async (req, res, next) => {
         const otpSecret = authenticator.generateSecret()          // OTP 시크릿 생성
         const otp = authenticator.generate(otpSecret)             // OTP 생성
         await User.updateOne({email}, {$set: {otp}}, {runValidators: true})
-        CheckOtpEmail(user.name, email, otp)
+        sendPasswordResetOtpEmail(user.name, email, otp)
         res.status(200).send('Otp has been sent.')    
     } catch (err) {
         next(err)
@@ -174,19 +174,128 @@ export const logout = async (req, res, next) => {
     }
 }
 
-export const confirmCode = async (req, res, next) => {
+export const verifyRegistrationCode = async (req, res, next) => {
     try {
-        const { confirmationCode } = req.params
-        const user = await User.findOne({confirmationCode})
+        const { confirmationCode } = req.params;
+
+        const user = await User.findOne({ confirmationCode })
         if (!user) throw createError(404, 'User not found!')
 
-        const status = 'Active'
-        await User.updateOne({confirmationCode}, {$set: {status}}, {runValidators: true})
-        res.status(200).json({name: user.name, email: user.email, message: 'activated'})
+        // 이미 활성화된 계정이면 다시 활성화하지 않음
+        if (user.status === 'Active') {
+            return res.status(200).send(successHtml(user.name, true))
+        }
+
+        // 상태 변경
+        await User.updateOne(
+            { confirmationCode },
+            { $set: { status: 'Active' } },
+            { runValidators: true }
+        )
+
+        // 성공 페이지 HTML 반환
+        res.status(200).send(successHtml(user.name, false))
     } catch (err) {
         next(err)
     }
 }
+
+const successHtml = (name, alreadyActive = false) => `
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartWork 가입 인증 완료</title>
+    <style>
+    body {
+        font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', Arial, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 480px;
+        margin: 60px auto;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        overflow: hidden;
+        text-align: center;
+    }
+    .header {
+        background-color: #2563eb;
+        color: #fff;
+        padding: 20px;
+    }
+    .content {
+        padding: 30px 20px;
+    }
+    h1 {
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+    p {
+        color: #555;
+        line-height: 1.6;
+        margin: 10px 0 20px;
+    }
+    .button {
+        display: inline-block;
+        background-color: #2563eb;
+        color: white;
+        padding: 12px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+    .button:hover {
+        background-color: #1e4ed8;
+    }
+    .footer {
+        background-color: #f9fafb;
+        padding: 16px;
+        font-size: 12px;
+        color: #777;
+    }
+
+    /* ✅ 모바일 대응 */
+    @media (max-width: 480px) {
+        .container {
+        margin: 20px;
+        }
+        h1 {
+        font-size: 20px;
+        }
+    }
+    </style>
+    </head>
+    <body>
+    <div class="container">
+        <div class="header">
+        <h1>SmartWork 가입 인증</h1>
+        </div>
+        <div class="content">
+        <h2>안녕하세요, ${name}님 👋</h2>
+        <p>
+            ${
+            alreadyActive
+                ? '이미 인증이 완료된 계정입니다.'
+                : '이메일 인증이 성공적으로 완료되었습니다!'
+            }
+        </p>
+        <a href="${process.env.DOMAIN}" class="button">
+            SmartWork로 이동하기
+        </a>
+        </div>
+        <div class="footer">
+        © ${new Date().getFullYear()} SmartWork. All rights reserved.
+        </div>
+    </div>
+    </body>
+    </html>
+    `
 
 export const setAttend = async (req, res, next) => {
     try {

@@ -6,9 +6,10 @@ import { isValidObjectId } from '../models/utils.js'
 import { getEmployeeByEmail } from './employee.js'
 import { reportUpdate } from './eventReport.js'
 import { sanitizeData, getNextDay, getToday } from '../utils/util.js'
-import { attendRequestEmail, attendConfirmationEmail } from '../utils/email.js'
+import { sendAttendRequestEmail, sendAttendConfirmationEmail } from '../utils/email.js'
 import { getLeftLeaveSummary } from './summary.js'
 import { createError } from '../utils/error.js'
+import { renderSimpleMessage } from '../utils/htmlTemplate.js'
 import { WORKING } from '../config/working.js'
 
 const APPROVAL_STATUS = {
@@ -19,8 +20,6 @@ const APPROVAL_STATUS = {
 }
 
 const getReasons = () => Object.keys(WORKING.status) 
-
-export const makeHtml = (event) => `<h1 style="text-align:center;">${event}</h1>`
 
 export const getEventsInCalendar = async (req, res, next) => {
     try {
@@ -125,7 +124,7 @@ export const postApproval = async (req, res, next) => {
             const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason, etc, approverName: approver.name, approverEmail: approver.email})
             await newApproval.save()
             const summary = await getLeftLeaveSummary(employee)
-            await attendRequestEmail(newApproval, summary)
+            await sendAttendRequestEmail(newApproval, summary)
             res.status(200).send('Event has been created.')
         }
     } catch (err) {
@@ -164,45 +163,35 @@ export const getConsenter = async (employee) => {
     return consenter
 }
 
+// ✅ 결재 승인 함수
 export const confirmApproval = async (req, res, next) => {
-    /* 
-        1. _id 확인
-        2. status가 pending이면서 기간에 문제가 없으면 status를 Active로 바꾸고 달력에 저장하고 confirm email 송부 
-    */
-    try {
-        const { _id }  = req.params
-        if (isValidObjectId(_id)) {
-            const approval = await Approval.findOne({_id})
-            if (!approval) throw createError(403, 'approval not found!')
-            if (approval.status === APPROVAL_STATUS.PENDING){
-                const result = await makeActive(approval)
-                res.status(200).send(makeHtml(result.msg))
-            } else {
-                res.status(200).send(makeHtml('이미 처리하였습니다.'))
-            }
-        } else {
-            throw createError(404, 'approval not found!')
-        }
-    } catch (err) {
-        next(err)
-    }
+    await handleApprovalAction(req, res, next, makeActive, '결재 승인 완료')
 }
 
+// ✅ 결재 반려 함수
 export const confirmCancel = async (req, res, next) => {
+    await handleApprovalAction(req, res, next, makeCancel, '결재 반려 완료')
+}
+
+// ✅ 공용 결재 처리 함수
+const handleApprovalAction = async (req, res, next, actionFn, successTitle) => {
     try {
-        const { _id }  = req.params
-        if (isValidObjectId(_id)) {
-            const approval = await Approval.findOne({_id})
-            if (!approval) return next(createError(404, 'approval not found!'))
-            if (approval.status === APPROVAL_STATUS.PENDING){
-                const result = await makeCancel(approval)
-                res.status(200).send(makeHtml(result.msg))
-            } else {
-                res.status(200).send(makeHtml('이미 처리하였습니다.'))
-            }
-        } else {
-            throw createError(404, 'approval not found!')
-        }
+        const { _id } = req.params
+
+        if (!isValidObjectId(_id)) throw createError(400, 'Invalid ID format.')
+
+        const approval = await Approval.findById(_id)
+        if (!approval) throw createError(404, 'Approval not found.')
+
+        if (approval.status !== APPROVAL_STATUS.PENDING)
+            return res.status(200).send(renderSimpleMessage('이미 처리된 결재입니다.', '이 요청은 더 이상 유효하지 않습니다.'))
+
+        const result = await actionFn(approval)
+
+        // 이메일 알림 전송
+        await sendApprovalResultEmail(approval, result.status)
+
+        return res.status(200).send(makeHtml(successTitle, result.msg))
     } catch (err) {
         next(err)
     }
@@ -218,7 +207,7 @@ export const makeActive = async (approval) => {
         status = APPROVAL_STATUS.ACTIVE
         msg = '승인하였습니다.'
         await Approval.updateOne({_id}, {$set: {status}}, {runValidators: true})
-        await attendConfirmationEmail(approval, status)
+        await sendAttendConfirmationEmail(approval, status)
     } else {
         status = APPROVAL_STATUS.WRONG
         msg = '기간에 문제가 있습니다.'
@@ -233,7 +222,7 @@ export const makeCancel = async (approval) => {
         await deleteEvent(approval)
     }
     await Approval.updateOne({_id}, {$set: {status}}, {runValidators: true})
-    await attendConfirmationEmail(approval, status)
+    await sendAttendConfirmationEmail(approval, status)
     const msg = '취소하였습니다.'
     return {status, msg}
 }

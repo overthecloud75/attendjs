@@ -60,6 +60,9 @@ def get_lunar_day(year, month_day):
     lunar_date = lunar_calendar.LunarIsoFormat()
     return lunar_date[5:7] + lunar_date[8:]
 
+def check_this_year():
+    return datetime.datetime.now().year
+
 def check_time():
     now = datetime.datetime.now()
     hour = now.hour

@@ -1,3 +1,7 @@
+* 25/10/08
+    - 2.5.4 (clinet, api, backend) <br>
+        email template enhancement <br>
+
 * 25/10/05
     - 2.5.3 (api) <br>
         apply res.on('finish') <br>

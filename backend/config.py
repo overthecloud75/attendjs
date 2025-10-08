@@ -7,6 +7,8 @@ LOG_DIR = 'logs'
 if not os.path.exists(os.path.join(BASE_DIR, LOG_DIR)):
     os.mkdir(os.path.join(BASE_DIR, LOG_DIR))
 
+DOMAIN = 'https://smartwork.adoscompany.com'
+
 # wift attend
 USE_WIFI_ATTENDANCE = False
 

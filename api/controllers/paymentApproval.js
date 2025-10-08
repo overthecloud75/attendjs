@@ -3,12 +3,13 @@ import Upload from '../models/Upload.js'
 import Payment from '../models/Payment.js'
 import { isValidObjectId } from '../models/utils.js'
 import { getEmployeeByEmail } from './employee.js'
-import { getApprover, getConsenter, makeHtml } from './event.js'
+import { getApprover, getConsenter } from './event.js'
 import { sanitizeData } from '../utils/util.js'
-import { paymentRequestEmail, paymentConfirmationEmail } from '../utils/email.js'
+import { sendPaymentRequestEmail, sendPaymentConfirmationEmail } from '../utils/email.js'
 import { fillPaymentExcelTemplate } from '../utils/xls.js'
 import { getImageId } from '../utils/image.js'
 import { createError } from '../utils/error.js'
+import { renderSimpleMessage } from '../utils/htmlTemplate.js'
 
 const APPROVAL_STATUS = {
     PENDING: 'Pending',
@@ -113,7 +114,7 @@ export const postPayment = async (req, res, next) => {
         approval.paymentId = payment._id
         const newApproval = new Approval(approval)
         await newApproval.save()
-        await paymentRequestEmail(newApproval, newApproval.status, payment)
+        await sendPaymentRequestEmail(newApproval, newApproval.status, payment)
 
         res.status(200).send('Event has been created.')
     } catch (err) {
@@ -121,41 +122,63 @@ export const postPayment = async (req, res, next) => {
     }
 }
 
+/**
+ * 결제 승인 처리
+ * 1차 승인 (_order = 0) → 결제 진행중(IN_PROGRESS)
+ * 2차 승인 (_order = 1) → 결제 완료(ACTIVE)
+ */
 export const paymentApproval = async (req, res, next) => {
-    /* 
-        1. _id, _order 확인
-    */
     try {
         const { _id, _order } = req.params
-        if (!isValidObjectId(_id)) throw createError(404, 'approval not found!')
-        const approval = await Approval.findOne({_id})
-        if (!approval) throw createError(403, 'approval not found!')
-        if (approval.status === APPROVAL_STATUS.PENDING && _order === '0'){
-            const result = await makePaymentInProgress(approval)
-            res.status(200).send(makeHtml(result.msg))
-        } else if (approval.status === APPROVAL_STATUS.IN_PROGRESS && _order === '1') {
-            const result = await makePaymentActive(approval)
-            res.status(200).send(makeHtml(result.msg))
-        } else {
-            res.status(200).send(makeHtml('이미 처리하였습니다.'))
+
+        if (!isValidObjectId(_id))
+            throw createError(400, 'Invalid ID format.')
+
+        const approval = await Approval.findById(_id)
+        if (!approval)
+            throw createError(404, 'Approval not found.')
+
+        let result, title
+
+        if (approval.status === APPROVAL_STATUS.PENDING && _order === '0') {
+            result = await makePaymentInProgress(approval)
+            title = '결제 진행 중으로 변경되었습니다.'
+        } 
+        else if (approval.status === APPROVAL_STATUS.IN_PROGRESS && _order === '1') {
+            result = await makePaymentActive(approval)
+            title = '결제가 완료되었습니다.'
+        } 
+        else {
+            return res.status(200).send(renderSimpleMessage('이미 처리된 결제입니다.', '이 결제 요청은 더 이상 유효하지 않습니다.'))
         }
+
+        return res.status(200).send(renderSimpleMessage(title, result.msg))
     } catch (err) {
         next(err)
     }
 }
 
+/**
+ * 결제 취소 처리
+ * 결제가 완료되지 않은 상태에서만 취소 가능
+ */
 export const paymentCancel = async (req, res, next) => {
     try {
-        const{ _id } = req.params
-        if (!isValidObjectId(_id)) throw createError(404, 'approval not found!')
-        const approval = await Approval.findOne({_id})
-        if (!approval) return next(createError(404, 'approval not found!'))
-        if (approval.status !== APPROVAL_STATUS.ACTIVE){
-            const result = await makePaymentCancel(approval)
-            res.status(200).send(makeHtml(result.msg))
-        } else {
-            res.status(200).send(makeHtml('이미 처리하였습니다.'))
+        const { _id } = req.params
+
+        if (!isValidObjectId(_id))
+            throw createError(400, 'Invalid ID format.')
+
+        const approval = await Approval.findById(_id)
+        if (!approval)
+            throw createError(404, 'Approval not found.')
+
+        if (approval.status === APPROVAL_STATUS.ACTIVE) {
+            return res.status(200).send(renderSimpleMessage('이미 처리된 결제입니다.', '완료된 결제는 취소할 수 없습니다.'))
         }
+
+        const result = await makePaymentCancel(approval)
+        return res.status(200).send(renderSimpleMessage('결제가 취소되었습니다.', result.msg))
     } catch (err) {
         next(err)
     }
@@ -165,7 +188,7 @@ export const makePaymentActive = async (approval) => {
     const status = APPROVAL_STATUS.ACTIVE
     const msg = '승인하였습니다.'
     await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
-    await paymentConfirmationEmail(approval, status) // 합의자 승인 후 요청자에게 메일 송부 
+    await sendPaymentConfirmationEmail(approval, status) // 합의자 승인 후 요청자에게 메일 송부 
     return {status, msg}
 }
 
@@ -173,7 +196,7 @@ export const makePaymentCancel = async (approval) => {
     const status = APPROVAL_STATUS.CANCEL
     const msg = '취소하였습니다.'
     await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
-    await paymentConfirmationEmail(approval, status) // 반려 후 요청자에게 메일 송부 
+    await sendPaymentConfirmationEmail(approval, status) // 반려 후 요청자에게 메일 송부 
     return {status, msg}
 }
 
@@ -182,7 +205,7 @@ export const makePaymentInProgress = async (approval) => {
     const msg = '승인하였습니다.'
     await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
     const payment = await Payment.findOne({_id: approval.paymentId})
-    await paymentRequestEmail(approval, status, payment) // 승인 후 합의권자에게 메일 송부 
+    await sendPaymentRequestEmail(approval, status, payment) // 승인 후 합의권자에게 메일 송부 
     return {status, msg}
 }
 
