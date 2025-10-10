@@ -1,12 +1,10 @@
 export const getToday = () => {
     const today = new Date()
-
-    const year = today.getFullYear()
-    const month = ('0' + (today.getMonth() + 1)).slice(-2)
-    const day = ('0' + today.getDate()).slice(-2)
-    const dateStr = year + '-' + month  + '-' + day
-    return dateStr 
-}
+    const yyyy = today.getFullYear()
+    const mm = String(today.getMonth() + 1).padStart(2, '0')
+    const dd = String(today.getDate()).padStart(2, '0')
+    return `${yyyy}-${mm}-${dd}`
+  }
 
 export const getNextDay = (dateStr) => {
     let [year, month, day] = dateStr.split('-').map(Number)
@@ -16,8 +14,7 @@ export const getNextDay = (dateStr) => {
     year = nextDate.getFullYear()
     month = String(nextDate.getMonth() + 1).padStart(2, '0')
     day = String(nextDate.getDate()).padStart(2, '0')
-    const formattedDate = `${year}-${month}-${day}`
-    return formattedDate
+    return `${year}-${month}-${day}`
 }
 
 export const getNextYear = (dateStr) => {
@@ -28,14 +25,13 @@ export const getNextYear = (dateStr) => {
     year = nextDate.getFullYear() + 1
     month = String(nextDate.getMonth() + 1).padStart(2, '0')
     day = String(nextDate.getDate()).padStart(2, '0')
-    const formattedDate = `${year}-${month}-${day}`
-    return formattedDate
+    return `${year}-${month}-${day}`
 }
 
 export const getYearMonth = () => {
     const today = new Date()
     const year = today.getFullYear()
-    const month = ('0' + (today.getMonth() + 1)).slice(-2)
+    const month = String(today.getMonth() + 1).padStart(2, '0')
     return { year, month }
 }
 
@@ -45,7 +41,6 @@ const getSeparateDay = () => {
     const month = ('0' + (today.getMonth() + 1)).slice(-2)
     const day = ('0' + today.getDate()).slice(-2)
     const monthDay = month + '-' + day
-    //const dateStr = year + '-' + month  + '-' + day
     return {thisYear, monthDay}
 }
 

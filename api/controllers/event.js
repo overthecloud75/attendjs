@@ -34,7 +34,7 @@ export const getEventsInCalendar = async (req, res, next) => {
 }
 
 const fetchEvents = async (start, end, option, user) => {
-    const baseQuery = { start: { $gte: start, $lt: end } }
+    const baseQuery = { start: { $gte: start, $lt: end }, employeeId: { $exists: true } }
     let events = []
     let attendStatus = []
     const notExistEmployeeIdEvent = await Event.find({ ...baseQuery, employeeId: { $exists: false } }).sort({ start: 1 })
@@ -189,9 +189,9 @@ const handleApprovalAction = async (req, res, next, actionFn, successTitle) => {
         const result = await actionFn(approval)
 
         // 이메일 알림 전송
-        await sendApprovalResultEmail(approval, result.status)
+        await sendAttendConfirmationEmail(approval, result.status)
 
-        return res.status(200).send(makeHtml(successTitle, result.msg))
+        return res.status(200).send(renderSimpleMessage(successTitle, result.msg))
     } catch (err) {
         next(err)
     }

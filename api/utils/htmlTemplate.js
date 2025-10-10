@@ -35,7 +35,6 @@ export const renderAuthTemplate = (title, name, bodyHtml) => `
                 <h2 style="margin-top: 0;">안녕하세요, ${name}님</h2>
                 ${bodyHtml}
             </div>
-
             ${renderFooterLink()}
         </div>
     </div>
