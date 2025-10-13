@@ -70,6 +70,7 @@ const getEmployeementPeriod = (beginDate) => {
     else if (thisMonth < beginMonth) {baseMonth = 12 + thisMonth - beginMonth}
     // 근무 기간이 1년이 안 된 경우 정교한 계산 필요 
     else if ((thisYear - beginYear) === 1 && monthDay < beginMonthDay) {baseMonth = 12}
+    else if ((thisYear - beginYear) > 1 && monthDay < beginMonthDay) {baseMonth = 11}
 
     let employeementPeriod = 0
     if (beginYear < thisYear) {

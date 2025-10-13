@@ -187,10 +187,6 @@ const handleApprovalAction = async (req, res, next, actionFn, successTitle) => {
             return res.status(200).send(renderSimpleMessage('이미 처리된 결재입니다.', '이 요청은 더 이상 유효하지 않습니다.'))
 
         const result = await actionFn(approval)
-
-        // 이메일 알림 전송
-        await sendAttendConfirmationEmail(approval, result.status)
-
         return res.status(200).send(renderSimpleMessage(successTitle, result.msg))
     } catch (err) {
         next(err)
