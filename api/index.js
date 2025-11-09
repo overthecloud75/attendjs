@@ -19,6 +19,7 @@ import deviceRoute from './routes/device.js'
 import creditcardRoute from './routes/creditcard.js'
 import locationRoute from './routes/location.js'
 import employeeRoute from './routes/employee.js'
+import meetingRoute from './routes/meeting.js'
 import approvalRoute from './routes/approval.js'
 import paymentRoute from './routes/payment.js'
 import boardRoute from './routes/board.js'
@@ -75,7 +76,7 @@ app.use((req, res, next) => {
 })
 
 app.use(cors({ origin: [
-    process.env.DOMAIN
+        process.env.DOMAIN
     ]}
 ))
 
@@ -101,6 +102,7 @@ app.use('/api/location', locationRoute)
 app.use('/api/device', deviceRoute)
 app.use('/api/creditcard', creditcardRoute)
 app.use('/api/employee', employeeRoute)
+app.use('/api/meeting', meetingRoute)
 app.use('/api/approval', approvalRoute)
 app.use('/api/payment', paymentRoute)
 app.use('/api/board', boardRoute)

@@ -4,7 +4,7 @@ export const getToday = () => {
     const mm = String(today.getMonth() + 1).padStart(2, '0')
     const dd = String(today.getDate()).padStart(2, '0')
     return `${yyyy}-${mm}-${dd}`
-  }
+}
 
 export const getNextDay = (dateStr) => {
     let [year, month, day] = dateStr.split('-').map(Number)
@@ -38,9 +38,9 @@ export const getYearMonth = () => {
 const getSeparateDay = () => {
     const today = new Date()
     const thisYear = today.getFullYear()
-    const month = ('0' + (today.getMonth() + 1)).slice(-2)
-    const day = ('0' + today.getDate()).slice(-2)
-    const monthDay = month + '-' + day
+    const month = `0${today.getMonth() + 1}`.slice(-2)
+    const day = `0${today.getDate()}`.slice(-2)
+    const monthDay = `${month}-${day}`
     return {thisYear, monthDay}
 }
 
@@ -62,7 +62,7 @@ const getEmployeementPeriod = (beginDate) => {
 
     const beginDateSplit = beginDate.split('-')
     const beginYear = Number(beginDateSplit[0])
-    const beginMonthDay = beginDateSplit[1] + '-' + beginDateSplit[2]
+    const beginMonthDay = `${beginDateSplit[1]}-${beginDateSplit[2]}`
     const beginMonth = Number(beginDateSplit[1])
 
     let baseMonth = 0 
@@ -82,7 +82,7 @@ const getEmployeementPeriod = (beginDate) => {
             baseYear = baseYear + 1
         }
     }
-    const baseDate = String(baseYear) + '-' + beginMonthDay
+    const baseDate = `${baseYear}-${beginMonthDay}`
     return {employeementPeriod, baseDate, baseMonth}
 }
 
@@ -126,6 +126,7 @@ export const sanitizeData = (data, type) => {
         if (type === 'date') {
             regex = /^\d{4}-\d{2}-\d{2}$/
             if (data.match(regex) === null) {
+                console.log('getToday')
                 return getToday()
             }
         } else if (type === 'email') {

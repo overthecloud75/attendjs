@@ -21,13 +21,13 @@ const StatusBadge = ({ value }) => {
                 fontWeight: 600,
                 backgroundColor: bg,
                 color: 'white',
+                borderRadius: '4px',
                 height: 18,   
             }}
             onClick={() => {}}
         />
     )
 }
-
 
 export const columnHeaders = [
     {

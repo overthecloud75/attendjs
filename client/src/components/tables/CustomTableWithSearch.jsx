@@ -30,7 +30,7 @@ const CustomTableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHead
     const [date, setDate] = useState(getInitialDate(page))
 
     const [clickCount, setClickCount] = useState(0)
-    const [fileName, setFileName] = useState(page + '.csv')
+    const [fileName, setFileName] = useState(`${page}.csv`)
 
     const {data, setData, loading } = useFetch(
         page, 

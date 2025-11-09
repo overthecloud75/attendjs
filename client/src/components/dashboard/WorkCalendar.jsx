@@ -26,7 +26,7 @@ const WorkCalendar = () => {
             start: 'title', 
             center: '',
             end: 'today prev,next'
-        })
+    })
 
     // 일정 타입 선택: private, team, company
     const [selectedType, setSelectedType] = useState('private')
@@ -153,7 +153,7 @@ const WorkCalendar = () => {
                 select={user.isAdmin?handleDateSelect:false}
                 eventClick={user.isAdmin?handleEventClick:false}
                 datesSet={handleDates}
-                contentHeight={'auto'}
+                contentHeight='auto'
                 locale='ko'
                 dayMaxEventRows={2}   // 한 셀에 최대 2줄만 표시
             />

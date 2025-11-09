@@ -7,11 +7,11 @@ export const chatCompletion = async (req, res, next) => {
         messages = [...messages, {role: 'user', content: newMessage}]
 
         const data = {model: process.env.CHATBOT_MODEL, messages, temperature: 0.7}
-        const chatResponse = await axios.post(process.env.CHATBOT_BACKEND + '/api/chat/completions',
+        const chatResponse = await axios.post(`${process.env.CHATBOT_BACKEND}/api/chat/completions`,
             data,
             {
                 headers: {
-                    'Authorization': 'Bearer ' + process.env.CHATBOT_API_KEY,
+                    'Authorization': `Bearer ${process.env.CHATBOT_API_KEY}`,
                     'Content-Type': 'application/json',
                     'User-Agent': 'Mozilla/5.0'
                 }

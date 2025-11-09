@@ -3,7 +3,6 @@ import Sidebar from '../components/bar/Sidebar'
 import Navbar from '../components/bar/Navbar'
 import CoustomTableWithSearch from '../components/tables/CustomTableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/location'
-import Footer from '../components/Footer'
 import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
 
 const Location = ({menu, setMenu}) => {
@@ -23,7 +22,6 @@ const Location = ({menu, setMenu}) => {
                     columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
                     csvHeaders={csvHeaders}
                 />
-                {menu && <Footer/>}
             </div> 
         </div>
     )

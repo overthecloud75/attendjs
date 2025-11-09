@@ -61,7 +61,6 @@ class Report(BasicModel):
             '''
             if self.overnight_employees:
                 self._update_overnight(date=yesterday)
-
         elif (hour > overnight_time and hour <= overnight_time + 1) or (date != self.today):
             self._check_attend(date, hour)
             '''
@@ -75,7 +74,7 @@ class Report(BasicModel):
             try:
                 self._notice_email(date=date)
             except Exception as e:
-                self.logger.error('{}, {}'.format(e, date))
+                self.logger.error(f'{e}, {data}')
         elif hour > overnight_time + 3:
             self._check_attend(date, hour)
 
@@ -166,7 +165,7 @@ class Report(BasicModel):
         max_uptime = 0 
 
         access_today = self._get_access_day(date, delta=0)  # access_day 형식으로 변환
-        cursor.execute("select e_id, e_name, e_date, e_time, e_mode, e_uptime from tenter where e_date = ?", access_today)
+        cursor.execute('select e_id, e_name, e_date, e_time, e_mode, e_uptime from tenter where e_date = ?', access_today)
 
         for row in cursor.fetchall():
             employee_id = int(row[0])
@@ -196,7 +195,7 @@ class Report(BasicModel):
                         attend[employee_id]['begin'] = time
                         attend[employee_id]['end'] = time
                 elif int(time) <= int(WORKING['time']['overNight']) and employee_id not in self.overnight_employees:
-                    self.logger.info('overnight: {}, {}'.format(employee_id, time))
+                    self.logger.info(f'overnight: {employee_id}, {time}')
                     self.overnight_employees.append(employee_id)
         if max_uptime:
             self.e_uptime = max_uptime
@@ -228,7 +227,7 @@ class Report(BasicModel):
             # fulltime이 아닌 직원에 대해 미출근과 출근전인 경우 기록하지 않음
             # 주말인 경우 employee 정보 수집을 하지 않기 때문에 regular key가 없을 수 있음
             # employee 등록이 안 된 경우 regular key가 없을 수 있음
-            if attend_by_employee_id['regular'] not in WORKING['update'] and attend_by_employee_id['status'] not in ['정상출근']:
+            if attend_by_employee_id['regular'] not in WORKING['update'] and attend_by_employee_id['status'] in EMAIL_NOTICE_BASE:
                 pass
             else:
                 if employee_id in self.previous_attend and self.previous_attend[employee_id] == attend_by_employee_id:
@@ -236,7 +235,7 @@ class Report(BasicModel):
                 else:
                     self.collection.update_one({'date': date, 'employeeId': employee_id}, {'$set': attend_by_employee_id}, upsert=True)
         except Exception as e:
-            self.logger.error('{}, {}'.format(e, attend_by_employee_id))
+            self.logger.error(f'{e}, {attend_by_employee_id}')
 
     def _compare_time(self, attend, date, employee_id, name, begin, end):
         if employee_id in attend:
@@ -269,7 +268,7 @@ class Report(BasicModel):
         return working_hours
 
     def _update_overnight(self, date=None):
-        self.logger.info('overnight: {}'.format(self.overnight_employees))
+        self.logger.info(f'overnight: {self.overnight_employees}')
         access_yesterday = self._get_access_day(date, delta=-1)
         yesterday = get_delta_day(date, delta=-1)
         for employee_id in self.overnight_employees:
@@ -290,10 +289,10 @@ class Report(BasicModel):
                         attend['end'] = time
 
             if 'begin' in attend:
-                self.logger.info('attendyesterday: {}'.format(attend))
-                access_today = date[0:4] + date[5:7] + date[8:]
+                self.logger.info(f'attendyesterday: {attend}')
+                access_today = self._get_access_day(date)
                 cursor.execute(
-                    "select e_id, e_name, e_date, e_time, e_mode from tenter where e_date = ? and e_id = ?",
+                    'select e_id, e_name, e_date, e_time, e_mode from tenter where e_date = ? and e_id = ?',
                     (access_today, employee_id))
                 end = '000000'
                 for row in cursor.fetchall():
@@ -384,8 +383,8 @@ class Report(BasicModel):
             if status not in EMAIL_NOTICE_BASE:
                 return False
 
-            self.logger.info(f"[NOTICE EMAIL] {self.today} {name}")
-            subject = f"[근태 관리] {report['date']} {name} {status}"
+            self.logger.info(f'[NOTICE EMAIL] {self.today} {name}')
+            subject = f'[근태 관리] {report['date']} {name} {status}'
             html_body = self._render_notice_email(name, report)
             cc = self.employee.get_approver(employee)['email']
             sent = send_email(email=email, subject=subject, body=html_body, cc=cc,include_cc=True)     
@@ -409,34 +408,37 @@ class Report(BasicModel):
 
             if 'employeeId' in data:
                 employee_id = data['employeeId']
-                status = self._get_status_from_schedule(title)
+                reason = self._get_reason_from_event(title)
                 
-                # 반차가 포함된 경우에만 status 추가 가능 
-                if employee_id in schedule_dict and schedule_dict[employee_id] != '휴가' and status != '휴가' and (schedule_dict[employee_id] == '반차' or status == '반차'):
-                    schedule_dict[employee_id] = schedule_dict[employee_id] + ', ' + status
-                elif employee_id in schedule_dict and status == '휴가':
-                    schedule_dict[employee_id] = status 
+                # 반차가 포함된 경우에만 reason 추가 가능 
+                if employee_id in schedule_dict and schedule_dict[employee_id] != '휴가' and reason != '휴가' and (schedule_dict[employee_id] == '반차' or reason == '반차'):
+                    schedule_dict[employee_id] = f'{schedule_dict[employee_id]}, {reason}'
+                elif employee_id in schedule_dict and reason == '휴가':
+                    schedule_dict[employee_id] = reason 
                 else:
-                    schedule_dict[employee_id] = status
+                    schedule_dict[employee_id] = reason
         return schedule_dict
     
     def _convert_begin(self, begin=None):
         if begin:
-            begin = begin[0:2] + ':' + begin[2:4] + ':' + begin[4:6]
+            begin = f'{begin[0:2]}:{begin[2:4]}:{begin[4:6]}'
         return begin 
 
-    def _get_status_from_schedule(self, title):
-        status = '기타'     
-        for status_type in WORKING['status']:
-            # if status_type in title: 포함된 값이 아닌 select로 값을 받기 때문에 == 으로 변경
-            if status_type == title.split('/')[1]:
-                status = status_type
-        return status 
+    def _get_reason_from_event(self, title):
+        reason = '기타'     
+        for reason_type in WORKING['reason']:
+            # if reason_type in title: 포함된 값이 아닌 select로 값을 받기 때문에 == 으로 변경
+            if reason_type == title.split('/')[1]:
+                if reason_type in WORKING['outStatus']['반차']:
+                    reason = '반차'
+                else:
+                    reason = reason_type
+        return reason
 
     def _get_access_day(self, date, delta=0):
         if delta:
             date = get_delta_day(date, delta=delta)
-        return date[0:4] + date[5:7] + date[8:]
+        return date.replace('-', '')
 
 
 

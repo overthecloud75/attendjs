@@ -6,10 +6,13 @@ import { format } from 'date-fns'
 import PersonIcon from '@mui/icons-material/Person'
 import DateRangeIcon from '@mui/icons-material/DateRange'
 import SearchIcon from '@mui/icons-material/Search'
+import Button from '@mui/material/Button'
 import { DateRange } from 'react-date-range'
 
 const Wrapper = styled.div`
     position: absolute;
+    align-items: center;
+    height: 60px;
     width: 80%;
     display: flex;
     z-index: 1000;
@@ -22,11 +25,7 @@ const Wrapper = styled.div`
 const SearchContainer = styled.div`
     width: 100%;
     max-width: 900px;
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border: 2px solid #e1e5e9;
-    border-radius: 16px;
     padding: 5px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
     
     &:focus-within {
@@ -35,7 +34,7 @@ const SearchContainer = styled.div`
     }
     
     @media screen and (max-width: 768px) {
-        padding: 20px;
+        padding: 5px;
         border-radius: 12px;
     }
 `
@@ -59,7 +58,7 @@ const SearchField = styled.div`
     gap: 12px;
     flex: 1;
     min-width: 200px;
-    padding: 14px 18px;
+    padding: 10px 18px;
     background: white;
     border: 1px solid #e1e5e9;
     border-radius: 12px;
@@ -73,7 +72,7 @@ const SearchField = styled.div`
     
     @media screen and (max-width: 768px) {
         min-width: auto;
-        padding: 12px 16px;
+        padding: 8px 16px;
     }
 `
 
@@ -83,7 +82,7 @@ const DateField = styled.div`
     gap: 12px;
     flex: 1;
     min-width: 280px;
-    padding: 14px 18px;
+    padding: 10px 18px;
     background: white;
     border: 1px solid #e1e5e9;
     border-radius: 12px;
@@ -100,7 +99,7 @@ const DateField = styled.div`
     
     @media screen and (max-width: 768px) {
         min-width: auto;
-        padding: 12px 16px;
+        padding: 8px 16px;
     }
 `
 
@@ -155,41 +154,6 @@ const DateText = styled.span`
     }
 `
 
-const SearchButton = styled.button`
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-weight: 600;
-    font-size: 14px;
-    border: none;
-    padding: 14px 28px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 120px;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
-    
-    &:hover {
-        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
-    }
-    
-    &:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
-    }
-    
-    @media screen and (max-width: 768px) {
-        width: 100%;
-        padding: 16px 28px;
-        font-size: 15px;
-    }
-`
-
 const DatePickerContainer = styled.div`
     position: absolute;
     z-index: 9999;
@@ -210,7 +174,7 @@ const Search = ({page, searchKeyword, name, setName, date, setDate, clickCount, 
         event.preventDefault()
         setOpenDate(false)
         setClickCount(clickCount+1)
-        setFileName(page + '_' + format(date[0].startDate, 'yyyy-MM-dd') + '_'+ format(date[0].endDate, 'yyyy-MM-dd') + '_' + name)
+        setFileName(`${page}_${format(date[0].startDate, 'yyyy-MM-dd')}_${format(date[0].endDate, 'yyyy-MM-dd')}_${name}`)
     }
 
     return (     
@@ -245,10 +209,20 @@ const Search = ({page, searchKeyword, name, setName, date, setDate, clickCount, 
                             </DatePickerContainer>
                         }
                     </DateField>   
-                    <SearchButton type='submit'>
-                        <SearchIcon style={{ fontSize: 18 }} />
+                    <Button
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                        startIcon={<SearchIcon sx={{ fontSize: 18 }} />}
+                        sx={{
+                            fontSize: 14,
+                            px: 2,
+                            py: 1,
+                            textTransform: 'none', 
+                        }}
+                    >
                         검색
-                    </SearchButton>
+                    </Button>
                 </SearchForm>
             </SearchContainer>
         </Wrapper>

@@ -14,7 +14,7 @@ export const fillPaymentExcelTemplate = async (approval, uploadImage) => {
     const worksheet = workbook.getWorksheet('sheet')
   
     // 셀 데이터 채우기
-    worksheet.getCell('A2').value = '개인경비청구서_' + approval.name
+    worksheet.getCell('A2').value = `개인경비청구서_${approval.name}`
     worksheet.getCell('C3').value = approval.email      // email
     worksheet.getCell('G3').value = approval.name      // email
     worksheet.getCell('C4').value = approval.cardNo     // 카드번호
@@ -26,7 +26,7 @@ export const fillPaymentExcelTemplate = async (approval, uploadImage) => {
     
     // 이미지 삽입
     const imageId = workbook.addImage({
-        filename:  uploadImage.destination + uploadImage.fileName,
+        filename:  `${uploadImage.destination}${uploadImage.fileName}`,
         extension: uploadImage.fileName.split('.')[1]
     })
   
@@ -39,10 +39,10 @@ export const fillPaymentExcelTemplate = async (approval, uploadImage) => {
 
     // 변경된 내용을 새 파일로 저장
     const { year, month } = getYearMonth()
-    ensureDirectoryExists('payments/'+ year + '/' + month + '/')  
-    const destination = 'payments/'+ year + '/' + month + '/' + `${uuidv4()}.xlsx`
+    ensureDirectoryExists(`payments/${year}/${month}/`)  
+    const destination = `payments/${year}/${month}/${uuidv4()}.xlsx`
    
     await workbook.xlsx.writeFile(destination)
-    const fileName = '개인경비청구서_' + approval.name + '_' + approval.start + '.xlsx'
+    const fileName = `개인경비청구서_${approval.name}_${approval.start}.xlsx`
     return {destination, fileName}
 }

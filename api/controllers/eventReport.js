@@ -18,13 +18,12 @@ const seperateEvent = (action, event) => {
     if (action !== 'add') return { name, eventStatus: null }
     
     let eventStatus = '기타'
-    for (let status in WORKING.status) {
-        if (eventCandidate.includes(status)) {
-            eventStatus = status 
-            if (status === '반차') break 
+    for (let reason in WORKING.reason) {
+        if (eventCandidate.includes(reason)) {
+            eventStatus = reason
+            if (reason === '반차') break 
         }
     }
-   
     return {name, eventStatus}
 }
 
@@ -73,7 +72,7 @@ const updateReport = async (report, eventStatus, employeeStatus) => {
     updatedReport.reason = eventStatus
 
     if (eventStatus) {
-        updatedReport.workingHours = WORKING.status[eventStatus]
+        updatedReport.workingHours = WORKING.reason[eventStatus]
         updatedReport.status = null
     } else {
         updatedReport.workingHours = calculateWorkingHours(report.begin, report.end)

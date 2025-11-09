@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 import { Tooltip } from 'react-tooltip'
-import CloseIcon from '@mui/icons-material/Close'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'
 import WifiFindIcon from '@mui/icons-material/WifiFind'
 import GpsFixedIcon from '@mui/icons-material/GpsFixed'
 import SummarizeIcon from '@mui/icons-material/Summarize'
 import PlaceIcon from '@mui/icons-material/Place'
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom'
 import ComputerIcon from '@mui/icons-material/Computer'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
 import PeopleIcon from '@mui/icons-material/People'
@@ -26,13 +26,14 @@ const Wrapper = styled.div`
 `
 
 const Top = styled.div`
-    display: flex;  
-    height: 70px; 
+    display: flex;
+    height: 60px;
     align-items: center;
-    justify-content: space-around;
+    justify-content: left;
     border-bottom: 1px solid #e1e5e9;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: #ffffff;    
+    color: #333;             
+
     @media screen and (max-width: 600px) {
         height: 50px;
     }
@@ -71,7 +72,7 @@ const Bottom = styled.div`
     margin: 20px;
     align-items: center;
     justify-content: center;
-    padding: 15px;
+    padding: 10px 10px;
     background: #f8fafc;
     border-radius: 12px;
     border: 1px solid #e1e5e9;
@@ -82,13 +83,13 @@ const Bottom = styled.div`
 `
 
 const Logo = styled.span`
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 700;
-    color: white;
+    color: #333;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     letter-spacing: 0.5px;
     @media screen and (max-width: 600px) {
-        font-size: 7px;
+        display: none;
     }
 `
 
@@ -155,20 +156,6 @@ const Item = styled.li`
     }
 ` 
 
-const Close = styled.div`
-    font-size: 24px;
-    color: white;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-        transform: scale(1.1);
-    }
-` 
-
 const Icon = styled.div`
     font-size: 30px;
     color: #7451f8;
@@ -193,40 +180,13 @@ const Span = styled.span`
         margin-left: 0px;
     }
 `
-
-const Color = styled.div`
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-    border: 2px solid #e1e5e9;
-    cursor: pointer;
-    margin: 0 4px;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-    &:nth-child(1){
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+const FootMessage = styled.div`
+    bottom: 10px;
+    right: 10px;
+    font-size: 12px;
+    @media screen and (max-height: 800px), screen and (max-width: 600px) {
+        display: none;
     }
-    &:nth-child(2){
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    }
-    &:nth-child(3){
-        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-    }
-
-    &:hover {
-        transform: scale(1.1);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    @media screen and (max-width: 600px) {
-        width: 15px;
-        height: 15px;
-        margin-left: 0px;
-        margin-right: 0px;
-        justify-content: center;
-    }
-}
 `
 
 const itemDict = 
@@ -266,6 +226,13 @@ const itemDict =
             to: '/employee',
             icon: <PeopleIcon/>,
             title: 'Employee',
+            auth: true,
+            visible: true
+        },
+        {
+            to: '/meetings',
+            icon: <MeetingRoomIcon/>,
+            title: 'Meetings',
             auth: true,
             visible: true
         },
@@ -375,12 +342,13 @@ const Sidebar = ({menu, setMenu}) => {
     return (
         <Wrapper>
             <Top>
-                <Link to='/' style={{ textDecoration: 'none' }}>
-                    <Logo>SmartWork</Logo>
-                </Link>
-                <Close>
-                    <CloseIcon onClick={handleMenu}/>
-                </Close>
+                <img
+                    src='/smartwork.webp'  
+                    alt='SmartWork Logo'
+                    style={{ height: 50 }}
+                    onClick={handleMenu}       
+                />
+                <Logo>SmartWork</Logo>
             </Top>
             <Middle>
                 <Items>
@@ -388,7 +356,9 @@ const Sidebar = ({menu, setMenu}) => {
                 </Items>
             </Middle>
             <Bottom>
-                <Color/> 
+                <FootMessage>
+                    Copyright © {(new Date().getFullYear())} SmartWork. 
+                </FootMessage>
             </Bottom>
         </Wrapper>
     )

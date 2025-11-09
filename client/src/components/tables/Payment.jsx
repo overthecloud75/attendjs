@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'react'
-import styled from 'styled-components'
 import dayjs from 'dayjs'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Stack } from '@mui/material'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { useTranslation } from 'react-i18next'
 import { getPaymentApproval, postPaymentApproval } from '../../utils/EventUtil'
 import Editor from './Editor'
-
-const DatePickWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    position: relative;
-`
 
 const FORM_FIELDS = {
     APPROVER: 'approver',
@@ -24,7 +16,7 @@ const FORM_FIELDS = {
     REASON: 'reason',
     ETC: 'etc',
     CONTENT: 'content'
-  }
+}
   
 const VALIDATION_MESSAGES = {
     [FORM_FIELDS.START]: '사용일이 작성되지 않습니다.',
@@ -49,8 +41,13 @@ const Payment = ({writeMode, open, setOpen}) => {
     useEffect(() => {
         const fetchData = async () => {
             const {data, error} = await getPaymentApproval()
+            console.log(data)
             if (!error) {
-                setValue({...value, approver: data.approver.name, consenter: data.consenter.name })
+                setValue({
+                    ...value, 
+                    approver: `${data.approver.name}/${data.approver.position}/${data.approver.department}`, 
+                    consenter: `${data.consenter.name}/${data.consenter.position}/${data.consenter.department}` 
+                })
             }
         }
         fetchData()
@@ -92,25 +89,25 @@ const Payment = ({writeMode, open, setOpen}) => {
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>{t('button-payment-approval')}</DialogTitle>
-            <DialogContent>
-                <TextField 
-                    margin='dense'
-                    id={FORM_FIELDS.APPROVER}
-                    label='결재자'
-                    fullWidth
-                    variant='standard'
-                    value={value.approver}
-                />
-                <TextField 
-                    margin='dense'
-                    id={FORM_FIELDS.CONSENTER}
-                    label='합의자'
-                    fullWidth
-                    variant='standard'
-                    value={value.consenter}
-                />
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePickWrapper>
+            <Stack spacing={2}>
+                <DialogContent>
+                    <TextField 
+                        margin='dense'
+                        id={FORM_FIELDS.APPROVER}
+                        label='결재자'
+                        fullWidth
+                        variant='standard'
+                        value={value.approver}
+                    />
+                    <TextField 
+                        margin='dense'
+                        id={FORM_FIELDS.CONSENTER}
+                        label='합의자'
+                        fullWidth
+                        variant='standard'
+                        value={value.consenter}
+                    />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker 
                             label='사용일' 
                             format={'YYYY-MM-DD'}
@@ -118,45 +115,45 @@ const Payment = ({writeMode, open, setOpen}) => {
                                 ...prev, 
                                 start: newValue.format('YYYY-MM-DD')
                             }))}
-                            sx={{ width: '100%' }}
+                            slotProps={{ textField: { fullWidth: true } }}
                         />
-                    </DatePickWrapper>
-                </LocalizationProvider>
-                <TextField 
-                    margin='dense'
-                    id={FORM_FIELDS.CARD_NO}
-                    label='카드번호'
-                    fullWidth
-                    variant='outlined'
-                    value={value.cardNo}
-                    onChange={handleChange}
-                />
-                <TextField 
-                    margin='dense'
-                    id={FORM_FIELDS.REASON}
-                    label='사용내용'
-                    fullWidth
-                    variant='outlined'
-                    value={value.reason}
-                    onChange={handleChange}
-                />
-                <TextField 
-                    margin='dense'
-                    id={FORM_FIELDS.ETC}
-                    label='사용금액'
-                    fullWidth
-                    variant='outlined'
-                    value={value.etc}
-                    onChange={handleChange}
-                />
-                <Editor
-                    writeMode={writeMode}
-                    value={value}
-                    setValue={setValue}
-                    readOnly={writeMode ? false : true}
-                    placeholder='여기에 영수증 사진을 upload 해주세요.'
-                />
-            </DialogContent>
+                    </LocalizationProvider>
+                    <TextField 
+                        margin='dense'
+                        id={FORM_FIELDS.CARD_NO}
+                        label='카드번호'
+                        fullWidth
+                        variant='outlined'
+                        value={value.cardNo}
+                        onChange={handleChange}
+                    />
+                    <TextField 
+                        margin='dense'
+                        id={FORM_FIELDS.REASON}
+                        label='사용내용'
+                        fullWidth
+                        variant='outlined'
+                        value={value.reason}
+                        onChange={handleChange}
+                    />
+                    <TextField 
+                        margin='dense'
+                        id={FORM_FIELDS.ETC}
+                        label='사용금액'
+                        fullWidth
+                        variant='outlined'
+                        value={value.etc}
+                        onChange={handleChange}
+                    />
+                    <Editor
+                        writeMode={writeMode}
+                        value={value}
+                        setValue={setValue}
+                        readOnly={writeMode ? false : true}
+                        placeholder='여기에 영수증 사진을 upload 해주세요.'
+                    />
+                </DialogContent>
+            </Stack>
             <DialogActions>
                 <Button onClick={handleClose} variant='outlined'>{t('button-cancel')}</Button>
                 <Button onClick={handleUpdate} variant='outlined'>{t('button-ok')}</Button>

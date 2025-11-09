@@ -11,7 +11,7 @@ const Title= styled.div`
     justify-content: center;
 `
 
-const src = 'https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=' + naverMapAPIKey
+const src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${naverMapAPIKey}`
 
 const NMap = ({state}) => {
     const [scriptLoading, setScriptLoading] = useState(true)

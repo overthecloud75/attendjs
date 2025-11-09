@@ -8,7 +8,7 @@ import { getUser } from '../../storage/userSlice'
 import ProfileMenu from '../bar/ProfileMenu'
 
 const Container = styled.div`
-    height: 70px;
+    height: 60px;
     border-bottom: 1px solid #e1e5e9;
     display: flex;
     align-items: center;
@@ -43,14 +43,13 @@ const MenuButton = styled.div`
     height: 40px;
     border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: all 0.25s ease;
+    background: #5f6ee1;   /* 단색 파랑 톤 */
     color: white;
 
     &:hover {
-        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-        transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background: #4d5ccb;  /* 조금 더 어두운 톤 */
+        transform: scale(1.04);
     }
 `
 
@@ -70,7 +69,7 @@ const Item = styled.div`
     align-items: center;
     position: relative;
     cursor: pointer;
-    padding: 8px;
+    padding: 6px;
     border-radius: 50%;
     transition: all 0.2s ease;
 
@@ -108,7 +107,7 @@ const UserSection = styled.div`
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 8px 16px;
+    padding: 2px 16px;
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.3s ease;

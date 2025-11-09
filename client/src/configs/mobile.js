@@ -1,3 +1,3 @@
 export const MOBILE = {
-    size: 800
+    size: 768
 }

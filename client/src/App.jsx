@@ -16,6 +16,7 @@ import Summary from './pages/Summary'
 import Device from './pages/Device'
 import CreditCard from './pages/CreditCard'
 import Employee from './pages/Employee'
+import MeetingRoom from './pages/MeetingRoom'
 import LoginHistory from './pages/LoginHistory'
 import ApprovalHistory from './pages/ApprovalHistory'
 import TooManyRequests from './pages/TooManyRequests'
@@ -53,6 +54,7 @@ function App() {
                     <Route exact path='/device' element={<Device menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/creditcard' element={<CreditCard menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/employee' element={<Employee menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/meetings' element={<MeetingRoom menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/loginhistory' element={<LoginHistory menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/approvalhistory' element={<ApprovalHistory menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/board' element={<Board menu={menu} setMenu={setMenu}/>}/>

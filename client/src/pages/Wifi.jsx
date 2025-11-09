@@ -3,7 +3,6 @@ import Sidebar from '../components/bar/Sidebar'
 import Navbar from '../components/bar/Navbar'
 import CoustomTableWithSearch from '../components/tables/CustomTableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/wifi'
-import Footer from '../components/Footer'
 import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
 
 const Wifi = ({menu, setMenu}) => {
@@ -23,7 +22,6 @@ const Wifi = ({menu, setMenu}) => {
                     columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
                     csvHeaders={csvHeaders}
                 />
-                {menu && <Footer/>}
             </div>
         </div>
     )

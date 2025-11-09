@@ -1,10 +1,9 @@
 import Sidebar from '../components/bar/Sidebar'
 import Navbar from '../components/bar/Navbar'
-import Calendar from '../components/Calendar'
-import Footer from '../components/Footer'
 import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
+import MeetingRoomContainer from '../components/meeting/MeetingRoomContainer'
 
-const Schedule = ({menu, setMenu}) => {
+const MeetingRoom = ({menu, setMenu}) => {
 
     useRedirectIfNotAuthenticated()
 
@@ -13,11 +12,10 @@ const Schedule = ({menu, setMenu}) => {
             {menu && <Sidebar menu={menu} setMenu={setMenu}/>}
             <div className='wrapper'>
                 <Navbar menu={menu} setMenu={setMenu}/> 
-                <Calendar/>
-                {menu && <Footer/>}
+                <MeetingRoomContainer/>
             </div>
         </div>
     )
 }
 
-export default Schedule
+export default MeetingRoom

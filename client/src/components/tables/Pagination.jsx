@@ -8,20 +8,14 @@ const Paginate = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    margin: 10px 5px 10px 5px;
+    gap: 5px;
+    margin: 5px 5px;
     padding: 5px;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    border-radius: 12px;
-    border: 1px solid #e1e5e9;
+    border-radius: 8px;
 
     @media screen and (max-width: 768px) {
         flex-wrap: wrap;
-        gap: 6px;
-    }
-
-    @media screen and (max-width: 600px) {
-        margin: 5px
+        gap: 3px;
     }
 `
 
@@ -32,124 +26,101 @@ const NavigationGroup = styled.div`
 `
 
 const PageButton = styled.button`
-    border: none;
-    border-radius: 8px;
-    padding: 8px;
-    margin: 0;
-    background: white;
-    color: #64748b;
-    font-weight: 500;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #374151;
+    border-radius: 6px;
+    padding: 6px 10px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    min-width: 25px;
+    height: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 40px;
-    height: 40px;
-    border: 1px solid #e1e5e9;
-    
-    &:hover {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        border-color: transparent;
-    }
+    font-size: 14px;
+    transition: background 0.15s ease, border-color 0.15s ease;
 
-    &:active {
-        transform: translateY(0);
+    &:hover:not([disabled]) {
+        background: #f3f4f6;
+        border-color: #d1d5db;
     }
 
     &[disabled] {
-        background: #f1f5f9;
-        color: #94a3b8;
+        background: #f9fafb;
+        color: #9ca3af;
         cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-        border-color: #e1e5e9;
     }
 
     &[aria-current="true"] {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: #e5e7eb;
+        border-color: #d1d5db;
         font-weight: 600;
-        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
-        border-color: transparent;
     }
-    
+
     @media screen and (max-width: 768px) {
-        padding: 3px;
+        min-width: 25px;
+        height: 25px;
+        padding: 4px;
     }
 `
 
 const PageInfo = styled.div`
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: #64748b;
+    gap: 6px;
+    color: #6b7280;
     font-size: 14px;
-    font-weight: 500;
-    
+
     @media screen and (max-width: 768px) {
         font-size: 13px;
-    }
-    
-    @media screen and (max-width: 600px) {
-        font-size: 11px;
-        gap: 3px;
     }
 `
 
 const PageSpan = styled.span`
-    margin: 0px 5px;
-    
-    @media screen and (max-width: 600px) {
-        margin: 0px 2px;
-    }
+    margin: 0 4px;
 `
 
 const PageInput = styled.input`
-    margin: 0px 5px;
-    padding: 8px 8px;
-    border: 1px solid;
-	border-radius: 8px;
-    width: 50px;
-    background-color: transparent;
-    justify-content: center;
+    width: 48px;
+    padding: 6px 4px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #374151;
+    text-align: center;
+
+    &:focus {
+        outline: none;
+        border-color: #6b7280;
+    }
 
     @media screen and (max-width: 600px) {
-        padding: 3px 3px;
-        margin: 0px 2px;
-        width: 25px;
+        width: 32px;
+        padding: 4px;
     }
 `
 
 const PageSelect = styled.select`
-    margin: 0 8px;
-    padding: 8px 12px;
-    border: 1px solid #e1e5e9;
-    border-radius: 8px;
-    background-color: white;
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #374151;
     font-size: 14px;
-    font-weight: 500;
-    color: #1e293b;
     cursor: pointer;
-    transition: all 0.3s ease;
-    
+
     &:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: #6b7280;
     }
-    
-    &:hover {
-        border-color: #667eea;
-    }
-    
+
     @media screen and (max-width: 768px) {
-        padding: 3px 3px;
-        margin: 0px 2px;
-        display: None
+        padding: 4px;
+        font-size: 13px;
+    }
+
+    @media screen and (max-width: 600px) {
+        display: none;
     }
 `
 
@@ -157,17 +128,16 @@ const PageSizeGroup = styled.div`
     display: flex;
     align-items: center;
     gap: 4px;
-    
+
     @media screen and (max-width: 600px) {
         display: none;
     }
 `
 
 const PageSizeLabel = styled.span`
-    color: #64748b;
+    color: #6b7280;
     font-size: 14px;
-    font-weight: 500;
-    
+
     @media screen and (max-width: 768px) {
         font-size: 13px;
     }

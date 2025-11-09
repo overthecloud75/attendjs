@@ -51,7 +51,7 @@ const CustomTableButtons = ({
                 <Payment writeMode={writeMode} open={openPayment} setOpen={setOpenPayment} />
             )}
 
-            <Stack direction='row' spacing={1} flexWrap='wrap'>
+            <Stack direction='row' spacing={1} flexWrap='wrap' justifyContent='flex-end' sx={{ width: '100%' }}>
                 {url === 'approval' && (
                 <>
                     <Button variant='contained' color='primary' onClick={handleAttendClick}>
@@ -68,8 +68,9 @@ const CustomTableButtons = ({
                         New
                     </Button>
                 )}
-
-                <CsvDownload data={data} csvHeaders={csvHeaders} fileName={fileName} />
+                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                    <CsvDownload data={data} csvHeaders={csvHeaders} fileName={fileName} />
+                </Box>
             </Stack>
         </Box>
     )

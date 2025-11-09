@@ -10,8 +10,8 @@ import { ensureDirectoryExists } from '../utils/file.js'
 const storage = multer.diskStorage({ 
     destination: (req, file, cb) => { 
         const { year, month } = getYearMonth()
-        ensureDirectoryExists('uploads/'+ year + '/' + month + '/')  
-        cb(null, 'uploads/'+ year + '/' + month + '/')
+        ensureDirectoryExists(`uploads/${year}/${month}/`)  
+        cb(null, `uploads/${year}/${month}/`)
     },
     filename: (req, file, cb) => { 
         cb(null, `${uuidv4()}.${mime.extension(file.mimetype)}`)

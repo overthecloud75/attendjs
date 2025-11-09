@@ -103,14 +103,14 @@ class Scanner:
         for ip_split in ip_split_list:
             ip_part = ip_split
             if len(ip_split) == 2:
-                ip_part = '0' + ip_split
+                ip_part = f'0{ip_split}'
             elif len(ip_split) == 1:
-                ip_part = '00' + ip_split
+                ip_part = f'00{ip_split}'
 
             if ip_str == '':
                 ip_str = ip_part
             else:
-                ip_str = ip_str + '.' + ip_part
+                ip_str = f'{ip_str}.{ip_part}'
         return ip_str
 
 def check_hour():
@@ -119,11 +119,11 @@ def check_hour():
     hour = correct_time(now.hour)
     minute = correct_time(now.minute)
     second = correct_time(now.second)
-    return today, hour + minute + second
+    return today, f'{hour}{minute}{second}'
 
 def correct_time(time):
     if int(time) < 10:
-        time = '0' + str(time)
+        time = f'0{str(time)}'
     else:
         time = str(time)
     return time

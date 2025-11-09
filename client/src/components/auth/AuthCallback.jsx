@@ -20,7 +20,7 @@ const AuthCallback = ({mode}) => {
         const params = new URLSearchParams(window.location.search)
         const code = params.get('code')
         const session_state = params.get('session_state')
-        const redirect_uri = window.location.origin + authorityRedirectPath
+        const redirect_uri = `${window.location.origin}${authorityRedirectPath}`
         if (code && session_state) {
             handleSubmit({code, session_state, redirect_uri})
         } else {

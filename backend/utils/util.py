@@ -12,7 +12,7 @@ def check_holiday(date):
     year = date[0:4]
     month = date[5:7]
     day = date[8:]
-    month_day = month + day
+    month_day = f'{month}{day}'
 
     date = datetime.datetime(int(year), int(month), int(day), 1, 0, 0)  # str -> datetime으로 변환
     lunar_month_day = get_lunar_day(year, month_day)
@@ -45,20 +45,20 @@ def datetime_to_date(date):
     this_month = date.month
     this_day = date.day
     if this_month < 10:
-        this_month = '0' + str(this_month)
+        this_month = f'0{str(this_month)}'
     else:
         this_month = str(this_month)
     if this_day < 10:
-        this_day = '0' + str(this_day)
+        this_day = f'0{str(this_day)}'
     else:
         this_day = str(this_day)
-    date = this_month + this_day
+    date = f'{this_month}{this_day}'
     return date
 
 def get_lunar_day(year, month_day):
     lunar_calendar.setSolarDate(int(year), int(month_day[0:2]), int(month_day[2:4]))
     lunar_date = lunar_calendar.LunarIsoFormat()
-    return lunar_date[5:7] + lunar_date[8:]
+    return f'{lunar_date[5:7]}{lunar_date[8:]}'
 
 def check_this_year():
     return datetime.datetime.now().year
@@ -84,11 +84,11 @@ def check_hour():
     hour = correct_time(now.hour)
     minute = correct_time(now.minute)
     second = correct_time(now.second)
-    return today, hour + minute + second
+    return today, f'{hour}{minute}{second}'
 
 def correct_time(time):
     if int(time) < 10:
-        time = '0' + str(time)
+        time = f'0{str(time)}'
     else:
         time = str(time)
     return time

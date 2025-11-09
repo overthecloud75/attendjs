@@ -51,7 +51,7 @@ const Editor = ({writeMode, value, setValue, isReadOnly, placeholder='여기에 
     }
      
     const imageUploadAdapter = (loader) => {
-        const imgLink = getSiteUrl() + '/api/upload/image'
+        const imgLink = `${getSiteUrl()}/api/upload/image`
         return {
             upload: async () => {
                 try {

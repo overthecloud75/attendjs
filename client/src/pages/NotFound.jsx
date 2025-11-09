@@ -1,37 +1,43 @@
 import { Box, Typography, Button } from '@mui/material'
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined'
 import { useNavigate } from 'react-router-dom'
+import Feature from '../components/Feature'
+import Footer from '../components/Footer'
 
 const NotFound = () => {
-  const navigate = useNavigate()
+    const navigate = useNavigate()
 
-  return (
-        <Box
-            display='flex'
-            flexDirection='column'
-            alignItems='center'
-            justifyContent='center'
-            height='100vh'
-            textAlign='center'
-            bgcolor='#f9fafb'
-            px={2}
-        >
-            <ReportProblemOutlinedIcon color='warning' sx={{ fontSize: 80, mb: 2 }} />
-            <Typography variant='h3' fontWeight='bold' gutterBottom>
-                404 Not Found
-            </Typography>
-            <Typography variant='body1' color='text.secondary' mb={4}>
-                요청하신 페이지를 찾을 수 없습니다. URL을 확인하시거나 홈으로 돌아가세요.
-            </Typography>
-            <Button 
-                variant='outlined' 
-                color='warning' 
-                onClick={() => navigate('/')}
-                sx={{ textTransform: 'none' }}
+    return (
+        <div>
+            <Feature/>
+            <Box
+                display='flex'
+                flexDirection='column'
+                alignItems='center'
+                justifyContent='center'
+                height='100vh'
+                textAlign='center'
+                sx={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
+                px={2}
             >
-                홈으로 이동
-            </Button>
-        </Box>
+                <ReportProblemOutlinedIcon color='warning' sx={{ fontSize: 60, mb: 2 }} />
+                <Typography variant='h4' fontWeight='bold' gutterBottom>
+                    404 Not Found
+                </Typography>
+                <Typography variant='body1' color='text.secondary' mb={4}>
+                    요청하신 페이지를 찾을 수 없습니다. URL을 확인하시거나 홈으로 돌아가세요.
+                </Typography>
+                <Button 
+                    variant='contained' 
+                    color='primary' 
+                    onClick={() => navigate('/')}
+                    sx={{ textTransform: 'none' }}
+                >
+                    홈으로 이동
+                </Button>
+            </Box>
+            <Footer/>
+        </div>
     )
 }
 

@@ -1,10 +1,11 @@
-* 25/10/08
-    - 2.5.4 (clinet, api, backend) <br>
-        email template enhancement <br>
+### 25/11/09
+**v2.5.5 (client, API)** : Added meeting reservation feature
 
-* 25/10/05
-    - 2.5.3 (api) <br>
-        apply res.on('finish') <br>
+### 25/10/08
+**v2.5.4 (client, API, backend)** : Email template enhancement  
+
+### 25/10/05
+**v2.5.3 (API)** : Applied `res.on('finish')`
 
 * 25/10/03
     - 2.5.2 (client) <br>

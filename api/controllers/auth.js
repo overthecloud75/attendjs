@@ -404,7 +404,6 @@ export const authCallback = async (req, res, next) => {
 
 const checkMobile = (ip, user_agent) => {
     const ip16 = ip.split('.').slice(0, 2).join('.')
-    // const ip24 = ip_split[0] + '.' + ip_split[1] + '.' + ip_split[2]
     const isMobile = MOBILE_IP_LIST.includes(ip16) && (user_agent.includes('iPhone') || user_agent.includes('Android')) ? 'O' : 'X'
 
     const isRemotePlace = ip16 === process.env.REMOTE_IP

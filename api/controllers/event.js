@@ -19,7 +19,7 @@ const APPROVAL_STATUS = {
     WRONG: 'Wrong'
 }
 
-const getReasons = () => Object.keys(WORKING.status) 
+const getReasons = () => Object.keys(WORKING.reason) 
 
 export const getEventsInCalendar = async (req, res, next) => {
     try {
@@ -107,7 +107,9 @@ export const getApproval = async (req, res, next) => {
 
 export const postApproval = async (req, res, next) => {
     try {
-        const { reason, etc } = req.body
+        const { reason, etc: rawEtc } = req.body
+        const etc = getEtcValue(reason, rawEtc)
+
         const start = sanitizeData(req.body.start, 'date')
         const end = sanitizeData(req.body.end, 'date')
         const email = req.user.email
@@ -117,11 +119,11 @@ export const postApproval = async (req, res, next) => {
         if (!reasons.includes(reason)) {
             throw createError(400, 'Something Wrong!')
         }
-        const checkTheSameApproval = await Approval.findOne({email, start, end, reason, etc})
+        const checkTheSameApproval = await Approval.findOne({email, start, end, reason})
         if (checkTheSameApproval && checkTheSameApproval.status !== APPROVAL_STATUS.CANCEL) {
-            res.status(200).send('Already there is the same approval.')
+            res.status(200).send('An approval with the same details already exists.')
         } else {
-            const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, reason, etc, approverName: approver.name, approverEmail: approver.email})
+            const newApproval = new Approval({approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email, department: employee.department, start, end, reason, etc, approverName: approver.name, approverEmail: approver.email})
             await newApproval.save()
             const summary = await getLeftLeaveSummary(employee)
             await sendAttendRequestEmail(newApproval, summary)
@@ -131,6 +133,17 @@ export const postApproval = async (req, res, next) => {
         next(err)
     }
 }
+
+const getEtcValue = (reason, rawEtc) => {
+    let etc = rawEtc
+    if (reason === '반차' && rawEtc === '오후반차') {} 
+    else if (reason === '반차') {
+        etc = '오전반차'
+    } else if (reason === '기타') {}
+    else {etc = ''}
+    return etc
+}
+
 
 export const getApprover = async (employee) => {
     let approver
@@ -151,7 +164,7 @@ export const getApprover = async (employee) => {
         default:
             approver = await Employee.findOne({position: '본부장', regular: { $ne: '퇴사' }})
     }
-    const baseApprover = {name: approver.name, department: approver.department, email: approver.email, employeeId: approver.employeeId}
+    const baseApprover = {name: approver.name, position:approver.position, department: approver.department, email: approver.email, employeeId: approver.employeeId}
     return baseApprover
 }
 
@@ -195,6 +208,7 @@ const handleApprovalAction = async (req, res, next, actionFn, successTitle) => {
 
 export const makeActive = async (approval) => {
     const { _id, start, end } = approval
+    console.log(approval)
     let status 
     let msg 
     if (end >= start) {
@@ -224,7 +238,7 @@ export const makeCancel = async (approval) => {
 }
 
 const makeTitle = (approval) => {
-    const title = (approval.reason === '기타' && approval.reason !== '') ? (approval.name + '/' + approval.etc) : (approval.name + '/' + approval.reason)
+    const title = (approval.etc) ? (`${approval.name}/${approval.etc}`) : (`${approval.name}/${approval.reason}`)
     return title
 }
 

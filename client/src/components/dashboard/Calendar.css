@@ -1,69 +1,69 @@
 /* 기본 스타일 (데스크톱) */
 .fc .fc-toolbar.fc-header-toolbar {
     margin-bottom: 1.2rem;
-  }
+}
   
-  .fc-button {
+.fc-button {
     font-size: 13px !important;
-  }
-  
-  .fc-prev-button,
-  .fc-next-button {
+}
+
+.fc-prev-button,
+.fc-next-button {
     font-size: 13px !important;
-  }
-  
-  .fc .fc-toolbar-title {
+}
+
+.fc .fc-toolbar-title {
     font-size: 1.1rem !important; /* 제목은 약간 크게 */
     text-align: center;
-  }
-  
-  .fc-col-header-cell-cushion {
+}
+
+.fc-col-header-cell-cushion {
     font-size: 0.9rem !important; /* 요일 표시 */
-  }
-  
-  /* 날짜 숫자 */
-  .fc .fc-daygrid-day-number {
+}
+
+/* 날짜 숫자 */
+.fc .fc-daygrid-day-number {
     font-size: 0.85rem !important;
     text-align: center;
-  }
-  
-  /* 이벤트 제목 */
-  .fc .fc-daygrid-event .fc-event-title {
+}
+
+/* 이벤트 제목 */
+.fc .fc-daygrid-event .fc-event-title {
     display: flex;
     font-size: 0.75rem !important;
     justify-content: center;
     align-items: center;
     white-space: normal;
-  }
-  
-  /* 모바일 : 화면 너비가 600px 이하 */
-  @media (max-width: 600px) {
+}
+
+/* 모바일 : 화면 너비가 600px 이하 */
+@media (max-width: 600px) {
     .fc .fc-toolbar.fc-header-toolbar {
       margin-bottom: 0.6rem;
     }
-  
+
     .fc-button {
-      font-size: 10px !important;
+        font-size: 10px !important;
     }
-  
+
     .fc-prev-button,
     .fc-next-button {
-      font-size: 10px !important;
+        font-size: 10px !important;
     }
-  
+
     .fc .fc-toolbar-title {
-      font-size: 0.85rem !important;
+        font-size: 0.85rem !important;
     }
-  
+
     .fc .fc-col-header-cell-cushion {
-      font-size: 0.7rem !important;
+        font-size: 0.7rem !important;
     }
-  
+
     .fc .fc-daygrid-day-number {
-      font-size: 0.7rem !important;
+        font-size: 0.7rem !important;
     }
-  
+
     .fc .fc-daygrid-event .fc-event-title {
-      font-size: 0.65rem !important;
+        font-size: 0.65rem !important;
     }
-  }
+}

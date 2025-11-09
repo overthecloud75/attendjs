@@ -8,7 +8,7 @@ except Exception as e:
     
 def send_email(email=None, subject=None, body=None, cc=None,include_cc=False):
     mimemsg = MIMEMultipart()
-    mimemsg['From'] = 'HR_MANAGER' + '<' + ACCOUNT['email'] + '>'
+    mimemsg['From'] = f'HR_MANAGER<{ACCOUNT["email"]}>'
     mimemsg['To'] = email
     if include_cc and cc:
         mimemsg['Cc'] = cc

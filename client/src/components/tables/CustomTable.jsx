@@ -11,7 +11,6 @@ import {
     Typography,
 } from '@mui/material'
 import styled from 'styled-components'
-import { v } from '../../variable.js'
 import Pagination from './Pagination.jsx'
 import Update from './UpdateDialog.jsx'
 import CardUpdate from './CardUpdate.jsx'
@@ -22,34 +21,29 @@ import CustomTableButtons from './CustomTableButtons.jsx'
 
 const Container = styled.div`
     width: 100%;
-    overflow-x: auto;
+    margin: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     font-size: 14px;
+    background: #ffffff;
 `
 
 const TableWrapper = styled.div`
-    overflow-x: auto;
-    border-radius: 16px;
+    border-radius: 8px;
     margin: 0 5px 0 5px;
     
     &::-webkit-scrollbar {
-        height: 8px;
-    }
-    
-    &::-webkit-scrollbar-track {
-        background: #f1f5f9;
-        border-radius: 4px;
+        height: 6px;
     }
     
     &::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
+        background: #d1d5db;
         border-radius: 4px;
     }
     
-    &::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
+    &::-webkit-scrollbar-track {
+        background: #f3f4f6;
     }
 `
 
@@ -58,78 +52,60 @@ const TableSheet = styled.table`
     border-collapse: collapse;
     text-align: center;
     font-size: 14px;
-    
-    @media screen and (max-width: 768px) {
-        font-size: 11px;
-    }
 `
 
 const THead = styled.thead`
     position: sticky;
     top: 0;
-    z-index: 100;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    z-index: 50;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
 `
 
-const HeadTr = styled.tr`
-    background: transparent;
-`
+const HeadTr = styled.tr``
 
 const Th = styled.th`
-    padding: ${v.smSpacing};
+    padding: 10px 12px;
     border: none;
-    color: white;
-    text-transform: capitalize;
+    color: #374151;
     font-weight: 600;
-    font-size: 14px;
-    position: relative;
+    font-size: 13px;
+    text-transform: capitalize;
     cursor: pointer;
-    transition: all 0.3s ease;
-    
+    position: relative;
+    transition: background 0.2s ease;
+
     &:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: #f3f4f6;
     }
-    
-    &:first-child {
-        border-top-left-radius: 16px;
-    }
-    
-    &:last-child {
-        border-top-right-radius: 16px;
-    }
-    
+
     @media screen and (max-width: 768px) {
-        padding-left: 0px;
-        padding-right: 0px
         font-size: 11px;
     }
 `
 
 const Td = styled.td`
-    padding: ${v.smSpacing};
-    border-bottom: 1px solid #f1f5f9;
-    color: #1e293b;
-    font-weight: 400;
-    transition: all 0.3s ease;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f3f4f6;
+    color: #374151;
+    font-size: 13px;
 
     @media screen and (max-width: 768px) {
         padding-left: 0px;
-        padding-right: 0px
+        padding-right: 0px;
     }
 `
 
 const TBody = styled.tbody`
-    cursor: pointer;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    &:last-child td {
-        border-bottom: none;
-    }
+    background: #ffffff;
 `
 
 const BodyTr = styled.tr`
-    background-color: transparent;
+    &:hover td {
+        background: #f9fafb;
+    }
 `
+
 // https://geuni620.github.io/blog/2023/12/2/tanstack-table/
 const CustomTable = ({url, columns, data, setData, csvHeaders, fileName}) => {
     // update시 page 설정

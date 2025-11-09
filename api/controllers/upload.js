@@ -6,7 +6,7 @@ import { createError } from '../utils/error.js'
 export const postImageUpload = async (req, res, next) => {
     try {
         const { originalname: originalName, destination, filename: fileName } = req.file
-        const filePath = destination + fileName 
+        const filePath = `${destination}${fileName}` 
 
         let width, height
 
@@ -32,7 +32,7 @@ export const getImage = async (req, res, next) => {
         const upload = await Upload.findOne({_id: file})
 
         if (!upload) throw createError(404, 'Image Not Found')
-        const absolutePath = path.resolve(upload.destination + upload.fileName)
+        const absolutePath = path.resolve(`${upload.destination}${upload.fileName}`)
         res.sendFile(absolutePath, (err) => {
             if (err) throw createError(404, err)
         })
