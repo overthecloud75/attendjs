@@ -13,7 +13,6 @@ import {
 
 const ProfileDialog = ({ user, open, handleClose }) => {
 
-    console.log(user)
     const userKeys = Object.keys(user).slice(0, 4)
     const userValues = Object.values(user).slice(0, 4)
 

@@ -384,7 +384,7 @@ class Report(BasicModel):
                 return False
 
             self.logger.info(f'[NOTICE EMAIL] {self.today} {name}')
-            subject = f'[근태 관리] {report['date']} {name} {status}'
+            subject = f"[근태 관리] {report['date']} {name} {status}"
             html_body = self._render_notice_email(name, report)
             cc = self.employee.get_approver(employee)['email']
             sent = send_email(email=email, subject=subject, body=html_body, cc=cc,include_cc=True)     
