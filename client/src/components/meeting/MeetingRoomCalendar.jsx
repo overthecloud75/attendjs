@@ -5,11 +5,14 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { Box, Typography } from '@mui/material'
 import { format } from 'date-fns'
+import tippy from 'tippy.js'
+import 'tippy.js/dist/tippy.css'
 import { useWindowDimension } from '../../hooks/useWindowDimension'
 import { MOBILE } from '../../configs/mobile'
 import { getUser } from '../../storage/userSlice'
 import { getMeetingsInCalendar, deleteMeetingInCalendar } from '../../utils/EventUtil'
-import MeetingRoomForm from './MeettngRoomForm'
+import SmallMeetingRoomForm from './SmallMeetingRoomForm'
+import './MeetingRoomCalendar.css'
 
 const MeetingRoomCalendar = ({eventsData, setEventsData}) => {
 
@@ -66,7 +69,7 @@ const MeetingRoomCalendar = ({eventsData, setEventsData}) => {
     }, [room])
 
     const handleEventClick = async (clickInfo) => {
-        if (window.confirm(`'${clickInfo.event.title}' 정말로 event를 지우기를 원하시나요?`)) {
+        if (window.confirm(`'${clickInfo.event.title}' 회의실 예약을 삭제하시겠습니까?`)) {
             const result = await deleteMeetingInCalendar(clickInfo.event)
             if (!result.err) {
                 clickInfo.event.remove()
@@ -76,8 +79,8 @@ const MeetingRoomCalendar = ({eventsData, setEventsData}) => {
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <Typography variant='h5' fontWeight='bold' mb={2} sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                <MeetingRoomForm
+            <Typography variant='h5' fontWeight='bold' mb={1} sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                <SmallMeetingRoomForm
                     room={room}
                     setRoom={setRoom}
                 /> 예약 현황 📅
@@ -90,26 +93,38 @@ const MeetingRoomCalendar = ({eventsData, setEventsData}) => {
                 editable={user.isAdmin}
                 selectable={user.isAdmin}
                 events={eventsData}
-                eventContent={(arg) => {
-                    const { title, start, end, extendedProps } = arg.event
+                eventContent={(arg) => 
+                    <div className='fc-timegrid-title'>
+                        <small><strong>{arg.event.title}</strong></small>
+                    </div>
+                }
+                eventClick={user.isAdmin?handleEventClick:false}
+                eventDidMount={(info) => {
+                    const { title, start, end, extendedProps } = info.event
                     const name = extendedProps.name || ''
+                    const meetingType = extendedProps.meetingType || ''
                     const timeRange = `${format(start, 'HH:mm')} - ${format(end, 'HH:mm')}`
-                    return {
-                        html: `
-                        <small>신청자 : <strong>${name}</strong></small><br>
-                        <small>주제 : <strong>${title}</strong></small><br>
-                        <small>시간 : <strong>${timeRange}</strong></small>
-                        `
+                    if (title) {
+                        tippy(info.el, {
+                            content: `
+                                <small>신청자 : <strong>${name}</strong></small><br/>
+                                <small>주제 : <strong>${title}</strong></small><br/>
+                                <small>시간 : <strong>${timeRange}</strong></small><br/>
+                                <small>종류 : <strong>${meetingType}</strong></small>
+                            `,
+                            allowHTML: true,
+                            placement: 'top',
+                        })
                     }
                 }}
-                eventClick={user.isAdmin?handleEventClick:false}
                 contentHeight='auto'
                 locale='ko'
                 weekends={weekends}
                 allDaySlot={false}
-                slotMinTime='09:00:00'
-                slotMaxTime='18:00:00'
-                slotDuration='00:20:00'
+                expandRows={false}
+                slotMinTime='08:00:00'
+                slotMaxTime='20:00:00'
+                slotDuration='00:30:00'
             />
         </Box>
     )

@@ -1,5 +1,4 @@
 import { Card, CardContent, Typography } from '@mui/material'
-import dayjs from 'dayjs'
 
 const TodayStatusCard = () => {
     const checkInTime = '09:14'

@@ -71,7 +71,7 @@ export const sendRegistrationConfirmationEmail = async (name, email, confirmatio
         logger.info(`✅ Confirmation email sent successfully to ${email}`)
     } catch (err) {
         logger.error(`❌ Failed to send confirmation email: ${err.message}`)
-        logger.info(err.stack)
+        logger.info(err.stack, exc_info=True)
     }
 }
 
@@ -118,7 +118,7 @@ export const sendPasswordResetOtpEmail = async (name, email, otp) => {
         logger.info(`✅ OTP 메일 발송 완료: ${email}`)
     } catch (err) {
         logger.error(`❌ OTP 메일 발송 실패: ${err.message}`)
-        logger.error(err.stack)
+        logger.error(err.stack, exc_info=True)
     }
 }
 
@@ -160,7 +160,7 @@ export const sendAttendRequestEmail = async (approval, summary) => {
             html,
         })
     } catch (err) {
-        logger.error(err.stack || err)
+        logger.error(err.stack || err, exc_info=True)
     }
 }
 
@@ -211,7 +211,7 @@ export const sendAttendConfirmationEmail = async (approval, status) => {
             html,
         })
     } catch (err) {
-        logger.error(err.stack || err)
+        logger.error(err.stack || err, exc_info=True)
     }
 }
 
@@ -274,7 +274,7 @@ export const sendPaymentRequestEmail = async (approval, status, payment) => {
             }] : []
         })
     } catch (err) {
-        logger.error(err.stack || err)
+        logger.error(err.stack || err, exc_info=True)
     }
 }
 
@@ -313,6 +313,6 @@ export const sendPaymentConfirmationEmail = async (approval, status) => {
             html,
         })
     } catch (err) {
-        logger.error(err.stack || err)
+        logger.error(err.stack || err, exc_info=True)
     }
 }

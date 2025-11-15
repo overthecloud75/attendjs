@@ -21,10 +21,11 @@ const fetchEvents = async (start, end, room) => {
 
 export const addMeeting = async (req, res, next) => {
     try {
-        const { title, date: rawDate, start: rawStart, end: rawEnd, name, meetingType, room } = req.body
+        const { title, date: rawDate, start: rawStart, end: rawEnd, meetingType, room } = req.body
         const date = sanitizeData(rawDate, 'date')
         const start = `${date}T${rawStart}:00`
         const end =  `${date}T${rawEnd}:00`
+        const name = `${req.user.name}/${req.user.department}`
 
         const meetingRoom = await Meeting.find({start: {$gte: start, $lt: end}, room})
         if (meetingRoom.length === 0) {

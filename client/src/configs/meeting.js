@@ -1,0 +1,1 @@
+export const MEETINGROOMS = ['대회의실', 'A 회의실', 'B 회의실']

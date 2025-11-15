@@ -17,13 +17,13 @@ USE_GPS_ATTENDANCE = True
 
 # email setting
 USE_NOTICE_EMAIL = True
-EMAIL_NOTICE_BASE = ['미출근', '지각']
+EMAIL_NOTICE_BASE = ['출근전', '미출근', '지각']
 
 # working
 WORKING = {
     'time': {'beginTime': '100000', 'lunchTime': '123000', 'lunchFinishTime': '133000', 'overNight': '040000'},
     'inStatus': ['정상출근', '지각', '미출근'],
-    'outStatus': {'반차': ['오전반차, 오후반차']},
+    'outStatus': {'반차': ['오전반차', '오후반차']},
     'update': ['상근', '병특'],
     'reason': {'휴가': 0, '반차': 4, '오전반차': 4, '오후반차': 4, '외근': 8, '재택': 8, '출근': 8, '기타': 8},
     'offDay': {'휴가': 1, '반차': 0.5, '지각': 0, '미출근': 0},

@@ -4,7 +4,7 @@ import random
 import datetime
 import copy
 
-from utils import check_time, check_holiday, get_delta_day
+from utils import check_time, check_holiday, get_delta_day, convert_to_time_string, get_access_day, calculate_working_hours
 from .db import db, BasicModel
 from .mail import send_email
 from .employee import Employee
@@ -36,7 +36,7 @@ class Report(BasicModel):
         self.gps_on = GPSOn()
         
         self.e_uptime = 0
-        self.employees_list = []
+        self.employee_list = []
         
     def update(self, date=None):
         '''
@@ -74,14 +74,14 @@ class Report(BasicModel):
             try:
                 self._notice_email(date=date)
             except Exception as e:
-                self.logger.error(f'{e}, {data}')
+                self.logger.error(f'{e}, {date}', exc_info=True)
         elif hour > overnight_time + 3:
             self._check_attend(date, hour)
 
     def _check_attend(self, date, hour):
         # attend 초기화
-        self.previous_attend = {}
-        attend = {}
+        self.previous_attends = {}
+        attends = {}
         
         # holidady 여부 확인 
         self.is_holiday = check_holiday(date)
@@ -95,59 +95,59 @@ class Report(BasicModel):
                 self.is_holiday = True
                 self.e_uptime = 0
             else:
-                attend = self._get_initial_attend_and_employees(date=date)
+                attends = self._get_initial_attends(date=date)
 
         # 지문 인식 출퇴근 기록
-        attend = self.fingerprint_attend(attend, date)
+        attends = self.fingerprint_attend(attends, date)
         # 지문 인식기 + wifi 출퇴근 기록
         if USE_WIFI_ATTENDANCE:
-            attend = self._fingerprint_or_wifi(attend, date)
+            attends = self._fingerprint_or_wifi(attends, date)
         # Add GPS attend 
         if USE_GPS_ATTENDANCE:
-            attend = self._legacy_or_gps(attend, date)
-        # attend
-        for employee_id in attend:
+            attends = self._legacy_or_gps(attends, date)
+        # attends
+        for employee_id in attends:
             # GPS 기록에는 regualar 여부 기록하지 않음 비상근일 때 reqular key 값이 없어 error 발생할 수 있음 
-            if 'regular' not in attend:
+            employee_attendance = attends[employee_id]
+            if 'regular' not in employee_attendance:
                 employee = self.employee.get(employee_id=employee_id)
-                attend[employee_id]['regular'] = employee['regular']
+                employee_attendance['regular'] = employee['regular']
             if employee_id in schedule_dict:
-                status = schedule_dict[employee_id]
-                attend[employee_id]['status'] = None
-                attend[employee_id]['reason'] = status 
-                # status가 2개 이상으로 표시된 경우 ex) 반차, 정기점검
-                if '반차' in status: 
-                    attend[employee_id]['reason'] = '반차'
-                elif '휴가' in status:
-                    attend[employee_id]['reason'] = '휴가'
-                attend[employee_id]['workingHours'] = WORKING['status'][attend[employee_id]['reason']]
-            elif attend[employee_id]['reason']:
-                attend[employee_id]['status'] = None
-                attend[employee_id]['workingHours'] = WORKING['status'][attend[employee_id]['reason']] 
-            elif attend[employee_id]['begin']:
+                reason = schedule_dict[employee_id]
+                employee_attendance['status'] = None
+                employee_attendance['reason'] = reason 
+                # reason이 2개 이상으로 표시된 경우 ex) 반차, 정기점검
+                if '반차' in reason: 
+                    employee_attendance['reason'] = '반차'
+                elif '휴가' in reason:
+                    employee_attendance['reason'] = '휴가'
+                employee_attendance['workingHours'] = WORKING['reason'][employee_attendance['reason']]
+            elif employee_attendance['reason']:
+                employee_attendance['status'] = None
+                employee_attendance['workingHours'] = WORKING['reason'][employee_attendance['reason']] 
+            elif employee_attendance['begin']:
                 # 휴일이 아닌 경우와 fulltime job인 경우만 지각 처리
-                if not self.is_holiday and attend[employee_id]['regular'] in WORKING['update'] and int(attend[employee_id]['begin']) > int(WORKING['time']['beginTime']):       
-                    attend[employee_id]['status'] = '지각'
+                if not self.is_holiday and employee_attendance['regular'] in WORKING['update'] and int(employee_attendance['begin']) > int(WORKING['time']['beginTime']):       
+                    employee_attendance['status'] = '지각'
                 else:
-                    attend[employee_id]['status'] = '정상출근'
-                attend[employee_id]['workingHours'] = self._calculate_working_hours(attend[employee_id]['begin'], attend[employee_id]['end'], overnight=False)
+                    employee_attendance['status'] = '정상출근'
+                employee_attendance['workingHours'] = calculate_working_hours(employee_attendance['begin'], employee_attendance['end'], overnight=False)
             else:
                 if hour >= 18:
-                    attend[employee_id]['status'] = '미출근'
+                    employee_attendance['status'] = '미출근'
                 else:
-                    attend[employee_id]['status'] = '출근전'
-                attend[employee_id]['workingHours'] = 0
-            self._update_attend_by_employee_id(date, employee_id, attend[employee_id])
+                    employee_attendance['status'] = '출근전'
+                employee_attendance['workingHours'] = 0
+            self._update_employee_attendance(date, employee_id, employee_attendance)
 
-    def _get_initial_attend_and_employees(self, date=None):
-        attend = {}
-        if self.collection.count_documents({'date': date}):
+    def _get_initial_attends(self, date=None):
+        if not self.collection.count_documents({'date': date}):
             attend_list = self.collection.find({'date': date})
-            for check_previous_attend in attend_list:
-                attend[check_previous_attend['employeeId']] = check_previous_attend
+            attends = {check_previous_attend['employeeId']: check_previous_attend for check_previous_attend in attend_list}
         else:
-            self.employees_list = self.employee.get_list(date=date)
-            for employee in self.employees_list:
+            attends = {}
+            self.employee_list = self.employee.get_list(date=date)
+            for employee in self.employee_list:
                 name = employee['name']
                 employee_id = employee['employeeId']
                 regular = employee['regular']
@@ -155,16 +155,17 @@ class Report(BasicModel):
                     reason = '출근'
                 else:
                     reason = None
-                # 같은 employee_id 인데 이름이 바뀌는 경우 발생
-                attend[employee_id] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 'end': None, 'reason': reason, 'regular': regular}
-        self.previous_attend = copy.deepcopy(attend)
-        return attend
+                # 같은 employee_id 인데 이름이 바뀌는 경우 발생해서 name 표기 
+                employee_attendance = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 'end': None, 'reason': reason, 'regular': regular}
+                attends[employee_id] = employee_attendance
+        self.previous_attends = copy.deepcopy(attends)
+        return attends
 
-    def fingerprint_attend(self, attend, date):
+    def fingerprint_attend(self, attends, date):
         self.overnight_employees = []
         max_uptime = 0 
 
-        access_today = self._get_access_day(date, delta=0)  # access_day 형식으로 변환
+        access_today = get_access_day(date, delta=0)  # access_day 형식으로 변환
         cursor.execute('select e_id, e_name, e_date, e_time, e_mode, e_uptime from tenter where e_date = ?', access_today)
 
         for row in cursor.fetchall():
@@ -177,31 +178,33 @@ class Report(BasicModel):
                 if e_uptime > self.e_uptime and int(time) > int(WORKING['time']['overNight']): # overnight가 아닌 것에 대한 기준
                     if e_uptime > max_uptime:
                         max_uptime = e_uptime
-                    if employee_id not in attend:
-                        employee = self.employee.get(employee_id=employee_id)
-                        if employee:
-                            attend[employee_id] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 
-                                'end': None, 'reason': None, 'regular': employee['regular']}
-                        else:
-                            attend[employee_id] = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 
-                                'end': None, 'reason': None, 'regular': '비상근'}
-                            self.employee.post(employee_id=employee_id, name=name, begin_date=date)
-                    if attend[employee_id]['begin']:
-                        if int(time) < int(attend[employee_id]['begin']):
-                            attend[employee_id]['begin'] = time    
-                        if int(time) > int(attend[employee_id]['end']):
-                            attend[employee_id]['end'] = time
+                    if employee_id in attends:
+                        employee_attendance = attends[employee_id]
                     else:
-                        attend[employee_id]['begin'] = time
-                        attend[employee_id]['end'] = time
+                        employee = self.employee.get(employee_id=employee_id)
+                        employee_attendance = {'date': date, 'name': name, 'employeeId': employee_id, 'begin': None, 'end': None, 'reason': None}
+                        if employee:
+                            employee_attendance['reqular'] = employee['regular']
+                        else:
+                            employee_attendance['regular'] = '비상근'
+                            self.employee.post(employee_id=employee_id, name=name, begin_date=date)
+                        attends[employee_id] = employee_attendance
+                    if employee_attendance['begin']:
+                        if int(time) < int(employee_attendance['begin']):
+                            employee_attendance['begin'] = time    
+                        if int(time) > int(employee_attendance['end']):
+                            employee_attendance['end'] = time
+                    else:
+                        employee_attendance['begin'] = time
+                        employee_attendance['end'] = time
                 elif int(time) <= int(WORKING['time']['overNight']) and employee_id not in self.overnight_employees:
                     self.logger.info(f'overnight: {employee_id}, {time}')
                     self.overnight_employees.append(employee_id)
         if max_uptime:
             self.e_uptime = max_uptime
-        return attend
+        return attends
 
-    def _fingerprint_or_wifi(self, attend, date):
+    def _fingerprint_or_wifi(self, attends, date):
         # wifi device
         device_dict = self.devices.by_employees(date=date)
 
@@ -210,66 +213,62 @@ class Report(BasicModel):
             name = device_dict[employee_id][0]
             begin, end = self.device_on.get_attend_by_mac_list(device_dict[employee_id][1: ], date=date)
             if begin:
-                attend = self._compare_time(attend, date, employee_id, name, begin, end)
-        return attend
+                if employee_id in attends:
+                    employee_attendance = attends[employee_id]
+                    employee_attendance = self._compare_time(employee_attendance, begin, end)
+                else:
+                    employee_attendance = {'date': date, 'employeeId': employee_id, 'name': name, 'begin': begin, 'end': end, 'reason': None}
+                attends[employee_id] = employee_attendance
+        return attends
 
-    def _legacy_or_gps(self, attend, date):
+    def _legacy_or_gps(self, attends, date):
         # GPS device
         gps_on_list = self.gps_on.get_attend(date=date)
 
         # gps 와 legacy 근태 비교
         for gps_on in gps_on_list:
-            attend = self._compare_time(attend, date, gps_on['employeeId'], gps_on['name'], gps_on['begin'], gps_on['end'])
-        return attend
+            employee_id = gps_on['employeeId']
+            begin = gps_on['begin']
+            end = gps_on['end']
+            if employee_id in attends:
+                employee_attendance = attends[employee_id]
+                employee_attendance = self._compare_time(employee_attendance, begin, end)
+            else:
+                employee_attendance = {'date': date, 'employeeId': employee_id, 'name': gps_on['name'], 'begin': begin, 'end': end, 'reason': None}
+            attends[employee_id] = employee_attendance
+        return attends
 
-    def _update_attend_by_employee_id(self, date, employee_id, attend_by_employee_id):
+    def _update_employee_attendance(self, date, employee_id, employee_attendance):
         try:
             # fulltime이 아닌 직원에 대해 미출근과 출근전인 경우 기록하지 않음
             # 주말인 경우 employee 정보 수집을 하지 않기 때문에 regular key가 없을 수 있음
             # employee 등록이 안 된 경우 regular key가 없을 수 있음
-            if attend_by_employee_id['regular'] not in WORKING['update'] and attend_by_employee_id['status'] in EMAIL_NOTICE_BASE:
+            if employee_attendance['regular'] not in WORKING['update'] and employee_attendance['status'] in EMAIL_NOTICE_BASE:
                 pass
             else:
-                if employee_id in self.previous_attend and self.previous_attend[employee_id] == attend_by_employee_id:
+                if employee_id in self.previous_attends and self.previous_attends[employee_id] == employee_attendance:
                     pass
                 else:
-                    self.collection.update_one({'date': date, 'employeeId': employee_id}, {'$set': attend_by_employee_id}, upsert=True)
+                    self.collection.update_one({'date': date, 'employeeId': employee_id}, {'$set': employee_attendance}, upsert=True)
         except Exception as e:
-            self.logger.error(f'{e}, {attend_by_employee_id}')
+            self.logger.error(f'{e}, {employee_attendance}', exc_info=True)
 
-    def _compare_time(self, attend, date, employee_id, name, begin, end):
-        if employee_id in attend:
-            if attend[employee_id]['begin']:
-                if int(begin) < int(attend[employee_id]['begin']):
-                    attend[employee_id]['begin'] = begin
-            else:
-                attend[employee_id]['begin'] = begin
-            if attend[employee_id]['end']:
-                if int(end) > int(attend[employee_id]['end']):
-                    attend[employee_id]['end'] = end
-            else:
-                attend[employee_id]['end'] = end
+    def _compare_time(self, employee_attendance, begin, end):
+        if employee_attendance['begin']:
+            if int(begin) < int(employee_attendance['begin']):
+                employee_attendance['begin'] = begin
         else:
-            attend[employee_id] = {'date': date, 'employee_id': employee_id, 'name':name, 'begin': begin, 'end': end, 'reason': None}
-        return attend 
-
-    def _calculate_working_hours(self, begin, end, overnight=False):
-        working_hours = (int(end[0:2]) - int(begin[0:2])) + \
-                        (int(end[2:4]) - int(begin[2:4])) / 60
-        if overnight:
-            working_hours = working_hours + 24
-            if int(WORKING['time']['lunchTime']) > int(begin):
-                working_hours = working_hours - 1
+            employee_attendance['begin'] = begin
+        if employee_attendance['end']:
+            if int(end) > int(employee_attendance['end']):
+                employee_attendance['end'] = end
         else:
-            if int(end) > int(WORKING['time']['lunchFinishTime']) and \
-                    int(WORKING['time']['lunchTime']) > int(begin):
-                working_hours = working_hours - 1
-        working_hours = round(working_hours, 1)
-        return working_hours
+            employee_attendance['end'] = end
+        return employee_attendance
 
     def _update_overnight(self, date=None):
         self.logger.info(f'overnight: {self.overnight_employees}')
-        access_yesterday = self._get_access_day(date, delta=-1)
+        access_yesterday = get_access_day(date, delta=-1)
         yesterday = get_delta_day(date, delta=-1)
         for employee_id in self.overnight_employees:
             cursor.execute("select e_id, e_name, e_date, e_time, e_mode from tenter where e_date=? and e_id = ?",
@@ -290,7 +289,7 @@ class Report(BasicModel):
 
             if 'begin' in attend:
                 self.logger.info(f'attendyesterday: {attend}')
-                access_today = self._get_access_day(date)
+                access_today = get_access_day(date)
                 cursor.execute(
                     'select e_id, e_name, e_date, e_time, e_mode from tenter where e_date = ? and e_id = ?',
                     (access_today, employee_id))
@@ -301,7 +300,7 @@ class Report(BasicModel):
                         if end < time:
                             end = time
                 attend['end'] = end
-                attend['workingHours'] = self._calculate_working_hours(attend['begin'], end, overnight=True)
+                attend['workingHours'] = calculate_working_hours(attend['begin'], end, overnight=True)
                 self.collection.update_one({'date': attend['date'], 'employeeId': int(employee_id)}, {'$set': attend}, upsert=True)
 
     def _notice_email(self, date=None):
@@ -313,53 +312,54 @@ class Report(BasicModel):
         '''
         if not self.is_holiday and date == self.today and USE_NOTICE_EMAIL:
             collection = db['notice']
-            notice = collection.find_one({'date': date})    
-            if notice is None:
-                for employee in self.employees_list:
+
+            notice_count = collection.count_documents({'date': date})    
+            if not notice_count:
+                for employee in self.employee_list:
                     insert_data = self._send_notice_email(employee=employee)
                     if insert_data:
                         collection.insert_one(insert_data)
 
-        def _render_notice_email(self, name, report):
-            """근태 안내 메일 HTML 생성"""
-            action_html = f"""
-                <h2 style="margin-top:0;">안녕하세요, {name}님</h2>
-                <p style="color:#444;">근태 관련하여 아래와 같은 사유가 있어 안내 메일을 송부합니다.</p>
-            """
+    def _render_notice_email(self, name, report):
+        """근태 안내 메일 HTML 생성"""
+        action_html = f"""
+            <h2 style="margin-top:0;">안녕하세요, {name}님</h2>
+            <p style="color:#444;">근태 관련하여 아래와 같은 사유가 있어 안내 메일을 송부합니다.</p>
+        """
 
-            table_html = f"""
-                <tr>
-                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">이름</td>
-                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{name}</td>
-                </tr>
-                <tr>
-                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">날짜</td>
-                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{report['date']}</td>
-                </tr>
-                <tr>
-                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">출근 시각</td>
-                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{self._convert_begin(report['begin'])}</td>
-                </tr>
-                <tr>
-                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">근무 시간</td>
-                    <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{report['workingHours']}</td>
-                </tr>
-                <tr>
-                    <td style="padding:8px;">사유</td>
-                    <td style="padding:8px;">{report['status']}</td>
-                </tr>
-            """
+        table_html = f"""
+            <tr>
+                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">이름</td>
+                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{name}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">날짜</td>
+                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{report['date']}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">출근 시각</td>
+                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{convert_to_time_string(report['begin'])}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">근무 시간</td>
+                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{report['workingHours']}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px;">사유</td>
+                <td style="padding:8px;">{report['status']}</td>
+            </tr>
+        """
 
-            footer_html = f"""
-                <div style="margin-top:24px; text-align:center;">
-                    연차, 외근 등의 사유가 있는 경우<br>
-                    아래 버튼을 통해 출근 품의를 진행하면 근태가 정정됩니다.
-                </div>
-            """
+        footer_html = f"""
+            <div style="margin-top:24px; text-align:center;">
+                연차, 외근 등의 사유가 있는 경우<br>
+                아래 버튼을 통해 출근 품의를 진행하면 근태가 정정됩니다.
+            </div>
+        """
 
         return renderBaseTemplate(action_html, table_html, footer_html)
 
-    def _send_notice_email(self, employee={}, email=None):
+    def _send_notice_email(self, employee={}):
         '''
             1. email이 있고 regular 여부가 WORKING['update']에 포함되어 있는 경우만 메일 송부 
         '''
@@ -368,8 +368,7 @@ class Report(BasicModel):
 
         name = employee.get('name')
         employee_id = employee.get('employeeId')
-        # employee에 email이 있을 경우 우선 사용
-        email = employee.get('email', email)
+        email = employee.get('email', None)
 
         if not email or employee.get('regular') not in WORKING['update']:
             return False
@@ -393,7 +392,7 @@ class Report(BasicModel):
             else:
                 return sent
         except Exception as e:
-            self.logger.error(f'메일 발송 중 오류 발생: {e}')
+            self.logger.error(f'메일 발송 중 오류 발생: {e}', exc_info=True)
             return False
 
     def _schedule(self, date=None):
@@ -418,11 +417,6 @@ class Report(BasicModel):
                 else:
                     schedule_dict[employee_id] = reason
         return schedule_dict
-    
-    def _convert_begin(self, begin=None):
-        if begin:
-            begin = f'{begin[0:2]}:{begin[2:4]}:{begin[4:6]}'
-        return begin 
 
     def _get_reason_from_event(self, title):
         reason = '기타'     
@@ -434,11 +428,6 @@ class Report(BasicModel):
                 else:
                     reason = reason_type
         return reason
-
-    def _get_access_day(self, date, delta=0):
-        if delta:
-            date = get_delta_day(date, delta=delta)
-        return date.replace('-', '')
 
 
 

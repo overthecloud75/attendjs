@@ -1,0 +1,12 @@
+.fc-timegrid-slot {
+    height: 30px !important
+}
+
+.fc-timegrid-title {
+    white-space: nowrap !important;      
+    overflow: hidden !important;        
+    text-overflow: ellipsis !important;
+    display: flex;  
+    align-items: center;
+    height: 100%; 
+}

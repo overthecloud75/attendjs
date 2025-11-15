@@ -103,3 +103,27 @@ def get_delta_day(date, delta=None):
             date = date - timedelta(days=delta)
     date = date.strftime(DATE_FORMAT)
     return date
+
+def get_access_day(date, delta=0):
+    if delta:
+        date = get_delta_day(date, delta=delta)
+    return date.replace('-', '')
+
+def convert_to_time_string(begin=None):
+    if begin:
+        begin = f'{begin[0:2]}:{begin[2:4]}:{begin[4:6]}'
+    return begin 
+
+def calculate_working_hours(begin, end, overnight=False):
+    working_hours = (int(end[0:2]) - int(begin[0:2])) + \
+                    (int(end[2:4]) - int(begin[2:4])) / 60
+    if overnight:
+        working_hours = working_hours + 24
+        if int(WORKING['time']['lunchTime']) > int(begin):
+            working_hours = working_hours - 1
+    else:
+        if int(end) > int(WORKING['time']['lunchFinishTime']) and \
+                int(WORKING['time']['lunchTime']) > int(begin):
+            working_hours = working_hours - 1
+    working_hours = round(working_hours, 1)
+    return working_hours

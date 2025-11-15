@@ -36,7 +36,7 @@ def save_db():
         logger.info('update')
         report.update(date=None)
     except Exception as e:
-        logger.error(e)
+        logger.error(e, exc_info=True)
     time.sleep(1800)
 
 if __name__ == '__main__':

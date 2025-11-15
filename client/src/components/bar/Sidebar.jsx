@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { Tooltip } from 'react-tooltip'
+import tippy from 'tippy.js'
+import 'tippy.js/dist/tippy.css'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'
 import WifiFindIcon from '@mui/icons-material/WifiFind'
@@ -304,13 +305,15 @@ const SidebarItems = ({itemList, titleIndex}) => {
                 {(item.auth || user.isAdmin) &&
                     <Item className={item.visible ? '' : 'invisible'}>
                         <Icon
-                            data-tooltip-id={window.innerWidth<600 ? item.title : undefined}
-                            data-tooltip-content={item.title}
+                            ref={(el) => {
+                                if (el && window.innerWidth<600) {
+                                    tippy(el, { content: item.title, placement: 'bottom' });
+                                }
+                            }}
                         >
                             {item.icon}    
                         </Icon>
                         <Span>{item.title}</Span>
-                        <Tooltip id={item.title} place='top' type='dark' effect='float' />
                     </Item>
                 }
             </Link>

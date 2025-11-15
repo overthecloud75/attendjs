@@ -76,9 +76,14 @@ export const deleteEventInCalendar = async (req, res, next) => {
         const { _id } = req.body
         const event = await Event.findOne({ _id })
 
-        if (!event || !WORKING.specialHolidays.includes(event.title)) {
+        if (!event) {
             throw createError(400, "The event can't be deleted")
         }
+
+        if (!WORKING.specialHolidays.includes(event.title)) {
+            throw createError(400, "It's an event that can't be deleted.")
+        }
+
         const result = await Event.deleteOne({ _id })
         if (result.deletedCount === 0) {
             throw createError(400, "The event isn't deleted")

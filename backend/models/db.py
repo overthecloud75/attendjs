@@ -26,5 +26,5 @@ class BasicModel:
             data = self.collection.find_one({'_id': ObjectId(_id)})
         except Exception as e:
             data = None
-            self.logger.error(e)
+            self.logger.error(e, exc_info=True)
         return data

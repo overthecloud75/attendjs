@@ -49,7 +49,7 @@ def check_sn():
                 else:
                     devices.ip_sn_post(network)
         except Exception as e:
-            logger.error(e)
+            logger.error(e, exc_info=True)
         time.sleep(60)
 
 # nmap -O
@@ -68,7 +68,7 @@ def check_o():
                 else:
                     devices.ip_o_post(network)
         except Exception as e:
-            logger.error(e)
+            logger.error(e, exc_info=True)
         time.sleep(7200)
 
 if __name__ == '__main__':

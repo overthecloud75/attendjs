@@ -1,6 +1,5 @@
 import { Grid, Container, Typography } from '@mui/material'
 import UserInfoCard from './UserInfoCard'
-import TodayStatusCard from './TodayStatusCard'
 import LeaveSummary from './LeaveSummary'
 import WorkCalendar from './WorkCalendar'
 import { useLeftLeave } from '../../hooks/useLeftLeave'

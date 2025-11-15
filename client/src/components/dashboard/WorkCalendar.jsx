@@ -7,7 +7,7 @@ import { Paper, Typography, FormControlLabel, Checkbox } from '@mui/material'
 import { getColor, getSpecialHolidays, getEventsInCalendar, addEventInCalendar, deleteEventInCalendar } from '../../utils/EventUtil'
 import { useWindowDimension } from '../../hooks/useWindowDimension'
 import { MOBILE } from '../../configs/mobile'
-import './Calendar.css'
+import './WorkCalendar.css'
 import { useResponsive } from '../../hooks/useResponsive'
 import { getUser } from '../../storage/userSlice'
 

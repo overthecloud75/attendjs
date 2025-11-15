@@ -1,4 +1,5 @@
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
+import { MEETINGROOMS } from '../../configs/meeting'
 
 const MeetingRoomForm = ({room, setRoom}) => {
     return (
@@ -9,9 +10,9 @@ const MeetingRoomForm = ({room, setRoom}) => {
                 label='회의실'
                 onChange={(e) => setRoom(e.target.value)}
             >
-                <MenuItem value='대회의실'>대회의실</MenuItem>
-                <MenuItem value='B 회의실'>B 회의실</MenuItem>
-                <MenuItem value='C 회의실'>C 회의실</MenuItem>
+                {MEETINGROOMS.map((meeting) => (
+                    <MenuItem value={meeting}>{meeting}</MenuItem>
+                ))}
             </Select>
         </FormControl>
     )

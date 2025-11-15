@@ -5,7 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs'
 import { getUser } from '../../storage/userSlice'
 import { getRoomEvents, postMeetingReservation } from '../../utils/EventUtil'
-import MeetingRoomForm from './MeettngRoomForm'
+import MeetingRoomForm from './MeetingRoomForm'
 import MeetingTypeForm from './MeetingTypeForm'
 
 const MeetingRoomBooking = ({setEventsData, open, setOpenReservation}) => {
@@ -85,12 +85,14 @@ const MeetingRoomBooking = ({setEventsData, open, setOpenReservation}) => {
                                 label='시작 시간'
                                 value={startTime}
                                 onChange={(newTime) => setStartTime(newTime)}
+                                minutesStep={30}
                                 slotProps={{ textField: { fullWidth: true } }}
                             />
                             <TimePicker
                                 label='종료 시간'
                                 value={endTime}
                                 onChange={(newTime) => setEndTime(newTime)}
+                                minutesStep={30}
                                 slotProps={{ textField: { fullWidth: true } }}
                             />
                         </Stack>
