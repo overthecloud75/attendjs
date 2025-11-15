@@ -1,255 +1,241 @@
-import styled from 'styled-components'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import FirstPageIcon from '@mui/icons-material/FirstPage'
-import LastPageIcon from '@mui/icons-material/LastPage'
+import { Box, Button, Typography, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material'
+import { ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight } from 'lucide-react'
 
-const Paginate = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    margin: 5px 5px;
-    padding: 5px;
-    border-radius: 8px;
+const PaginationButton = ({ onClick, disabled, title, children }) => (
+    <Button 
+        variant='outlined'
+        onClick={onClick} 
+        disabled={disabled}
+        title={title}
+        size='small'
+        sx={{ minWidth: 25, height: 25, padding: '6px 10px' }}
+    >
+        {children}
+    </Button>
+)
 
-    @media screen and (max-width: 768px) {
-        flex-wrap: wrap;
-        gap: 3px;
-    }
-`
-
-const NavigationGroup = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 4px;
-`
-
-const PageButton = styled.button`
-    border: 1px solid #e5e7eb;
-    background: #ffffff;
-    color: #374151;
-    border-radius: 6px;
-    padding: 6px 10px;
-    cursor: pointer;
-    min-width: 25px;
-    height: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    transition: background 0.15s ease, border-color 0.15s ease;
-
-    &:hover:not([disabled]) {
-        background: #f3f4f6;
-        border-color: #d1d5db;
-    }
-
-    &[disabled] {
-        background: #f9fafb;
-        color: #9ca3af;
-        cursor: not-allowed;
-    }
-
-    &[aria-current="true"] {
-        background: #e5e7eb;
-        border-color: #d1d5db;
-        font-weight: 600;
-    }
-
-    @media screen and (max-width: 768px) {
-        min-width: 25px;
-        height: 25px;
-        padding: 4px;
-    }
-`
-
-const PageInfo = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #6b7280;
-    font-size: 14px;
-
-    @media screen and (max-width: 768px) {
-        font-size: 13px;
-    }
-`
-
-const PageSpan = styled.span`
-    margin: 0 4px;
-`
-
-const PageInput = styled.input`
-    width: 48px;
-    padding: 6px 4px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background: #ffffff;
-    color: #374151;
-    text-align: center;
-
-    &:focus {
-        outline: none;
-        border-color: #6b7280;
-    }
-
-    @media screen and (max-width: 600px) {
-        width: 32px;
-        padding: 4px;
-    }
-`
-
-const PageSelect = styled.select`
-    padding: 6px 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background: #ffffff;
-    color: #374151;
-    font-size: 14px;
-    cursor: pointer;
-
-    &:focus {
-        outline: none;
-        border-color: #6b7280;
-    }
-
-    @media screen and (max-width: 768px) {
-        padding: 4px;
-        font-size: 13px;
-    }
-
-    @media screen and (max-width: 600px) {
-        display: none;
-    }
-`
-
-const PageSizeGroup = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
-    @media screen and (max-width: 600px) {
-        display: none;
-    }
-`
-
-const PageSizeLabel = styled.span`
-    color: #6b7280;
-    font-size: 14px;
-
-    @media screen and (max-width: 768px) {
-        font-size: 13px;
-    }
-`
-
-const Pagination = ({gotoPage, canPreviousPage, previousPage, nextPage, 
-    canNextPage, pageCount, pageIndex, pageOptions, pageSize, setPageSize}) => {
-
+const Pagination = ({
+    gotoPage,
+    canPreviousPage,
+    previousPage,
+    nextPage,
+    canNextPage,
+    pageCount,
+    pageIndex,
+    pageOptions,
+    pageSize,
+    setPageSize,
+}) => {
     // 페이지 번호 배열 생성 (현재 페이지 주변 2개씩)
     const getPageNumbers = () => {
-        const pages = [];
+        const pages = []
+        // pageCount는 총 페이지 수를 나타냄 (number)
         const totalPages = parseInt(pageOptions)
         const currentPage = pageIndex + 1
         
+        // 시작 페이지: 1 또는 현재 페이지 - 2 중 큰 값
         const start = Math.max(1, currentPage - 2)
+        // 끝 페이지: 전체 페이지 수 또는 현재 페이지 + 2 중 작은 값
         const end = Math.min(totalPages, currentPage + 2)
         
         for (let i = start; i <= end; i++) {
             pages.push(i)
-        }   
-        return pages
+        }
+        
+        // 시작 페이지가 1보다 크면 1 페이지와 생략 부호를 추가
+        if (start > 1) {
+            if (start > 2) pages.unshift('...')
+            pages.unshift(1)
+        }
+        
+        // 끝 페이지가 전체 페이지 수보다 작으면 생략 부호와 마지막 페이지를 추가
+        if (end < totalPages) {
+            if (end < totalPages - 1) pages.push('...')
+            pages.push(totalPages)
+        }
+
+        // 중복 제거 및 배열 정렬 (마지막 예외 처리)
+        return pages.filter((value, index, self) => 
+            value === '...' ? (index === 1 || index === self.length - 2) : self.indexOf(value) === index
+        )
     }
+
     const pageNumbers = getPageNumbers()
+    const currentPageIndex = pageIndex + 1
+    const totalPages = pageCount
+
+    // 페이지 이동 input 처리
+    const handlePageInputChange = (e) => {
+        const value = e.target.value
+        let page = 0
+        
+        if (value === '') {
+            return 
+        }
+
+        const pageNum = Number(value)
+        if (pageNum >= 1 && pageNum <= totalPages) {
+            page = pageNum - 1
+            gotoPage(page)
+        } else if (pageNum > totalPages) {
+            // 최대 페이지보다 큰 경우 마지막 페이지로 이동
+            gotoPage(totalPages - 1)
+        } else if (pageNum < 1) {
+            // 1보다 작은 경우 첫 페이지로 이동
+            gotoPage(0)
+        }
+    }
+    
+    // 페이지 크기 변경 처리
+    const handlePageSizeChange = (event) => {
+        setPageSize(Number(event.target.value))
+    }
+
+
     return (
-        <Paginate>
-            <NavigationGroup>
-                <PageButton 
-                    onClick={() => gotoPage(0)} 
+        <Box 
+            component='div'
+            sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 1, 
+                margin: 1, 
+                padding: 1, 
+                borderRadius: '8px',
+                flexWrap: { xs: 'wrap', md: 'nowrap' }, // 모바일에서는 줄바꿈
+            }}
+        >
+            {/* 1. 이전/첫 페이지 버튼 그룹 */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <PaginationButton
+                    onClick={() => gotoPage(0)}
                     disabled={!canPreviousPage}
                     title='첫 페이지'
                 >
-                    <FirstPageIcon style={{ fontSize: 20 }} />
-                </PageButton>
-                
-                <PageButton 
-                    onClick={() => previousPage()} 
+                    <ChevronsLeft size={16} />
+                </PaginationButton>
+                <PaginationButton
+                    onClick={() => previousPage()}
                     disabled={!canPreviousPage}
                     title='이전 페이지'
                 >
-                    <ChevronLeftIcon style={{ fontSize: 20 }} />
-                </PageButton>
-            </NavigationGroup>
+                    <ChevronLeft size={16} />
+                </PaginationButton>
+            </Box>
             
-            {pageNumbers.map(pageNum => (
-                <PageButton
-                    key={pageNum}
-                    onClick={() => gotoPage(pageNum - 1)}
-                    aria-current={pageNum === pageIndex + 1 ? 'true' : 'false'}
-                    title={`${pageNum} 페이지`}
-                >
-                    {pageNum}
-                </PageButton>
-            ))}
-            <PageInfo>
-                <span>페이지</span>
-                <PageSpan>
-                    {pageIndex + 1} / {pageCount}
-                </PageSpan>
-            </PageInfo>
-            
-            <PageInfo>
-                <span>이동:</span>
-                <PageInput
-                    type='number'
-                    defaultValue={pageIndex + 1}
-                    min={1}
-                    max={pageOptions.length}
-                    name='gotoPage'
-                    onChange={(e) => {
-                        const page = e.target.value ? Number(e.target.value) - 1 : 0
-                        gotoPage(page)
-                    }}
-                    title='페이지 번호 입력'
-                />
-            </PageInfo>
+            {/* 2. 페이지 번호 버튼 */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                {pageNumbers.map((pageNum, index) => {
+                    const isCurrent = pageNum === currentPageIndex
 
-            <NavigationGroup>
-                <PageButton 
+                    return (
+                        <Button
+                            key={pageNum}
+                            onClick={() => gotoPage(pageNum - 1)}
+                            variant={isCurrent ? 'contained' : 'outlined'}
+                            color={isCurrent ? 'primary' : 'inherit'}
+                            size='small'
+                            sx={{
+                                minWidth: 35,
+                                height: 25,
+                                padding: '6px 10px',
+                                fontSize: 14,
+                                fontWeight: isCurrent ? 600 : 400,
+                                '&:hover:not([disabled])': {
+                                    backgroundColor: isCurrent ? 'primary.dark' : '#f3f4f6',
+                                    borderColor: isCurrent ? 'primary.main' : '#d1d5db',
+                                },
+                            }}
+                            aria-current={isCurrent ? 'true' : 'false'}
+                            title={`${pageNum} 페이지`}
+                        >
+                            {pageNum}
+                        </Button>
+                    )
+                })}
+            </Box>
+
+            {/* 3. 다음/마지막 페이지 버튼 그룹 */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <PaginationButton
                     onClick={() => nextPage()} 
                     disabled={!canNextPage}
                     title='다음 페이지'
                 >
-                    <ChevronRightIcon style={{ fontSize: 20 }} />
-                </PageButton>
-                
-                <PageButton 
+                    <ChevronRight size={16} />
+                </PaginationButton>
+                <PaginationButton
                     onClick={() => gotoPage(pageCount - 1)} 
                     disabled={!canNextPage}
                     title='마지막 페이지'
                 >
-                    <LastPageIcon style={{ fontSize: 20 }} />
-                </PageButton>
-            </NavigationGroup>
+                    <ChevronsRight size={16} />
+                </PaginationButton>
+            </Box>
             
-            <PageSizeGroup>
-                <PageSizeLabel>표시:</PageSizeLabel>
-                <PageSelect
-                    value={pageSize}
-                    name='pageSize'
+            {/* 4. 페이지 정보 (N/M) */}
+            <Typography variant='body2' color='text.secondary' sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 0.5 }}>
+                페이지
+                <Typography component='span' fontWeight='bold' sx={{ mx: 0.5 }}>
+                    {currentPageIndex} / {totalPages}
+                </Typography>
+            </Typography>
+            
+            {/* 5. 페이지 이동 Input */}
+            <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 0.5 }}>
+                <Typography variant='body2' color='text.secondary'>
+                    이동:
+                </Typography>
+                <TextField
+                    type='number'
+                    defaultValue={currentPageIndex}
                     onChange={(e) => {
-                        setPageSize(Number(e.target.value));
+                        handlePageInputChange(e)
                     }}
-                    title="페이지당 항목 수 선택"
-                >
-                    {[10, 20, 50, 100].map((size) => (
-                        <option key={size} value={size}>
-                            {size}개
-                        </option>
-                    ))}
-                </PageSelect>
-            </PageSizeGroup>
-        </Paginate>
+                    onBlur={handlePageInputChange}
+                    slotProps={{ 
+                        input: {
+                            min: 1, 
+                            max: totalPages, 
+                            style: { padding: '4px 4px', textAlign: 'center' } // 내부 스타일 조정
+                        }
+                    }}
+                    sx={{ 
+                        width: { xs: 50, sm: 60 }, // 모바일에서 너비 조정
+                        '& input': { height: 7 }, // 높이 조정
+                    }}
+                    size='small'
+                    variant='outlined'
+                    title='페이지 번호 입력'
+                />
+            </Box>
+
+            {/* 6. 페이지당 항목 수 Select */}
+            <Box sx={{ 
+                display: { xs: 'none', sm: 'flex' }, // 600px 미만에서 숨김 처리 (PageSizeGroup)
+                alignItems: 'center', 
+                gap: 0.5 
+            }}>
+                <FormControl variant='outlined' size='small'>
+                    <InputLabel id='page-size-label'>표시</InputLabel>
+                    <Select
+                        labelId='page-size-label'
+                        value={pageSize}
+                        onChange={handlePageSizeChange}
+                        label='표시'
+                        sx={{ fontSize: 14, height: 30, width: 80 }}
+                        title='페이지당 항목 수 선택'
+                    >
+                        {[10, 20, 50, 100].map((size) => (
+                            <MenuItem key={size} value={size}>
+                                {size}개
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Box>
+        </Box>
     )
 }
 

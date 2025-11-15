@@ -4,6 +4,22 @@ import Navbar from '../components/bar/Navbar'
 //import GMap from '../components/GoogleMap'
 import NMap from '../components/NaverMap'
 
+const defaultState = {
+    location: {
+        latitude: 37,
+        longitude: 127
+    },
+    where: {
+        minDistance: 100,
+        place: 'Unknown',
+        placeLocation: {
+            latitude: 37.01,
+            longitude: 127.01
+        },
+        attend: false
+    }
+}
+
 const Map = ({menu, setMenu}) => {
 
     const { state } = useLocation()
@@ -16,7 +32,7 @@ const Map = ({menu, setMenu}) => {
                     menu={menu} 
                     setMenu={setMenu}
                 /> 
-                <NMap state={state}/>    
+                <NMap state={state ?? defaultState}/>    
             </div>
         </div>
     )

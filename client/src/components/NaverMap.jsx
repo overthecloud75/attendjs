@@ -1,15 +1,20 @@
 import { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 import { naverMapAPIKey } from '../configs/apiKey'
 
-const Container = styled.div``
-
-const Title= styled.div`
-    display: flex;
-    font-weight: bold;
-    margin: 10px;
-    justify-content: center;
-`
+const Title = ({ children }) => (
+    <Typography 
+        sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            fontWeight: 'bold',
+            margin: '10px'
+        }}
+    >
+        {children}
+    </Typography>
+)
 
 const src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${naverMapAPIKey}`
 
@@ -52,18 +57,37 @@ const NMap = ({state}) => {
     }, [scriptLoading])
 
     return (  
-        <Container>
-        {state&&<Title>Your location is {state.where.minDistance * 1000}m distant from {state.where.place}</Title>}
-        {state&&state.where.attend?
-            <Title>Don't worry.&nbsp;<mark>checked</mark></Title>:
-            <Title><mark>Unchecked.&nbsp;</mark> plz login again</Title>
-        }
-            <div id='map' style={{
-                display: scriptLoading ? 'none' : 'block',
-                width: '100%', 
-                height: '400px'
-            }}/>
-        </Container>
+        <Box>
+            {state && (
+                <Title>
+                    You are {state.where.minDistance * 1000}m away from&nbsp;
+                    <strong>{state.where.place}</strong>.
+                </Title>
+            )}
+
+            {state && (
+                <Title>
+                    {state.where.attend ? (
+                        <>
+                            You're all set.&nbsp;<mark>Checked</mark>
+                        </>
+                    ) : (
+                        <>
+                            <mark>Unchecked</mark>&nbsp;Please log in again.
+                        </>
+                    )}
+                </Title>
+            )}
+
+            <Box
+                id='map'
+                sx={{
+                    display: scriptLoading ? 'none' : 'block',
+                    width: '100%',
+                    height: '400px'
+                }}
+            />
+        </Box>
     )
 }
 

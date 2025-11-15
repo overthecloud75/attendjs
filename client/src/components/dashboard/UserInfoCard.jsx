@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { Card, CardContent, Typography, Avatar, Box, Divider } from '@mui/material'
-import PersonIcon from '@mui/icons-material/Person'
 import { getUser } from '../../storage/userSlice'
 
 const UserInfoCard = ({leftLeave}) => {
@@ -12,7 +11,7 @@ const UserInfoCard = ({leftLeave}) => {
             <CardContent>
                 <Box display='flex' alignItems='center' mb={2}>
                     <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
-                        <PersonIcon />
+                        🧑
                     </Avatar>
                     <Box>
                         <Typography variant='h6'>{user.name} {user.rank}</Typography>

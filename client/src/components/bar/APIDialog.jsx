@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, IconButton, Tooltip } from '@mui/material'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { getApiKey, updateApiKey } from '../../utils/EventUtil'
 
 const APIDialog = ({open, apiKey, handleClose}) => {
@@ -57,22 +54,24 @@ const APIDialog = ({open, apiKey, handleClose}) => {
                         variant='standard'
                         value={getMaskedValue(value)}
                         key='0'
-                        InputProps={{
-                            readOnly: true,
-                            endAdornment: (
-                                <>
-                                    <Tooltip title={showKey ? 'API Key 숨기기' : 'API key 보기'}>
-                                        <IconButton onClick={() => setShowKey(!showKey)}>
-                                            {showKey ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title={copySuccess ? '복사됨!' : '복사하기'}>
-                                        <IconButton onClick={handleCopy}>
-                                            <ContentCopyIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                </>
-                            )
+                        slotProps={{
+                            input: {
+                                readOnly: true,
+                                endAdornment: (
+                                    <>
+                                        <Tooltip title={showKey ? 'API Key 숨기기' : 'API key 보기'}>
+                                            <IconButton onClick={() => setShowKey(!showKey)}>
+                                                {showKey ? '🙈' : '👁️'}
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title={copySuccess ? '복사됨!' : '복사하기'}>
+                                            <IconButton onClick={handleCopy}>
+                                                📋
+                                            </IconButton>
+                                        </Tooltip>
+                                    </>
+                                ),
+                            },
                         }}
                         autoComplete='false'
                     />:
@@ -85,8 +84,10 @@ const APIDialog = ({open, apiKey, handleClose}) => {
                         variant='standard'
                         value={value}
                         key='0'
-                        InputProps={{
+                        slotProps={{
+                            input: {
                             readOnly: true,
+                            },
                         }}
                         autoComplete='false'
                     />

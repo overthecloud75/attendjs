@@ -1,160 +1,185 @@
 import { useState } from 'react'
-import styled from 'styled-components'
-import MenuIcon from '@mui/icons-material/Menu'
-import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
-import NotificationsIcon from '@mui/icons-material/Notifications'
-import { Avatar, Badge } from '@mui/material'
+import { Box, AppBar, Toolbar, Avatar, Badge, Typography } from '@mui/material'
 import { getUser } from '../../storage/userSlice'
 import ProfileMenu from '../bar/ProfileMenu'
 
-const Container = styled.div`
-    height: 60px;
-    border-bottom: 1px solid #e1e5e9;
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #555;
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    top: 0;
-    backdrop-filter: blur(10px);
-    @media screen and (max-width: 600px) {
-        height: 50px;
-    }
-`
-const Wrapper = styled.div`
-    width: 100%;
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`
-const LeftSection = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 20px;
-`
+const ItemBox = ({ children }) => (
+    <Box 
+        sx={{ 
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2
+        }}
+    >
+        {children}
+    </Box>
+)
 
-const MenuButton = styled.div`
-    display: ${props => props.visible == 'true' ? 'flex' : 'none'};
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    background: #5f6ee1;   /* 단색 파랑 톤 */
-    color: white;
+const Item = ({ children }) => (
+    <Box 
+        sx={{
+            display: 'flex',
+            alignItems: 'center',
+            position: 'relative',
+            cursor: 'pointer',
+            padding: '6px',
+            borderRadius: '50%',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+                background: 'rgba(0, 0, 0, 0.04)', 
+            },
+        }}
+    >
+        {children}
+    </Box>
+)
 
-    &:hover {
-        background: #4d5ccb;  /* 조금 더 어두운 톤 */
-        transform: scale(1.04);
-    }
-`
+const Icon = ({ children }) => {
+    return (
+        <Box
+            sx={{
+                fontSize: '20px',
+                color: '#666',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                
+                '&:hover': {
+                    background: 'rgba(0, 0, 0, 0.04)',
+                },
+            }}
+        >
+            {children}
+        </Box>
+    )
+}
 
-const RightSection = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 16px;
-`
+const CustomBadge = ({ children, badgeContent, ...props }) => {
+    return (
+        <Badge
+            badgeContent={badgeContent}
+            slotProps={{
+                badge: {
+                    sx: {
+                        background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                        color: 'white',
+                        fontSize: '10px',
+                        fontWeight: 600,
+                        minWidth: '18px',
+                        height: '18px',
+                        borderRadius: '9px',
+                        border: '2px solid white',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                    },
+                },
+            }}
+            {...props}
+        >
+            {children}
+        </Badge>
+    )
+}
 
-const Items = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 15px;
-`
-const Item = styled.div`
-    display: flex;
-    align-items: center;
-    position: relative;
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 50%;
-    transition: all 0.2s ease;
+const UserSection = ({ children, ...props }) => {
+    return (
+        <Box
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '2px 16px',
+                borderRadius: '20px',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                
+                // 배경 및 테두리
+                background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+                border: '1px solid #e1e5e9',
 
-    &:hover {
-        background-color: rgba(0,0,0,0.04);
-    }
-`
-const Icon = styled.div`
-    font-size: 20px;
-    color: #666;
-    display: flex;
-    align-items: center;
-    justify-content: center;   
+                // &:hover 스타일
+                '&:hover': {
+                    background: 'linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                },
+            }}
+            {...props}
+        >
+            {children}
+        </Box>
+    );
+};
 
-    &:hover {
-        background-color: rgba(0,0,0,0.04);
-    }
-`
+const UserInfo = ({ children, ...props }) => {
+    return (
+        <Box
+            sx={{
+                display: { xs: 'none', md: 'flex' },
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+            }}
+            {...props}
+        >
+            {children}
+        </Box>
+    )
+}
 
-const StyledBadge = styled(Badge)`
-    .MuiBadge-badge {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
-        font-size: 10px;
-        font-weight: 600;
-        min-width: 18px;
-        height: 18px;
-        border-radius: 9px;
-        border: 2px solid white;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-`
+const UserName = ({ children, ...props }) => {
+    return (
+        <Typography
+            component='span' 
+            sx={{
+                fontSize: '14px',
+                fontWeight: 600,
+                color: '#1e293b',
+                lineHeight: 1.2,
+            }}
+            {...props}
+        >
+            {children}
+        </Typography>
+    );
+};
 
-const UserSection = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 2px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    border: 1px solid #e1e5e9;
+const UserRole = ({ children, ...props }) => {
+    return (
+        <Typography
+            component='span' 
+            sx={{
+                fontSize: '12px',
+                color: '#64748b',
+                lineHeight: 1.2,
+            }}
+            {...props}
+        >
+            {children}
+        </Typography>
+    )
+}
 
-    &:hover {
-        background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-`
+const CustomAvatar = ({ children, ...props }) => {
+    return (
+        <Avatar
+            sx={{
 
-const UserInfo = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    
-    @media screen and (max-width: 768px) {
-        display: none;
-    }
-`
-
-const UserName = styled.span`
-    font-size: 14px;
-    font-weight: 600;
-    color: #1e293b;
-    line-height: 1.2;
-`
-
-const UserRole = styled.span`
-    font-size: 12px;
-    color: #64748b;
-    line-height: 1.2;
-`
-
-const StyledAvatar = styled(Avatar)`
-    width: 36px !important;
-    height: 36px !important;
-    border: 2px solid #e1e5e9;
-    transition: all 0.3s ease;
-    
-    &:hover {
-        border-color: #667eea;
-        transform: scale(1.05);
-    }
-`
+                width: '36px', 
+                height: '36px',
+                
+                border: '2px solid #e1e5e9',
+                transition: 'all 0.3s ease',
+        
+                '&:hover': {
+                    borderColor: '#667eea',
+                    transform: 'scale(1.05)',
+                },
+            }}
+            {...props}
+        >
+            {children}
+        </Avatar>
+    )
+}
 
 const Navbar = ({menu, setMenu}) => {
 
@@ -168,53 +193,72 @@ const Navbar = ({menu, setMenu}) => {
     }
 
     return (
-        <Container>
-            <Wrapper>
-                <LeftSection>
-                    <MenuButton 
-                        visible={(!menu).toString()} 
-                        onClick={handleMenu}
-                    >
-                        <MenuIcon />
-                    </MenuButton>
-                </LeftSection>
-                <RightSection>
-                    <Items>
-                        <Item>
-                            <StyledBadge badgeContent={2} max={99}>
-                                <Icon>
-                                    <ChatBubbleOutlineOutlinedIcon />
-                                </Icon>
-                            </StyledBadge>
-                        </Item>
-                        
-                        <Item>
-                            <StyledBadge badgeContent={5} max={99}>
-                                <Icon>
-                                    <NotificationsIcon />
-                                </Icon>
-                            </StyledBadge>
-                        </Item>
-                    </Items>
-                    
-                    <UserSection onClick={handleClick}>
-                        <UserInfo>
-                            <UserName>{user.name || '사용자'}</UserName>
-                            <UserRole>{user.isAdmin ? '관리자' : '직원'}</UserRole>
-                        </UserInfo>
-                        <StyledAvatar>
-                            {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                        </StyledAvatar>
-                    </UserSection>
-                </RightSection>
-            </Wrapper>
+        <Box>
+            <AppBar position='static' sx={{ background: 'white' }}>
+                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between'}}>
+                    {/* left */}
+                    <div>
+                        <Box
+                            onClick={handleMenu}
+                            sx={{
+                                display: !menu ? 'flex' : 'none', 
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '35px',
+                                height: '35px',
+                                borderRadius: '12px',
+                                cursor: 'pointer',
+                                transition: 'all 0.25s ease',
+                            
+                                background: '#5f6ee1', 
+                                color: 'white',
+
+                                '&:hover': {
+                                    background: '#4d5ccb', 
+                                    transform: 'scale(1.04)',
+                                },
+                            }}
+                        >
+                            ☰
+                        </Box>
+                    </div>
+                    {/* right */}
+                    <ItemBox>  
+                        <ItemBox>  
+                            <Item>
+                                <CustomBadge badgeContent={2} max={99}>
+                                    <Icon>
+                                        💬
+                                    </Icon>
+                                </CustomBadge>
+                            </Item>
+                            <Item>
+                                <CustomBadge badgeContent={5} max={99}>
+                                    <Icon>
+                                        🔔
+                                    </Icon>
+                                </CustomBadge>
+                            </Item>
+                        </ItemBox>  
+                        <UserSection onClick={handleClick}>
+                            <UserInfo>
+                                <UserName>{user.name || '사용자'}</UserName>
+                                <UserRole>{user.isAdmin ? '관리자' : '직원'}</UserRole>
+                            </UserInfo>
+                            <CustomAvatar>
+                                {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                            </CustomAvatar>
+                        </UserSection>
+                    </ItemBox>
+                </Toolbar>
+            </AppBar>
             <ProfileMenu 
                 user={user}
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
                 setMenu={setMenu}
             />     
-        </Container>
+        </Box>
     )
 }
 

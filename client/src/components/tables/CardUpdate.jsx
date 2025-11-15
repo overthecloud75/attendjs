@@ -171,7 +171,11 @@ const CardUpdate = ({writeMode, page, columns, data, setData, open, setOpen, row
                                 variant='standard'
                                 value={value[item.accessorKey]?value[item.accessorKey]:''}
                                 key={index}
-                                InputProps={{readOnly: true}}
+                                slotProps={{
+                                    input: {
+                                        readOnly: true,  
+                                    },
+                                }}
                                 autoComplete='false'
                             />
                         )

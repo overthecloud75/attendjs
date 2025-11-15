@@ -10,8 +10,8 @@ const SmallMeetingRoomForm = ({room, setRoom}) => {
                 label='회의실'
                 onChange={(e) => setRoom(e.target.value)}
             >   
-                {MEETINGROOMS.map((meeting) => (
-                    <MenuItem value={meeting}>{meeting}</MenuItem>
+                {MEETINGROOMS.map((meeting, index) => (
+                    <MenuItem key={index} value={meeting}>{meeting}</MenuItem>
                 ))}
             </Select>
         </FormControl>

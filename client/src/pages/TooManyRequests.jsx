@@ -1,5 +1,4 @@
 import { Box, Typography, Button } from '@mui/material'
-import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlined'
 import { useNavigate } from 'react-router-dom'
 import Feature from '../components/Feature'
 import Footer from '../components/Footer'
@@ -20,7 +19,14 @@ const TooManyRequests = () => {
                 sx={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
                 px={2}
             >
-                <HourglassEmptyOutlinedIcon color='warning' sx={{ fontSize: 60, mb: 2 }} />
+                <div
+                    style={{
+                        fontSize: 60,     
+                        marginBottom: '16px',
+                    }}
+                >
+                    ⏳
+                </div>
                 <Typography variant='h4' fontWeight='bold' gutterBottom>
                     429 Too Many Requests
                 </Typography>

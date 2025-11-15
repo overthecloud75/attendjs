@@ -107,7 +107,7 @@ const WorkCalendar = () => {
         <Paper sx={{ px: 2, py: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
                 <Typography variant='h6'>
-                    근무 캘린더
+                    근무 캘린더 📅
                 </Typography>
                 {!isMobile && (
                     <div style={{ display: 'flex', gap: '1rem' }}>

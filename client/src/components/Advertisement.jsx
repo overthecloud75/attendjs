@@ -1,57 +1,34 @@
-import styled from 'styled-components'
-
-const Container = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    flex: 1;
-    text-align: center;
-    width: 100%;
-    @media screen and (max-width: 800px) {
-        display: none
-    }
-`
-
-const Wrapper = styled.div`
-    width: 100%;
-    max-width: 1024px;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-`
-
-const Title = styled.h1`
-    margin: 15px 0 0 0;
-    padding: 0;
-    text-align: center;
-    width: 100%;
-    font-size: 40px;
-`
-
-const TitleDesc = styled.div`
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    font-size: 25px;
-`
+import { Box, Typography } from '@mui/material'
 
 const Advertisement = () => {
     return (
-        <Container>
-            <Wrapper>
-                <Title>
+        <Box
+            sx={{
+                display: { xs: 'none', md: 'flex' },
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                flex: 1,
+        }}
+        >
+            <Box
+                sx={{
+                    width: '100%',
+                    maxWidth: 1024,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 1,
+                }}
+            >
+                <h1 style={{ fontSize: '40px', marginTop: '15px', textAlign: 'center' }}>
                     진정한 SmartWork의 시작
-                </Title>
-                <TitleDesc>
+                </h1>
+                <Typography sx={{ fontSize: 25, textAlign: 'center' }}>
                     사람과 사람, 그 관계를 만드는
-                </TitleDesc>
-            </Wrapper>
-        </Container>
+                </Typography>
+            </Box>
+        </Box>
     )
 }
 

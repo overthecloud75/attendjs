@@ -21,7 +21,7 @@ const DashboardContainer  = () => {
                     },
                 }}
             >
-                내 근태 현황
+                내 근태 현황 📝
             </Typography>
 
             <Grid container spacing={2}>

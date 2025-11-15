@@ -1,17 +1,17 @@
-import styled from 'styled-components'
-
-const Wrapper = styled.div`
-    bottom: 10px;
-    right: 10px;
-    font-size: 12px;
-    position: absolute;
-`
+import Box from '@mui/material/Box'
 
 const Footer = () => {
     return (
-        <Wrapper>
-            Copyright © {(new Date().getFullYear())} SmartWork.
-        </Wrapper>
+        <Box
+            sx={{
+                position: 'absolute',
+                bottom: 10,
+                right: 10,
+                fontSize: 12
+            }}
+        >
+            Copyright © {new Date().getFullYear()} SmartWork.
+        </Box>
     )
 }
 

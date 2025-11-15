@@ -126,7 +126,11 @@ const Update = ({writeMode, page, columns, data, setData, open, setOpen, rowData
                                 variant='standard'
                                 value={rowData[item.accessorKey]?rowData[item.accessorKey]:''}
                                 key={index}
-                                InputProps={{readOnly: true}}
+                                slotProps={{
+                                    input: {
+                                        readOnly: true,  
+                                    },
+                                }}
                                 autoComplete='false'
                             />
                         )

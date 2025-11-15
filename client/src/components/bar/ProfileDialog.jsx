@@ -45,11 +45,11 @@ const ProfileDialog = ({ user, open, handleClose }) => {
         >
             <DialogTitle
                 sx={{
-                bgcolor: 'primary.main',
-                color: 'white',
-                textAlign: 'center',
-                fontWeight: 600,
-                py: 2
+                    bgcolor: 'primary.main',
+                    color: 'white',
+                    textAlign: 'center',
+                    fontWeight: 600,
+                    py: 2
                 }}
             >
                 👤 프로필 상세 정보
@@ -70,11 +70,11 @@ const ProfileDialog = ({ user, open, handleClose }) => {
                 >
                     <Avatar
                         sx={{
-                        width: 50,
-                        height: 50,
-                        bgcolor: 'primary.main',
-                        fontSize: 24,
-                        fontWeight: 'bold'
+                            width: 50,
+                            height: 50,
+                            bgcolor: 'primary.main',
+                            fontSize: 24,
+                            fontWeight: 'bold'
                         }}
                     >
                         {user.name ? user.name.charAt(0).toUpperCase() : 'U'}

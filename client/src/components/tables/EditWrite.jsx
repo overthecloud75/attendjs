@@ -103,7 +103,11 @@ const EditWrite = ({writeMode, page, columns, data, setData, open, setOpen, rowD
                                     variant='standard'
                                     value={value[item.accessorKey]?value[item.accessorKey]:''}
                                     key={index}
-                                    InputProps={{readOnly: true}}                   
+                                    slotProps={{
+                                        input: {
+                                            readOnly: true,  
+                                        },
+                                    }}                  
                                 />
                             ):(
                                 <TextField

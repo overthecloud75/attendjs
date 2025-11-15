@@ -1,5 +1,4 @@
 import { Box, Typography, Button } from '@mui/material'
-import MarkEmailUnreadOutlinedIcon from '@mui/icons-material/MarkEmailUnreadOutlined'
 import { useNavigate } from 'react-router-dom'
 import Feature from '../components/Feature'
 import Footer from '../components/Footer'
@@ -20,7 +19,14 @@ const CheckEmail = () => {
                 sx={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
                 px={2}
             >
-                <MarkEmailUnreadOutlinedIcon color='warning' sx={{ fontSize: 60, mb: 2 }} />
+                <div
+                    style={{
+                        fontSize: 60,        
+                        marginBottom: '16px',
+                    }}
+                >
+                    ✉️
+                </div>
                 <Typography variant='h4' fontWeight='bold' gutterBottom>
                     이메일 인증 필요
                 </Typography>

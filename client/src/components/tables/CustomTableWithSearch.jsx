@@ -25,7 +25,7 @@ const getInitialDate = (page) => {
     }]
 }
 
-const CustomTableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHeaders}) => {
+const CustomTableWithSearch = ({menu, searchKeyword, page, url, columnHeaders, csvHeaders}) => {
     const [name, setName] = useState('')
     const [date, setDate] = useState(getInitialDate(page))
 
@@ -49,6 +49,7 @@ const CustomTableWithSearch = ({searchKeyword, page, url, columnHeaders, csvHead
         <>
             {showSearch && 
                 <Search
+                    menu={menu}
                     page={page}
                     searchKeyword={searchKeyword}
                     name={name}
