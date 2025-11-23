@@ -1,16 +1,17 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import Approval from '../dashboard/Approval.jsx'
 import Payment from './Payment.jsx'
 import CsvDownload from './CsvDownload.jsx'
 import { AdminEditablePages, UserEditablePages } from '../../configs/pages.js'
 import { getUser } from '../../storage/userSlice.js'
+import { pagesInfo } from '../../configs/pages.js'
 
 const getEditablePages = (user) => (user.isAdmin ? AdminEditablePages : UserEditablePages)
 
 const CustomTableButtons = ({
-    url,
+    page,
     data,
     csvHeaders,
     fileName,
@@ -29,12 +30,12 @@ const CustomTableButtons = ({
     const handleWriteClick = () => {
         setSelectedRowData({})
         setWriteMode(true)
-        if (['board', 'report'].includes(url)) {
+        if (['board', 'report'].includes(page)) {
         setOpenEditWrite(true)
-        } else if (url === 'creditcard') {
+        } else if (page === 'creditcard') {
         setSelectedRowData({ name: user.name, email: user.email, card: user.cardNo })
         setOpenUpdate(true)
-        } else if (editablePages.includes(url)) {
+        } else if (editablePages.includes(page)) {
         setOpenUpdate(true)
         }
     }
@@ -43,28 +44,45 @@ const CustomTableButtons = ({
     const handlePaymentClick = () => setOpenPayment(true)
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, m: 1 }}>
+        <Box sx={{ display: 'flex', gap: 2, m: 1 }}>
             {openApproval && (
                 <Approval navigate={navigate} open={openApproval} setOpen={setOpenApproval} />
             )}
             {openPayment && (
                 <Payment writeMode={writeMode} open={openPayment} setOpen={setOpenPayment} />
             )}
-
-            <Stack direction='row' spacing={1} flexWrap='wrap' justifyContent='flex-end' sx={{ width: '100%' }}>
-                {url === 'approval' && (
-                <>
-                    <Button variant='contained' color='primary' onClick={handleAttendClick}>
-                        근태 결재
-                    </Button>
-                    <Button variant='contained' color='secondary' onClick={handlePaymentClick}>
-                        지출 결재
-                    </Button>
-                </>
+            <Stack direction='row' spacing={1} ml={2} sx={{ width: '100%', alignItems: 'center' }}>
+                <Typography variant='h6' sx={{ textTransform: 'none' }}>{`${pagesInfo[page].emoji} ${pagesInfo[page].title}`}</Typography>
+            </Stack>
+            <Stack direction='row' spacing={1} justifyContent='flex-end' sx={{ width: '100%', alignItems: 'center' }}>
+                {page === 'approval' && (
+                    <>
+                        <Button 
+                            variant='contained' 
+                            color='primary' 
+                            onClick={handleAttendClick} 
+                            sx={{ display: { xs: 'none', sm: 'block' }, py: 0.7 }}
+                        >
+                            근태 결재
+                        </Button>
+                        <Button 
+                            variant='contained' 
+                            color='secondary' 
+                            onClick={handlePaymentClick}
+                            sx={{ py: 0.7 }}
+                        >
+                            지출 결재
+                        </Button>
+                    </>
                 )}
 
-                {editablePages.includes(url) && (
-                    <Button variant='contained' color='success' onClick={handleWriteClick}>
+                {editablePages.includes(page) && (
+                    <Button 
+                        variant='contained' 
+                        color='success' 
+                        onClick={handleWriteClick} 
+                        sx={{ display: { xs: 'none', sm: 'block' }, py: 0.7 }}
+                    >
                         New
                     </Button>
                 )}

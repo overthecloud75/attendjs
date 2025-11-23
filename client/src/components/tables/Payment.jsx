@@ -41,7 +41,6 @@ const Payment = ({writeMode, open, setOpen}) => {
     useEffect(() => {
         const fetchData = async () => {
             const {data, error} = await getPaymentApproval()
-            console.log(data)
             if (!error) {
                 setValue({
                     ...value, 

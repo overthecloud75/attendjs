@@ -7,9 +7,9 @@ const CsvDownload = ({ data, csvHeaders, fileName }) => {
             variant='outlined'
             color='info'
             sx={{
-                textTransform: 'none',   // 버튼 텍스트 대문자 변환 해제
+                textTransform: 'none',  
                 px: 2,
-                py: 1,
+                py: 0.7,
             }}
         >
             <CSVLink
@@ -17,8 +17,8 @@ const CsvDownload = ({ data, csvHeaders, fileName }) => {
                 headers={csvHeaders}
                 filename={fileName}
                 style={{
-                color: 'inherit',        // 버튼 텍스트 색상 상속
-                textDecoration: 'none',  // 링크 밑줄 제거
+                    color: 'inherit',        
+                    textDecoration: 'none',  
                 }}
             >
                 CSV Download

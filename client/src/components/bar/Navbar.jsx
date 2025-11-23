@@ -86,7 +86,7 @@ const UserSection = ({ children, ...props }) => {
             sx={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '12px',
+                gap: 2,
                 padding: '2px 16px',
                 borderRadius: '20px',
                 cursor: 'pointer',
@@ -107,8 +107,8 @@ const UserSection = ({ children, ...props }) => {
         >
             {children}
         </Box>
-    );
-};
+    )
+}
 
 const UserInfo = ({ children, ...props }) => {
     return (
@@ -139,8 +139,8 @@ const UserName = ({ children, ...props }) => {
         >
             {children}
         </Typography>
-    );
-};
+    )
+}
 
 const UserRole = ({ children, ...props }) => {
     return (

@@ -73,11 +73,6 @@ export const mobileColumnHeaders = [
         enableSorting: true,
     },
     {
-        accessorKey: 'email',
-        header: 'Email',
-        enableSorting: true,
-    },
-    {
         accessorKey: 'department',
         header: '부서',
         enableSorting: true,

@@ -64,7 +64,7 @@ const CustomTableWithSearch = ({menu, searchKeyword, page, url, columnHeaders, c
             <Suspense fallback={<LoadingSpinner/>}> 
                 {loading ? <LoadingSpinner/> : (
                     <CustomTable 
-                        url={page}
+                        page={page}
                         columns={columnHeaders}
                         data={data}
                         setData={setData}

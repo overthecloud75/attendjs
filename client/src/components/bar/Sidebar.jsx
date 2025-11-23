@@ -1,107 +1,29 @@
 import { Box, AppBar, Toolbar, List, Typography, ListItemButton, Tooltip, useTheme } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { getUser } from '../../storage/userSlice'
+import { pagesInfo } from '../../configs/pages'
 
-const itemDict = 
-    {
-        Attendance : [
-            {
-                to: '/dashboard', 
-                emoji: '📊',
-                title: 'Dashboard',
-                auth: true,
-                visible: true
-            },
-            {
-                to: '/attend', 
-                emoji: '🕒',
-                title: 'Attend',
-                auth: true,
-                visible: true
-            },
-            {    
-                to: '/wifi-attend',
-                emoji: '📶',
-                title: 'Wifi-Attend',
-                auth: false, 
-                visible: false
-            }, 
-            {    
-                to: '/gps-attend',
-                emoji: '📍',
-                title: 'GPS-Attend',
-                auth: true,
-                visible: true
-            }
-        ],
+const itemDict = {
+    Attendance : [
+        pagesInfo['dashboard'],
+        pagesInfo['attend'],
+        pagesInfo['wifi-attend'],
+        pagesInfo['gps-attend']
+    ],
     Management : [
-        {
-            to: '/employee',
-            emoji: '👥',
-            title: 'Employee',
-            auth: true,
-            visible: true
-        },
-        {
-            to: '/meetings',
-            emoji: '📅',
-            title: 'Meetings',
-            auth: true,
-            visible: true
-        },
-        {
-            to: '/device',
-            emoji: '💻',
-            title: 'Device',
-            auth: true,
-            visible: true
-        },
-        {
-            to: '/creditcard',
-            emoji: '💳',
-            title: 'CreditCard',
-            auth: true,
-            visible: true
-        }
+        pagesInfo['employee'],
+        pagesInfo['meetings'],
+        pagesInfo['device'],
+        pagesInfo['creditcard']
     ],
     Community : [
-        {
-            to: '/approvalhistory',
-            emoji: '✔️',
-            title: 'ApprovalHistory',
-            auth: true,
-            visible: true
-        },
-        {
-            to: '/board',
-            emoji: '📋',
-            title: 'Board',
-            auth: true,
-            visible: true
-        },        
+        pagesInfo['approval'],
+        pagesInfo['board'],      
     ],
     Admin : [
-        {
-            to: '/summary',
-            emoji: '📄',
-            title: 'Summary',
-            auth: false,
-            visible: true
-        },
-        {
-            to: '/location',
-            emoji: '📌',
-            title: 'Location',
-            auth: false,
-            visible: true
-        },
-        {
-            to: '/loginhistory',
-            emoji: '🔐',
-            title: 'LoginHistory',
-            auth: false,
-            visible: true
-        },
+        pagesInfo['summary'],
+        pagesInfo['location'],
+        pagesInfo['loginhistory'],
     ]
 }
 
@@ -122,7 +44,7 @@ const SidebarItems = ({itemList, titleIndex}) => {
                         sx={{
                             display: itemDisplay,
                             alignItems: 'center',
-                            height: '50px',
+                            height: '45px',
                             padding: '0 20px',
                             margin: '2px 10px',
                             borderRadius: '12px',
@@ -140,7 +62,7 @@ const SidebarItems = ({itemList, titleIndex}) => {
                                 },
                             },
 
-                            [theme.breakpoints.down('sm')]: {
+                            [theme.breakpoints.down('md')]: {
                                 height: '40px',
                                 padding: '5px 0px',
                                 justifyContent: 'center',
@@ -169,7 +91,7 @@ const SidebarItems = ({itemList, titleIndex}) => {
                                 fontSize: '13px',
                                 fontWeight: 600,
                                 color: '#666',
-                                ml: '10px',
+                                ml: 1,
                                 transition: 'color 0.3s ease'
                             }}
                         >
@@ -222,7 +144,6 @@ const Sidebar = ({menu, setMenu}) => {
     }
     return (
         <Box
-            component='aside'
             sx={{
                 flex: 1,
                 borderRight: '1px solid #e1e5e9',
@@ -254,7 +175,6 @@ const Sidebar = ({menu, setMenu}) => {
                                 color: '#333',
                                 textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                                 letterSpacing: '0.5px',
-                                ml: 1 
                             }}
                         >
                             SmartWork
@@ -262,14 +182,12 @@ const Sidebar = ({menu, setMenu}) => {
                     </Toolbar>
                 </AppBar>
             </Box>
-
             {/* Middle */}
             <Box
                 sx={{
                     padding: '20px 0',
                     overflowY: 'auto',
-                    maxHeight: 'calc(100vh - 140px)',
-                    flexGrow: 1,
+                    maxHeight: 'calc(100vh - 150px)',
                     [theme.breakpoints.down('sm')]: {
                         padding: '10px 5px',
                     },
@@ -283,7 +201,7 @@ const Sidebar = ({menu, setMenu}) => {
             <Box
                 sx={{
                     display: {xs: 'none', md: 'flex'},
-                    margin: '20px',
+                    margin: '30px 15px 0 15px',
                     alignItems: 'center',
                     justifyContent: 'center',
                     padding: '10px 10px',

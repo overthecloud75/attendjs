@@ -51,7 +51,7 @@ const Th = ({ children, ...props }) => (
 )
 
 // https://geuni620.github.io/blog/2023/12/2/tanstack-table/
-const CustomTable = ({url, columns, data, setData, csvHeaders, fileName}) => {
+const CustomTable = ({page, columns, data, setData, csvHeaders, fileName}) => {
     // update시 page 설정
     const [selectedRowData, setSelectedRowData] = useState({})
     const [pagination, setPagination] = useState({
@@ -74,13 +74,13 @@ const CustomTable = ({url, columns, data, setData, csvHeaders, fileName}) => {
             getSortedRowModel: getSortedRowModel(),
             onPaginationChange: setPagination,
         })
-    // when url is board, open write 
+    
     const handleUpdateClick = (e, rowData) => {
         setSelectedRowData(rowData)
         setWriteMode(false)
-        if (UpdatablePages.includes(url)) { 
+        if (UpdatablePages.includes(page)) { 
             setOpenUpdate(true) 
-        } else if (UserEditablePages.includes(url)) {
+        } else if (UserEditablePages.includes(page)) {
             setOpenEditWrite(true)
         }
     }
@@ -98,7 +98,7 @@ const CustomTable = ({url, columns, data, setData, csvHeaders, fileName}) => {
             }}
         > 
             <CustomTableButtons
-                url={url}   
+                page={page}   
                 data={data}
                 csvHeaders={csvHeaders}
                 fileName={fileName}
@@ -185,17 +185,17 @@ const CustomTable = ({url, columns, data, setData, csvHeaders, fileName}) => {
                 pageSize={table.getState().pagination.pageSize}
                 setPageSize={table.setPageSize}
             />
-            {openUpdate&&(url==='approval'?
+            {openUpdate&&(page==='approval'?
                 <ApprovalUpdate
                     data={data}
                     setData={setData}
                     open={openUpdate}
                     setOpen={setOpenUpdate}
                     rowData={selectedRowData}
-                />:(url==='creditcard'?
+                />:(page==='creditcard'?
                 <CardUpdate
                     writeMode={writeMode}
-                    page={url}
+                    page={page}
                     columns={columns}
                     data={data}
                     setData={setData}
@@ -205,7 +205,7 @@ const CustomTable = ({url, columns, data, setData, csvHeaders, fileName}) => {
                 />:
                 <Update
                     writeMode={writeMode}
-                    page={url}
+                    page={page}
                     columns={columns}
                     data={data}
                     setData={setData}

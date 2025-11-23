@@ -22,7 +22,7 @@ const MeetingRoomButtons = ({setEventsData}) => {
                         variant='outlined'
                         color='info'
                         sx={{
-                            textTransform: 'none',   // 버튼 텍스트 대문자 변환 해제
+                            textTransform: 'none',
                             px: 2,
                             py: 1,
                         }}

@@ -37,7 +37,7 @@ function App() {
         <BrowserRouter>
             <Suspense fallback={<LoadingSpinner/>}>
                 <Routes>
-                    <Route exact path='/' element={user.isLogin ? <Navigate to='/attend' /> : <Login menu={menu} setMenu={setMenu}/>}/>
+                    <Route exact path='/' element={user.isLogin ? <Navigate to='/dashboard'/> : <Navigate to='/auth/login'/>}/>
                     <Route exact path='/auth/register' element={<Register menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/login' element={<Login menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/auth/reset-password' element={<ResetPassword menu={menu} setMenu={setMenu}/>}/>
@@ -60,7 +60,7 @@ function App() {
                     <Route exact path='/board' element={<Board menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/check-email' element={<CheckEmail menu={menu} setMenu={setMenu}/>}/>
                     <Route exact path='/too-many-requests' element={<TooManyRequests/>}/>
-                    <Route path='*' element={<NotFound/>} />
+                    <Route path='*' element={<NotFound/>}/>
                 </Routes>
             </Suspense>
         </BrowserRouter>

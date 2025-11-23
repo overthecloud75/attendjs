@@ -161,7 +161,7 @@ const Search = ({
                         </Box>
                     } 
                 </Box>
-
+                
                 {/* Submit Button */}
                 <Button
                     type='submit'

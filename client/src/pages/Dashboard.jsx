@@ -1,21 +1,12 @@
-import { Widget } from 'react-chat-widget-react-18'
-import 'react-chat-widget-react-18/lib/styles.css'
 import Sidebar from '../components/bar/Sidebar'
 import Navbar from '../components/bar/Navbar'
-import { useChat } from '../hooks/useChat'
 import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
 import DashboardContainer from '../components/dashboard/DashboardContainer'
-
-const CHAT_CONFIG = {
-    title: 'SmartWork Chat',
-    subtitle: '',
-    showTimeStamp: false
-}
+import { ChatWidget } from '../components/dashboard/ChatWidget'
 
 const Dashboard = ({menu, setMenu}) => {
 
     useRedirectIfNotAuthenticated()
-    const { handleNewUserMessage } = useChat()
 
     return (
         <div className='container'>
@@ -24,10 +15,7 @@ const Dashboard = ({menu, setMenu}) => {
                 <Navbar menu={menu} setMenu={setMenu}/> 
                 <DashboardContainer />
             </div>
-            <Widget
-                {...CHAT_CONFIG}
-                handleNewUserMessage={handleNewUserMessage}
-            />
+            <ChatWidget/>
         </div>
     )
 }

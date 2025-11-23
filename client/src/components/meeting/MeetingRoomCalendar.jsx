@@ -22,6 +22,7 @@ const MeetingRoomCalendar = ({eventsData, setEventsData}) => {
     const calendarRef = useRef()
 
     const [weekends, setWeekends] = useState(false)
+    const [thisWeek, setThisWeek] = useState('')
     const [headerToolbar, setHeaderToolbar] = useState({
         start: 'prev,next today', 
         center: 'title',
@@ -47,6 +48,10 @@ const MeetingRoomCalendar = ({eventsData, setEventsData}) => {
         }
     }, [width])
 
+    const handleDates = async (datesInfo) => {
+        setThisWeek(datesInfo.view.title)
+    }
+
     useEffect(() => {
         const calendarApiView = calendarRef.current?.getApi()?.view
         if (!calendarApiView) return
@@ -66,7 +71,7 @@ const MeetingRoomCalendar = ({eventsData, setEventsData}) => {
             }
         }
         {fetchData()}
-    }, [room])
+    }, [thisWeek, room])
 
     const handleEventClick = async (clickInfo) => {
         if (window.confirm(`'${clickInfo.event.title}' 회의실 예약을 삭제하시겠습니까?`)) {
@@ -90,6 +95,7 @@ const MeetingRoomCalendar = ({eventsData, setEventsData}) => {
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 headerToolbar={headerToolbar}
                 initialView='timeGridWeek'
+                datesSet={handleDates}
                 editable={user.isAdmin}
                 selectable={user.isAdmin}
                 events={eventsData}

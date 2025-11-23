@@ -60,8 +60,8 @@ const NMap = ({state}) => {
         <Box>
             {state && (
                 <Title>
-                    You are {state.where.minDistance * 1000}m away from&nbsp;
-                    <strong>{state.where.place}</strong>.
+                    현재 위치는&nbsp;<strong>{state.where.place}</strong>에서&nbsp;
+                    {state.where.minDistance * 1000}m 떨어져 있습니다.
                 </Title>
             )}
 
@@ -69,11 +69,11 @@ const NMap = ({state}) => {
                 <Title>
                     {state.where.attend ? (
                         <>
-                            You're all set.&nbsp;<mark>Checked</mark>
+                            확인되었습니다.&nbsp;<mark>출근 완료</mark>
                         </>
                     ) : (
                         <>
-                            <mark>Unchecked</mark>&nbsp;Please log in again.
+                            <mark>출근 미완료</mark>&nbsp;다시 로그인해주세요.
                         </>
                     )}
                 </Title>
