@@ -4,7 +4,7 @@ import random
 import datetime
 import copy
 
-from utils import check_time, check_holiday, get_delta_day, convert_to_time_string, get_access_day, calculate_working_hours
+from utils import check_time, check_holiday, get_delta_day, get_access_day, calculate_working_hours, render_notice_html
 from .db import db, BasicModel
 from .mail import send_email
 from .employee import Employee
@@ -141,7 +141,7 @@ class Report(BasicModel):
             self._update_employee_attendance(date, employee_id, employee_attendance)
 
     def _get_initial_attends(self, date=None):
-        if not self.collection.count_documents({'date': date}):
+        if self.collection.count_documents({'date': date}):
             attend_list = self.collection.find({'date': date})
             attends = {check_previous_attend['employeeId']: check_previous_attend for check_previous_attend in attend_list}
         else:
@@ -320,45 +320,6 @@ class Report(BasicModel):
                     if insert_data:
                         collection.insert_one(insert_data)
 
-    def _render_notice_email(self, name, report):
-        """근태 안내 메일 HTML 생성"""
-        action_html = f"""
-            <h2 style="margin-top:0;">안녕하세요, {name}님</h2>
-            <p style="color:#444;">근태 관련하여 아래와 같은 사유가 있어 안내 메일을 송부합니다.</p>
-        """
-
-        table_html = f"""
-            <tr>
-                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">이름</td>
-                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{name}</td>
-            </tr>
-            <tr>
-                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">날짜</td>
-                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{report['date']}</td>
-            </tr>
-            <tr>
-                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">출근 시각</td>
-                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{convert_to_time_string(report['begin'])}</td>
-            </tr>
-            <tr>
-                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">근무 시간</td>
-                <td style="padding:8px; border-bottom:1px solid #e0e0e0;">{report['workingHours']}</td>
-            </tr>
-            <tr>
-                <td style="padding:8px;">사유</td>
-                <td style="padding:8px;">{report['status']}</td>
-            </tr>
-        """
-
-        footer_html = f"""
-            <div style="margin-top:24px; text-align:center;">
-                연차, 외근 등의 사유가 있는 경우<br>
-                아래 버튼을 통해 출근 품의를 진행하면 근태가 정정됩니다.
-            </div>
-        """
-
-        return renderBaseTemplate(action_html, table_html, footer_html)
-
     def _send_notice_email(self, employee={}):
         '''
             1. email이 있고 regular 여부가 WORKING['update']에 포함되어 있는 경우만 메일 송부 
@@ -384,7 +345,7 @@ class Report(BasicModel):
 
             self.logger.info(f'[NOTICE EMAIL] {self.today} {name}')
             subject = f"[근태 관리] {report['date']} {name} {status}"
-            html_body = self._render_notice_email(name, report)
+            html_body = render_notice_html(name, report)
             cc = self.employee.get_approver(employee)['email']
             sent = send_email(email=email, subject=subject, body=html_body, cc=cc,include_cc=True)     
             if sent:

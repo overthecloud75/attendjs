@@ -20,7 +20,6 @@ export const chatCompletion = async (req, res, next) => {
         const result = chatResponse.data
         res.status(200).send(result['choices'][0]['message']['content'])
     } catch (err) {
-        console.log('err', err)
         next(err)
     }
 }

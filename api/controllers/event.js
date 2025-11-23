@@ -213,7 +213,6 @@ const handleApprovalAction = async (req, res, next, actionFn, successTitle) => {
 
 export const makeActive = async (approval) => {
     const { _id, start, end } = approval
-    console.log(approval)
     let status 
     let msg 
     if (end >= start) {

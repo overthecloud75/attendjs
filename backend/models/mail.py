@@ -13,7 +13,7 @@ def send_email(email=None, subject=None, body=None, cc=None,include_cc=False):
     if include_cc and cc:
         mimemsg['Cc'] = cc
     mimemsg['Subject'] = subject
-    mimemsg.attach(MIMEText(body, 'plain'))
+    mimemsg.attach(MIMEText(body, 'html'))
     try:
         connection = smtplib.SMTP(host=MAIL_SERVER['host'], port=MAIL_SERVER['port'])
         connection.starttls()

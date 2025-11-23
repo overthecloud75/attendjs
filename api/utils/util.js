@@ -126,7 +126,6 @@ export const sanitizeData = (data, type) => {
         if (type === 'date') {
             regex = /^\d{4}-\d{2}-\d{2}$/
             if (data.match(regex) === null) {
-                console.log('getToday')
                 return getToday()
             }
         } else if (type === 'email') {
