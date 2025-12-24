@@ -1,0 +1,170 @@
+22/08/15
+    - 0.5.1 (client)
+        styled Container, Wrapper -> className container, wrapper in index.css
+    - 0.5.2 (client)
+        sidebar.jsx : itemList -> itemDict with title 
+    - 0.5.3 (backend)
+        make testconfig.py to gather user modified setting in each py files
+
+22/08/16
+    - 0.5.4 (api)
+        wifi-attend for wifiRange
+
+22/08/20
+    - 0.5.5 (client)
+        avatar menu
+    - 0.5.6 (client)
+        Update.jsx
+    - 0.5.7 (api)
+        update in controllers/device.js 
+    - 0.5.8 (client)
+        table re-rendering after update
+
+22/08/21
+    - 0.5.9 (client)
+        fix autofocus disappear afer typing 
+        fix update textfield 한글 입력 문제
+    - 0.6.0 (api)
+        reqFormat in config/winston.js
+    - 0.6.1 (api)
+        location in models/Device.js/DeviceSchema
+
+22/08/22
+    - 0.6.2 (api)
+        decodeURI in reqFormat
+
+22/08/27
+    - 0.6.3 (backend)
+        SMTP server but not operated. why? 
+
+22/09/04
+    - 0.6.4 (client)
+        configs folder
+    - 0.6.5 (client)
+        pages/board
+    - 0.6.6 (api)
+        board
+    - 0.6.7 (client)
+        config.js -> configs folder
+    - 0.6.8 (client)
+        components/write
+        webEditor = ckeditor
+    - 0.6.9 (api)
+        board.js/write, deleteBoard 
+    - 0.7.0 (backend)
+        delete SMTP server 
+
+22/09/05
+    - 0.7.1 (client)
+        style.scss
+    - 0.7.2 (client)
+        register/login page
+
+22/09/06
+    - 0.7.3 (client)
+        pages/employee
+    - 0.7.4 (api)
+        controllers/employee
+
+22/09/12
+    - 0.7.5 (backend)
+        alternativa vacation for lunar '0101', '0815'
+    - 0.7.6 (client)
+        separate Search.jsx from TableWithSearch.jsx
+    - 0.7.7 (client)
+        Provider store={store}
+    - 0.7.8 (client)
+        use localStorage to save user information
+
+22/09/20
+    - 0.7.9 (client, api)
+        device: type, charge 
+
+22/09/21 
+    - 0.8.0 (backend)
+        attend['name'] -> attend['employee_id']
+    - 0.8.1 (client, api)
+        employee update ('department', 'rank', 'position', 'regular', 'mode')
+
+22/09/25
+    - 0.8.2 (client)
+        device page: table.width = 130%
+
+22/10/22 
+    - 0.8.3 (client)
+        attendance -> SmartWork
+    - 0.8.4 (client)
+        write.jsx fix useState(rowData.content) -> useState(value.content)
+
+22/10/15 
+    - 0.8.5 (client, Write.jsx)
+        add confirm when delete or update 
+
+22/10/27
+    - 0.8.6 (backend)
+        old, new_sn_post -> sn_post, ip_sn_post
+        old, new_o_post -> o_post, ip_o_post
+
+22/10/29
+    - 0.8.7 (client)
+        apply Contents Security Policy : script-src 'self' 
+    
+22/11/09 
+    - 0.8.8 (api)
+        fix some problem in reportUpdate in controllers. 
+    - 0.8.9 (client)
+        apply headers: headers: {'Cache-Control': 'no-cache'} in axios.get 
+        but the issues[0] is not solved.
+
+22/11/21
+    - 0.9.0 (backend)
+        err fix: if 'regular' not in employee: employee['regular'] = '상근'
+
+22/11/26 
+    - 0.9.1 (backend)
+        try except in nmap_sn_scan in utils
+
+22/11/27
+    - 0.9.2 (client)
+        user localStorage exiry : 86400000
+    - 0.9.3 (client)
+        err fix : confirm -> window.confirm in Write.jsx
+
+22/11/30
+    - 0.9.4 (api)
+        email.js for email confirmation when register 
+
+22/12/02
+    - 0.9.5 (client)
+        user : localStroage -> sessionStorage
+    - 0.9.6 (client)
+        pages/Confirm.jsx
+    - 0.9.7 (api)
+        confirm/token -> checkConfirm in auth.js 
+
+22/12/03
+    - 0.9.8 (api)
+        verifyIP in verfiToken.js
+    - 0.9.9 (client)
+        when 401 error, redirect to login page 
+
+22/12/04
+    - 1.0.0 (all)
+        apply codeql.yml
+    - 1.0.1 (api)
+        mongoose version 6.4.4 -> 6.7.5
+    - 1.0.2 (api)
+        missing rate limiting : apply 'express-rate-limit'
+    - 1.0.3 (api)
+        logout in auth.js for clear cookies
+    - 1.0.4 (client)
+        requestAuth in AuthUtil.jsx 
+    - 1.0.5 (client, api)
+        use CSRF-Token
+    - 1.0.6 (api)
+        login setOptions({sanitizeFilter: true}) to protect NoSQL injection
+    - 1.0.7 (api)
+        sanitizeData for date, email
+
+
+   

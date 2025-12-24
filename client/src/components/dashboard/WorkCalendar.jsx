@@ -1,0 +1,240 @@
+import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import { Paper, Typography, Box, ToggleButton, ToggleButtonGroup, Stack, Chip } from '@mui/material'
+import { Calendar as CalendarIcon, User, Users, Building2 } from 'lucide-react'
+import { useSelector } from 'react-redux'
+
+import { getColor, getSpecialHolidays, getEventsInCalendar, addEventInCalendar, deleteEventInCalendar } from '../../utils/EventUtil'
+import { useWindowDimension } from '../../hooks/useWindowDimension'
+import { MOBILE } from '../../configs/mobile'
+import { useResponsive } from '../../hooks/useResponsive'
+import './WorkCalendar.css'
+
+const WorkCalendar = () => {
+
+    const user = useSelector(state => state.user)
+    const navigate = useNavigate()
+    const { isMobile } = useResponsive()
+    const calendarRef = useRef()
+
+    const [eventsData, setEventsData] = useState([])
+    const [weekends, setWeekends] = useState(true)
+    const [thisMonth, setThisMonth] = useState('')
+    const [headerToolbar, setHeaderToolbar] = useState({
+        start: 'title',
+        center: '',
+        end: 'today prev,next'
+    })
+
+    // 일정 타입 선택: private, team, company
+    const [selectedType, setSelectedType] = useState('private')
+    const { width } = useWindowDimension()
+
+    useEffect(() => {
+        if (width < MOBILE.size) {
+            setWeekends(false)
+            setHeaderToolbar({ start: '', center: '', end: 'today prev,next' })
+        } else {
+            setWeekends(true)
+            setHeaderToolbar({ start: 'title', center: '', end: 'today prev,next' })
+        }
+    }, [width])
+
+    // Update to match new Calendar behavior - fetch events when month or type changes
+    useEffect(() => {
+        const calendarApiView = calendarRef.current?.getApi()?.view
+        if (!calendarApiView) return
+
+        const args = { start: calendarApiView.activeStart, end: calendarApiView.activeEnd }
+
+        const fetchData = async () => {
+            const events = await getEventsInCalendar(args, selectedType)
+            if (events.err) {
+                const errorStatus = events.err.response.data.status
+                if (errorStatus === 401) {
+                    sessionStorage.removeItem('user')
+                    navigate('/login')
+                }
+            } else {
+                setEventsData(events.data)
+            }
+        }
+
+        if (thisMonth) { fetchData() }
+        // Fetch initially if no month set yet but calendar handles dateSet immediately
+    }, [thisMonth, selectedType])
+
+    const handleDates = async (datesInfo) => {
+        setThisMonth(datesInfo.view.title)
+    }
+
+    const handleTypeChange = (event, newAlignment) => {
+        if (newAlignment !== null) {
+            setSelectedType(newAlignment)
+        }
+    }
+
+    const handleDateSelect = async (selectInfo) => {
+        const specialHolidays = getSpecialHolidays()
+        let title = prompt(`'${specialHolidays}' 중 하나만 입력 가능합니다.`)
+        let calendarApi = selectInfo.view.calendar
+
+        calendarApi.unselect() // clear date selection
+
+        if (title) {
+            let event = {
+                title,
+                start: selectInfo.startStr,
+                end: selectInfo.endStr
+            }
+            const result = await addEventInCalendar(event)
+            if (!result.err) {
+                event = getColor(event)
+                calendarApi.addEvent(event)
+            }
+        }
+    }
+
+    const handleEventClick = async (clickInfo) => {
+        if (window.confirm(`'${clickInfo.event.title}' 일정을 삭제하시겠습니까?`)) {
+            const result = await deleteEventInCalendar(clickInfo.event)
+            if (!result.err) {
+                clickInfo.event.remove()
+            }
+        }
+    }
+
+    return (
+        <Paper
+            elevation={0}
+            sx={{
+                p: { xs: 2, sm: 3 },
+                borderRadius: 3,
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                height: '100%',
+                bgcolor: 'white'
+            }}
+        >
+            <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                justifyContent="space-between"
+                alignItems={{ xs: 'flex-start', sm: 'center' }}
+                mb={1}
+                gap={2}
+            >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Box sx={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: '10px',
+                        bgcolor: '#e0e7ff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#4f46e5'
+                    }}>
+                        <CalendarIcon size={20} />
+                    </Box>
+                    <Typography variant='h6' fontWeight='600' color="#1e293b">
+                        근무 캘린더
+                    </Typography>
+                </Box>
+
+                {!isMobile && (
+                    <ToggleButtonGroup
+                        value={selectedType}
+                        exclusive
+                        onChange={handleTypeChange}
+                        aria-label="schedule type"
+                        size="small"
+                        sx={{
+                            '& .MuiToggleButton-root': {
+                                borderRadius: '8px !important',
+                                border: '1px solid #e2e8f0',
+                                mx: 0.5,
+                                px: 2,
+                                py: 0.5,
+                                textTransform: 'none',
+                                fontWeight: 500,
+                                color: '#64748b'
+                            },
+                            '& .Mui-selected': {
+                                bgcolor: '#eff6ff !important',
+                                color: '#3b82f6 !important',
+                                borderColor: '#3b82f6 !important',
+                                fontWeight: 600
+                            }
+                        }}
+                    >
+                        <ToggleButton value="private">
+                            <Stack direction="row" spacing={1} alignItems="center">
+                                <User size={14} />
+                                <span>개인</span>
+                            </Stack>
+                        </ToggleButton>
+                        <ToggleButton value="team">
+                            <Stack direction="row" spacing={1} alignItems="center">
+                                <Users size={14} />
+                                <span>팀</span>
+                            </Stack>
+                        </ToggleButton>
+                        <ToggleButton value="company">
+                            <Stack direction="row" spacing={1} alignItems="center">
+                                <Building2 size={14} />
+                                <span>회사</span>
+                            </Stack>
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+                )}
+            </Stack>
+
+            <Box
+                sx={{
+                    // Override FullCalendar styles
+                    '& .fc': { fontFamily: 'inherit' },
+                    '& .fc-col-header-cell-cushion': { color: '#475569', fontWeight: 600, py: 1.5 },
+                    '& .fc-daygrid-day-number': { color: '#64748b', fontSize: '0.875rem', p: 1 },
+                    '& .fc-theme-standard td, .fc-theme-standard th': { borderColor: '#f1f5f9' },
+                    '& .fc-header-toolbar': { mb: 2 },
+                    '& .fc-button': {
+                        bgcolor: 'white',
+                        color: '#475569',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: 'none',
+                        textTransform: 'capitalize',
+                        fontWeight: 500,
+                        transition: 'all 0.2s'
+                    },
+                    '& .fc-button:hover': { bgcolor: '#f8fafc', color: '#1e293b', borderColor: '#cbd5e1' },
+                    '& .fc-button-active': { bgcolor: '#eff6ff !important', color: '#3b82f6 !important', borderColor: '#3b82f6 !important' },
+                    '& .fc-today-button': { fontWeight: 600 },
+                    '& .fc-day-today': { bgcolor: '#f8fafc !important' },
+                    '& .fc-event': { borderRadius: '4px', border: 'none', padding: '1px 3px', fontSize: '0.75rem' }
+                }}
+            >
+                <FullCalendar
+                    ref={calendarRef}
+                    plugins={[dayGridPlugin, interactionPlugin]}
+                    headerToolbar={headerToolbar}
+                    initialView='dayGridMonth'
+                    editable={user.isAdmin}
+                    selectable={user.isAdmin}
+                    events={eventsData}
+                    weekends={weekends}
+                    select={user.isAdmin ? handleDateSelect : false}
+                    eventClick={user.isAdmin ? handleEventClick : false}
+                    datesSet={handleDates}
+                    contentHeight='auto'
+                    locale='ko'
+                    dayMaxEventRows={2}
+                />
+            </Box>
+        </Paper>
+    )
+}
+
+export default WorkCalendar
