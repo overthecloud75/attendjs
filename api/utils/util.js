@@ -41,7 +41,7 @@ const getSeparateDay = () => {
     const month = `0${today.getMonth() + 1}`.slice(-2)
     const day = `0${today.getDate()}`.slice(-2)
     const monthDay = `${month}-${day}`
-    return {thisYear, monthDay}
+    return { thisYear, monthDay }
 }
 
 export const getDate = (dateStr) => {
@@ -56,7 +56,7 @@ export const getNextDate = (dateStr) => {
 }
 
 const getEmployeementPeriod = (beginDate) => {
-    const {thisYear, monthDay} = getSeparateDay()
+    const { thisYear, monthDay } = getSeparateDay()
     const thisMonth = Number(monthDay.split('-')[0])
     let baseYear = thisYear
 
@@ -65,12 +65,12 @@ const getEmployeementPeriod = (beginDate) => {
     const beginMonthDay = `${beginDateSplit[1]}-${beginDateSplit[2]}`
     const beginMonth = Number(beginDateSplit[1])
 
-    let baseMonth = 0 
-    if (thisMonth > beginMonth) {baseMonth = thisMonth - beginMonth}
-    else if (thisMonth < beginMonth) {baseMonth = 12 + thisMonth - beginMonth}
+    let baseMonth = 0
+    if (thisMonth > beginMonth) { baseMonth = thisMonth - beginMonth }
+    else if (thisMonth < beginMonth) { baseMonth = 12 + thisMonth - beginMonth }
     // 근무 기간이 1년이 안 된 경우 정교한 계산 필요 
-    else if ((thisYear - beginYear) === 1 && monthDay < beginMonthDay) {baseMonth = 12}
-    else if ((thisYear - beginYear) > 1 && monthDay < beginMonthDay) {baseMonth = 11}
+    else if ((thisYear - beginYear) === 1 && monthDay < beginMonthDay) { baseMonth = 12 }
+    else if ((thisYear - beginYear) > 1 && monthDay < beginMonthDay) { baseMonth = 11 }
 
     let employeementPeriod = 0
     if (beginYear < thisYear) {
@@ -83,20 +83,20 @@ const getEmployeementPeriod = (beginDate) => {
         }
     }
     const baseDate = `${baseYear}-${beginMonthDay}`
-    return {employeementPeriod, baseDate, baseMonth}
+    return { employeementPeriod, baseDate, baseMonth }
 }
 
 export const getDefaultAnnualLeave = (beginDate) => {
-    const {employeementPeriod, baseDate, baseMonth} = getEmployeementPeriod(beginDate)
+    const { employeementPeriod, baseDate, baseMonth } = getEmployeementPeriod(beginDate)
     let defaultAnnualLeave = 15
     if (employeementPeriod == 0) {
         defaultAnnualLeave = baseMonth
-    } else if (employeementPeriod > 1 ) {
+    } else if (employeementPeriod > 1) {
         defaultAnnualLeave = defaultAnnualLeave + parseInt(employeementPeriod / 2)
-        if (employeementPeriod % 2 == 0) {defaultAnnualLeave = defaultAnnualLeave - 1}
+        if (employeementPeriod % 2 == 0) { defaultAnnualLeave = defaultAnnualLeave - 1 }
     }
-    if (defaultAnnualLeave > 25) {defaultAnnualLeave = 25}
-    return {defaultAnnualLeave, employeementPeriod, baseDate, baseMonth} 
+    if (defaultAnnualLeave > 25) { defaultAnnualLeave = 25 }
+    return { defaultAnnualLeave, employeementPeriod, baseDate, baseMonth }
 }
 
 export const separateIP = (x_forwarded_for) => {
@@ -104,54 +104,56 @@ export const separateIP = (x_forwarded_for) => {
     if (ipList.length > 1) {
         const externalIP = ipList[0].split(':')[0]
         const internalIP = ipList[1]
-        return {externalIP, internalIP}
+        return { externalIP, internalIP }
     } else {
         const externalIP = ipList[0]
         const internalIP = ipList[0]
-        return {externalIP, internalIP}
+        return { externalIP, internalIP }
     }
 }
 
 export const getClientIP = (req) => {
-    if ('x-forwarded-for' in req.headers) 
-        {return req.headers['x-forwarded-for'].split(',')[0].split(':')[0]}
+    if ('x-forwarded-for' in req.headers) { return req.headers['x-forwarded-for'].split(',')[0].split(':')[0] }
     else {
         return req.connection.remoteAddress
     }
 }
 
 export const sanitizeData = (data, type) => {
-    let regex 
-    if (data) {
-        if (type === 'date') {
-            regex = /^\d{4}-\d{2}-\d{2}$/
-            if (data.match(regex) === null) {
-                return getToday()
-            }
-        } else if (type === 'email') {
-            regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
-            if (data.match(regex) === null) {
+    // Handle empty or null data immediately
+    if (!data) {
+        if (type === 'date') return getToday()
+        return ''
+    }
+
+    switch (type) {
+        case 'date': {
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+            return dateRegex.test(data) ? data : getToday()
+        }
+        case 'email': {
+            const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
+            return emailRegex.test(data) ? data : ''
+        }
+        case 'mobile': {
+            // Remove dashes to just check digits
+            const digits = String(data).replace(/-/g, '')
+
+            // Basic validation for Korean mobile numbers (starts with 01, followed by 0,1,6,7,8,9, and total length 10 or 11)
+            const mobileRegex = /^01[016789]\d{7,8}$/
+
+            if (!mobileRegex.test(digits)) {
                 return ''
             }
-        } else if (type === 'mobile') {
-            const digits = data.replace('-', '');
-            console.log('data', data, digits, type)
-            // 한국 휴대폰 번호 (10~11자리) 검사
-            if (!/^01[016789]\d{7,8}$/.test(digits)) {
-                return '' // 유효하지 않은 번호
-            } // 10자리 (예: 011-234-5678) 또는 11자리 (예: 010-1234-5678) 처리
+
+            // Format: 010-1234-5678 or 011-123-4567
             if (digits.length === 10) {
                 return digits.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')
             } else {
                 return digits.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
             }
         }
-    } else if (type ==='date') {
-        return getToday()
-    } else if (type === 'email') {
-        return ''
-    } else if (type === 'mobile') {
-        return ''
+        default:
+            return data
     }
-    return data 
 }

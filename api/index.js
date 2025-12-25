@@ -36,7 +36,7 @@ const connect = async () => {
     try {
         await mongoose.connect(
             process.env.MONGOURL, {
-            dbName: process.env.MONGODB, auth: {username: process.env.MONGOUSER, password: process.env.MONGOPWD}
+            dbName: process.env.MONGODB, auth: { username: process.env.MONGOUSER, password: process.env.MONGOPWD }
         })
         logger.warn('Connected to mongoDB.')
     } catch (err) {
@@ -54,30 +54,33 @@ mongoose.connection.on('connected', () => {
 })
 
 const limiter = rateLimit({
-	windowMs: 2 * 60 * 1000, // 2 minutes
-	max: 100, // Limit each IP to 100 requests per `window` (here, per 2 minutes)
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    windowMs: 2 * 60 * 1000, // 2 minutes
+    max: 100, // Limit each IP to 100 requests per `window` (here, per 2 minutes)
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     keyGenerator: (req, res) => getClientIP(req)
 })
 // middlewares
 app.use(limiter) // Apply the rate limiting middleware to all requests
 app.use(cookieParser())
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 const csrfProtection = csrf({ cookie: true })
 
 app.use((req, res, next) => {
-    const exemptPaths = ['/api/auth/setAttend', '/api/auth/callback']
+    const exemptPaths = ['/api/auth/setAttend', '/api/auth/callback', '/api/auth/verify']
     if (exemptPaths.includes(req.path)) {
         return next()
-    } 
+    }
     csrfProtection(req, res, next)
 })
 
-app.use(cors({ origin: [
+app.use(cors({
+    origin: [
         process.env.DOMAIN
-    ]}
+    ]
+}
 ))
 
 app.use((req, res, next) => {

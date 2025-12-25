@@ -583,6 +583,26 @@ const getUserInfoFromMS365 = async (accessToken) => {
     return response
 }
 
+export const verify = async (req, res, next) => {
+    try {
+        const { email: rawEmail, password } = req.body
+        const email = sanitizeData(rawEmail, 'email')
+        await validateUserCredentials(email, password)
+        res.status(200).json({ status: 'success', message: 'Verified' })
+    } catch (err) {
+        next(err)
+    }
+}
 
-
-
+export const checkAuth = (req, res, next) => {
+    try {
+        res.status(200).json({
+            username: req.user.name,
+            email: req.user.email,
+            isAdmin: req.user.isAdmin,
+            employeeId: req.user.employeeId
+        })
+    } catch (err) {
+        next(err)
+    }
+}

@@ -1,5 +1,5 @@
 import express from 'express'
-import { register, login, password, lostPassword, passwordWithOtp, logout, setAttend, search, getApiKey, updateApiKey, validateToken, authCallback } from '../controllers/auth.js'
+import { register, login, password, lostPassword, passwordWithOtp, logout, setAttend, search, getApiKey, updateApiKey, validateToken, authCallback, verify, checkAuth } from '../controllers/auth.js'
 import { csrfToken } from '../controllers/form.js'
 import { verifyUser, verifyAdmin } from '../utils/verifyToken.js'
 
@@ -142,7 +142,9 @@ router.post('/setAttend', verifyUser, setAttend)
 router.get('/search', verifyAdmin, search)
 router.get('/apiKey', verifyUser, getApiKey)
 router.post('/apiKey', verifyUser, updateApiKey)
+router.get('/check', verifyUser, checkAuth)
 router.get('/validateToken', validateToken)
 router.post('/callback', authCallback)
+router.post('/verify', verify)
 
 export default router
