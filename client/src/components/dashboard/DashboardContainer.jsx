@@ -17,7 +17,7 @@ const DashboardContainer = () => {
                     variant='h4'
                     fontWeight='700'
                     sx={{
-                        color: '#1e293b',
+                        color: 'var(--text-primary)',
                         fontSize: { xs: '1.5rem', md: '2rem' },
                         display: 'flex',
                         alignItems: 'center',
@@ -27,7 +27,7 @@ const DashboardContainer = () => {
                 >
                     반가워요, {user.name}님! 👋
                 </Typography>
-                <Typography variant='subtitle1' sx={{ color: '#64748b', fontWeight: 500 }}>
+                <Typography variant='subtitle1' sx={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
                     오늘의 근태 현황을 한눈에 확인하세요.
                 </Typography>
             </Box>

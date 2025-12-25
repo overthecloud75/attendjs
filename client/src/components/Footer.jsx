@@ -7,11 +7,12 @@ const Footer = () => {
                 position: 'absolute',
                 bottom: 10,
                 right: 10,
-                fontSize: 12
+                fontSize: 12,
+                color: 'var(--text-secondary)'
             }}
         >
             Copyright © {new Date().getFullYear()} SmartWork.
-        </Box>
+        </Box >
     )
 }
 

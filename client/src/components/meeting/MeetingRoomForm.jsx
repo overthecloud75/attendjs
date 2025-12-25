@@ -14,11 +14,16 @@ const MeetingRoomForm = ({ room, setRoom }) => {
                 onChange={(e) => setRoom(e.target.value)}
                 startAdornment={
                     <InputAdornment position="start">
-                        <MapPin size={16} color="#94a3b8" />
+                        <MapPin size={16} style={{ color: 'var(--text-secondary)' }} />
                     </InputAdornment>
                 }
                 sx={{
-                    '& .MuiSelect-select': { pl: 1 }
+                    '& .MuiSelect-select': { pl: 1 },
+                    color: 'var(--text-primary)',
+                    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
+                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
+                    '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
                 }}
             >
                 {MEETINGROOMS.map((meeting, index) => (

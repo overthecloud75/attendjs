@@ -129,8 +129,8 @@ export default Sidebar
 const SidebarContainer = styled(Box)(({ theme }) => ({
     width: 260, // 기본 너비 고정
     height: '100vh',
-    borderRight: '1px solid #e2e8f0',
-    background: '#ffffff',
+    borderRight: '1px solid var(--border-color)',
+    background: 'var(--bg-primary)',
     display: 'flex',
     flexDirection: 'column',
     transition: 'width 0.3s ease',
@@ -141,9 +141,9 @@ const SidebarContainer = styled(Box)(({ theme }) => ({
 }))
 
 const StyledAppBar = styled(AppBar)({
-    background: 'white',
+    background: 'var(--bg-primary)',
     boxShadow: 'none',
-    borderBottom: '1px solid #e2e8f0',
+    borderBottom: '1px solid var(--border-color)',
     height: 64,
     justifyContent: 'center'
 })
@@ -180,7 +180,7 @@ const MenuContainer = styled(Box)(({ theme }) => ({
         width: '4px',
     },
     '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#cbd5e1',
+        backgroundColor: 'var(--border-color)',
         borderRadius: '4px',
     },
 }))
@@ -192,7 +192,7 @@ const CategoryTitle = styled(Typography)(({ theme }) => ({
     },
     fontSize: '0.75rem',
     fontWeight: 700,
-    color: '#94a3b8',
+    color: 'var(--text-secondary)',
     padding: '0 16px',
     marginTop: '24px',
     marginBottom: '8px',
@@ -206,12 +206,12 @@ const StyledListItemButton = styled(ListItemButton)(({ theme, active }) => ({
     marginBottom: 4,
     borderRadius: '8px',
     transition: 'all 0.2s ease',
-    backgroundColor: active ? '#eff6ff' : 'transparent',
-    color: active ? '#2563eb' : '#64748b',
+    backgroundColor: active ? 'var(--bg-active)' : 'transparent',
+    color: active ? 'var(--text-active)' : 'var(--text-secondary)',
 
     '&:hover': {
-        backgroundColor: active ? '#eff6ff' : '#f8fafc',
-        color: '#1e293b',
+        backgroundColor: active ? 'var(--bg-active)' : 'var(--hover-bg)',
+        color: 'var(--text-primary)',
         transform: 'translateX(4px)',
     },
 
@@ -252,13 +252,13 @@ const FooterContainer = styled(Box)(({ theme }) => ({
         display: 'flex',
     },
     padding: '16px',
-    borderTop: '1px solid #e2e8f0',
-    bgcolor: '#f8fafc',
+    borderTop: '1px solid var(--border-color)',
+    bgcolor: 'var(--bg-secondary)',
     justifyContent: 'center'
 }))
 
 const FooterText = styled(Typography)({
     fontSize: '0.75rem',
-    color: '#94a3b8',
+    color: 'var(--text-secondary)',
     fontWeight: 500
 })

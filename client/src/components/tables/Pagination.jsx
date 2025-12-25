@@ -1,4 +1,4 @@
-import { Box, Button, Typography, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material'
+import { Box, Button, Typography, Select, MenuItem, FormControl } from '@mui/material'
 import { ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight } from 'lucide-react'
 
 const PaginationButton = ({ onClick, disabled, title, children }) => (
@@ -14,13 +14,14 @@ const PaginationButton = ({ onClick, disabled, title, children }) => (
             height: 32,
             padding: 0,
             borderRadius: '50%',
-            color: '#64748b',
+            color: 'var(--text-secondary)',
             '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                color: '#1e293b'
+                backgroundColor: 'var(--hover-bg)',
+                color: 'var(--text-primary)'
             },
             '&:disabled': {
-                color: '#cbd5e1'
+                color: 'var(--text-secondary)',
+                opacity: 0.5
             }
         }}
     >
@@ -73,16 +74,6 @@ const Pagination = ({
     const currentPageIndex = pageIndex + 1
     const totalPages = pageCount
 
-    const handlePageInputChange = (e) => {
-        const value = e.target.value
-        if (value === '') return
-
-        const pageNum = Number(value)
-        if (pageNum >= 1 && pageNum <= totalPages) {
-            gotoPage(pageNum - 1)
-        }
-    }
-
     const handlePageSizeChange = (event) => {
         setPageSize(Number(event.target.value))
     }
@@ -95,8 +86,8 @@ const Pagination = ({
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: '12px 24px',
-                borderTop: '1px solid #f1f5f9',
-                backgroundColor: '#fff',
+                borderTop: '1px solid var(--border-color)',
+                backgroundColor: 'var(--card-bg)',
                 mt: 'auto',
                 flexWrap: { xs: 'wrap', sm: 'nowrap' },
                 gap: 4 // increased gap between sections
@@ -112,8 +103,9 @@ const Pagination = ({
                         sx={{
                             fontSize: 13,
                             fontWeight: 500,
-                            color: '#475569',
-                            '& .MuiSelect-select': { py: 0.5, pr: 3 }
+                            color: 'var(--text-secondary)',
+                            '& .MuiSelect-select': { py: 0.5, pr: 3 },
+                            '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
                         }}
                     >
                         {[10, 20, 50, 100].map((size) => (
@@ -124,8 +116,8 @@ const Pagination = ({
                     </Select>
                 </FormControl>
 
-                <Typography variant='body2' color='text.secondary' sx={{ fontSize: 13 }}>
-                    총 {totalPages} 페이지 중 <Box component="span" fontWeight="600" color="#1e293b">{currentPageIndex}</Box>
+                <Typography variant='body2' sx={{ fontSize: 13, color: 'var(--text-secondary)' }}>
+                    총 {totalPages} 페이지 중 <Box component="span" fontWeight="600" color="var(--text-primary)">{currentPageIndex}</Box>
                 </Typography>
             </Box>
 
@@ -167,10 +159,10 @@ const Pagination = ({
                                     fontSize: 13,
                                     fontWeight: isCurrent ? 600 : 400,
                                     backgroundColor: isCurrent ? '#4f46e5' : 'transparent',
-                                    color: isCurrent ? '#fff' : '#475569',
+                                    color: isCurrent ? '#fff' : 'var(--text-secondary)',
                                     boxShadow: isCurrent ? '0 2px 4px rgba(79, 70, 229, 0.2)' : 'none',
                                     '&:hover': {
-                                        backgroundColor: isCurrent ? '#4338ca' : '#f1f5f9',
+                                        backgroundColor: isCurrent ? '#4338ca' : 'var(--hover-bg)',
                                     },
                                 }}
                             >

@@ -57,9 +57,9 @@ const Approval = ({ navigate, open, setOpen }) => {
         setValue(prev => ({ ...prev, [name]: newValue ? newValue.format('YYYY-MM-DD') : '' }))
     }
 
-    const renderInfoRow = (icon, label, fieldValue, color = '#1e293b') => (
-        <Stack direction="row" alignItems="center" spacing={1.5} sx={{ p: 1.5, bgcolor: '#f8fafc', borderRadius: 2 }}>
-            <Box sx={{ color: '#64748b', display: 'flex' }}>{icon}</Box>
+    const renderInfoRow = (icon, label, fieldValue, color = 'var(--text-primary)') => (
+        <Stack direction="row" alignItems="center" spacing={1.5} sx={{ p: 1.5, bgcolor: 'var(--bg-secondary)', borderRadius: 2 }}>
+            <Box sx={{ color: 'var(--text-secondary)', display: 'flex' }}>{icon}</Box>
             <Box>
                 <Typography variant="caption" color="#64748b" display="block">{label}</Typography>
                 <Typography variant="body2" fontWeight="600" color={color}>
@@ -81,7 +81,17 @@ const Approval = ({ navigate, open, setOpen }) => {
                         value={value.etc || ''}
                         onChange={handleChange}
                         size="small"
-                        sx={{ bgcolor: 'white' }}
+                        sx={{
+                            bgcolor: 'var(--card-bg)',
+                            '& .MuiOutlinedInput-root': {
+                                color: 'var(--text-primary)',
+                                '& fieldset': { borderColor: 'var(--border-color)' },
+                                '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+                            },
+                            '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                            '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' }
+                        }}
                     />
                 </Fade>
             )
@@ -96,7 +106,14 @@ const Approval = ({ navigate, open, setOpen }) => {
                             value={value.etc || '오전반차'}
                             label='반차 구분'
                             onChange={handleChange}
-                            sx={{ bgcolor: 'white' }}
+                            sx={{
+                                bgcolor: 'var(--card-bg)',
+                                color: 'var(--text-primary)',
+                                '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
+                                '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
+                                '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                            }}
                         >
                             {HALF_LEAVE_OPTIONS.map((option) => (
                                 <MenuItem key={option} value={option}>
@@ -118,17 +135,17 @@ const Approval = ({ navigate, open, setOpen }) => {
             open={open}
             onClose={handleClose}
             PaperProps={{
-                sx: { borderRadius: 3, maxWidth: 450, width: '100%' }
+                sx: { borderRadius: 3, maxWidth: 450, width: '100%', bgcolor: 'var(--card-bg)', color: 'var(--text-primary)' }
             }}
         >
             <DialogTitle sx={{ pb: 1, pt: 3, px: 3 }}>
                 <Stack direction="row" alignItems="center" gap={1.5}>
-                    <Box sx={{ p: 1, bgcolor: '#eff6ff', borderRadius: '50%', color: '#3b82f6' }}>
+                    <Box sx={{ p: 1, bgcolor: 'var(--bg-active)', borderRadius: '50%', color: 'var(--text-active)' }}>
                         <FileText size={24} />
                     </Box>
-                    <Typography variant="h6" fontWeight="700" color="#1e293b">
+                    <Typography variant="h6" fontWeight="700" color="var(--text-primary)">
                         결재 신청
-                        <Typography component="span" variant="body2" color="#64748b" display="block" fontWeight="400" sx={{ mt: 0.5 }}>
+                        <Typography component="span" variant="body2" color="var(--text-secondary)" display="block" fontWeight="400" sx={{ mt: 0.5 }}>
                             휴가 및 근태 관련 결재를 신청합니다.
                         </Typography>
                     </Typography>
@@ -152,7 +169,7 @@ const Approval = ({ navigate, open, setOpen }) => {
                     )}
 
                     <Divider flexItem>
-                        <Chip label="신청 상세" size="small" sx={{ color: '#64748b', bgcolor: '#f1f5f9' }} />
+                        <Chip label="신청 상세" size="small" sx={{ color: 'var(--text-secondary)', bgcolor: 'var(--bg-secondary)' }} />
                     </Divider>
 
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -165,7 +182,25 @@ const Approval = ({ navigate, open, setOpen }) => {
                                     textField: {
                                         fullWidth: true,
                                         size: 'small',
-                                        InputProps: { startAdornment: <Calendar size={16} style={{ marginRight: 8, color: '#94a3b8' }} /> }
+                                        slotProps: {
+                                            input: {
+                                                startAdornment: <Calendar size={16} style={{ marginRight: 8, color: 'var(--text-secondary)' }} />
+                                            }
+                                        },
+                                        sx: {
+                                            '& .MuiOutlinedInput-root': {
+                                                color: 'var(--text-primary)',
+                                                '& fieldset': { borderColor: 'var(--border-color)' },
+                                                '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                                '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                                            },
+                                            '& .MuiOutlinedInput-input': {
+                                                color: 'var(--text-primary)',
+                                            },
+                                            '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                            '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' },
+                                            '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                                        }
                                     }
                                 }}
                             />
@@ -177,7 +212,25 @@ const Approval = ({ navigate, open, setOpen }) => {
                                     textField: {
                                         fullWidth: true,
                                         size: 'small',
-                                        InputProps: { startAdornment: <Calendar size={16} style={{ marginRight: 8, color: '#94a3b8' }} /> }
+                                        slotProps: {
+                                            input: {
+                                                startAdornment: <Calendar size={16} style={{ marginRight: 8, color: 'var(--text-secondary)' }} />
+                                            }
+                                        },
+                                        sx: {
+                                            '& .MuiOutlinedInput-root': {
+                                                color: 'var(--text-primary)',
+                                                '& fieldset': { borderColor: 'var(--border-color)' },
+                                                '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                                '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                                            },
+                                            '& .MuiOutlinedInput-input': {
+                                                color: 'var(--text-primary)',
+                                            },
+                                            '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                            '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' },
+                                            '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                                        }
                                     }
                                 }}
                             />
@@ -185,13 +238,20 @@ const Approval = ({ navigate, open, setOpen }) => {
                     </LocalizationProvider>
 
                     <FormControl fullWidth size="small">
-                        <InputLabel>신청 사유</InputLabel>
+                        <InputLabel sx={{ color: 'var(--text-secondary)', '&.Mui-focused': { color: '#3b82f6' } }}>신청 사유</InputLabel>
                         <Select
                             name='reason'
                             label='신청 사유'
                             value={value.reason || ''}
                             onChange={handleChange}
-                            startAdornment={<CalendarDays size={16} style={{ marginLeft: 8, marginRight: 8, color: '#94a3b8' }} />}
+                            startAdornment={<CalendarDays size={16} style={{ marginLeft: 8, marginRight: 8, color: 'var(--text-secondary)' }} />}
+                            sx={{
+                                color: 'var(--text-primary)',
+                                '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
+                                '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
+                                '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                            }}
                         >
                             {REASON_OPTIONS.map((option) => (
                                 <MenuItem key={option} value={option}>
@@ -211,11 +271,11 @@ const Approval = ({ navigate, open, setOpen }) => {
                     variant='outlined'
                     sx={{
                         borderRadius: 2,
-                        color: '#64748b',
-                        borderColor: '#e2e8f0',
+                        color: 'var(--text-secondary)',
+                        borderColor: 'var(--border-color)',
                         fontSize: '0.9rem',
                         px: 3,
-                        '&:hover': { bgcolor: '#f8fafc', borderColor: '#cbd5e1' }
+                        '&:hover': { bgcolor: 'var(--bg-secondary)', borderColor: 'var(--border-color)' }
                     }}
                 >
                     취소

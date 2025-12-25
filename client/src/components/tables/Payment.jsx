@@ -141,11 +141,11 @@ const Payment = ({ writeMode, open, setOpen }) => {
     }
 
     const renderInfoRow = (icon, label, fieldValue) => (
-        <Stack direction="row" alignItems="center" spacing={1.5} sx={{ p: 1.5, bgcolor: '#f8fafc', borderRadius: 2, height: '100%' }}>
-            <Box sx={{ color: '#64748b', display: 'flex' }}>{icon}</Box>
+        <Stack direction="row" alignItems="center" spacing={1.5} sx={{ p: 1.5, bgcolor: 'var(--bg-secondary)', borderRadius: 2, height: '100%' }}>
+            <Box sx={{ color: 'var(--text-secondary)', display: 'flex' }}>{icon}</Box>
             <Box sx={{ width: '100%' }}>
-                <Typography variant="caption" color="#64748b" display="block">{label}</Typography>
-                <Typography variant="body2" fontWeight="600" color="#1e293b" sx={{ wordBreak: 'break-all' }}>
+                <Typography variant="caption" sx={{ color: 'var(--text-secondary)', display: 'block' }}>{label}</Typography>
+                <Typography variant="body2" fontWeight="600" sx={{ color: 'var(--text-primary)', wordBreak: 'break-all' }}>
                     {fieldValue || '-'}
                 </Typography>
             </Box>
@@ -159,17 +159,17 @@ const Payment = ({ writeMode, open, setOpen }) => {
             fullWidth
             maxWidth="md"
             PaperProps={{
-                sx: { borderRadius: 3 }
+                sx: { borderRadius: 3, bgcolor: 'var(--card-bg)', backgroundImage: 'none' }
             }}
         >
             <DialogTitle sx={{ pb: 1, pt: 3, px: 3 }}>
                 <Stack direction="row" alignItems="center" gap={1.5}>
-                    <Box sx={{ p: 1, bgcolor: '#eff6ff', borderRadius: '50%', color: '#3b82f6' }}>
+                    <Box sx={{ p: 1, bgcolor: 'var(--bg-active)', borderRadius: '50%', color: 'var(--text-active)' }}>
                         <Receipt size={24} />
                     </Box>
-                    <Typography variant="h6" fontWeight="700" color="#1e293b">
+                    <Typography variant="h6" fontWeight="700" sx={{ color: 'var(--text-primary)' }}>
                         비용 결재
-                        <Typography component="span" variant="body2" color="#64748b" display="block" fontWeight="400" sx={{ mt: 0.5 }}>
+                        <Typography component="span" variant="body2" sx={{ color: 'var(--text-secondary)', display: 'block', fontWeight: 400, mt: 0.5 }}>
                             법인카드 사용 내역 및 영수증을 제출합니다.
                         </Typography>
                     </Typography>
@@ -204,7 +204,9 @@ const Payment = ({ writeMode, open, setOpen }) => {
                                         textField: {
                                             fullWidth: true,
                                             size: 'small',
-                                            InputProps: { startAdornment: <Calendar size={16} style={{ marginRight: 8, color: '#94a3b8' }} /> }
+                                            slotProps: {
+                                                input: { startAdornment: <Calendar size={16} style={{ marginRight: 8, color: 'var(--text-secondary)' }} /> }
+                                            }
                                         }
                                     }}
                                 />
@@ -219,8 +221,10 @@ const Payment = ({ writeMode, open, setOpen }) => {
                                 value={value.cardNo}
                                 onChange={handleChange}
                                 size="small"
-                                InputProps={{
-                                    startAdornment: <CreditCard size={16} style={{ marginRight: 8, color: '#94a3b8' }} />
+                                slotProps={{
+                                    input: {
+                                        startAdornment: <CreditCard size={16} style={{ marginRight: 8, color: 'var(--text-secondary)' }} />
+                                    }
                                 }}
                             />
                         </Grid>
@@ -234,8 +238,10 @@ const Payment = ({ writeMode, open, setOpen }) => {
                                 value={value.etc}
                                 onChange={handleChange}
                                 size="small"
-                                InputProps={{
-                                    startAdornment: <DollarSign size={16} style={{ marginRight: 8, color: '#94a3b8' }} />
+                                slotProps={{
+                                    input: {
+                                        startAdornment: <DollarSign size={16} style={{ marginRight: 8, color: 'var(--text-secondary)' }} />
+                                    }
                                 }}
                             />
                         </Grid>
@@ -249,22 +255,27 @@ const Payment = ({ writeMode, open, setOpen }) => {
                                 value={value.reason}
                                 onChange={handleChange}
                                 size="small"
-                                InputProps={{
-                                    startAdornment: <FileText size={16} style={{ marginRight: 8, color: '#94a3b8' }} />
+                                slotProps={{
+                                    input: {
+                                        startAdornment: <FileText size={16} style={{ marginRight: 8, color: 'var(--text-secondary)' }} />
+                                    }
                                 }}
                             />
                         </Grid>
                     </Grid>
 
                     <Box>
-                        <Typography variant="subtitle2" fontWeight="600" color="#475569" sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Typography variant="subtitle2" fontWeight="600" sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)' }}>
                             영수증 이미지 첨부
                         </Typography>
                         <Box sx={{
-                            '& .quill': { bgcolor: 'white' },
-                            '& .ql-toolbar': { borderTopLeftRadius: '8px', borderTopRightRadius: '8px', borderColor: '#e2e8f0', bgcolor: '#f8fafc' },
-                            '& .ql-container': { borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px', borderColor: '#e2e8f0', minHeight: '300px' },
-                            '& .ql-editor': { fontSize: '1rem', minHeight: '300px' }
+                            '& .quill': { bgcolor: 'var(--card-bg)' },
+                            '& .ql-toolbar': { borderTopLeftRadius: '8px', borderTopRightRadius: '8px', borderColor: 'var(--border-color)', bgcolor: 'var(--bg-secondary)' },
+                            '& .ql-container': { borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px', borderColor: 'var(--border-color)', minHeight: '300px' },
+                            '& .ql-editor': { fontSize: '1rem', minHeight: '300px', color: 'var(--text-primary)' },
+                            '& .ql-stroke': { stroke: 'var(--text-primary) !important' },
+                            '& .ql-fill': { fill: 'var(--text-primary) !important' },
+                            '& .ql-picker': { color: 'var(--text-primary) !important' }
                         }}>
                             <ReactQuill
                                 ref={quillRef}
@@ -285,11 +296,11 @@ const Payment = ({ writeMode, open, setOpen }) => {
                     variant='outlined'
                     sx={{
                         borderRadius: 2,
-                        color: '#64748b',
-                        borderColor: '#e2e8f0',
+                        color: 'var(--text-secondary)',
+                        borderColor: 'var(--border-color)',
                         fontSize: '0.9rem',
                         px: 3,
-                        '&:hover': { bgcolor: '#f8fafc', borderColor: '#cbd5e1' }
+                        '&:hover': { bgcolor: 'var(--hover-bg)', borderColor: 'var(--text-secondary)' }
                     }}
                 >
                     {t('button-cancel')}

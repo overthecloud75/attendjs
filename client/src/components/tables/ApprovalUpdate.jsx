@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem } from '@mui/material'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, InputAdornment } from '@mui/material'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
+import { Edit, Save, X, List, FileText, User, Calendar, CheckCircle } from 'lucide-react'
 
 import { EditableSelects } from '../../configs/pages.js'
 import { approvalAttendUpdate, approvalPaymentUpdate } from '../../utils/Approval'
@@ -22,7 +23,7 @@ const COLUMNS_MAP = {
 const ApprovalUpdate = ({ data, setData, open, setOpen, rowData }) => {
     const user = useSelector(state => state.user)
     const { status: previousStatus, approvalType } = rowData
-    
+
     const options = OPTIONS_MAP[approvalType] || paymentOptions
     const columns = COLUMNS_MAP[approvalType] || paymentUpdateColumnHeaders
 
@@ -53,9 +54,12 @@ const ApprovalUpdate = ({ data, setData, open, setOpen, rowData }) => {
     }
 
     return (
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Update approval</DialogTitle>
-            <DialogContent>
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+            <DialogTitle sx={{ bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Edit size={20} />
+                결재 수정
+            </DialogTitle>
+            <DialogContent sx={{ bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', pt: 3 }}>
                 {columns.map((item, index) => {
                     const isSelect = EditableSelects.includes(item.accessorKey) && options[item.accessorKey]
                     const currentVal = value[item.accessorKey] || ''
@@ -75,6 +79,27 @@ const ApprovalUpdate = ({ data, setData, open, setOpen, rowData }) => {
                                 value={currentVal}
                                 onChange={handleChange}
                                 autoComplete='off'
+                                sx={{
+                                    mt: 2,
+                                    '& .MuiOutlinedInput-root': {
+                                        color: 'var(--text-primary)',
+                                        '& fieldset': { borderColor: 'var(--border-color)' },
+                                        '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                        '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+                                    },
+                                    '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                    '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' },
+                                    '& .MuiSelect-icon': { color: 'var(--text-secondary)' }
+                                }}
+                                slotProps={{
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <List size={18} style={{ color: 'var(--text-secondary)' }} />
+                                            </InputAdornment>
+                                        ),
+                                    }
+                                }}
                             >
                                 {options[item.accessorKey].map((option) => (
                                     <MenuItem key={option} value={option}>
@@ -93,7 +118,7 @@ const ApprovalUpdate = ({ data, setData, open, setOpen, rowData }) => {
                                 value={currentVal}
                                 readOnly={true}
                                 modules={{ toolbar: false }}
-                                style={{ marginTop: '16px', marginBottom: '16px' }}
+                                style={{ marginTop: '16px', marginBottom: '16px', color: 'var(--text-primary)' }}
                             />
                         )
                     }
@@ -109,15 +134,47 @@ const ApprovalUpdate = ({ data, setData, open, setOpen, rowData }) => {
                             fullWidth
                             variant='standard'
                             value={rowData[item.accessorKey] || ''}
-                            slotProps={{ input: { readOnly: true } }}
+                            sx={{ mt: 2 }}
+                            slotProps={{
+                                input: {
+                                    readOnly: true,
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            {['createdAt', 'updatedAt', 'date'].includes(item.accessorKey) ?
+                                                <Calendar size={18} style={{ color: 'var(--text-secondary)' }} /> :
+                                                (['user', 'name'].includes(item.accessorKey) ?
+                                                    <User size={18} style={{ color: 'var(--text-secondary)' }} /> :
+                                                    <FileText size={18} style={{ color: 'var(--text-secondary)' }} />
+                                                )
+                                            }
+                                        </InputAdornment>
+                                    ),
+                                    sx: { color: 'var(--text-secondary)' }
+                                },
+                                inputLabel: { sx: { color: 'var(--text-secondary)' } }
+                            }}
                             autoComplete='off'
                         />
                     )
                 })}
             </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} variant='outlined'>Cancel</Button>
-                <Button onClick={handleUpdate} variant='outlined'>Update</Button>
+            <DialogActions sx={{ p: 3, bgcolor: 'var(--card-bg)', borderTop: '1px solid var(--border-color)' }}>
+                <Button
+                    onClick={handleClose}
+                    variant='outlined'
+                    sx={{ color: 'var(--text-secondary)', borderColor: 'var(--border-color)', '&:hover': { bgcolor: 'var(--bg-secondary)', borderColor: 'var(--text-secondary)' } }}
+                    startIcon={<X size={18} />}
+                >
+                    취소
+                </Button>
+                <Button
+                    onClick={handleUpdate}
+                    variant='contained'
+                    sx={{ bgcolor: '#3b82f6', '&:hover': { bgcolor: '#2563eb' } }}
+                    startIcon={<Save size={18} />}
+                >
+                    수정
+                </Button>
             </DialogActions>
         </Dialog>
     )

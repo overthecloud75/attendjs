@@ -9,7 +9,14 @@ const SmallMeetingRoomForm = ({ room, setRoom }) => {
                 value={room}
                 label='회의실'
                 onChange={(e) => setRoom(e.target.value)}
-                sx={{ bgcolor: 'white' }}
+                sx={{
+                    bgcolor: 'var(--card-bg)',
+                    color: 'var(--text-primary)',
+                    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
+                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
+                    '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                }}
             >
                 {MEETINGROOMS.map((meeting, index) => (
                     <MenuItem key={index} value={meeting}>{meeting}</MenuItem>

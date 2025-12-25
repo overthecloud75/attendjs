@@ -66,6 +66,8 @@ const ProfileMenu = ({ user, anchorEl, setAnchorEl, setMenu }) => {
                             mt: 1.5,
                             minWidth: 240,
                             borderRadius: 3,
+                            bgcolor: 'var(--card-bg)',
+                            color: 'var(--text-primary)',
                             '&:before': {
                                 content: '""',
                                 display: 'block',
@@ -74,7 +76,7 @@ const ProfileMenu = ({ user, anchorEl, setAnchorEl, setMenu }) => {
                                 right: 14,
                                 width: 10,
                                 height: 10,
-                                bgcolor: 'background.paper',
+                                bgcolor: 'var(--card-bg)',
                                 transform: 'translateY(-50%) rotate(45deg)',
                                 zIndex: 0,
                             },
@@ -89,10 +91,10 @@ const ProfileMenu = ({ user, anchorEl, setAnchorEl, setMenu }) => {
                         {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
                     </Avatar>
                     <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-                        <Box sx={{ fontWeight: 600, fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <Box sx={{ fontWeight: 600, fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-primary)' }}>
                             {user.name || 'User'}
                         </Box>
-                        <Box sx={{ fontSize: '0.75rem', color: 'text.secondary', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <Box sx={{ fontSize: '0.75rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {user.email || ''}
                         </Box>
                     </Box>
@@ -100,30 +102,30 @@ const ProfileMenu = ({ user, anchorEl, setAnchorEl, setMenu }) => {
 
                 <Divider />
 
-                <MenuItem onClick={handleProfileClick} sx={{ py: 1.5 }}>
-                    <ListItemIcon>
+                <MenuItem onClick={handleProfileClick} sx={{ py: 1.5, '&:hover': { bgcolor: 'var(--hover-bg)' } }}>
+                    <ListItemIcon sx={{ color: 'var(--text-secondary)' }}>
                         <User size={18} />
                     </ListItemIcon>
-                    <ListItemText primary="내 프로필 (Profile)" primaryTypographyProps={{ fontSize: '0.9rem' }} />
+                    <ListItemText primary="내 프로필 (Profile)" primaryTypographyProps={{ fontSize: '0.9rem', color: 'var(--text-primary)' }} />
                 </MenuItem>
 
-                <MenuItem onClick={handleAPIClick} sx={{ py: 1.5 }}>
-                    <ListItemIcon>
+                <MenuItem onClick={handleAPIClick} sx={{ py: 1.5, '&:hover': { bgcolor: 'var(--hover-bg)' } }}>
+                    <ListItemIcon sx={{ color: 'var(--text-secondary)' }}>
                         <Key size={18} />
                     </ListItemIcon>
-                    <ListItemText primary="API Key 관리" primaryTypographyProps={{ fontSize: '0.9rem' }} />
+                    <ListItemText primary="API Key 관리" primaryTypographyProps={{ fontSize: '0.9rem', color: 'var(--text-primary)' }} />
                 </MenuItem>
 
-                <MenuItem component={Link} to="/auth/reset-password" sx={{ py: 1.5 }}>
-                    <ListItemIcon>
+                <MenuItem component={Link} to="/auth/reset-password" sx={{ py: 1.5, '&:hover': { bgcolor: 'var(--hover-bg)' } }}>
+                    <ListItemIcon sx={{ color: 'var(--text-secondary)' }}>
                         <Lock size={18} />
                     </ListItemIcon>
-                    <ListItemText primary="비밀번호 변경" primaryTypographyProps={{ fontSize: '0.9rem' }} />
+                    <ListItemText primary="비밀번호 변경" primaryTypographyProps={{ fontSize: '0.9rem', color: 'var(--text-primary)' }} />
                 </MenuItem>
 
                 <Divider />
 
-                <MenuItem onClick={handleLogout} sx={{ py: 1.5, color: 'error.main' }}>
+                <MenuItem onClick={handleLogout} sx={{ py: 1.5, color: 'error.main', '&:hover': { bgcolor: 'var(--hover-bg)' } }}>
                     <ListItemIcon sx={{ color: 'error.main' }}>
                         <LogOut size={18} />
                     </ListItemIcon>

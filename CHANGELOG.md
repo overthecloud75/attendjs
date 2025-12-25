@@ -1,4 +1,7 @@
 #### 25/12/25
+**2.6.0 (client)** : Added Dark Mode
+
+#### 25/12/25
 **2.5.9 (client)** : client UI improvement
 
 #### 25/11/23

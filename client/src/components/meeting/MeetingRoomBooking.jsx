@@ -62,18 +62,22 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
         <Dialog
             open={open}
             onClose={handleClose}
-            PaperProps={{
-                sx: {
-                    borderRadius: 3,
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                    maxWidth: '500px',
-                    width: '100%'
+            slotProps={{
+                paper: {
+                    sx: {
+                        borderRadius: 3,
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                        maxWidth: '500px',
+                        width: '100%',
+                        bgcolor: 'var(--card-bg)',
+                        color: 'var(--text-primary)'
+                    }
                 }
             }}
         >
             <DialogTitle sx={{
                 pb: 1,
-                borderBottom: '1px solid #f1f5f9',
+                borderBottom: '1px solid var(--border-color)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 1.5
@@ -82,7 +86,7 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
                     width: 32,
                     height: 32,
                     borderRadius: '8px',
-                    bgcolor: '#eff6ff',
+                    bgcolor: '#eff6ff', // Keep brand color bg for consistency or change if needed, but text inside is blue so light bg is ok? Actually standardizing on blue icon might be better. Let's keep it as is for brand identity or matches other icons.
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -90,7 +94,7 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
                 }}>
                     <Calendar size={18} />
                 </Box>
-                <Typography variant="h6" sx={{ fontWeight: 600, color: '#1e293b' }}>
+                <Typography variant="h6" sx={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                     회의실 예약
                 </Typography>
             </DialogTitle>
@@ -101,7 +105,7 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
 
                         {/* 1. 기본 정보 섹션 */}
                         <Box>
-                            <Typography variant="subtitle2" sx={{ mb: 1.5, color: '#64748b', fontWeight: 600 }}>
+                            <Typography variant="subtitle2" sx={{ mb: 1.5, color: 'var(--text-secondary)', fontWeight: 600 }}>
                                 예약 정보
                             </Typography>
                             <Stack spacing={2}>
@@ -111,12 +115,22 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="예약자 이름"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <User size={16} color="#94a3b8" />
-                                            </InputAdornment>
-                                        ),
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            color: 'var(--text-primary)',
+                                            '& fieldset': { borderColor: 'var(--border-color)' },
+                                            '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                            '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+                                        }
+                                    }}
+                                    slotProps={{
+                                        input: {
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <User size={16} style={{ color: 'var(--text-secondary)' }} />
+                                                </InputAdornment>
+                                            ),
+                                        }
                                     }}
                                 />
                                 <TextField
@@ -125,12 +139,22 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                     placeholder="회의 주제를 입력하세요"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <Type size={16} color="#94a3b8" />
-                                            </InputAdornment>
-                                        ),
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            color: 'var(--text-primary)',
+                                            '& fieldset': { borderColor: 'var(--border-color)' },
+                                            '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                            '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+                                        }
+                                    }}
+                                    slotProps={{
+                                        input: {
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <Type size={16} style={{ color: 'var(--text-secondary)' }} />
+                                                </InputAdornment>
+                                            ),
+                                        }
                                     }}
                                 />
                             </Stack>
@@ -138,7 +162,7 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
 
                         {/* 2. 회의실 및 타입 */}
                         <Box>
-                            <Typography variant="subtitle2" sx={{ mb: 1.5, color: '#64748b', fontWeight: 600 }}>
+                            <Typography variant="subtitle2" sx={{ mb: 1.5, color: 'var(--text-secondary)', fontWeight: 600 }}>
                                 장소 및 유형
                             </Typography>
                             <Stack direction="row" spacing={2}>
@@ -155,7 +179,7 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
 
                         {/* 3. 일시 선택 */}
                         <Box>
-                            <Typography variant="subtitle2" sx={{ mb: 1.5, color: '#64748b', fontWeight: 600 }}>
+                            <Typography variant="subtitle2" sx={{ mb: 1.5, color: 'var(--text-secondary)', fontWeight: 600 }}>
                                 예약 일시
                             </Typography>
                             <Stack spacing={2}>
@@ -166,6 +190,21 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
                                         textField: {
                                             size: 'small',
                                             fullWidth: true,
+                                            sx: {
+                                                '& .MuiOutlinedInput-root': {
+                                                    color: 'var(--text-primary)',
+                                                    '& fieldset': { borderColor: 'var(--border-color)' },
+                                                    '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                                    '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                                                    // '& input::placeholder': { color: 'var(--text-secondary)', opacity: 1 }
+                                                },
+                                                '& .MuiOutlinedInput-input': {
+                                                    color: 'var(--text-primary)',
+                                                    '&::placeholder': { color: 'var(--text-secondary)', opacity: 1 }
+                                                },
+                                                '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                                '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                                            }
                                         }
                                     }}
                                 />
@@ -178,11 +217,26 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
                                         slotProps={{
                                             textField: {
                                                 size: 'small',
-                                                fullWidth: true
+                                                fullWidth: true,
+                                                sx: {
+                                                    '& .MuiOutlinedInput-root': {
+                                                        color: 'var(--text-primary)',
+                                                        '& fieldset': { borderColor: 'var(--border-color)' },
+                                                        '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                                        '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                                                        // '& input::placeholder': { color: 'var(--text-secondary)', opacity: 1 }
+                                                    },
+                                                    '& .MuiOutlinedInput-input': {
+                                                        color: 'var(--text-primary)',
+                                                        '&::placeholder': { color: 'var(--text-secondary)', opacity: 1 }
+                                                    },
+                                                    '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                                    '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                                                }
                                             }
                                         }}
                                     />
-                                    <Typography sx={{ alignSelf: 'center', color: '#cbd5e1' }}>~</Typography>
+                                    <Typography sx={{ alignSelf: 'center', color: 'var(--text-secondary)' }}>~</Typography>
                                     <TimePicker
                                         label="종료"
                                         value={endTime}
@@ -191,7 +245,22 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
                                         slotProps={{
                                             textField: {
                                                 size: 'small',
-                                                fullWidth: true
+                                                fullWidth: true,
+                                                sx: {
+                                                    '& .MuiOutlinedInput-root': {
+                                                        color: 'var(--text-primary)',
+                                                        '& fieldset': { borderColor: 'var(--border-color)' },
+                                                        '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                                        '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                                                        // '& input::placeholder': { color: 'var(--text-secondary)', opacity: 1 }
+                                                    },
+                                                    '& .MuiOutlinedInput-input': {
+                                                        color: 'var(--text-primary)',
+                                                        '&::placeholder': { color: 'var(--text-secondary)', opacity: 1 }
+                                                    },
+                                                    '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                                    '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                                                }
                                             }
                                         }}
                                     />
@@ -207,13 +276,13 @@ const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
                 </LocalizationProvider>
             </DialogContent>
 
-            <DialogActions sx={{ p: 2.5, borderTop: '1px solid #f1f5f9', gap: 1 }}>
+            <DialogActions sx={{ p: 2.5, borderTop: '1px solid var(--border-color)', gap: 1 }}>
                 <Button
                     onClick={handleClose}
                     sx={{
-                        color: '#64748b',
+                        color: 'var(--text-secondary)',
                         px: 2,
-                        '&:hover': { bgcolor: '#f1f5f9' }
+                        '&:hover': { bgcolor: 'var(--hover-bg)' }
                     }}
                 >
                     취소

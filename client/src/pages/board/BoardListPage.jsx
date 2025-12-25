@@ -41,8 +41,8 @@ const BoardListPage = ({ menu, setMenu }) => {
                     label={params.value}
                     size="small"
                     sx={{
-                        bgcolor: '#f1f5f9',
-                        color: '#475569',
+                        bgcolor: 'var(--bg-active)',
+                        color: 'var(--text-active)',
                         fontWeight: 600,
                         fontSize: '0.75rem'
                     }}
@@ -62,7 +62,7 @@ const BoardListPage = ({ menu, setMenu }) => {
                         cursor: 'pointer',
                         width: '100%',
                         height: '100%',
-                        color: '#1e293b',
+                        color: 'var(--text-primary)',
                         '&:hover': { color: '#3b82f6' }
                     }}
                     onClick={() => navigate(`/board/${params.row._id}`)}
@@ -72,7 +72,7 @@ const BoardListPage = ({ menu, setMenu }) => {
                             label="공지"
                             size="small"
                             sx={{
-                                bgcolor: '#fee2e2',
+                                bgcolor: 'rgba(239, 68, 68, 0.15)',
                                 color: '#ef4444',
                                 fontWeight: 700,
                                 height: 20
@@ -81,7 +81,7 @@ const BoardListPage = ({ menu, setMenu }) => {
                     )}
                     <Typography variant="body2" fontWeight={500} noWrap>{params.row.title}</Typography>
                     {params.row.files?.length > 0 && (
-                        <Box sx={{ color: '#94a3b8', display: 'flex', alignItems: 'center' }}>
+                        <Box sx={{ color: 'var(--text-secondary)', display: 'flex', alignItems: 'center' }}>
                             <FileText size={14} />
                         </Box>
                     )}
@@ -139,10 +139,10 @@ const BoardListPage = ({ menu, setMenu }) => {
 
                     {/* Header */}
                     <Box sx={{ mb: 2 }}>
-                        <Typography variant="h4" fontWeight="700" color="#1e293b" gutterBottom>
+                        <Typography variant="h4" fontWeight="700" color="var(--text-primary)" gutterBottom>
                             사내 게시판 📋
                         </Typography>
-                        <Typography variant="body1" color="#64748b">
+                        <Typography variant="body1" color="var(--text-secondary)">
                             공지사항 및 자유로운 소통 공간입니다.
                         </Typography>
                     </Box>
@@ -152,7 +152,8 @@ const BoardListPage = ({ menu, setMenu }) => {
                         sx={{
                             p: 3,
                             borderRadius: 3,
-                            border: '1px solid #e2e8f0',
+                            border: '1px solid var(--border-color)',
+                            bgcolor: 'var(--card-bg)',
                             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
                         }}
                     >
@@ -164,7 +165,8 @@ const BoardListPage = ({ menu, setMenu }) => {
                                 mb: 3,
                                 borderBottom: 1,
                                 borderColor: 'divider',
-                                '& .MuiTab-root': { textTransform: 'none', fontWeight: 600, fontSize: '1rem' }
+                                '& .MuiTab-root': { textTransform: 'none', fontWeight: 600, fontSize: '1rem', color: 'var(--text-secondary)' },
+                                '& .Mui-selected': { color: '#3b82f6 !important' }
                             }}
                         >
                             <Tab label="전체" value="ALL" />
@@ -177,12 +179,19 @@ const BoardListPage = ({ menu, setMenu }) => {
                         <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ mb: 3, alignItems: 'center' }}>
                             <Box sx={{ display: 'flex', gap: 2, flex: 1, width: { xs: '100%', md: 'auto' } }}>
                                 <FormControl size="small" sx={{ minWidth: 120 }}>
-                                    <InputLabel>검색조건</InputLabel>
+                                    <InputLabel sx={{ color: 'var(--text-secondary)', '&.Mui-focused': { color: '#3b82f6' } }}>검색조건</InputLabel>
                                     <Select
                                         label="검색조건"
                                         value={searchType}
                                         onChange={(e) => setSearchType(e.target.value)}
-                                        sx={{ bgcolor: '#f8fafc' }}
+                                        sx={{
+                                            bgcolor: 'var(--bg-secondary)',
+                                            color: 'var(--text-primary)',
+                                            '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
+                                            '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
+                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
+                                            '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                                        }}
                                     >
                                         <MenuItem value="title">제목</MenuItem>
                                         <MenuItem value="content">내용</MenuItem>
@@ -197,15 +206,27 @@ const BoardListPage = ({ menu, setMenu }) => {
                                     onChange={(e) => setSearchKeyword(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                                     fullWidth
-                                    sx={{ bgcolor: '#f8fafc' }}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton onClick={handleSearch} edge="end">
-                                                    <Search size={18} />
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
+                                    sx={{
+                                        bgcolor: 'var(--bg-secondary)',
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': { borderColor: 'var(--border-color)' },
+                                            '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                            '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                                            color: 'var(--text-primary)'
+                                        },
+                                        '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                        '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' }
+                                    }}
+                                    slotProps={{
+                                        input: {
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton onClick={handleSearch} edge="end" sx={{ color: 'var(--text-secondary)' }}>
+                                                        <Search size={18} />
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            )
+                                        }
                                     }}
                                 />
                             </Box>
@@ -244,22 +265,34 @@ const BoardListPage = ({ menu, setMenu }) => {
                                 sx={{
                                     border: 'none',
                                     '& .MuiDataGrid-columnHeaders': {
-                                        bgcolor: '#f8fafc',
-                                        color: '#475569',
+                                        backgroundColor: 'var(--bg-secondary)',
+                                        color: 'var(--text-secondary)',
                                         fontWeight: 700,
-                                        fontSize: '0.875rem'
+                                        fontSize: '0.875rem',
+                                        borderBottom: '1px solid var(--border-color)'
+                                    },
+                                    '& .MuiDataGrid-columnHeader': {
+                                        backgroundColor: 'var(--bg-secondary)'
                                     },
                                     '& .MuiDataGrid-cell': {
-                                        borderBottom: '1px solid #f1f5f9',
-                                        color: '#334155',
+                                        borderBottom: '1px solid var(--border-color)',
+                                        backgroundColor: 'var(--card-bg)',
+                                        color: 'var(--text-primary)',
                                         fontSize: '0.875rem'
+                                    },
+                                    '& .MuiDataGrid-iconSeparator': {
+                                        display: 'none'
                                     },
                                     '& .MuiDataGrid-row:hover': {
                                         cursor: 'pointer',
-                                        bgcolor: '#f8fafc'
+                                        backgroundColor: 'var(--hover-bg)'
                                     },
                                     '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-cell:focus': {
                                         outline: 'none'
+                                    },
+                                    '& .MuiDataGrid-overlay': {
+                                        backgroundColor: 'var(--card-bg)',
+                                        color: 'var(--text-secondary)'
                                     }
                                 }}
                                 onRowClick={(params) => navigate(`/board/${params.row._id}`)}

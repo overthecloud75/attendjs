@@ -28,11 +28,11 @@ const ProfileDialog = ({ user, open, handleClose }) => {
             fullWidth
             slotProps={{
                 paper: {
-                    sx: { borderRadius: 3, padding: 0 }
+                    sx: { borderRadius: 3, padding: 0, bgcolor: 'var(--card-bg)', color: 'var(--text-primary)' }
                 }
             }}
         >
-            <DialogTitle sx={{ px: 3, py: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #eee' }}>
+            <DialogTitle sx={{ px: 3, py: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)' }}>
                 <Typography variant="h6" fontWeight={700}>
                     내 프로필
                 </Typography>
@@ -82,7 +82,7 @@ const ProfileDialog = ({ user, open, handleClose }) => {
                     <Stack spacing={2}>
                         {fields.map((field) => (
                             <Box key={field.key} sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary', justifyContent: 'center' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)', justifyContent: 'center' }}>
                                     {field.icon}
                                     <Typography variant="caption" fontWeight={600}>
                                         {field.label}
@@ -97,9 +97,10 @@ const ProfileDialog = ({ user, open, handleClose }) => {
                                         input: {
                                             readOnly: true,
                                             sx: {
-                                                bgcolor: '#f8f9fa',
+                                                bgcolor: 'var(--bg-secondary)',
                                                 fontSize: '0.9rem',
-                                                '& fieldset': { border: '1px solid #e0e0e0' },
+                                                color: 'var(--text-primary)',
+                                                '& fieldset': { border: '1px solid var(--border-color)' },
                                             }
                                         },
                                         htmlInput: {

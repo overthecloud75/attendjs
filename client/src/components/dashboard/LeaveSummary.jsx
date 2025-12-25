@@ -10,7 +10,7 @@ function LeaveProgressBar(props) {
     return (
         <Box sx={{ width: '100%', mb: 1 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body2" color="#64748b" fontWeight={500}>연차 사용률</Typography>
+                <Typography variant="body2" color="var(--text-secondary)" fontWeight={500}>연차 사용률</Typography>
                 <Typography variant="body2" color="#3b82f6" fontWeight={700}>{Math.round(props.value)}%</Typography>
             </Box>
             <LinearProgress
@@ -19,7 +19,7 @@ function LeaveProgressBar(props) {
                 sx={{
                     height: 8,
                     borderRadius: 4,
-                    backgroundColor: '#f1f5f9',
+                    backgroundColor: 'var(--hover-bg)',
                     '& .MuiLinearProgress-bar': {
                         borderRadius: 4,
                         backgroundColor: props.value > 80 ? '#ef4444' : '#3b82f6',
@@ -32,7 +32,7 @@ function LeaveProgressBar(props) {
 
 const StatItem = ({ icon: Icon, label, value, color }) => (
     <Box sx={{
-        bgcolor: '#f8fafc',
+        bgcolor: 'var(--bg-secondary)',
         p: 1.5,
         borderRadius: 2,
         display: 'flex',
@@ -40,11 +40,11 @@ const StatItem = ({ icon: Icon, label, value, color }) => (
         gap: 1.5
     }}>
         <Box sx={{
-            color: color || '#64748b',
+            color: color || 'var(--text-secondary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            bgcolor: 'white',
+            bgcolor: 'var(--bg-primary)',
             p: 0.8,
             borderRadius: '50%',
             boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
@@ -52,8 +52,8 @@ const StatItem = ({ icon: Icon, label, value, color }) => (
             <Icon size={16} strokeWidth={2} />
         </Box>
         <Box>
-            <Typography variant="caption" display="block" color="#64748b" fontWeight={500}>{label}</Typography>
-            <Typography variant="body2" fontWeight={700} color="#1e293b">{value}일</Typography>
+            <Typography variant="caption" display="block" color="var(--text-secondary)" fontWeight={500}>{label}</Typography>
+            <Typography variant="body2" fontWeight={700} color="var(--text-primary)">{value}일</Typography>
         </Box>
     </Box>
 )
@@ -92,8 +92,8 @@ const LeaveSummary = ({ leftLeave }) => {
                     py: 1,
                     height: '100%',
                     borderRadius: 3,
-                    border: '1px solid #e2e8f0',
-                    bgcolor: 'white',
+                    border: '1px solid var(--border-color)',
+                    bgcolor: 'var(--card-bg)',
                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
                     display: 'flex',
                     flexDirection: 'column',
@@ -102,7 +102,7 @@ const LeaveSummary = ({ leftLeave }) => {
             >
                 <Box>
                     <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-                        <Typography variant='h6' fontWeight='700' color='#1e293b'>
+                        <Typography variant='h6' fontWeight='700' color='var(--text-primary)'>
                             연차 사용 현황
                         </Typography>
                         <Button

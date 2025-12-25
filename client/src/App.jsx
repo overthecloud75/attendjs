@@ -1,4 +1,4 @@
-import { useState, Suspense, lazy } from 'react'
+import { useState, Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import './style.scss'
 import Attend from './pages/Attend'
@@ -33,8 +33,13 @@ const CheckEmail = lazy(() => import('./pages/CheckEmail'))
 
 function App() {
     const user = useSelector(state => state.user)
+    const theme = useSelector(state => state.theme.mode)
     const { isMobile } = useResponsive()
     const [menu, setMenu] = useState(isMobile ? false : true)
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme)
+    }, [theme])
     return (
         <BrowserRouter>
             <Suspense fallback={<LoadingSpinner />}>

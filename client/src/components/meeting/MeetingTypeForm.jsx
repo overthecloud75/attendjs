@@ -13,11 +13,16 @@ const MeetingTypeForm = ({ meetingType, setMeetingType }) => {
                 onChange={(e) => setMeetingType(e.target.value)}
                 startAdornment={
                     <InputAdornment position="start">
-                        {meetingType === '내부' ? <Users2 size={16} color="#94a3b8" /> : <Building2 size={16} color="#94a3b8" />}
+                        {meetingType === '내부' ? <Users2 size={16} style={{ color: 'var(--text-secondary)' }} /> : <Building2 size={16} style={{ color: 'var(--text-secondary)' }} />}
                     </InputAdornment>
                 }
                 sx={{
-                    '& .MuiSelect-select': { pl: 1 }
+                    '& .MuiSelect-select': { pl: 1 },
+                    color: 'var(--text-primary)',
+                    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
+                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
+                    '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
                 }}
             >
                 <MenuItem value='내부'>

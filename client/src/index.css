@@ -1,3 +1,27 @@
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --card-bg: #ffffff;
+    --hover-bg: #f1f5f9;
+    --bg-active: #eff6ff;
+    --text-active: #2563eb;
+}
+
+[data-theme='dark'] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: #334155;
+    --card-bg: #1e293b;
+    --hover-bg: #334155;
+    --bg-active: rgba(59, 130, 246, 0.15);
+    --text-active: #60a5fa;
+}
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,15 +29,18 @@ body {
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+        monospace;
 }
 
 a:link {
-    color:inherit;
+    color: inherit;
 }
 
 .container {
@@ -25,6 +52,7 @@ a:link {
     display: flex;
     flex: 9;
     flex-direction: column;
+    min-width: 0;
 }
 
 .wrap {
@@ -35,7 +63,8 @@ a:link {
 }
 
 #cf-turnstile {
-    width: 300px !important; /* 원하는 크기로 조정 */
+    width: 300px !important;
+    /* 원하는 크기로 조정 */
     max-width: 100%;
 }
 
@@ -58,34 +87,45 @@ a:link {
 
 /* 위젯 열기 버튼의 크기 줄이기 */
 .rcw-launcher {
-    width: 40px !important; /* 버튼의 가로 크기 */
-    height: 40px !important; /* 버튼의 세로 크기 */
-    border-radius: 50% !important; /* 원형 모양 유지 */
+    width: 40px !important;
+    /* 버튼의 가로 크기 */
+    height: 40px !important;
+    /* 버튼의 세로 크기 */
+    border-radius: 50% !important;
+    /* 원형 모양 유지 */
 }
 
 /* 버튼 아이콘 크기 조정 (예: 채팅 아이콘) */
 .rcw-launcher-icon {
-    font-size: 18px !important; /* 아이콘 크기 줄이기 */
+    font-size: 18px !important;
+    /* 아이콘 크기 줄이기 */
 }
 
 .rcw-open-launcher {
-    width: 20px !important;    /* 아이콘의 가로 크기 */
-    height: 20px !important;   /* 아이콘의 세로 크기 */
+    width: 20px !important;
+    /* 아이콘의 가로 크기 */
+    height: 20px !important;
+    /* 아이콘의 세로 크기 */
 }
 
 .rcw-widget-container {
     max-width: 380px !important;
 }
+
 /* 헤더의 높이를 줄이기 */
 .rcw-header {
-    height: 20px !important; /* 헤더의 높이 줄이기 */
-    padding: 5px 5px !important; /* 헤더 내 여백 줄이기 */
+    height: 20px !important;
+    /* 헤더의 높이 줄이기 */
+    padding: 5px 5px !important;
+    /* 헤더 내 여백 줄이기 */
 }
 
 /* 헤더 내부의 제목 폰트 크기 및 패딩 줄이기 */
 .rcw-title {
-    font-size: 14px !important; /* 제목 폰트 크기 */
-    padding: 0px !important; /* 제목 내부 여백 */
+    font-size: 14px !important;
+    /* 제목 폰트 크기 */
+    padding: 0px !important;
+    /* 제목 내부 여백 */
 }
 
 /* Chat 위젯의 전체 글꼴 크기 변경 */
@@ -114,7 +154,8 @@ a:link {
 .rcw-client {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: flex-end !important;;
+    justify-content: flex-end !important;
+    ;
     margin-left: auto !important;
 }
 
@@ -145,11 +186,111 @@ a:link {
 
 .rcw-badge {
     display: flex !important;
-    justify-content: center !important;  
+    justify-content: center !important;
     align-items: center !important;
-    font-size: 10px !important;  /* 글자 크기 */
-    width: 15px !important;      /* 배지 크기 */
-    height: 15px !important;    /* 배지 크기 */
+    font-size: 10px !important;
+    /* 글자 크기 */
+    width: 15px !important;
+    /* 배지 크기 */
+    height: 15px !important;
+    /* 배지 크기 */
     top: -3px !important;
     right: -3px !important;
+}
+
+/* React Date Range Dark Mode Overrides */
+[data-theme='dark'] .rdrCalendarWrapper,
+[data-theme='dark'] .rdrDateDisplayWrapper,
+[data-theme='dark'] .rdrDateDisplay,
+[data-theme='dark'] .rdrMonthAndYearWrapper,
+[data-theme='dark'] .rdrMonths,
+[data-theme='dark'] .rdrMonth,
+[data-theme='dark'] .rdrWeekDays,
+[data-theme='dark'] .rdrDay {
+    background: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .rdrDayDisabled {
+    background-color: var(--bg-secondary) !important;
+}
+
+[data-theme='dark'] .rdrDayUnpassive .rdrDayPassive {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme='dark'] .rdrDefinedRangesWrapper {
+    background: var(--bg-secondary) !important;
+    border-right: 1px solid var(--border-color) !important;
+}
+
+[data-theme='dark'] .rdrStaticRange {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+[data-theme='dark'] .rdrStaticRange:hover,
+[data-theme='dark'] .rdrStaticRange.rdrStaticRangeSelected {
+    background: var(--hover-bg) !important;
+    color: var(--text-active) !important;
+}
+
+[data-theme='dark'] .rdrInputRange {
+    color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .rdrInputRangeInput {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+[data-theme='dark'] .rdrNextPrevButton {
+    background: var(--hover-bg) !important;
+}
+
+[data-theme='dark'] .rdrNextPrevButton:hover {
+    background: var(--bg-active) !important;
+}
+
+/* MUI Dark Mode Overrides */
+[data-theme='dark'] .MuiInputBase-input,
+[data-theme='dark'] .MuiOutlinedInput-input {
+    color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .MuiInputLabel-root,
+[data-theme='dark'] .MuiInputLabel-formControl {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme='dark'] .MuiInputLabel-root.Mui-focused {
+    color: var(--text-active) !important;
+}
+
+[data-theme='dark'] .MuiStepLabel-label {
+    color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .MuiStepLabel-label.Mui-active {
+    color: var(--text-active) !important;
+}
+
+[data-theme='dark'] .MuiOutlinedInput-notchedOutline {
+    border-color: var(--border-color) !important;
+}
+
+[data-theme='dark'] .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: var(--text-secondary) !important;
+}
+
+[data-theme='dark'] .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: var(--text-active) !important;
+}
+
+/* React Quill Dark Mode Overrides */
+[data-theme='dark'] .ql-editor.ql-blank::before {
+    color: var(--text-secondary) !important;
+    font-style: normal;
 }

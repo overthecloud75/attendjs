@@ -149,9 +149,9 @@ const BoardWritePage = ({ menu, setMenu }) => {
                     {/* Header */}
                     <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 3 }}>
                         <IconButton onClick={() => navigate('/board')}>
-                            <ArrowLeft size={24} color="#64748b" />
+                            <ArrowLeft size={24} color="var(--text-secondary)" />
                         </IconButton>
-                        <Typography variant="h5" fontWeight="700" color="#1e293b">
+                        <Typography variant="h5" fontWeight="700" color="var(--text-primary)">
                             게시글 작성
                         </Typography>
                     </Stack>
@@ -161,8 +161,9 @@ const BoardWritePage = ({ menu, setMenu }) => {
                         sx={{
                             p: 4,
                             borderRadius: 3,
-                            border: '1px solid #e2e8f0',
-                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)'
+                            border: '1px solid var(--border-color)',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                            bgcolor: 'var(--card-bg)'
                         }}
                     >
                         <Stack spacing={3}>
@@ -173,7 +174,7 @@ const BoardWritePage = ({ menu, setMenu }) => {
                                         value={boardType}
                                         label="게시판 분류"
                                         onChange={(e) => setBoardType(e.target.value)}
-                                        sx={{ bgcolor: '#f8fafc' }}
+                                        sx={{ bgcolor: 'var(--bg-secondary)' }}
                                     >
                                         {BOARD_TYPES.map(type => (
                                             <MenuItem key={type.value} value={type.value}>{type.label}</MenuItem>
@@ -185,7 +186,7 @@ const BoardWritePage = ({ menu, setMenu }) => {
                                     label="제목을 입력하세요"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    sx={{ bgcolor: '#f8fafc' }}
+                                    sx={{ bgcolor: 'var(--bg-secondary)' }}
                                 />
                             </Stack>
 
@@ -193,16 +194,19 @@ const BoardWritePage = ({ menu, setMenu }) => {
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <FormControlLabel
                                         control={<Switch checked={isPinned} onChange={(e) => setIsPinned(e.target.checked)} />}
-                                        label={<Typography variant="body2" fontWeight={500} color="#475569">공지사항으로 고정</Typography>}
+                                        label={<Typography variant="body2" fontWeight={500} color="var(--text-secondary)">공지사항으로 고정</Typography>}
                                     />
                                 </Box>
                             )}
 
                             <Box sx={{
-                                '& .quill': { bgcolor: 'white' },
-                                '& .ql-toolbar': { borderTopLeftRadius: '8px', borderTopRightRadius: '8px', borderColor: '#e2e8f0', bgcolor: '#f8fafc' },
-                                '& .ql-container': { borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px', borderColor: '#e2e8f0', minHeight: '400px' },
-                                '& .ql-editor': { fontSize: '1rem', minHeight: '400px' }
+                                '& .quill': { bgcolor: 'var(--card-bg)' },
+                                '& .ql-toolbar': { borderTopLeftRadius: '8px', borderTopRightRadius: '8px', borderColor: 'var(--border-color)', bgcolor: 'var(--bg-secondary)' },
+                                '& .ql-container': { borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px', borderColor: 'var(--border-color)', minHeight: '400px' },
+                                '& .ql-editor': { fontSize: '1rem', minHeight: '400px', color: 'var(--text-primary)' },
+                                '& .ql-stroke': { stroke: 'var(--text-primary) !important' },
+                                '& .ql-fill': { fill: 'var(--text-primary) !important' },
+                                '& .ql-picker': { color: 'var(--text-primary) !important' }
                             }}>
                                 <ReactQuill
                                     ref={quillRef}
@@ -214,9 +218,9 @@ const BoardWritePage = ({ menu, setMenu }) => {
                                 />
                             </Box>
 
-                            <Box sx={{ p: 2, border: '1px solid #e2e8f0', borderRadius: 2, bgcolor: '#f8fafc' }}>
+                            <Box sx={{ p: 2, border: '1px solid var(--border-color)', borderRadius: 2, bgcolor: 'var(--bg-secondary)' }}>
                                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-                                    <Typography variant="subtitle2" fontWeight="600" color="#475569" display="flex" alignItems="center" gap={1}>
+                                    <Typography variant="subtitle2" fontWeight="600" color="var(--text-secondary)" display="flex" alignItems="center" gap={1}>
                                         <Upload size={18} /> 파일 첨부
                                     </Typography>
                                     <Button
@@ -224,7 +228,7 @@ const BoardWritePage = ({ menu, setMenu }) => {
                                         component="label"
                                         startIcon={<CloudUpload size={16} />}
                                         size="small"
-                                        sx={{ textTransform: 'none', bgcolor: 'white' }}
+                                        sx={{ textTransform: 'none', bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', borderColor: 'var(--border-color)' }}
                                     >
                                         파일 선택
                                         <input type="file" multiple hidden onChange={handleFileChange} />
@@ -239,24 +243,24 @@ const BoardWritePage = ({ menu, setMenu }) => {
                                                 label={`${file.name} (${Math.round(file.size / 1024)}KB)`}
                                                 onDelete={() => removeFile(i)}
                                                 variant="outlined"
-                                                sx={{ bgcolor: 'white' }}
+                                                sx={{ bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', borderColor: 'var(--border-color)' }}
                                             />
                                         ))}
                                     </Box>
                                 ) : (
-                                    <Typography variant="body2" color="#94a3b8" align="center" py={2}>
+                                    <Typography variant="body2" color="var(--text-secondary)" align="center" py={2}>
                                         첨부할 파일을 선택해주세요.
                                     </Typography>
                                 )}
                             </Box>
 
-                            <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ pt: 2, borderTop: '1px solid #f1f5f9' }}>
+                            <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ pt: 2, borderTop: '1px solid var(--border-color)' }}>
                                 <Button
                                     variant="outlined"
                                     color="inherit"
                                     startIcon={<X size={18} />}
                                     onClick={() => navigate('/board')}
-                                    sx={{ borderRadius: 2, textTransform: 'none', color: '#64748b' }}
+                                    sx={{ borderRadius: 2, textTransform: 'none', color: 'var(--text-secondary)', borderColor: 'var(--border-color)' }}
                                 >
                                     취소
                                 </Button>

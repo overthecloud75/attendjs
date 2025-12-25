@@ -11,7 +11,10 @@ import { options } from '../../configs/options.js'
 import { getToday } from '../../utils/DateUtil'
 import { getCreditCardNo } from '../../utils/EventUtil'
 import ReactQuill from 'react-quill-new'
+
 import 'react-quill-new/dist/quill.snow.css'
+import { Calendar, CreditCard, DollarSign, FileText, Save, Trash2, X, PenTool, Edit } from 'lucide-react'
+import { InputAdornment } from '@mui/material'
 
 const CardUpdate = ({ writeMode, page, columns, data, setData, open, setOpen, rowData }) => {
     const [focus, setFocus] = useState('info')
@@ -159,8 +162,11 @@ const CardUpdate = ({ writeMode, page, columns, data, setData, open, setOpen, ro
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
-            <DialogTitle>Update {page}</DialogTitle>
-            <DialogContent>
+            <DialogTitle sx={{ bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: 1 }}>
+                {writeMode ? <PenTool size={20} /> : <Edit size={20} />}
+                {writeMode ? '카드 내역 작성' : '카드 내역 수정'}
+            </DialogTitle>
+            <DialogContent sx={{ bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', pt: 3 }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DatePicker']}>
                         <DatePicker
@@ -168,7 +174,31 @@ const CardUpdate = ({ writeMode, page, columns, data, setData, open, setOpen, ro
                             format={'YYYY-MM-DD'}
                             value={dayjs(value.date)}
                             onChange={(newValue) => setValue({ ...value, date: newValue.format('YYYY-MM-DD') })}
-                            sx={{ width: '100%' }}
+                            sx={{ width: '100%', mt: 1 }}
+                            slotProps={{
+                                textField: {
+                                    sx: {
+                                        '& .MuiOutlinedInput-root': {
+                                            color: 'var(--text-primary)',
+                                            '& fieldset': { borderColor: 'var(--border-color)' },
+                                            '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                            '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+                                        },
+                                        '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                        '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' },
+                                        '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                                    },
+                                    slotProps: {
+                                        input: {
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <Calendar size={18} style={{ color: 'var(--text-secondary)', marginRight: 8 }} />
+                                                </InputAdornment>
+                                            )
+                                        }
+                                    }
+                                }
+                            }}
                         />
                     </DemoContainer>
                 </LocalizationProvider>
@@ -188,6 +218,27 @@ const CardUpdate = ({ writeMode, page, columns, data, setData, open, setOpen, ro
                                 key={index}
                                 onChange={handleChange}
                                 autoComplete='false'
+                                sx={{
+                                    mt: 2,
+                                    '& .MuiOutlinedInput-root': {
+                                        color: 'var(--text-primary)',
+                                        '& fieldset': { borderColor: 'var(--border-color)' },
+                                        '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                        '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+                                    },
+                                    '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                    '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' },
+                                    '& .MuiSelect-icon': { color: 'var(--text-secondary)' }
+                                }}
+                                slotProps={{
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <CreditCard size={18} style={{ color: 'var(--text-secondary)' }} />
+                                            </InputAdornment>
+                                        ),
+                                    }
+                                }}
                             >
                                 {options[item.accessorKey].map((option) => (
                                     <MenuItem
@@ -213,6 +264,29 @@ const CardUpdate = ({ writeMode, page, columns, data, setData, open, setOpen, ro
                                 key={index}
                                 onChange={handleChange}
                                 autoComplete='false'
+                                sx={{
+                                    mt: 2,
+                                    '& .MuiOutlinedInput-root': {
+                                        color: 'var(--text-primary)',
+                                        '& fieldset': { borderColor: 'var(--border-color)' },
+                                        '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                        '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+                                    },
+                                    '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                    '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' }
+                                }}
+                                slotProps={{
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                {['amount', 'cost'].includes(item.accessorKey) ?
+                                                    <DollarSign size={18} style={{ color: 'var(--text-secondary)' }} /> :
+                                                    <FileText size={18} style={{ color: 'var(--text-secondary)' }} />
+                                                }
+                                            </InputAdornment>
+                                        ),
+                                    }
+                                }}
                             />
                         )
                     } else if (item.accessorKey !== 'date') {
@@ -226,12 +300,16 @@ const CardUpdate = ({ writeMode, page, columns, data, setData, open, setOpen, ro
                                 variant='standard'
                                 value={value[item.accessorKey] ? value[item.accessorKey] : ''}
                                 key={index}
+
+                                autoComplete='false'
+                                sx={{ mt: 2 }}
                                 slotProps={{
                                     input: {
                                         readOnly: true,
+                                        sx: { color: 'var(--text-secondary)' }
                                     },
+                                    inputLabel: { sx: { color: 'var(--text-secondary)' } }
                                 }}
-                                autoComplete='false'
                             />
                         )
                     }
@@ -244,13 +322,37 @@ const CardUpdate = ({ writeMode, page, columns, data, setData, open, setOpen, ro
                     readOnly={!writeMode}
                     modules={writeMode ? modules : { toolbar: false }}
                     placeholder='여기에 영수증 사진을 upload 해주세요.'
-                    style={{ height: '300px', marginBottom: '50px', marginTop: '20px' }}
+                    style={{ height: '300px', marginBottom: '50px', marginTop: '20px', color: 'var(--text-primary)' }}
                 />
             </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} variant='outlined'>Cancel</Button>
-                <Button onClick={handleUpdate} variant='outlined'>{writeMode ? 'Write' : 'Update'}</Button>
-                {!writeMode && (<Button onClick={handleDelete} variant='outlined'>Delete</Button>)}
+            <DialogActions sx={{ p: 3, bgcolor: 'var(--card-bg)', borderTop: '1px solid var(--border-color)' }}>
+                <Button
+                    onClick={handleClose}
+                    variant='outlined'
+                    sx={{ color: 'var(--text-secondary)', borderColor: 'var(--border-color)', '&:hover': { bgcolor: 'var(--bg-secondary)', borderColor: 'var(--text-secondary)' } }}
+                    startIcon={<X size={18} />}
+                >
+                    취소
+                </Button>
+                {!writeMode &&
+                    (<Button
+                        onClick={handleDelete}
+                        variant='outlined'
+                        color="error"
+                        sx={{ borderColor: 'error.main', '&:hover': { bgcolor: 'error.light', color: 'white', borderColor: 'error.main' } }}
+                        startIcon={<Trash2 size={18} />}
+                    >
+                        삭제
+                    </Button>)
+                }
+                <Button
+                    onClick={handleUpdate}
+                    variant='contained'
+                    sx={{ bgcolor: '#3b82f6', '&:hover': { bgcolor: '#2563eb' } }}
+                    startIcon={<Save size={18} />}
+                >
+                    {writeMode ? '작성' : '수정'}
+                </Button>
             </DialogActions>
         </Dialog>
     )

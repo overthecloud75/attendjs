@@ -87,7 +87,7 @@ const APIDialog = ({ open, apiKey: initialApiKey, handleClose }) => {
             maxWidth="sm"
             slotProps={{
                 paper: {
-                    sx: { borderRadius: 3, padding: 1 }
+                    sx: { borderRadius: 3, padding: 1, bgcolor: 'var(--card-bg)', color: 'var(--text-primary)' }
                 }
             }}
         >
@@ -96,7 +96,7 @@ const APIDialog = ({ open, apiKey: initialApiKey, handleClose }) => {
             </DialogTitle>
             <DialogContent>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="var(--text-secondary)">
                         이 API Key는 외부 애플리케이션 연동에 사용되는 보안 자격 증명입니다.<br />
                         타인에게 노출되지 않도록 주의해 주세요.
                     </Typography>
@@ -145,7 +145,15 @@ const APIDialog = ({ open, apiKey: initialApiKey, handleClose }) => {
                             '& .MuiOutlinedInput-root': {
                                 fontFamily: 'monospace',
                                 fontWeight: 500,
-                            }
+                                color: 'var(--text-primary)',
+                                '& fieldset': { borderColor: 'var(--border-color)' },
+                                '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+                            },
+                            '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                            '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' },
+                            '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' },
+                            '& .MuiIconButton-root': { color: 'var(--text-secondary)' }
                         }}
                     />
                 </Box>
@@ -161,7 +169,7 @@ const APIDialog = ({ open, apiKey: initialApiKey, handleClose }) => {
                 >
                     {apiKey ? '재발급 (Regenerate)' : '새로 발급 (Generate)'}
                 </Button>
-                <Button onClick={handleClose} variant="outlined" color="inherit">
+                <Button onClick={handleClose} variant="outlined" sx={{ color: 'var(--text-secondary)', borderColor: 'var(--border-color)', '&:hover': { bgcolor: 'var(--bg-secondary)', borderColor: 'var(--text-secondary)' } }}>
                     닫기
                 </Button>
             </DialogActions>

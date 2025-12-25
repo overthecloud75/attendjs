@@ -5,6 +5,8 @@ import { format } from 'date-fns'
 import { useSelector } from 'react-redux'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
+import { User, Type, Calendar, Save, Trash2, X, PenTool, Edit } from 'lucide-react'
+import { InputAdornment } from '@mui/material'
 
 const EditWrite = ({ writeMode, page, columns, data, setData, open, setOpen, rowData }) => {
 
@@ -89,8 +91,11 @@ const EditWrite = ({ writeMode, page, columns, data, setData, open, setOpen, row
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth='lg'>
-            <DialogTitle>Write {page}</DialogTitle>
-            <DialogContent>
+            <DialogTitle sx={{ bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: 1 }}>
+                {writeMode ? <PenTool size={20} /> : <Edit size={20} />}
+                {writeMode ? '글 작성' : '글 수정'}
+            </DialogTitle>
+            <DialogContent sx={{ bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', pt: 3 }}>
                 {columns.map((item, index) => {
                     return (
                         value[item.accessorKey] !== undefined &&
@@ -104,10 +109,21 @@ const EditWrite = ({ writeMode, page, columns, data, setData, open, setOpen, row
                                 variant='standard'
                                 value={value[item.accessorKey] ? value[item.accessorKey] : ''}
                                 key={index}
+                                sx={{ mt: 2 }}
                                 slotProps={{
                                     input: {
                                         readOnly: true,
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                {['createdAt', 'updatedAt'].includes(item.accessorKey) ?
+                                                    <Calendar size={18} style={{ color: 'var(--text-secondary)' }} /> :
+                                                    <User size={18} style={{ color: 'var(--text-secondary)' }} />
+                                                }
+                                            </InputAdornment>
+                                        ),
+                                        sx: { color: 'var(--text-secondary)' }
                                     },
+                                    inputLabel: { sx: { color: 'var(--text-secondary)' } }
                                 }}
                             />
                         ) : (
@@ -121,6 +137,26 @@ const EditWrite = ({ writeMode, page, columns, data, setData, open, setOpen, row
                                 value={value[item.accessorKey] ? value[item.accessorKey] : ''}
                                 key={index}
                                 onChange={handleInputChange}
+                                sx={{
+                                    mt: 2,
+                                    '& .MuiOutlinedInput-root': {
+                                        color: 'var(--text-primary)',
+                                        '& fieldset': { borderColor: 'var(--border-color)' },
+                                        '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                        '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+                                    },
+                                    '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                    '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' }
+                                }}
+                                slotProps={{
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                {item.accessorKey === 'title' && <Type size={18} style={{ color: 'var(--text-secondary)' }} />}
+                                            </InputAdornment>
+                                        ),
+                                    }
+                                }}
                             />
                         )
 
@@ -132,15 +168,37 @@ const EditWrite = ({ writeMode, page, columns, data, setData, open, setOpen, row
                     value={value.content || ''}
                     onChange={(content) => setValue({ ...value, content })}
                     placeholder="여기에 내용을 입력하세요..."
-                    style={{ height: '300px', marginBottom: '50px', marginTop: '20px' }}
+                    style={{ height: '300px', marginBottom: '50px', marginTop: '20px', color: 'var(--text-primary)' }}
                 />
             </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} variant='outlined'>Cancel</Button>
-                <Button onClick={handleUpdate} variant='outlined'>{writeMode ? 'Write' : 'Update'}</Button>
+            <DialogActions sx={{ p: 3, bgcolor: 'var(--card-bg)', borderTop: '1px solid var(--border-color)' }}>
+                <Button
+                    onClick={handleClose}
+                    variant='outlined'
+                    sx={{ color: 'var(--text-secondary)', borderColor: 'var(--border-color)', '&:hover': { bgcolor: 'var(--bg-secondary)', borderColor: 'var(--text-secondary)' } }}
+                    startIcon={<X size={18} />}
+                >
+                    취소
+                </Button>
                 {!writeMode &&
-                    (<Button onClick={handleDelete} variant='outlined'>Delete</Button>)
+                    (<Button
+                        onClick={handleDelete}
+                        variant='outlined'
+                        color="error"
+                        sx={{ borderColor: 'error.main', '&:hover': { bgcolor: 'error.light', color: 'white', borderColor: 'error.main' } }}
+                        startIcon={<Trash2 size={18} />}
+                    >
+                        삭제
+                    </Button>)
                 }
+                <Button
+                    onClick={handleUpdate}
+                    variant='contained'
+                    sx={{ bgcolor: '#3b82f6', '&:hover': { bgcolor: '#2563eb' } }}
+                    startIcon={<Save size={18} />}
+                >
+                    {writeMode ? '작성' : '수정'}
+                </Button>
             </DialogActions>
         </Dialog>
     )

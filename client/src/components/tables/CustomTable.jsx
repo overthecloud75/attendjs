@@ -22,8 +22,8 @@ const Td = ({ children, ...props }) => (
     <TableCell
         sx={{
             padding: '12px 16px',
-            borderBottom: '1px solid #f1f5f9',
-            color: '#475569',
+            borderBottom: '1px solid var(--border-color)',
+            color: 'var(--text-secondary)',
             fontSize: { xs: 12, sm: 13 },
             whiteSpace: 'nowrap',
             overflow: 'hidden',
@@ -39,16 +39,16 @@ const Th = ({ children, ...props }) => (
     <TableCell
         sx={{
             padding: '14px 16px',
-            background: '#f8fafc',
-            color: '#1e293b',
+            background: 'var(--bg-secondary)',
+            color: 'var(--text-primary)',
             fontWeight: 600,
             fontSize: { xs: 12, sm: 13 },
             textTransform: 'uppercase',
             letterSpacing: '0.02em',
-            borderBottom: '2px solid #e2e8f0',
+            borderBottom: '2px solid var(--border-color)',
             cursor: 'pointer',
             transition: 'background 0.2s ease',
-            '&:hover': { background: '#f1f5f9' },
+            '&:hover': { background: 'var(--hover-bg)' },
             whiteSpace: 'nowrap'
         }}
         {...props}
@@ -122,7 +122,8 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName }) => 
                     width: '100%',
                     overflow: 'hidden',
                     borderRadius: 3,
-                    border: '1px solid #e2e8f0',
+                    bgcolor: 'var(--card-bg)',
+                    border: '1px solid var(--border-color)',
                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)'
                 }}
             >
@@ -156,7 +157,7 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName }) => 
                                         sx={{
                                             transition: 'background-color 0.1s',
                                             '&:hover': {
-                                                backgroundColor: '#f8fafc !important',
+                                                backgroundColor: 'var(--hover-bg) !important',
                                             },
                                         }}
                                     >
@@ -164,7 +165,7 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName }) => 
                                             <Typography
                                                 variant="body2"
                                                 sx={{
-                                                    color: '#64748b',
+                                                    color: 'var(--text-secondary)',
                                                     fontWeight: 500,
                                                     cursor: 'pointer',
                                                     textDecoration: 'none',
@@ -188,10 +189,10 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName }) => 
                         </Table>
                     </TableContainer>
                 ) : (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 8, color: '#64748b', textAlign: 'center' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 8, color: 'var(--text-secondary)', textAlign: 'center' }}>
                         <Typography sx={{ fontSize: 48, mb: 2, filter: 'grayscale(1)', opacity: 0.5 }}>📊</Typography>
-                        <Typography sx={{ fontSize: 16, fontWeight: 600, color: '#1e293b', mb: 1 }}>데이터가 없습니다</Typography>
-                        <Typography sx={{ fontSize: 14, color: '#64748b' }}>새로운 데이터를 추가하거나 검색 조건을 변경해보세요.</Typography>
+                        <Typography sx={{ fontSize: 16, fontWeight: 600, color: 'var(--text-primary)', mb: 1 }}>데이터가 없습니다</Typography>
+                        <Typography sx={{ fontSize: 14, color: 'var(--text-secondary)' }}>새로운 데이터를 추가하거나 검색 조건을 변경해보세요.</Typography>
                     </Box>
                 )}
 

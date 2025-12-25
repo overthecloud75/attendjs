@@ -27,7 +27,7 @@ const Advertisement = () => {
                     sx={{
                         fontSize: { md: '3rem', lg: '3.5rem' },
                         fontWeight: 700,
-                        color: 'black',
+                        color: 'var(--text-primary)',
                         textAlign: 'center',
                         lineHeight: 1.2,
                         letterSpacing: '-0.02em',
@@ -40,7 +40,7 @@ const Advertisement = () => {
                     sx={{
                         fontSize: { md: '1.5rem', lg: '1.8rem' },
                         textAlign: 'center',
-                        color: '#555',
+                        color: 'var(--text-secondary)',
                         fontWeight: 500,
                         letterSpacing: '-0.01em'
                     }}

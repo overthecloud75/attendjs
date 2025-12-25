@@ -115,8 +115,8 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                     sx={{
                         p: 2,
                         borderRadius: 3,
-                        bgcolor: depth > 0 ? '#f8fafc' : 'white',
-                        border: '1px solid #e2e8f0'
+                        bgcolor: depth > 0 ? 'var(--bg-secondary)' : 'var(--card-bg)',
+                        border: '1px solid var(--border-color)'
                     }}
                 >
                     <Stack direction="row" spacing={2} alignItems="flex-start">
@@ -124,8 +124,8 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                             sx={{
                                 width: 32,
                                 height: 32,
-                                bgcolor: '#eff6ff',
-                                color: '#3b82f6',
+                                bgcolor: 'var(--bg-active)',
+                                color: 'var(--text-active)',
                                 fontSize: '0.875rem',
                                 fontWeight: 700
                             }}
@@ -135,10 +135,10 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                         <Box sx={{ flex: 1 }}>
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
                                 <Stack direction="row" spacing={1} alignItems="center">
-                                    <Typography variant="subtitle2" fontWeight="700" color="#1e293b">
+                                    <Typography variant="subtitle2" fontWeight="700" color="var(--text-primary)">
                                         {comment.authorName}
                                     </Typography>
-                                    <Typography variant="caption" color="text.secondary">
+                                    <Typography variant="caption" color="var(--text-secondary)">
                                         {comment.createdAt?.substring(0, 16).replace('T', ' ')}
                                     </Typography>
                                 </Stack>
@@ -149,7 +149,7 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                                 )}
                             </Stack>
 
-                            <Typography variant="body2" sx={{ my: 1, color: '#334155', lineHeight: 1.6 }}>
+                            <Typography variant="body2" sx={{ my: 1, color: 'var(--text-primary)', lineHeight: 1.6 }}>
                                 {comment.content}
                             </Typography>
 
@@ -158,11 +158,11 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                                 startIcon={<CornerDownRight size={14} />}
                                 onClick={() => setReplyTarget(replyTarget === comment._id ? null : comment._id)}
                                 sx={{
-                                    color: replyTarget === comment._id ? '#3b82f6' : '#64748b',
+                                    color: replyTarget === comment._id ? 'var(--text-active)' : 'var(--text-secondary)',
                                     minWidth: 'auto',
                                     p: 0,
                                     fontSize: '0.75rem',
-                                    '&:hover': { bg: 'transparent', color: '#3b82f6' }
+                                    '&:hover': { bg: 'transparent', color: 'var(--text-active)' }
                                 }}
                             >
                                 답글 달기
@@ -179,7 +179,7 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                                         onChange={(e) => setCommentContent(e.target.value)}
                                         sx={{
                                             mb: 1,
-                                            '& .MuiOutlinedInput-root': { bgcolor: 'white' }
+                                            '& .MuiOutlinedInput-root': { bgcolor: 'var(--card-bg)' }
                                         }}
                                     />
                                     <Stack direction="row" justifyContent="flex-end" spacing={1}>
@@ -222,7 +222,7 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                     <Button
                         startIcon={<ArrowLeft size={18} />}
                         onClick={() => navigate('/board')}
-                        sx={{ mb: 2, color: '#64748b', '&:hover': { color: '#1e293b', bgcolor: 'transparent' } }}
+                        sx={{ mb: 2, color: 'var(--text-secondary)', '&:hover': { color: 'var(--text-primary)', bgcolor: 'transparent' } }}
                     >
                         목록으로 돌아가기
                     </Button>
@@ -233,8 +233,9 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                             p: 4,
                             mb: 3,
                             borderRadius: 3,
-                            border: '1px solid #e2e8f0',
-                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)'
+                            border: '1px solid var(--border-color)',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                            bgcolor: 'var(--card-bg)'
                         }}
                     >
                         {/* 헤더 */}
@@ -243,7 +244,7 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                                 <Chip
                                     label={post.boardType}
                                     size="small"
-                                    sx={{ bgcolor: '#eff6ff', color: '#3b82f6', fontWeight: 600, border: '1px solid #dbeafe' }}
+                                    sx={{ bgcolor: 'var(--bg-active)', color: 'var(--text-active)', fontWeight: 600, border: '1px solid var(--border-color)' }}
                                 />
                                 {post.isPinned && (
                                     <Chip
@@ -253,7 +254,7 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                                     />
                                 )}
                             </Stack>
-                            <Typography variant="h5" fontWeight="800" color="#1e293b" sx={{ mb: 3, lineHeight: 1.3 }}>
+                            <Typography variant="h5" fontWeight="800" color="var(--text-primary)" sx={{ mb: 3, lineHeight: 1.3 }}>
                                 {post.title}
                             </Typography>
 
@@ -265,16 +266,16 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                                 sx={{ pb: 3, borderBottom: '1px solid #f1f5f9' }}
                             >
                                 <Stack direction="row" spacing={3}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#64748b' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)' }}>
                                         <User size={16} />
                                         <Typography variant="body2" fontWeight={500}>{post.authorName}</Typography>
                                     </Box>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#64748b' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)' }}>
                                         <Calendar size={16} />
                                         <Typography variant="body2">{post.createdAt?.substring(0, 16).replace('T', ' ')}</Typography>
                                     </Box>
                                 </Stack>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#64748b', bgcolor: '#f8fafc', px: 1.5, py: 0.5, borderRadius: 2 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)', bgcolor: 'var(--bg-secondary)', px: 1.5, py: 0.5, borderRadius: 2 }}>
                                     <Eye size={16} />
                                     <Typography variant="body2" fontWeight={500}>{post.viewCount}</Typography>
                                 </Box>
@@ -286,7 +287,7 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                             minHeight: 200,
                             mb: 6,
                             typography: 'body1',
-                            color: '#334155',
+                            color: 'var(--text-primary)',
                             lineHeight: 1.8,
                             '& img': {
                                 maxWidth: '100%',
@@ -302,7 +303,7 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                         {/* 첨부파일 */}
                         {post.files && post.files.length > 0 && (
                             <Box sx={{ mb: 4 }}>
-                                <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: '700', color: '#1e293b', display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: '700', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 1 }}>
                                     <FileText size={16} /> 첨부파일
                                 </Typography>
                                 <Stack direction="row" flexWrap="wrap" gap={1}>
@@ -319,15 +320,15 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                                                 gap: 1.5,
                                                 px: 2,
                                                 py: 1,
-                                                bgcolor: '#f8fafc',
-                                                border: '1px solid #e2e8f0',
+                                                bgcolor: 'var(--bg-secondary)',
+                                                border: '1px solid var(--border-color)',
                                                 borderRadius: 2,
                                                 textDecoration: 'none',
-                                                color: '#475569',
+                                                color: 'var(--text-secondary)',
                                                 transition: 'all 0.2s',
                                                 '&:hover': {
-                                                    bgcolor: '#f1f5f9',
-                                                    borderColor: '#cbd5e1'
+                                                    bgcolor: 'var(--hover-bg)',
+                                                    borderColor: 'var(--text-secondary)'
                                                 }
                                             }}
                                         >
@@ -362,8 +363,8 @@ const BoardDetailPage = ({ menu, setMenu }) => {
 
                     {/* 댓글 섹션 */}
                     <Box sx={{ mb: 4 }}>
-                        <Typography variant="h6" fontWeight="700" color="#1e293b" sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <MessageSquare size={20} /> 댓글 <Box component="span" sx={{ color: '#3b82f6' }}>{comments.length}</Box>
+                        <Typography variant="h6" fontWeight="700" color="var(--text-primary)" sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <MessageSquare size={20} /> 댓글 <Box component="span" sx={{ color: 'var(--text-active)' }}>{comments.length}</Box>
                         </Typography>
 
                         <Paper
@@ -372,7 +373,8 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                                 p: 3,
                                 mb: 3,
                                 borderRadius: 3,
-                                border: '1px solid #e2e8f0',
+                                border: '1px solid var(--border-color)',
+                                bgcolor: 'var(--card-bg)'
                             }}
                         >
                             <Box sx={{ display: 'flex', gap: 2 }}>
@@ -391,7 +393,7 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                                     sx={{
                                         '& .MuiOutlinedInput-root': {
                                             borderRadius: 2,
-                                            bgcolor: '#f8fafc'
+                                            bgcolor: 'var(--bg-secondary)'
                                         }
                                     }}
                                 />

@@ -1,12 +1,15 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Box, AppBar, Toolbar, Avatar, Badge, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { Menu, MessageSquare, Bell, ChevronDown } from 'lucide-react'
+import { Menu, MessageSquare, ChevronDown, Moon, Sun } from 'lucide-react'
 import ProfileMenu from '../bar/ProfileMenu'
+import { toggleTheme } from '../../storage/themeSlice'
 
 const Navbar = ({ menu, setMenu }) => {
     const user = useSelector(state => state.user)
+    const theme = useSelector(state => state.theme.mode)
+    const dispatch = useDispatch()
     const [anchorEl, setAnchorEl] = useState(null)
 
     const handleMenu = () => {
@@ -20,9 +23,9 @@ const Navbar = ({ menu, setMenu }) => {
     return (
         <Box>
             <AppBar position='static' elevation={0} sx={{
-                background: 'rgba(255, 255, 255, 0.9)',
+                background: 'var(--bg-primary)',
                 backdropFilter: 'blur(8px)',
-                borderBottom: '1px solid #f1f5f9'
+                borderBottom: '1px solid var(--border-color)'
             }}>
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', minHeight: '64px' }}>
                     {/* Left: Menu Toggle */}
@@ -50,17 +53,15 @@ const Navbar = ({ menu, setMenu }) => {
                     {/* Right: Icons & User Profile */}
                     <RightSection>
                         <IconsContainer>
+                            <IconItem onClick={() => dispatch(toggleTheme())}>
+                                <IconWrapper>
+                                    {theme === 'dark' ? <Sun size={20} strokeWidth={2} /> : <Moon size={20} strokeWidth={2} />}
+                                </IconWrapper>
+                            </IconItem>
                             <IconItem>
                                 <CustomBadge badgeContent={2} max={99}>
                                     <IconWrapper>
                                         <MessageSquare size={20} strokeWidth={2} />
-                                    </IconWrapper>
-                                </CustomBadge>
-                            </IconItem>
-                            <IconItem>
-                                <CustomBadge badgeContent={5} max={99}>
-                                    <IconWrapper>
-                                        <Bell size={20} strokeWidth={2} />
                                     </IconWrapper>
                                 </CustomBadge>
                             </IconItem>
@@ -118,10 +119,10 @@ const IconItem = styled(Box)({
     width: '40px',
     height: '40px',
     borderRadius: '12px',
-    color: '#64748b',
+    color: 'var(--text-secondary)',
     transition: 'all 0.2s ease',
     '&:hover': {
-        background: '#f1f5f9',
+        background: 'var(--hover-bg)',
         color: '#4f46e5',
         transform: 'translateY(-1px)',
     },
@@ -161,8 +162,8 @@ const UserSection = styled(Box)({
     transition: 'all 0.2s ease',
     border: '1px solid transparent',
     '&:hover': {
-        background: '#fff',
-        borderColor: '#e2e8f0',
+        background: 'var(--hover-bg)',
+        borderColor: 'var(--border-color)',
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
     },
 })
@@ -180,7 +181,7 @@ const UserInfo = styled(Box)(({ theme }) => ({
 const UserName = styled(Typography)({
     fontSize: '14px',
     fontWeight: 600,
-    color: '#1e293b',
+    color: 'var(--text-primary)',
     lineHeight: 1.2,
     marginBottom: '2px',
 })
@@ -188,10 +189,10 @@ const UserName = styled(Typography)({
 const UserRole = styled(Typography)({
     fontSize: '11px',
     fontWeight: 500,
-    color: '#64748b',
+    color: 'var(--text-secondary)',
     lineHeight: 1,
     padding: '2px 6px',
-    background: '#f1f5f9',
+    background: 'var(--bg-secondary)',
     borderRadius: '4px',
 })
 
@@ -216,14 +217,14 @@ const MenuToggleButton = styled(Box, {
     borderRadius: '12px',
     cursor: 'pointer',
     transition: 'all 0.2s ease',
-    background: '#fff',
-    color: '#64748b',
-    border: '1px solid #e2e8f0',
+    background: 'var(--bg-primary)',
+    color: 'var(--text-secondary)',
+    border: '1px solid var(--border-color)',
     marginRight: '20px',
     '&:hover': {
-        background: '#f8fafc',
+        background: 'var(--hover-bg)',
         color: '#4f46e5',
-        borderColor: '#cbd5e1',
+        borderColor: 'var(--border-color)',
         transform: 'translateY(-1px)',
     },
 }))

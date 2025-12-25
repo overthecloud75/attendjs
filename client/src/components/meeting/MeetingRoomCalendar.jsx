@@ -91,9 +91,9 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
                 px: { xs: 1, sm: 3 },
                 py: { xs: 1, sm: 2 },
                 borderRadius: 3,
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--border-color)',
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
-                bgcolor: 'white'
+                bgcolor: 'var(--card-bg)'
             }}
         >
             <Stack
@@ -116,7 +116,7 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
                     }}>
                         <CalendarIcon size={20} />
                     </Box>
-                    <Typography variant='h6' fontWeight='600' color="#1e293b">
+                    <Typography variant='h6' fontWeight='600' color="var(--text-primary)">
                         회의실 예약 현황
                     </Typography>
                 </Box>
@@ -132,21 +132,30 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
             <Box
                 sx={{
                     '& .fc': { fontFamily: 'inherit' },
-                    '& .fc-col-header-cell-cushion': { color: '#475569', fontWeight: 600, py: 1 },
-                    '& .fc-timegrid-slot-label-cushion': { color: '#64748b', fontSize: '0.85rem' },
-                    '& .fc-theme-standard td, .fc-theme-standard th': { borderColor: '#f1f5f9' },
+                    '& .fc-col-header-cell-cushion': { color: 'var(--text-secondary)', fontWeight: 600, py: 1 },
+                    '& .fc-timegrid-slot-label-cushion': { color: 'var(--text-secondary)', fontSize: '0.85rem' },
+                    '& .fc-theme-standard td, .fc-theme-standard th': { borderColor: 'var(--border-color)' },
                     '& .fc-header-toolbar': { mb: 3 },
-                    '& .fc-button': {
-                        bgcolor: 'white',
-                        color: '#475569',
-                        border: '1px solid #e2e8f0',
+                    '& .fc-buttons .fc-button': { // Added .fc-buttons to be more specific if possible, but keeping .fc-button is fine
+                        bgcolor: 'var(--bg-primary)',
+                        color: 'var(--text-secondary)',
+                        border: '1px solid var(--border-color)',
                         boxShadow: 'none',
                         textTransform: 'capitalize',
                         fontWeight: 500
                     },
-                    '& .fc-button:hover': { bgcolor: '#f8fafc', color: '#1e293b', borderColor: '#cbd5e1' },
+                    '& .fc-button': {
+                        bgcolor: 'var(--bg-primary)',
+                        color: 'var(--text-secondary)',
+                        border: '1px solid var(--border-color)',
+                        boxShadow: 'none',
+                        textTransform: 'capitalize',
+                        fontWeight: 500
+                    },
+                    '& .fc-button:hover': { bgcolor: 'var(--hover-bg)', color: 'var(--text-primary)', borderColor: 'var(--border-color)' },
                     '& .fc-button-active': { bgcolor: '#eff6ff !important', color: '#3b82f6 !important', borderColor: '#3b82f6 !important' },
                     '& .fc-today-button': { fontWeight: 600 },
+                    '& .fc-toolbar-title': { color: 'var(--text-primary)' },
                     '& .fc-event': { borderRadius: '6px', border: 'none', padding: '2px' }
                 }}
             >
@@ -166,16 +175,9 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
 
                         return (
                             <Box sx={{ p: '4px 6px', height: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                                <Typography
-                                    variant="subtitle2"
-                                    noWrap
-                                    sx={{ fontWeight: 700, fontSize: '0.75rem', lineHeight: 1.2, color: 'white', mb: 0.5 }}
-                                >
-                                    {title}
-                                </Typography>
                                 <Stack spacing={0}>
                                     <Typography variant="caption" noWrap sx={{ fontSize: '0.7rem', opacity: 0.9, color: 'rgba(255,255,255,0.9)' }}>
-                                        {timeText}
+                                        {`${title} - ${timeText}`}
                                     </Typography>
                                     <Typography variant="caption" noWrap sx={{ fontSize: '0.7rem', opacity: 0.8, color: 'rgba(255,255,255,0.8)' }}>
                                         {extendedProps.name}
