@@ -131,3 +131,4 @@ app.listen(8888, () => {
     runLeaveMigration() // [New] 마이그레이션 자동 실행
     logger.warn('Connected to backend.')
 })
+// Force Restart for Migration Check 4 - Full History

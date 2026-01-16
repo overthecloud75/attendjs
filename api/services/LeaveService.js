@@ -17,7 +17,7 @@ export default class LeaveService {
         // 만료된 내역 포함 전체 조회
         const histories = await LeaveHistory.find({
             employeeId
-        }).sort({ grantDate: -1 })
+        }).sort({ grantDate: -1 }).limit(3)
 
         // 3. Legacy 결과에 History 리스트만 추가하여 반환
         return {

@@ -7,13 +7,11 @@ import { logger } from '../config/winston.js'
 
 const runLeaveMigration = async () => {
     try {
-        const count = await LeaveHistory.countDocuments()
-        if (count > 0) {
-            logger.info('Leave Migration skipped: Data already exists.')
-            return
-        }
+        // [User Request] DB 초기화 후 다시 마이그레이션 진행
+        await LeaveHistory.deleteMany({})
+        logger.info('Existing LeaveHistory cleared.')
 
-        logger.info('Starting Leave Migration (Full History)...')
+        logger.info('Starting Leave Migration (Full History - Upsert Mode)...')
         const employees = await Employee.find({ regular: { $ne: '퇴사' } })
 
         let migratedCount = 0
@@ -25,6 +23,7 @@ const runLeaveMigration = async () => {
             const thisYear = new Date().getFullYear()
             const maxYears = thisYear - beginYear + 2 // 넉넉하게 잡음 (내부에서 날짜 체크함)
 
+            // 전체 이력 마이그레이션 (User Request: Full History)
             for (let offset = 0; offset < maxYears; offset++) {
                 if (offset === 0) {
                     await migrateCurrentYear(emp)
@@ -61,15 +60,17 @@ const migrateCurrentYear = async (emp) => {
         const expiryDate = new Date(grantDate)
         expiryDate.setFullYear(expiryDate.getFullYear() + 1)
 
-        await new LeaveHistory({
-            employeeId: emp.employeeId,
-            nthYear: summary.employeementPeriod,
-            type: 'annual',
-            totalDays: totalDays,
-            usedDays: pastUsed,
-            grantDate: grantDate,
-            expiryDate: expiryDate
-        }).save()
+        await LeaveHistory.updateOne(
+            { employeeId: emp.employeeId, nthYear: summary.employeementPeriod },
+            {
+                type: 'annual',
+                totalDays: totalDays,
+                usedDays: pastUsed,
+                grantDate: grantDate,
+                expiryDate: expiryDate
+            },
+            { upsert: true }
+        )
     } catch (err) {
         logger.warn(`Migration Error (Current Year) for ${emp.name}: ${err.message}`)
     }
@@ -105,15 +106,17 @@ const migratePastYear = async (emp, offset) => {
         const usedDays = await calculateUsageFromLogs(emp.employeeId, targetGrantDate, nextYearDate)
 
         // 4. 저장 (단, expired 상태로)
-        await new LeaveHistory({
-            employeeId: emp.employeeId,
-            nthYear: nthYear,
-            type: 'annual',
-            totalDays: totalDays,
-            usedDays: usedDays,
-            grantDate: targetGrantDate,
-            expiryDate: nextYearDate
-        }).save()
+        await LeaveHistory.updateOne(
+            { employeeId: emp.employeeId, nthYear: nthYear },
+            {
+                type: 'annual',
+                totalDays: totalDays,
+                usedDays: usedDays,
+                grantDate: targetGrantDate,
+                expiryDate: nextYearDate
+            },
+            { upsert: true }
+        )
 
     } catch (err) {
         logger.warn(`Migration Error (Past Year -${offset}) for ${emp.name}: ${err.message}`)
@@ -121,7 +124,7 @@ const migratePastYear = async (emp, offset) => {
 }
 
 const calculateTotalDays = (nthYear) => {
-    if (nthYear < 1) return 0
+    if (nthYear < 1) return 11 // 1년차(0)는 월차 11개 기준
 
     let days = 15 + Math.floor((nthYear - 1) / 2)
     if (days > 25) days = 25
