@@ -1,8 +1,11 @@
-import { Box, AppBar, Toolbar, List, Typography, ListItemButton, Tooltip } from '@mui/material'
+import { Box, AppBar, Toolbar, List, Typography, ListItemButton, Tooltip, Collapse } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Link, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { pagesInfo } from '../../configs/pages'
+import { ChevronUp, ChevronDown } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const itemDict = {
     Attendance: [
@@ -23,58 +26,101 @@ const itemDict = {
     ],
     Admin: [
         pagesInfo['summary'],
-        pagesInfo['location'],
+        pagesInfo['settings'],
         pagesInfo['loginhistory'],
     ]
 }
 
 const SidebarItems = ({ itemList }) => {
+    return (
+        <>
+            {itemList.map((item, itemIndex) => (
+                <SidebarItem key={itemIndex} item={item} />
+            ))}
+        </>
+    )
+}
+
+const SidebarItem = ({ item }) => {
     const user = useSelector(state => state.user)
     const location = useLocation()
+    const [open, setOpen] = useState(false)
+    const { t } = useTranslation()
+
+    const hasAccess = item.auth || user.isAdmin
+    if (!hasAccess) return null
+
+    // ... (rest of logic) ...
+    // Map title to translation key
+    // Title "Dashboard" -> "sidebar-dashboard"
+    const titleKey = `sidebar-${item.title.toLowerCase().replace(/\s+/g, '-')}`
+    const displayTitle = t(titleKey, item.title) // Fallback to original title
+
+    const hasChildren = item.children && item.children.length > 0
+    const isActive = location.pathname === item.to || (item.to !== '/' && location.pathname.startsWith(item.to))
+
+    useEffect(() => {
+        if (hasChildren && isActive) {
+            setOpen(true)
+        }
+    }, [location.pathname]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    const handleClick = (e) => {
+        if (hasChildren) {
+            // e.preventDefault() // Allow navigation
+            setOpen(!open)
+        }
+    }
 
     return (
         <>
-            {itemList.map((item, itemIndex) => {
-                const hasAccess = item.auth || user.isAdmin
-                if (!hasAccess) return null
+            <StyledListItemButton
+                component={item.to ? Link : 'div'}
+                to={item.to}
+                active={isActive ? 1 : 0}
+                sx={{ display: item.visible ? 'flex' : 'none' }}
+                onClick={handleClick}
+                disableRipple
+            >
+                <Tooltip
+                    title={displayTitle}
+                    placement='right'
+                    arrow
+                >
+                    <IconWrapper active={isActive ? 1 : 0}>
+                        {item.emoji}
+                    </IconWrapper>
+                </Tooltip>
+                <ItemText active={isActive ? 1 : 0}>
+                    {displayTitle}
+                </ItemText>
+                {hasChildren && (
+                    <Box sx={{ ml: 'auto', display: { xs: 'none', md: 'flex' } }}>
+                        {open ? <ChevronUp size={20} color='var(--text-secondary)' /> : <ChevronDown size={20} color='var(--text-secondary)' />}
+                    </Box>
+                )}
+            </StyledListItemButton>
 
-                // 정확히 일치하거나 하위 경로일 경우 활성화 (예: /board, /board/write)
-                const isActive = location.pathname === item.to || (item.to !== '/' && location.pathname.startsWith(item.to))
-
-                return (
-                    <StyledListItemButton
-                        component={Link}
-                        key={itemIndex}
-                        to={item.to}
-                        active={isActive ? 1 : 0}
-                        sx={{ display: item.visible ? 'flex' : 'none' }}
-                        disableRipple
-                    >
-                        <Tooltip
-                            title={item.title}
-                            placement='right'
-                            arrow
-                        >
-                            <IconWrapper active={isActive ? 1 : 0}>
-                                {item.emoji}
-                            </IconWrapper>
-                        </Tooltip>
-                        <ItemText active={isActive ? 1 : 0}>
-                            {item.title}
-                        </ItemText>
-                    </StyledListItemButton>
-                )
-            })}
+            {hasChildren && (
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding sx={{ pl: 2 }}>
+                        {item.children.map((child, index) => (
+                            <SidebarItem key={index} item={child} />
+                        ))}
+                    </List>
+                </Collapse>
+            )}
         </>
     )
 }
 
 const SidebarCategories = () => {
+    const { t } = useTranslation()
     return (
         Object.keys(itemDict).map((title, titleIndex) => (
             <div key={titleIndex}>
                 <CategoryTitle component='div'>
-                    {title}
+                    {t(title.toLowerCase(), title)}
                 </CategoryTitle>
                 <SidebarItems itemList={itemDict[title]} />
             </div>

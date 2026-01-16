@@ -54,6 +54,10 @@ export const createPost = async (req, res, next) => {
     }
 }
 
+const escapeRegex = (text) => {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+}
+
 // 게시글 목록 조회
 export const getPosts = async (req, res, next) => {
     try {
@@ -64,7 +68,8 @@ export const getPosts = async (req, res, next) => {
 
         // 검색 로직
         if (search) {
-            const regex = new RegExp(search, 'i')
+            const escapedSearch = escapeRegex(search)
+            const regex = new RegExp(escapedSearch, 'i')
             if (searchType === 'title') query.title = regex
             else if (searchType === 'content') query.content = regex
             else if (searchType === 'author') query.authorName = regex

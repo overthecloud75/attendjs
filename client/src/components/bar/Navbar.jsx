@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Box, AppBar, Toolbar, Avatar, Badge, Typography } from '@mui/material'
+import { Box, AppBar, Toolbar, Avatar, Badge, Typography, Divider } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Menu, MessageSquare, ChevronDown, Moon, Sun } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import ProfileMenu from '../bar/ProfileMenu'
 import { toggleTheme } from '../../storage/themeSlice'
 
@@ -10,6 +11,7 @@ const Navbar = ({ menu, setMenu }) => {
     const user = useSelector(state => state.user)
     const theme = useSelector(state => state.theme.mode)
     const dispatch = useDispatch()
+    const { i18n } = useTranslation()
     const [anchorEl, setAnchorEl] = useState(null)
 
     const handleMenu = () => {
@@ -53,6 +55,23 @@ const Navbar = ({ menu, setMenu }) => {
                     {/* Right: Icons & User Profile */}
                     <RightSection>
                         <IconsContainer>
+                            {/* Language Toggle */}
+                            <Box sx={{ display: 'flex', gap: 1, mr: 1 }}>
+                                <LanguageButton
+                                    active={i18n.language === 'ko' ? 1 : 0}
+                                    onClick={() => i18n.changeLanguage('ko')}
+                                >
+                                    KOR
+                                </LanguageButton>
+                                <Divider orientation="vertical" flexItem sx={{ bgcolor: 'var(--border-color)', height: 16, my: 'auto' }} />
+                                <LanguageButton
+                                    active={i18n.language === 'en' ? 1 : 0}
+                                    onClick={() => i18n.changeLanguage('en')}
+                                >
+                                    ENG
+                                </LanguageButton>
+                            </Box>
+
                             <IconItem onClick={() => dispatch(toggleTheme())}>
                                 <IconWrapper>
                                     {theme === 'dark' ? <Sun size={20} strokeWidth={2} /> : <Moon size={20} strokeWidth={2} />}
@@ -122,7 +141,7 @@ const IconItem = styled(Box)({
     color: 'var(--text-secondary)',
     transition: 'all 0.2s ease',
     '&:hover': {
-        background: 'var(--hover-bg)',
+        background: 'var(--hover-bg)', // This is #f1f5f9 in light mode
         color: '#4f46e5',
         transform: 'translateY(-1px)',
     },
@@ -227,4 +246,19 @@ const MenuToggleButton = styled(Box, {
         borderColor: 'var(--border-color)',
         transform: 'translateY(-1px)',
     },
+}))
+
+const LanguageButton = styled(Typography)(({ active }) => ({
+    fontSize: '12px',
+    fontWeight: 700,
+    cursor: 'pointer',
+    color: active ? '#4f46e5' : 'var(--text-secondary)',
+    transition: 'all 0.2s',
+    '&:hover': {
+        color: '#4f46e5',
+        background: 'var(--hover-bg)',
+        borderRadius: '4px',
+        padding: '2px 4px',
+        margin: '-2px -4px' // Compensate padding
+    }
 }))

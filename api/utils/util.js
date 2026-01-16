@@ -1,3 +1,5 @@
+import { formatToTimeZone } from 'date-fns-timezone'
+
 export const getToday = () => {
     const today = new Date()
     const yyyy = today.getFullYear()
@@ -156,4 +158,18 @@ export const sanitizeData = (data, type) => {
         default:
             return data
     }
+}
+
+export const dateAndTime = () => {
+    const dateTime = new Date()
+    const output = formatToTimeZone(dateTime, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })
+    const date = output.split(' ')[0]
+    const time = output.split(' ')[1]
+    return { date, time }
+}
+
+export const getRandomInt = (min = 1, max = 1000) => {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min)) + min //최댓값은 제외, 최솟값은 포함
 }

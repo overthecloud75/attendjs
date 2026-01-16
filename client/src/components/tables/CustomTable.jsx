@@ -58,7 +58,7 @@ const Th = ({ children, ...props }) => (
 )
 
 // https://geuni620.github.io/blog/2023/12/2/tanstack-table/
-const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName }) => {
+const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdClick }) => {
     // update시 page 설정
     const [selectedRowData, setSelectedRowData] = useState({})
     const [pagination, setPagination] = useState({
@@ -161,7 +161,7 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName }) => 
                                             },
                                         }}
                                     >
-                                        <Td align="center" onClick={(e) => handleUpdateClick(e, row.original)}>
+                                        <Td align="center" onClick={(e) => onIdClick ? onIdClick(row.original) : handleUpdateClick(e, row.original)}>
                                             <Typography
                                                 variant="body2"
                                                 sx={{

@@ -1,4 +1,5 @@
 import { useDispatch } from 'react-redux'
+import { Box, Button } from '@mui/material'
 import { useNavigate, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { requestAuth } from '../../utils/AuthUtil'
@@ -82,7 +83,7 @@ const Auth = ({ mode }) => {
     const { name, email, password } = formData
 
     return (
-        <div style={styles.container}>
+        <Box sx={{ flex: 1 }}>
             <div className='formContainer'>
                 <div className='formWrapper'>
                     <span className='logo'>SmartWork</span>
@@ -114,12 +115,21 @@ const Auth = ({ mode }) => {
                             required
                         />
                         {isLogin && <div id='cf-turnstile' />}
-                        <button
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
                             disabled={loading}
-                            style={styles.button}
+                            sx={{
+                                bgcolor: '#7b96ec',
+                                borderRadius: '8px',
+                                p: '10px',
+                                fontWeight: 'bold',
+                                '&:hover': { bgcolor: '#5d7cc6' }
+                            }}
                         >
                             {isLogin ? 'Sign in' : 'Sign up'}
-                        </button>
+                        </Button>
 
                         <p>
                             {isLogin ? "You don't have an account? " : "You do have an account? "}
@@ -135,13 +145,20 @@ const Auth = ({ mode }) => {
                         <div className='text-center'>또는</div>
 
                         {isLogin && (
-                            <button
+                            <Button
+                                fullWidth
+                                variant="contained"
                                 onClick={handleSSOLogin}
                                 disabled={loading}
-                                style={styles.ssoButton}
+                                sx={{
+                                    bgcolor: '#2F2F91',
+                                    borderRadius: '8px',
+                                    color: 'white',
+                                    '&:hover': { bgcolor: '#242475' }
+                                }}
                             >
                                 🔐 Microsoft 계정으로 로그인
-                            </button>
+                            </Button>
                         )}
 
                         {loading && <LoadingSpinner />}
@@ -149,25 +166,10 @@ const Auth = ({ mode }) => {
                     </form>
                 </div>
             </div>
-        </div>
+        </Box>
     )
 }
 
-const styles = {
-    container: {
-        flex: 1
-    },
-    button: {
-        borderRadius: '8px',
-        cursor: 'pointer',
-    },
-    ssoButton: {
-        backgroundColor: '#2F2F91',
-        color: 'white',
-        border: 'none',
-        borderRadius: '8px',
-        cursor: 'pointer',
-    }
-}
+
 
 export default Auth

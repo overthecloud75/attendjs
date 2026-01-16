@@ -7,6 +7,8 @@ import rateLimit from 'express-rate-limit'
 import csrf from 'csurf'
 
 import { logger, accessLogFormat } from './config/winston.js'
+import startLeaveScheduler from './jobs/leaveScheduler.js'
+import runLeaveMigration from './jobs/leaveMigration.js'
 import pingRoute from './routes/ping.js'
 import authRoute from './routes/auth.js'
 import usersRoute from './routes/users.js'
@@ -27,6 +29,7 @@ import confirmRoute from './routes/confirm.js'
 import uploadRoute from './routes/upload.js'
 import chatRoute from './routes/chat.js'
 import swaggerRoute from './routes/swagger.js'
+import settingsRoute from './routes/settings.js'
 import { getClientIP } from './utils/util.js'
 
 dotenv.config()
@@ -112,6 +115,7 @@ app.use('/api/board', boardRoute)
 app.use('/api/confirm', confirmRoute)
 app.use('/api/upload', uploadRoute)
 app.use('/api/chat', chatRoute)
+app.use('/api/settings', settingsRoute)
 app.use('/swagger', swaggerRoute)
 
 app.use((err, req, res, next) => {
@@ -123,5 +127,7 @@ app.use((err, req, res, next) => {
 
 app.listen(8888, () => {
     connect()
+    startLeaveScheduler()
+    runLeaveMigration() // [New] 마이그레이션 자동 실행
     logger.warn('Connected to backend.')
 })

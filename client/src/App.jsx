@@ -30,6 +30,11 @@ const BoardListPage = lazy(() => import('./pages/board/BoardListPage'))
 const BoardWritePage = lazy(() => import('./pages/board/BoardWritePage'))
 const BoardDetailPage = lazy(() => import('./pages/board/BoardDetailPage'))
 const CheckEmail = lazy(() => import('./pages/CheckEmail'))
+// Admin Settings Imports
+const SettingsLayout = lazy(() => import('./pages/admin/SettingsLayout'))
+const GeneralSettings = lazy(() => import('./pages/admin/settings/General'))
+const SecuritySettings = lazy(() => import('./pages/admin/settings/Security'))
+const NotificationSettings = lazy(() => import('./pages/admin/settings/Notifications'))
 
 function App() {
     const user = useSelector(state => state.user)
@@ -57,7 +62,18 @@ function App() {
                     <Route exact path='/wifi-attend' element={<Wifi menu={menu} setMenu={setMenu} />} />
                     <Route exact path='/gps-attend' element={<GPS menu={menu} setMenu={setMenu} />} />
                     <Route exact path='/summary' element={<Summary menu={menu} setMenu={setMenu} />} />
-                    <Route exact path='/location' element={<Location menu={menu} setMenu={setMenu} />} />
+                    {/* Admin Settings Routes */}
+                    {/* Admin Settings Routes */}
+                    <Route path='/admin/settings' element={<SettingsLayout menu={menu} setMenu={setMenu} />}>
+                        <Route index element={<Navigate to='/admin/settings/location' replace />} />
+                        <Route path='location' element={<Location />} />
+                        <Route path='general' element={<GeneralSettings />} />
+                        <Route path='security' element={<SecuritySettings />} />
+                        <Route path='notifications' element={<NotificationSettings />} />
+                    </Route>
+                    {/* Retro-compatibility or Access control */}
+                    <Route exact path='/location' element={<Navigate to='/admin/settings/location' replace />} />
+
                     <Route exact path='/device' element={<Device menu={menu} setMenu={setMenu} />} />
                     <Route exact path='/creditcard' element={<CreditCard menu={menu} setMenu={setMenu} />} />
                     <Route exact path='/employee' element={<Employee menu={menu} setMenu={setMenu} />} />

@@ -1,89 +1,96 @@
 export const pagesInfo = {
-    'dashboard' : {
-        to: '/dashboard', 
+    'dashboard': {
+        to: '/dashboard',
         emoji: '📊',
         title: 'Dashboard',
         auth: true,
         visible: true
     },
-    'attend' : {
-        to: '/attend', 
+    'attend': {
+        to: '/attend',
         emoji: '🕒',
         title: 'Attend',
         auth: true,
         visible: true
     },
-    'wifi-attend' : {    
+    'wifi-attend': {
         to: '/wifi-attend',
         emoji: '📶',
         title: 'Wifi-Attend',
-        auth: false, 
+        auth: false,
         visible: false
-    }, 
-    'gps-attend' : {    
+    },
+    'gps-attend': {
         to: '/gps-attend',
         emoji: '📍',
         title: 'GPS-Attend',
         auth: true,
         visible: true
     },
-    'employee' : {
+    'employee': {
         to: '/employee',
         emoji: '👥',
         title: 'Employee',
         auth: true,
         visible: true
     },
-    'meetings' : {
+    'meetings': {
         to: '/meetings',
         emoji: '📅',
         title: 'Meetings',
         auth: true,
         visible: true
     },
-    'device' : {
+    'device': {
         to: '/device',
         emoji: '💻',
         title: 'Device',
         auth: true,
         visible: true
     },
-    'creditcard' : {
+    'creditcard': {
         to: '/creditcard',
         emoji: '💳',
         title: 'CreditCard',
         auth: true,
         visible: true
     },
-    'approval' : {
+    'approval': {
         to: '/approvalhistory',
         emoji: '✔️',
         title: 'ApprovalHistory',
         auth: true,
         visible: true
     },
-    'board' : {
+    'board': {
         to: '/board',
         emoji: '📋',
         title: 'Board',
         auth: true,
         visible: true
-    },        
-    'summary' : {
+    },
+    'summary': {
         to: '/summary',
         emoji: '📄',
         title: 'Summary',
         auth: false,
         visible: true
     },
-    'location' : {
-        to: '/location',
+    'location': {
+        to: '/admin/settings/location',
         emoji: '📌',
         title: 'Location',
         auth: false,
         visible: true
     },
-    'loginhistory' : {
+    'settings': {
+        to: '/admin/settings',
+        emoji: '⚙️',
+        title: 'Settings',
+        auth: false,
+        visible: true
+    },
+    'loginhistory': {
         to: '/loginhistory',
         emoji: '🔐',
         title: 'LoginHistory',

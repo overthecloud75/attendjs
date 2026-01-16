@@ -214,7 +214,25 @@ const WorkCalendar = () => {
                     '& .fc-today-button': { fontWeight: 600 },
                     '& .fc-day-today': { bgcolor: 'var(--hover-bg) !important' },
                     '& .fc-toolbar-title': { color: 'var(--text-primary)' },
-                    '& .fc-event': { borderRadius: '4px', border: 'none', padding: '1px 3px', fontSize: '0.75rem' }
+                    '& .fc-event': { borderRadius: '4px', border: 'none', padding: '1px 3px', fontSize: '0.75rem' },
+                    '& .fc-more-link': { color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.75rem' },
+                    '& .fc-popover': {
+                        bgcolor: 'var(--card-bg)',
+                        border: '1px solid var(--border-color)',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+                    },
+                    '& .fc-popover-header': {
+                        bgcolor: 'var(--bg-secondary)',
+                        color: 'var(--text-primary)',
+                        fontWeight: 600,
+                        borderBottom: '1px solid var(--border-color)'
+                    },
+                    '& .fc-popover-body': {
+                        bgcolor: 'var(--card-bg)',
+                    },
+                    '& .fc-popover-title': {
+                        color: 'var(--text-primary)'
+                    }
                 }}
             >
                 <FullCalendar

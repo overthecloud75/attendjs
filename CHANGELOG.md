@@ -1,3 +1,6 @@
+#### 26/01/16
+**2.6.1 (client, api)** : leave history modal added
+
 #### 25/12/25
 **2.6.0 (client)** : Added Dark Mode
 

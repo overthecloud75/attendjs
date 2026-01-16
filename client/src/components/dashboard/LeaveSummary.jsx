@@ -70,8 +70,6 @@ const LeaveSummary = ({ leftLeave }) => {
     const usedRate = totalLeave ? (totalUsedDays / totalLeave) * 100 : 0
 
     const leftDays = leftLeave?.leftAnnualLeave || 0
-    // notUsedDays and pendingDays calculation seems redundant or placeholder in original code logic based on props, but keeping as is 
-    const notUsedDays = leftLeave?.notUsed || 0
     const pendingDays = leftLeave?.pending || 0
 
     const handleApplyClick = () => setOpenApproval(true)

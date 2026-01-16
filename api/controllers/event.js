@@ -7,7 +7,7 @@ import { getEmployeeByEmail } from './employee.js'
 import { reportUpdate } from './eventReport.js'
 import { sanitizeData, getNextDay, getToday } from '../utils/util.js'
 import { sendAttendRequestEmail, sendAttendConfirmationEmail } from '../utils/email.js'
-import { getLeftLeaveSummary } from './summary.js'
+import LeaveService from '../services/LeaveService.js'
 import { createError } from '../utils/error.js'
 import { renderSimpleMessage } from '../utils/htmlTemplate.js'
 import { WORKING } from '../config/working.js'
@@ -103,7 +103,7 @@ export const getApproval = async (req, res, next) => {
         const employee = await getEmployeeByEmail(req.user.email)
         const approverWithEmployeeId = await getApprover(employee)
         const { employeeId, ...approver } = approverWithEmployeeId
-        const summary = await getLeftLeaveSummary(employee)
+        const summary = await LeaveService.getLeftLeaveSummary(employee)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json({ approver, summary })
     } catch (err) {
         next(err)
@@ -130,7 +130,7 @@ export const postApproval = async (req, res, next) => {
         } else {
             const newApproval = new Approval({ approvalType: 'attend', employeeId: employee.employeeId, name: employee.name, email, department: employee.department, start, end, reason, etc, approverName: approver.name, approverEmail: approver.email })
             await newApproval.save()
-            const summary = await getLeftLeaveSummary(employee)
+            const summary = await LeaveService.getLeftLeaveSummary(employee)
             await sendAttendRequestEmail(newApproval, summary)
             res.status(200).send('Event has been created.')
         }
