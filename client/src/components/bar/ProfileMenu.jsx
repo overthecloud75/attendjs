@@ -6,8 +6,10 @@ import { User, Key, Lock, LogOut } from 'lucide-react'
 import { requestAuth } from '../../utils/AuthUtil'
 import ProfileDialog from '../bar/ProfileDialog'
 import APIDialog from './APIDialog'
+import { useAuth } from '../../hooks/useAuth'
 
 const ProfileMenu = ({ user, anchorEl, setAnchorEl, setMenu }) => {
+    const { logout } = useAuth()
     const [errorMsg, setErrorMsg] = useState('')
     const [openProfileDialog, setOpenProfileDialog] = useState(false)
     const [openAPIDialog, setOpenAPIDialog] = useState(false)
@@ -21,7 +23,7 @@ const ProfileMenu = ({ user, anchorEl, setAnchorEl, setMenu }) => {
     }
 
     const handleLogout = async () => {
-        await requestAuth('logout', 'GET', '', dispatch, navigate, setErrorMsg)
+        await logout(setErrorMsg)
         setMenu(false)
         handleClose()
         if (errorMsg) {

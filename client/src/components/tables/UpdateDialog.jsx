@@ -4,12 +4,12 @@ import { Save, Trash2, X, Edit, Plus, User, Mail, Phone, Briefcase, List, Lock, 
 import axios from 'axios'
 import { AdminEditableTitles, UserEditableTitles, EditableSelects } from '../../configs/pages.js'
 import { options } from '../../configs/options.js'
-import { useSelector } from 'react-redux'
+import { useAuth } from '../../hooks/useAuth'
 
 const getEditableTitles = (user) => user.isAdmin ? AdminEditableTitles : UserEditableTitles
 
 const Update = ({ writeMode, page, columns, data, setData, open, setOpen, rowData }) => {
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
     const editableTitles = useMemo(() => getEditableTitles(user), [user])
 
     const [focus, setFocus] = useState('info')

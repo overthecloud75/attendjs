@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { FileCheck, CreditCard, Plus } from 'lucide-react'
+import { useAuth } from '../../hooks/useAuth'
 
 import Approval from '../dashboard/Approval.jsx'
 import Payment from './Payment.jsx'
@@ -23,7 +23,7 @@ const CustomTableButtons = ({
     setOpenUpdate,
 }) => {
     const navigate = useNavigate()
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
 
     // Determine which pages are editable for the current user
     const editablePages = useMemo(() => getEditablePages(user), [user])

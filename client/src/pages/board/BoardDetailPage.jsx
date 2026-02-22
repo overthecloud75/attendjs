@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import axios from 'axios'
+import { useAuth } from '../../hooks/useAuth'
 import {
-    Box, Typography, Paper, Divider, Button, TextField, List, IconButton, Chip, Stack, Avatar, Container
+    Box, Typography, Paper, Button, TextField, IconButton, Chip, Stack, Avatar
 } from '@mui/material'
 import {
     User, Calendar, Eye, ArrowLeft, Trash2, Download, MessageSquare, CornerDownRight, FileText
 } from 'lucide-react'
-import Navbar from '../../components/bar/Navbar'
-import Sidebar from '../../components/bar/Sidebar'
+import MainLayout from '../../components/layout/MainLayout'
 import DOMPurify from 'dompurify' // HTML XSS 방지용
 
 // 링크 보안 설정 (Hook)
@@ -23,7 +22,7 @@ DOMPurify.addHook('afterSanitizeAttributes', function (node) {
 const BoardDetailPage = ({ menu, setMenu }) => {
     const { id } = useParams()
     const navigate = useNavigate()
-    const currentUser = useSelector(state => state.user)
+    const { user: currentUser } = useAuth()
 
     const [post, setPost] = useState(null)
     const [comments, setComments] = useState([])
@@ -142,7 +141,7 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                                         {comment.createdAt?.substring(0, 16).replace('T', ' ')}
                                     </Typography>
                                 </Stack>
-                                {(currentUser.isAdmin || currentUser._id === comment.authorId || currentUser.employeeId === comment.authorId) && (
+                                {(currentUser.isAdmin || currentUser.email === comment.authorEmail) && (
                                     <IconButton size="small" onClick={() => deleteComment(comment._id)} sx={{ color: '#94a3b8', '&:hover': { color: '#ef4444' } }}>
                                         <Trash2 size={14} />
                                     </IconButton>
@@ -191,7 +190,6 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                         </Box>
                     </Stack>
                 </Paper>
-                {/* 대댓글 재귀 렌더링 */}
             </Box>
         ))
     }
@@ -209,223 +207,219 @@ const BoardDetailPage = ({ menu, setMenu }) => {
 
     if (!post) return <Box sx={{ p: 4, textAlign: 'center' }}>Loading...</Box>
 
-    const isAuthor = currentUser.isAdmin || currentUser._id === post.authorId || currentUser.name === post.authorName
+    const isAuthor = currentUser.isAdmin || currentUser.email === post.authorEmail
 
     return (
-        <div className='container'>
-            {menu && <Sidebar menu={menu} setMenu={setMenu} />}
-            <div className='wrapper'>
-                <Navbar menu={menu} setMenu={setMenu} />
-                <Box sx={{ p: { xs: 2, md: 4 }, width: '100%', maxWidth: 1400, mx: 'auto', boxSizing: 'border-box' }}>
+        <MainLayout menu={menu} setMenu={setMenu}>
+            <Box sx={{ p: { xs: 2, md: 4 }, width: '100%', maxWidth: 1400, mx: 'auto', boxSizing: 'border-box' }}>
 
-                    {/* 상단 네비게이션 */}
-                    <Button
-                        startIcon={<ArrowLeft size={18} />}
-                        onClick={() => navigate('/board')}
-                        sx={{ mb: 2, color: 'var(--text-secondary)', '&:hover': { color: 'var(--text-primary)', bgcolor: 'transparent' } }}
-                    >
-                        목록으로 돌아가기
-                    </Button>
+                {/* 상단 네비게이션 */}
+                <Button
+                    startIcon={<ArrowLeft size={18} />}
+                    onClick={() => navigate('/board')}
+                    sx={{ mb: 2, color: 'var(--text-secondary)', '&:hover': { color: 'var(--text-primary)', bgcolor: 'transparent' } }}
+                >
+                    목록으로 돌아가기
+                </Button>
+
+                <Paper
+                    elevation={0}
+                    sx={{
+                        p: 4,
+                        mb: 3,
+                        borderRadius: 3,
+                        border: '1px solid var(--border-color)',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                        bgcolor: 'var(--card-bg)'
+                    }}
+                >
+                    {/* 헤더 */}
+                    <Box sx={{ mb: 4 }}>
+                        <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+                            <Chip
+                                label={post.boardType}
+                                size="small"
+                                sx={{ bgcolor: 'var(--bg-active)', color: 'var(--text-active)', fontWeight: 600, border: '1px solid var(--border-color)' }}
+                            />
+                            {post.isPinned && (
+                                <Chip
+                                    label="공지"
+                                    size="small"
+                                    sx={{ bgcolor: '#fee2e2', color: '#ef4444', fontWeight: 600, border: '1px solid #fecaca' }}
+                                />
+                            )}
+                        </Stack>
+                        <Typography variant="h5" fontWeight="800" color="var(--text-primary)" sx={{ mb: 3, lineHeight: 1.3 }}>
+                            {post.title}
+                        </Typography>
+
+                        <Stack
+                            direction={{ xs: 'column', sm: 'row' }}
+                            justifyContent="space-between"
+                            alignItems={{ xs: 'flex-start', sm: 'center' }}
+                            spacing={2}
+                            sx={{ pb: 3, borderBottom: '1px solid #f1f5f9' }}
+                        >
+                            <Stack direction="row" spacing={3}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)' }}>
+                                    <User size={16} />
+                                    <Typography variant="body2" fontWeight={500}>{post.authorName}</Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)' }}>
+                                    <Calendar size={16} />
+                                    <Typography variant="body2">{post.createdAt?.substring(0, 16).replace('T', ' ')}</Typography>
+                                </Box>
+                            </Stack>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)', bgcolor: 'var(--bg-secondary)', px: 1.5, py: 0.5, borderRadius: 2 }}>
+                                <Eye size={16} />
+                                <Typography variant="body2" fontWeight={500}>{post.viewCount}</Typography>
+                            </Box>
+                        </Stack>
+                    </Box>
+
+                    {/* 내용 */}
+                    <Box sx={{
+                        minHeight: 200,
+                        mb: 6,
+                        typography: 'body1',
+                        color: 'var(--text-primary)',
+                        lineHeight: 1.8,
+                        '& img': {
+                            maxWidth: '100%',
+                            height: 'auto',
+                            display: 'block',
+                            margin: '1rem 0',
+                            borderRadius: 2
+                        }
+                    }}>
+                        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }} />
+                    </Box>
+
+                    {/* 첨부파일 */}
+                    {post.files && post.files.length > 0 && (
+                        <Box sx={{ mb: 4 }}>
+                            <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: '700', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <FileText size={16} /> 첨부파일
+                            </Typography>
+                            <Stack direction="row" flexWrap="wrap" gap={1}>
+                                {post.files.map((file, i) => (
+                                    <Paper
+                                        key={i}
+                                        elevation={0}
+                                        component="a"
+                                        href={file.path}
+                                        download={file.filename}
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: 1.5,
+                                            px: 2,
+                                            py: 1,
+                                            bgcolor: 'var(--bg-secondary)',
+                                            border: '1px solid var(--border-color)',
+                                            borderRadius: 2,
+                                            textDecoration: 'none',
+                                            color: 'var(--text-secondary)',
+                                            transition: 'all 0.2s',
+                                            '&:hover': {
+                                                bgcolor: 'var(--hover-bg)',
+                                                borderColor: 'var(--text-secondary)'
+                                            }
+                                        }}
+                                    >
+                                        <Download size={16} />
+                                        <Typography variant="body2" fontWeight={500}>
+                                            {file.filename}
+                                            <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 1 }}>
+                                                ({Math.round(file.size / 1024)}KB)
+                                            </Typography>
+                                        </Typography>
+                                    </Paper>
+                                ))}
+                            </Stack>
+                        </Box>
+                    )}
+
+                    {/* 버튼들 */}
+                    <Stack direction="row" justifyContent="flex-end" spacing={1}>
+                        {isAuthor && (
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                startIcon={<Trash2 size={16} />}
+                                onClick={handleDelete}
+                                sx={{ borderRadius: 2, textTransform: 'none' }}
+                            >
+                                게시글 삭제
+                            </Button>
+                        )}
+                    </Stack>
+                </Paper>
+
+                {/* 댓글 섹션 */}
+                <Box sx={{ mb: 4 }}>
+                    <Typography variant="h6" fontWeight="700" color="var(--text-primary)" sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <MessageSquare size={20} /> 댓글 <Box component="span" sx={{ color: 'var(--text-active)' }}>{comments.length}</Box>
+                    </Typography>
 
                     <Paper
                         elevation={0}
                         sx={{
-                            p: 4,
+                            p: 3,
                             mb: 3,
                             borderRadius: 3,
                             border: '1px solid var(--border-color)',
-                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
                             bgcolor: 'var(--card-bg)'
                         }}
                     >
-                        {/* 헤더 */}
-                        <Box sx={{ mb: 4 }}>
-                            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-                                <Chip
-                                    label={post.boardType}
-                                    size="small"
-                                    sx={{ bgcolor: 'var(--bg-active)', color: 'var(--text-active)', fontWeight: 600, border: '1px solid var(--border-color)' }}
-                                />
-                                {post.isPinned && (
-                                    <Chip
-                                        label="공지"
-                                        size="small"
-                                        sx={{ bgcolor: '#fee2e2', color: '#ef4444', fontWeight: 600, border: '1px solid #fecaca' }}
-                                    />
-                                )}
-                            </Stack>
-                            <Typography variant="h5" fontWeight="800" color="var(--text-primary)" sx={{ mb: 3, lineHeight: 1.3 }}>
-                                {post.title}
-                            </Typography>
-
-                            <Stack
-                                direction={{ xs: 'column', sm: 'row' }}
-                                justifyContent="space-between"
-                                alignItems={{ xs: 'flex-start', sm: 'center' }}
-                                spacing={2}
-                                sx={{ pb: 3, borderBottom: '1px solid #f1f5f9' }}
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                            <TextField
+                                fullWidth
+                                multiline
+                                minRows={2}
+                                placeholder="따뜻한 댓글을 남겨주세요..."
+                                value={replyTarget ? '' : commentContent}
+                                onChange={(e) => {
+                                    if (replyTarget) return
+                                    setCommentContent(e.target.value)
+                                }}
+                                disabled={!!replyTarget}
+                                variant="outlined"
+                                sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        borderRadius: 2,
+                                        bgcolor: 'var(--bg-secondary)'
+                                    }
+                                }}
+                            />
+                            <Button
+                                variant="contained"
+                                onClick={handleCommentSubmit}
+                                disabled={!!replyTarget}
+                                sx={{
+                                    minWidth: 80,
+                                    borderRadius: 2,
+                                    fontWeight: 600,
+                                    bgcolor: '#3b82f6',
+                                    boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)'
+                                }}
                             >
-                                <Stack direction="row" spacing={3}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)' }}>
-                                        <User size={16} />
-                                        <Typography variant="body2" fontWeight={500}>{post.authorName}</Typography>
-                                    </Box>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)' }}>
-                                        <Calendar size={16} />
-                                        <Typography variant="body2">{post.createdAt?.substring(0, 16).replace('T', ' ')}</Typography>
-                                    </Box>
-                                </Stack>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)', bgcolor: 'var(--bg-secondary)', px: 1.5, py: 0.5, borderRadius: 2 }}>
-                                    <Eye size={16} />
-                                    <Typography variant="body2" fontWeight={500}>{post.viewCount}</Typography>
-                                </Box>
-                            </Stack>
+                                등록
+                            </Button>
                         </Box>
-
-                        {/* 내용 */}
-                        <Box sx={{
-                            minHeight: 200,
-                            mb: 6,
-                            typography: 'body1',
-                            color: 'var(--text-primary)',
-                            lineHeight: 1.8,
-                            '& img': {
-                                maxWidth: '100%',
-                                height: 'auto',
-                                display: 'block',  // 이미지 아래 공백 제거 및 블록 요소화
-                                margin: '1rem 0', // 이미지 위아래 여백
-                                borderRadius: 2   // 이미지 모서리 둥글게
-                            }
-                        }}>
-                            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }} />
-                        </Box>
-
-                        {/* 첨부파일 */}
-                        {post.files && post.files.length > 0 && (
-                            <Box sx={{ mb: 4 }}>
-                                <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: '700', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 1 }}>
-                                    <FileText size={16} /> 첨부파일
-                                </Typography>
-                                <Stack direction="row" flexWrap="wrap" gap={1}>
-                                    {post.files.map((file, i) => (
-                                        <Paper
-                                            key={i}
-                                            elevation={0}
-                                            component="a"
-                                            href={file.path}
-                                            download={file.filename}
-                                            sx={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: 1.5,
-                                                px: 2,
-                                                py: 1,
-                                                bgcolor: 'var(--bg-secondary)',
-                                                border: '1px solid var(--border-color)',
-                                                borderRadius: 2,
-                                                textDecoration: 'none',
-                                                color: 'var(--text-secondary)',
-                                                transition: 'all 0.2s',
-                                                '&:hover': {
-                                                    bgcolor: 'var(--hover-bg)',
-                                                    borderColor: 'var(--text-secondary)'
-                                                }
-                                            }}
-                                        >
-                                            <Download size={16} />
-                                            <Typography variant="body2" fontWeight={500}>
-                                                {file.filename}
-                                                <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 1 }}>
-                                                    ({Math.round(file.size / 1024)}KB)
-                                                </Typography>
-                                            </Typography>
-                                        </Paper>
-                                    ))}
-                                </Stack>
-                            </Box>
-                        )}
-
-                        {/* 버튼들 */}
-                        <Stack direction="row" justifyContent="flex-end" spacing={1}>
-                            {isAuthor && (
-                                <Button
-                                    variant="outlined"
-                                    color="error"
-                                    startIcon={<Trash2 size={16} />}
-                                    onClick={handleDelete}
-                                    sx={{ borderRadius: 2, textTransform: 'none' }}
-                                >
-                                    게시글 삭제
-                                </Button>
-                            )}
-                        </Stack>
                     </Paper>
 
-                    {/* 댓글 섹션 */}
-                    <Box sx={{ mb: 4 }}>
-                        <Typography variant="h6" fontWeight="700" color="var(--text-primary)" sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <MessageSquare size={20} /> 댓글 <Box component="span" sx={{ color: 'var(--text-active)' }}>{comments.length}</Box>
-                        </Typography>
-
-                        <Paper
-                            elevation={0}
-                            sx={{
-                                p: 3,
-                                mb: 3,
-                                borderRadius: 3,
-                                border: '1px solid var(--border-color)',
-                                bgcolor: 'var(--card-bg)'
-                            }}
-                        >
-                            <Box sx={{ display: 'flex', gap: 2 }}>
-                                <TextField
-                                    fullWidth
-                                    multiline
-                                    minRows={2} // rows -> minRows
-                                    placeholder="따뜻한 댓글을 남겨주세요..."
-                                    value={replyTarget ? '' : commentContent}
-                                    onChange={(e) => {
-                                        if (replyTarget) return
-                                        setCommentContent(e.target.value)
-                                    }}
-                                    disabled={!!replyTarget}
-                                    variant="outlined"
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            borderRadius: 2,
-                                            bgcolor: 'var(--bg-secondary)'
-                                        }
-                                    }}
-                                />
-                                <Button
-                                    variant="contained"
-                                    onClick={handleCommentSubmit}
-                                    disabled={!!replyTarget}
-                                    sx={{
-                                        minWidth: 80,
-                                        borderRadius: 2,
-                                        fontWeight: 600,
-                                        bgcolor: '#3b82f6',
-                                        boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)'
-                                    }}
-                                >
-                                    등록
-                                </Button>
+                    <Box>
+                        {commentTree.map(parent => (
+                            <Box key={parent._id}>
+                                {renderComments([parent])}
+                                {parent.children.length > 0 && renderComments(parent.children, 1)}
                             </Box>
-                        </Paper>
-
-                        <Box>
-                            {commentTree.map(parent => (
-                                <Box key={parent._id}>
-                                    {renderComments([parent])}
-                                    {parent.children.length > 0 && renderComments(parent.children, 1)}
-                                </Box>
-                            ))}
-                        </Box>
+                        ))}
                     </Box>
                 </Box>
-            </div>
-        </div>
+            </Box>
+        </MainLayout>
     )
 }
 

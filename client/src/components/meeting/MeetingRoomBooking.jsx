@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useAuth } from '../../hooks/useAuth'
 import {
     TextField, Button, Stack, Dialog, DialogTitle,
     DialogContent, DialogActions, Box, Typography,
@@ -7,7 +8,6 @@ import {
 import { DatePicker, TimePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs'
-import { useSelector } from 'react-redux'
 import { Calendar, User, Type } from 'lucide-react'
 
 import { getRoomEvents, postMeetingReservation } from '../../utils/EventUtil'
@@ -16,7 +16,7 @@ import MeetingTypeForm from './MeetingTypeForm'
 
 const MeetingRoomBooking = ({ setEventsData, open, setOpenReservation }) => {
 
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
 
     const [name, setName] = useState(`${user.name}/${user.department}`)
     const [room, setRoom] = useState('대회의실')

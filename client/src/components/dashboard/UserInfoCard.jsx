@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux'
 import { Paper, Typography, Avatar, Box, Divider, Stack } from '@mui/material'
 import { Briefcase, Calendar, Clock, User } from 'lucide-react'
+import { useAuth } from '../../hooks/useAuth'
 
 const UserInfoCard = ({ leftLeave }) => {
 
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
 
     return (
         <Paper

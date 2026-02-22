@@ -8,6 +8,7 @@
     --hover-bg: #f1f5f9;
     --bg-active: #eff6ff;
     --text-active: #2563eb;
+    --bg-primary-transparent: rgba(255, 255, 255, 0.8);
 }
 
 [data-theme='dark'] {
@@ -20,6 +21,7 @@
     --hover-bg: #334155;
     --bg-active: rgba(59, 130, 246, 0.15);
     --text-active: #60a5fa;
+    --bg-primary-transparent: rgba(15, 23, 42, 0.8);
 }
 
 body {

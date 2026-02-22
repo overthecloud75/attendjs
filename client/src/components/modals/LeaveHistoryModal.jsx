@@ -42,7 +42,7 @@ const LeaveHistoryModal = ({ open, setOpen, employee }) => {
             }}>
                 <Box display="flex" alignItems="center" gap={1}>
                     <Calendar size={20} color="#3b82f6" />
-                    <Typography variant="h6" fontWeight={700}>
+                    <Typography component="div" variant="h6" fontWeight={700}>
                         {employee.name}님의 연차 상세 이력
                     </Typography>
                 </Box>

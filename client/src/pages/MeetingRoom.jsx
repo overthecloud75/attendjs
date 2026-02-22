@@ -1,20 +1,11 @@
-import Sidebar from '../components/bar/Sidebar'
-import Navbar from '../components/bar/Navbar'
-import { useRedirectIfNotAuthenticated } from '../hooks/useRedirectIfNotAuthenticated'
+import MainLayout from '../components/layout/MainLayout'
 import MeetingRoomContainer from '../components/meeting/MeetingRoomContainer'
 
-const MeetingRoom = ({menu, setMenu}) => {
-
-    useRedirectIfNotAuthenticated()
-
+const MeetingRoom = ({ menu, setMenu }) => {
     return (
-        <div className='container'>
-            {menu && <Sidebar menu={menu} setMenu={setMenu}/>}
-            <div className='wrapper'>
-                <Navbar menu={menu} setMenu={setMenu}/> 
-                <MeetingRoomContainer/>
-            </div>
-        </div>
+        <MainLayout menu={menu} setMenu={setMenu}>
+            <MeetingRoomContainer />
+        </MainLayout>
     )
 }
 

@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import { requestPassword } from '../../utils/AuthUtil'
 import { LoadingSpinner } from '../../utils/GeneralUtil'
+import { useAuth } from '../../hooks/useAuth'
 
 const Password = () => {
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
     const navigate = useNavigate()
 
     const [formData, setFormData] = useState({

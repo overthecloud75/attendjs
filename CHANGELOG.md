@@ -1,3 +1,6 @@
+#### 26/02/22
+**2.6.2 (client, api)** : centralized auth hook, route guards refactoring, global axios CSRF interceptor, and board API fixes.
+
 #### 26/01/16
 **2.6.1 (client, api)** : leave history modal added
 

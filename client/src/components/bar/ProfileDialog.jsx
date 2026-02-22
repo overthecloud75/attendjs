@@ -33,7 +33,7 @@ const ProfileDialog = ({ user, open, handleClose }) => {
             }}
         >
             <DialogTitle sx={{ px: 3, py: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)' }}>
-                <Typography variant="h6" fontWeight={700}>
+                <Typography component="div" variant="h6" fontWeight={700}>
                     내 프로필
                 </Typography>
                 <IconButton onClick={handleClose} size="small">

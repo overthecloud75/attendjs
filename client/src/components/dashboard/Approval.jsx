@@ -143,7 +143,7 @@ const Approval = ({ navigate, open, setOpen }) => {
                     <Box sx={{ p: 1, bgcolor: 'var(--bg-active)', borderRadius: '50%', color: 'var(--text-active)' }}>
                         <FileText size={24} />
                     </Box>
-                    <Typography variant="h6" fontWeight="700" color="var(--text-primary)">
+                    <Typography component="div" variant="h6" fontWeight="700" color="var(--text-primary)">
                         결재 신청
                         <Typography component="span" variant="body2" color="var(--text-secondary)" display="block" fontWeight="400" sx={{ mt: 0.5 }}>
                             휴가 및 근태 관련 결재를 신청합니다.

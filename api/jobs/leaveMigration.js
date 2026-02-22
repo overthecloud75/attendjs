@@ -1,7 +1,6 @@
 import LeaveService from '../services/LeaveService.js'
 import LeaveHistory from '../models/LeaveHistory.js'
 import Employee from '../models/Employee.js'
-import Report from '../models/Report.js'
 import Approval from '../models/Approval.js'
 import { logger } from '../config/winston.js'
 

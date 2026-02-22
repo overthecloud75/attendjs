@@ -128,7 +128,7 @@ const LeaveSummary = ({ leftLeave }) => {
                     </Box>
 
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid size={6}>
                             <StatItem
                                 icon={Calculator}
                                 label="총 연차"
@@ -136,7 +136,7 @@ const LeaveSummary = ({ leftLeave }) => {
                                 color="#64748b"
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid size={6}>
                             <StatItem
                                 icon={CheckCircle2}
                                 label="사용 완료"
@@ -144,7 +144,7 @@ const LeaveSummary = ({ leftLeave }) => {
                                 color="#22c55e"
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid size={6}>
                             <StatItem
                                 icon={Clock}
                                 label="잔여 연차"
@@ -152,7 +152,7 @@ const LeaveSummary = ({ leftLeave }) => {
                                 color="#3b82f6"
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid size={6}>
                             <StatItem
                                 icon={AlertCircle}
                                 label="승인 대기"

@@ -8,7 +8,7 @@ import { format } from 'date-fns'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
 import { Calendar as CalendarIcon } from 'lucide-react'
-import { useSelector } from 'react-redux'
+import { useAuth } from '../../hooks/useAuth'
 
 import { useWindowDimension } from '../../hooks/useWindowDimension'
 import { MOBILE } from '../../configs/mobile'
@@ -18,7 +18,7 @@ import './MeetingRoomCalendar.css'
 
 const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
 
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
 
     const { width } = useWindowDimension()
     const calendarRef = useRef()
@@ -33,6 +33,7 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
     const [room, setRoom] = useState('대회의실')
 
     useEffect(() => {
+        const calendarApi = calendarRef.current?.getApi()
         if (width < MOBILE.size) {
             setWeekends(false)
             setHeaderToolbar({
@@ -40,6 +41,7 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
                 center: '',
                 right: ''
             })
+            if (calendarApi) calendarApi.changeView('timeGridDay')
         } else {
             setWeekends(true)
             setHeaderToolbar({
@@ -47,6 +49,7 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
                 center: 'title',
                 right: ''
             })
+            if (calendarApi) calendarApi.changeView('timeGridWeek')
         }
     }, [width])
 

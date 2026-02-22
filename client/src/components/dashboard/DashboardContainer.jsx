@@ -1,14 +1,14 @@
 import { Grid, Container, Typography, Box } from '@mui/material'
-import { useSelector } from 'react-redux'
 import UserInfoCard from './UserInfoCard'
 import LeaveSummary from './LeaveSummary'
 import WorkCalendar from './WorkCalendar'
 import { useLeftLeave } from '../../hooks/useLeftLeave'
+import { useAuth } from '../../hooks/useAuth'
 
 const DashboardContainer = () => {
 
     const { leftLeave } = useLeftLeave()
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
 
     return (
         <Container maxWidth='xl' sx={{ mt: 1 }}>

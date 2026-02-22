@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { format } from 'date-fns'
-import { useSelector } from 'react-redux'
+import { useAuth } from './useAuth'
 
 const useFetch = (page, url, params, clickCount) => {
     const navigate = useNavigate()
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
 

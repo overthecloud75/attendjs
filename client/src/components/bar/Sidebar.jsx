@@ -1,11 +1,11 @@
-import { Box, AppBar, Toolbar, List, Typography, ListItemButton, Tooltip, Collapse } from '@mui/material'
+import { Box, AppBar, Toolbar, List, Typography, ListItemButton, Tooltip, Collapse, Drawer, useTheme, useMediaQuery } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Link, useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import { pagesInfo } from '../../configs/pages'
 import { ChevronUp, ChevronDown } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from '../../hooks/useAuth'
 
 const itemDict = {
     Attendance: [
@@ -42,12 +42,12 @@ const SidebarItems = ({ itemList }) => {
 }
 
 const SidebarItem = ({ item }) => {
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
     const location = useLocation()
     const [open, setOpen] = useState(false)
     const { t } = useTranslation()
 
-    const hasAccess = item.auth || user.isAdmin
+    const hasAccess = user.isLogin && (item.auth || user.isAdmin)
     if (!hasAccess) return null
 
     // ... (rest of logic) ...
@@ -95,7 +95,7 @@ const SidebarItem = ({ item }) => {
                     {displayTitle}
                 </ItemText>
                 {hasChildren && (
-                    <Box sx={{ ml: 'auto', display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ ml: 'auto' }}>
                         {open ? <ChevronUp size={20} color='var(--text-secondary)' /> : <ChevronDown size={20} color='var(--text-secondary)' />}
                     </Box>
                 )}
@@ -129,13 +129,15 @@ const SidebarCategories = () => {
 }
 
 const Sidebar = ({ menu, setMenu }) => {
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
     const handleMenu = () => {
         if (user.isLogin) setMenu(!menu)
     }
 
-    return (
+    const sidebarContent = (
         <SidebarContainer>
             {/* Top: Logo */}
             <StyledAppBar position='static'>
@@ -166,6 +168,34 @@ const Sidebar = ({ menu, setMenu }) => {
             </FooterContainer>
         </SidebarContainer>
     )
+
+    if (isMobile) {
+        return (
+            <Drawer
+                anchor="left"
+                open={menu}
+                onClose={() => setMenu(false)}
+                sx={{
+                    '& .MuiDrawer-paper': {
+                        width: 220,
+                        backgroundColor: 'var(--bg-primary-transparent, rgba(255, 255, 255, 0.8))',
+                        backdropFilter: 'blur(10px)',
+                        borderRight: '1px solid var(--border-color)',
+                        boxSizing: 'border-box',
+                        backgroundImage: 'none'
+                    },
+                    '& .MuiBackdrop-root': {
+                        backdropFilter: 'blur(2px)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.1)'
+                    }
+                }}
+            >
+                {sidebarContent}
+            </Drawer>
+        )
+    }
+
+    return sidebarContent
 }
 
 export default Sidebar
@@ -173,17 +203,13 @@ export default Sidebar
 // --- Styled Components ---
 
 const SidebarContainer = styled(Box)(({ theme }) => ({
-    width: 260, // 기본 너비 고정
+    width: 240, // Reduced from 260
     height: '100vh',
     borderRight: '1px solid var(--border-color)',
     background: 'var(--bg-primary)',
     display: 'flex',
     flexDirection: 'column',
-    transition: 'width 0.3s ease',
     flexShrink: 0,
-    [theme.breakpoints.down('md')]: {
-        width: 80, // 태블릿/모바일 축소 너비
-    },
 }))
 
 const StyledAppBar = styled(AppBar)({
@@ -205,12 +231,9 @@ const LogoImage = styled('img')(({ theme }) => ({
 }))
 
 const LogoText = styled(Typography)(({ theme }) => ({
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-        display: 'block',
-    },
-    marginLeft: '12px',
-    fontSize: '20px',
+    display: 'block',
+    marginLeft: '10px',
+    fontSize: '18px',
     fontWeight: 800,
     background: 'linear-gradient(45deg, #3b82f6 30%, #2563eb 90%)',
     WebkitBackgroundClip: 'text',
@@ -221,7 +244,7 @@ const LogoText = styled(Typography)(({ theme }) => ({
 const MenuContainer = styled(Box)(({ theme }) => ({
     flex: 1,
     overflowY: 'auto',
-    padding: '16px 12px',
+    padding: '16px 8px',
     '&::-webkit-scrollbar': {
         width: '4px',
     },
@@ -232,10 +255,7 @@ const MenuContainer = styled(Box)(({ theme }) => ({
 }))
 
 const CategoryTitle = styled(Typography)(({ theme }) => ({
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-        display: 'block',
-    },
+    display: 'block',
     fontSize: '0.75rem',
     fontWeight: 700,
     color: 'var(--text-secondary)',
@@ -280,10 +300,7 @@ const IconWrapper = styled('div')(({ active }) => ({
 }))
 
 const ItemText = styled(Typography)(({ theme, active }) => ({
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-        display: 'block',
-    },
+    display: 'block',
     fontSize: '0.925rem',
     fontWeight: active ? 600 : 500,
     marginLeft: '12px',
@@ -293,10 +310,7 @@ const ItemText = styled(Typography)(({ theme, active }) => ({
 }))
 
 const FooterContainer = styled(Box)(({ theme }) => ({
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-        display: 'flex',
-    },
+    display: 'flex',
     padding: '16px',
     borderTop: '1px solid var(--border-color)',
     bgcolor: 'var(--bg-secondary)',

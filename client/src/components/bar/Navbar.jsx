@@ -6,9 +6,10 @@ import { Menu, MessageSquare, ChevronDown, Moon, Sun } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import ProfileMenu from '../bar/ProfileMenu'
 import { toggleTheme } from '../../storage/themeSlice'
+import { useAuth } from '../../hooks/useAuth'
 
 const Navbar = ({ menu, setMenu }) => {
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
     const theme = useSelector(state => state.theme.mode)
     const dispatch = useDispatch()
     const { i18n } = useTranslation()

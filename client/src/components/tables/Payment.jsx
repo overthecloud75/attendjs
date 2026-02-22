@@ -180,10 +180,10 @@ const Payment = ({ writeMode, open, setOpen }) => {
                 <Stack spacing={3} sx={{ mt: 1 }}>
                     {/* 결재 라인 정보 (Read Only style but data persists) */}
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
                             {renderInfoRow(<User size={18} />, '결재자', value.approver)}
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
                             {renderInfoRow(<CheckCircle2 size={18} />, '합의자', value.consenter)}
                         </Grid>
                     </Grid>
@@ -191,7 +191,7 @@ const Payment = ({ writeMode, open, setOpen }) => {
                     <Divider />
 
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     label='사용일'
@@ -212,7 +212,7 @@ const Payment = ({ writeMode, open, setOpen }) => {
                                 />
                             </LocalizationProvider>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
                             <TextField
                                 id={FORM_FIELDS.CARD_NO}
                                 label='카드번호'
@@ -228,7 +228,7 @@ const Payment = ({ writeMode, open, setOpen }) => {
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
                             <TextField
                                 id={FORM_FIELDS.ETC}
                                 label='사용금액'
@@ -245,7 +245,7 @@ const Payment = ({ writeMode, open, setOpen }) => {
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
                             <TextField
                                 id={FORM_FIELDS.REASON}
                                 label='사용내용'

@@ -86,7 +86,7 @@ export const getPosts = async (req, res, next) => {
 
         const totalCount = await Post.countDocuments(query)
 
-        res.status(200).json({
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json({
             posts,
             totalPages: Math.ceil(totalCount / limit),
             currentPage: Number(page),
@@ -114,7 +114,7 @@ export const getPost = async (req, res, next) => {
         // 댓글 조회
         const comments = await Comment.find({ postId: id }).sort({ createdAt: 1 })
 
-        res.status(200).json({ post, comments })
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json({ post, comments })
     } catch (err) {
         next(err)
     }

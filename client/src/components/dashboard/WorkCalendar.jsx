@@ -5,7 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { Paper, Typography, Box, ToggleButton, ToggleButtonGroup, Stack, Chip } from '@mui/material'
 import { Calendar as CalendarIcon, User, Users, Building2 } from 'lucide-react'
-import { useSelector } from 'react-redux'
+import { useAuth } from '../../hooks/useAuth'
 
 import { getColor, getSpecialHolidays, getEventsInCalendar, addEventInCalendar, deleteEventInCalendar } from '../../utils/EventUtil'
 import { useWindowDimension } from '../../hooks/useWindowDimension'
@@ -15,7 +15,7 @@ import './WorkCalendar.css'
 
 const WorkCalendar = () => {
 
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
     const navigate = useNavigate()
     const { isMobile } = useResponsive()
     const calendarRef = useRef()

@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import axios from 'axios'
+import { useAuth } from '../../hooks/useAuth'
 import {
     Box, TextField, Button, MenuItem, Select, FormControl, InputLabel,
     Typography, FormControlLabel, Switch, Stack, Paper, Chip, IconButton
@@ -10,14 +10,12 @@ import { Save, X, ArrowLeft, Upload, CloudUpload } from 'lucide-react'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 
-import Navbar from '../../components/bar/Navbar'
-import Sidebar from '../../components/bar/Sidebar'
+import MainLayout from '../../components/layout/MainLayout'
 import { BOARD_TYPES } from '../../configs/board'
 
 const BoardWritePage = ({ menu, setMenu }) => {
     const navigate = useNavigate()
-    const currentUser = useSelector(state => state.user)
-
+    const { user: currentUser } = useAuth()
     const quillRef = useRef(null)
 
     const [boardType, setBoardType] = useState('FREE')
@@ -140,153 +138,149 @@ const BoardWritePage = ({ menu, setMenu }) => {
     }
 
     return (
-        <div className='container'>
-            {menu && <Sidebar menu={menu} setMenu={setMenu} />}
-            <div className='wrapper'>
-                <Navbar menu={menu} setMenu={setMenu} />
-                <Box sx={{ p: { xs: 2, md: 4 }, width: '100%', maxWidth: 1400, mx: 'auto', boxSizing: 'border-box' }}>
+        <MainLayout menu={menu} setMenu={setMenu}>
+            <Box sx={{ p: { xs: 2, md: 4 }, width: '100%', maxWidth: 1400, mx: 'auto', boxSizing: 'border-box' }}>
 
-                    {/* Header */}
-                    <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 3 }}>
-                        <IconButton onClick={() => navigate('/board')}>
-                            <ArrowLeft size={24} color="var(--text-secondary)" />
-                        </IconButton>
-                        <Typography variant="h5" fontWeight="700" color="var(--text-primary)">
-                            게시글 작성
-                        </Typography>
-                    </Stack>
+                {/* Header */}
+                <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 3 }}>
+                    <IconButton onClick={() => navigate('/board')}>
+                        <ArrowLeft size={24} color="var(--text-secondary)" />
+                    </IconButton>
+                    <Typography variant="h5" fontWeight="700" color="var(--text-primary)">
+                        게시글 작성
+                    </Typography>
+                </Stack>
 
-                    <Paper
-                        elevation={0}
-                        sx={{
-                            p: 4,
-                            borderRadius: 3,
-                            border: '1px solid var(--border-color)',
-                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
-                            bgcolor: 'var(--card-bg)'
-                        }}
-                    >
-                        <Stack spacing={3}>
-                            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                                <FormControl sx={{ minWidth: 150 }}>
-                                    <InputLabel>게시판 분류</InputLabel>
-                                    <Select
-                                        value={boardType}
-                                        label="게시판 분류"
-                                        onChange={(e) => setBoardType(e.target.value)}
-                                        sx={{ bgcolor: 'var(--bg-secondary)' }}
-                                    >
-                                        {BOARD_TYPES.map(type => (
-                                            <MenuItem key={type.value} value={type.value}>{type.label}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                                <TextField
-                                    fullWidth
-                                    label="제목을 입력하세요"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
+                <Paper
+                    elevation={0}
+                    sx={{
+                        p: 4,
+                        borderRadius: 3,
+                        border: '1px solid var(--border-color)',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                        bgcolor: 'var(--card-bg)'
+                    }}
+                >
+                    <Stack spacing={3}>
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                            <FormControl sx={{ minWidth: 150 }}>
+                                <InputLabel>게시판 분류</InputLabel>
+                                <Select
+                                    value={boardType}
+                                    label="게시판 분류"
+                                    onChange={(e) => setBoardType(e.target.value)}
                                     sx={{ bgcolor: 'var(--bg-secondary)' }}
-                                />
-                            </Stack>
+                                >
+                                    {BOARD_TYPES.map(type => (
+                                        <MenuItem key={type.value} value={type.value}>{type.label}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <TextField
+                                fullWidth
+                                label="제목을 입력하세요"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                sx={{ bgcolor: 'var(--bg-secondary)' }}
+                            />
+                        </Stack>
 
-                            {canPin && (
-                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <FormControlLabel
-                                        control={<Switch checked={isPinned} onChange={(e) => setIsPinned(e.target.checked)} />}
-                                        label={<Typography variant="body2" fontWeight={500} color="var(--text-secondary)">공지사항으로 고정</Typography>}
-                                    />
-                                </Box>
-                            )}
-
-                            <Box sx={{
-                                '& .quill': { bgcolor: 'var(--card-bg)' },
-                                '& .ql-toolbar': { borderTopLeftRadius: '8px', borderTopRightRadius: '8px', borderColor: 'var(--border-color)', bgcolor: 'var(--bg-secondary)' },
-                                '& .ql-container': { borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px', borderColor: 'var(--border-color)', minHeight: '400px' },
-                                '& .ql-editor': { fontSize: '1rem', minHeight: '400px', color: 'var(--text-primary)' },
-                                '& .ql-stroke': { stroke: 'var(--text-primary) !important' },
-                                '& .ql-fill': { fill: 'var(--text-primary) !important' },
-                                '& .ql-picker': { color: 'var(--text-primary) !important' }
-                            }}>
-                                <ReactQuill
-                                    ref={quillRef}
-                                    theme="snow"
-                                    value={content}
-                                    onChange={setContent}
-                                    modules={modules}
-                                    placeholder="내용을 자유롭게 작성해주세요."
+                        {canPin && (
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <FormControlLabel
+                                    control={<Switch checked={isPinned} onChange={(e) => setIsPinned(e.target.checked)} />}
+                                    label={<Typography variant="body2" fontWeight={500} color="var(--text-secondary)">공지사항으로 고정</Typography>}
                                 />
                             </Box>
+                        )}
 
-                            <Box sx={{ p: 2, border: '1px solid var(--border-color)', borderRadius: 2, bgcolor: 'var(--bg-secondary)' }}>
-                                <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-                                    <Typography variant="subtitle2" fontWeight="600" color="var(--text-secondary)" display="flex" alignItems="center" gap={1}>
-                                        <Upload size={18} /> 파일 첨부
-                                    </Typography>
-                                    <Button
-                                        variant="outlined"
-                                        component="label"
-                                        startIcon={<CloudUpload size={16} />}
-                                        size="small"
-                                        sx={{ textTransform: 'none', bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', borderColor: 'var(--border-color)' }}
-                                    >
-                                        파일 선택
-                                        <input type="file" multiple hidden onChange={handleFileChange} />
-                                    </Button>
-                                </Stack>
+                        <Box sx={{
+                            '& .quill': { bgcolor: 'var(--card-bg)' },
+                            '& .ql-toolbar': { borderTopLeftRadius: '8px', borderTopRightRadius: '8px', borderColor: 'var(--border-color)', bgcolor: 'var(--bg-secondary)' },
+                            '& .ql-container': { borderBottomLeftRadius: '8px', borderBottomRightRadius: '8px', borderColor: 'var(--border-color)', minHeight: '400px' },
+                            '& .ql-editor': { fontSize: '1rem', minHeight: '400px', color: 'var(--text-primary)' },
+                            '& .ql-stroke': { stroke: 'var(--text-primary) !important' },
+                            '& .ql-fill': { fill: 'var(--text-primary) !important' },
+                            '& .ql-picker': { color: 'var(--text-primary) !important' }
+                        }}>
+                            <ReactQuill
+                                ref={quillRef}
+                                theme="snow"
+                                value={content}
+                                onChange={setContent}
+                                modules={modules}
+                                placeholder="내용을 자유롭게 작성해주세요."
+                            />
+                        </Box>
 
-                                {files.length > 0 ? (
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                                        {files.map((file, i) => (
-                                            <Chip
-                                                key={i}
-                                                label={`${file.name} (${Math.round(file.size / 1024)}KB)`}
-                                                onDelete={() => removeFile(i)}
-                                                variant="outlined"
-                                                sx={{ bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', borderColor: 'var(--border-color)' }}
-                                            />
-                                        ))}
-                                    </Box>
-                                ) : (
-                                    <Typography variant="body2" color="var(--text-secondary)" align="center" py={2}>
-                                        첨부할 파일을 선택해주세요.
-                                    </Typography>
-                                )}
-                            </Box>
-
-                            <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ pt: 2, borderTop: '1px solid var(--border-color)' }}>
+                        <Box sx={{ p: 2, border: '1px solid var(--border-color)', borderRadius: 2, bgcolor: 'var(--bg-secondary)' }}>
+                            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+                                <Typography variant="subtitle2" fontWeight="600" color="var(--text-secondary)" display="flex" alignItems="center" gap={1}>
+                                    <Upload size={18} /> 파일 첨부
+                                </Typography>
                                 <Button
                                     variant="outlined"
-                                    color="inherit"
-                                    startIcon={<X size={18} />}
-                                    onClick={() => navigate('/board')}
-                                    sx={{ borderRadius: 2, textTransform: 'none', color: 'var(--text-secondary)', borderColor: 'var(--border-color)' }}
+                                    component="label"
+                                    startIcon={<CloudUpload size={16} />}
+                                    size="small"
+                                    sx={{ textTransform: 'none', bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', borderColor: 'var(--border-color)' }}
                                 >
-                                    취소
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    startIcon={<Save size={18} />}
-                                    onClick={handleSubmit}
-                                    disabled={loading}
-                                    sx={{
-                                        borderRadius: 2,
-                                        textTransform: 'none',
-                                        bgcolor: '#3b82f6',
-                                        fontWeight: 600,
-                                        px: 3,
-                                        boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)',
-                                        '&:hover': { bgcolor: '#2563eb' }
-                                    }}
-                                >
-                                    {loading ? '등록 중...' : '게시글 등록'}
+                                    파일 선택
+                                    <input type="file" multiple hidden onChange={handleFileChange} />
                                 </Button>
                             </Stack>
+
+                            {files.length > 0 ? (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                    {files.map((file, i) => (
+                                        <Chip
+                                            key={i}
+                                            label={`${file.name} (${Math.round(file.size / 1024)}KB)`}
+                                            onDelete={() => removeFile(i)}
+                                            variant="outlined"
+                                            sx={{ bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', borderColor: 'var(--border-color)' }}
+                                        />
+                                    ))}
+                                </Box>
+                            ) : (
+                                <Typography variant="body2" color="var(--text-secondary)" align="center" py={2}>
+                                    첨부할 파일을 선택해주세요.
+                                </Typography>
+                            )}
+                        </Box>
+
+                        <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ pt: 2, borderTop: '1px solid var(--border-color)' }}>
+                            <Button
+                                variant="outlined"
+                                color="inherit"
+                                startIcon={<X size={18} />}
+                                onClick={() => navigate('/board')}
+                                sx={{ borderRadius: 2, textTransform: 'none', color: 'var(--text-secondary)', borderColor: 'var(--border-color)' }}
+                            >
+                                취소
+                            </Button>
+                            <Button
+                                variant="contained"
+                                startIcon={<Save size={18} />}
+                                onClick={handleSubmit}
+                                disabled={loading}
+                                sx={{
+                                    borderRadius: 2,
+                                    textTransform: 'none',
+                                    bgcolor: '#3b82f6',
+                                    fontWeight: 600,
+                                    px: 3,
+                                    boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)',
+                                    '&:hover': { bgcolor: '#2563eb' }
+                                }}
+                            >
+                                {loading ? '등록 중...' : '게시글 등록'}
+                            </Button>
                         </Stack>
-                    </Paper>
-                </Box>
-            </div>
-        </div>
+                    </Stack>
+                </Paper>
+            </Box>
+        </MainLayout>
     )
 }
 

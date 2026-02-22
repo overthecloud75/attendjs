@@ -1,22 +1,21 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import axios from 'axios'
+import { useAuth } from '../../hooks/useAuth'
 import {
     Box, Tab, Tabs, TextField, Button, MenuItem, Select, FormControl, InputLabel,
     Typography, Pagination, Chip, Stack, Paper, IconButton, InputAdornment
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
-import { Search, PenLine, FileText, Filter } from 'lucide-react'
+import { Search, PenLine, FileText } from 'lucide-react'
 
-import Navbar from '../../components/bar/Navbar'
-import Sidebar from '../../components/bar/Sidebar'
+import MainLayout from '../../components/layout/MainLayout'
 import { BOARD_TYPES } from '../../configs/board'
 
 const BoardListPage = ({ menu, setMenu }) => {
     const navigate = useNavigate()
     // eslint-disable-next-line
-    const currentUser = useSelector(state => state.user)
+    const { user: currentUser } = useAuth()
 
     const [currentTab, setCurrentTab] = useState('ALL')
     const [posts, setPosts] = useState([])
@@ -131,189 +130,185 @@ const BoardListPage = ({ menu, setMenu }) => {
     }
 
     return (
-        <div className='container'>
-            {menu && <Sidebar menu={menu} setMenu={setMenu} />}
-            <div className='wrapper'>
-                <Navbar menu={menu} setMenu={setMenu} />
-                <Box sx={{ p: { xs: 2, md: 2 }, height: 'calc(100vh - 80px)', overflow: 'auto' }}>
+        <MainLayout menu={menu} setMenu={setMenu}>
+            <Box sx={{ p: { xs: 2, md: 2 }, height: 'calc(100vh - 80px)', overflow: 'auto' }}>
 
-                    {/* Header */}
-                    <Box sx={{ mb: 2 }}>
-                        <Typography variant="h4" fontWeight="700" color="var(--text-primary)" gutterBottom>
-                            사내 게시판 📋
-                        </Typography>
-                        <Typography variant="body1" color="var(--text-secondary)">
-                            공지사항 및 자유로운 소통 공간입니다.
-                        </Typography>
-                    </Box>
+                {/* Header */}
+                <Box sx={{ mb: 2 }}>
+                    <Typography variant="h4" fontWeight="700" color="var(--text-primary)" gutterBottom>
+                        사내 게시판 📋
+                    </Typography>
+                    <Typography variant="body1" color="var(--text-secondary)">
+                        공지사항 및 자유로운 소통 공간입니다.
+                    </Typography>
+                </Box>
 
-                    <Paper
-                        elevation={0}
+                <Paper
+                    elevation={0}
+                    sx={{
+                        p: 3,
+                        borderRadius: 3,
+                        border: '1px solid var(--border-color)',
+                        bgcolor: 'var(--card-bg)',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                    }}
+                >
+                    {/* Tabs */}
+                    <Tabs
+                        value={currentTab}
+                        onChange={(e, v) => { setCurrentTab(v); setPage(1); }}
                         sx={{
-                            p: 3,
-                            borderRadius: 3,
-                            border: '1px solid var(--border-color)',
-                            bgcolor: 'var(--card-bg)',
-                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                            mb: 3,
+                            borderBottom: 1,
+                            borderColor: 'divider',
+                            '& .MuiTab-root': { textTransform: 'none', fontWeight: 600, fontSize: '1rem', color: 'var(--text-secondary)' },
+                            '& .Mui-selected': { color: '#3b82f6 !important' }
                         }}
                     >
-                        {/* Tabs */}
-                        <Tabs
-                            value={currentTab}
-                            onChange={(e, v) => { setCurrentTab(v); setPage(1); }}
-                            sx={{
-                                mb: 3,
-                                borderBottom: 1,
-                                borderColor: 'divider',
-                                '& .MuiTab-root': { textTransform: 'none', fontWeight: 600, fontSize: '1rem', color: 'var(--text-secondary)' },
-                                '& .Mui-selected': { color: '#3b82f6 !important' }
-                            }}
-                        >
-                            <Tab label="전체" value="ALL" />
-                            {BOARD_TYPES.map(type => (
-                                <Tab key={type.value} label={type.label} value={type.value} />
-                            ))}
-                        </Tabs>
+                        <Tab label="전체" value="ALL" />
+                        {BOARD_TYPES.map(type => (
+                            <Tab key={type.value} label={type.label} value={type.value} />
+                        ))}
+                    </Tabs>
 
-                        {/* Search & Actions */}
-                        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ mb: 3, alignItems: 'center' }}>
-                            <Box sx={{ display: 'flex', gap: 2, flex: 1, width: { xs: '100%', md: 'auto' } }}>
-                                <FormControl size="small" sx={{ minWidth: 120 }}>
-                                    <InputLabel sx={{ color: 'var(--text-secondary)', '&.Mui-focused': { color: '#3b82f6' } }}>검색조건</InputLabel>
-                                    <Select
-                                        label="검색조건"
-                                        value={searchType}
-                                        onChange={(e) => setSearchType(e.target.value)}
-                                        sx={{
-                                            bgcolor: 'var(--bg-secondary)',
-                                            color: 'var(--text-primary)',
-                                            '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
-                                            '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
-                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
-                                            '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
-                                        }}
-                                    >
-                                        <MenuItem value="title">제목</MenuItem>
-                                        <MenuItem value="content">내용</MenuItem>
-                                        <MenuItem value="author">작성자</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <TextField
-                                    label="검색어를 입력하세요"
-                                    variant="outlined"
-                                    size="small"
-                                    value={searchKeyword}
-                                    onChange={(e) => setSearchKeyword(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                                    fullWidth
+                    {/* Search & Actions */}
+                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ mb: 3, alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', gap: 2, flex: 1, width: { xs: '100%', md: 'auto' } }}>
+                            <FormControl size="small" sx={{ minWidth: 120 }}>
+                                <InputLabel sx={{ color: 'var(--text-secondary)', '&.Mui-focused': { color: '#3b82f6' } }}>검색조건</InputLabel>
+                                <Select
+                                    label="검색조건"
+                                    value={searchType}
+                                    onChange={(e) => setSearchType(e.target.value)}
                                     sx={{
                                         bgcolor: 'var(--bg-secondary)',
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': { borderColor: 'var(--border-color)' },
-                                            '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
-                                            '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
-                                            color: 'var(--text-primary)'
-                                        },
-                                        '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
-                                        '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' }
-                                    }}
-                                    slotProps={{
-                                        input: {
-                                            endAdornment: (
-                                                <InputAdornment position="end">
-                                                    <IconButton onClick={handleSearch} edge="end" sx={{ color: 'var(--text-secondary)' }}>
-                                                        <Search size={18} />
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            )
-                                        }
-                                    }}
-                                />
-                            </Box>
-
-                            <Button
-                                variant="contained"
-                                startIcon={<PenLine size={18} />}
-                                onClick={() => navigate('/board/write')}
-                                sx={{
-                                    textTransform: 'none',
-                                    fontWeight: 600,
-                                    bgcolor: '#3b82f6',
-                                    borderRadius: 2,
-                                    py: 1,
-                                    px: 3,
-                                    boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)',
-                                    '&:hover': { bgcolor: '#2563eb' }
-                                }}
-                            >
-                                글쓰기
-                            </Button>
-                        </Stack>
-
-                        {/* DataGrid */}
-                        <div style={{ width: '100%', minHeight: 500 }}>
-                            <DataGrid
-                                rows={posts}
-                                columns={columns}
-                                getRowId={(row) => row._id}
-                                loading={loading}
-                                paginationMode="server"
-                                rowCount={totalCount}
-                                hideFooterPagination
-                                hideFooter
-                                disableSelectionOnClick
-                                sx={{
-                                    border: 'none',
-                                    '& .MuiDataGrid-columnHeaders': {
-                                        backgroundColor: 'var(--bg-secondary)',
-                                        color: 'var(--text-secondary)',
-                                        fontWeight: 700,
-                                        fontSize: '0.875rem',
-                                        borderBottom: '1px solid var(--border-color)'
-                                    },
-                                    '& .MuiDataGrid-columnHeader': {
-                                        backgroundColor: 'var(--bg-secondary)'
-                                    },
-                                    '& .MuiDataGrid-cell': {
-                                        borderBottom: '1px solid var(--border-color)',
-                                        backgroundColor: 'var(--card-bg)',
                                         color: 'var(--text-primary)',
-                                        fontSize: '0.875rem'
+                                        '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
+                                        '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
+                                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
+                                        '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                                    }}
+                                >
+                                    <MenuItem value="title">제목</MenuItem>
+                                    <MenuItem value="content">내용</MenuItem>
+                                    <MenuItem value="author">작성자</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <TextField
+                                label="검색어를 입력하세요"
+                                variant="outlined"
+                                size="small"
+                                value={searchKeyword}
+                                onChange={(e) => setSearchKeyword(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                                fullWidth
+                                sx={{
+                                    bgcolor: 'var(--bg-secondary)',
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': { borderColor: 'var(--border-color)' },
+                                        '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                        '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                                        color: 'var(--text-primary)'
                                     },
-                                    '& .MuiDataGrid-iconSeparator': {
-                                        display: 'none'
-                                    },
-                                    '& .MuiDataGrid-row:hover': {
-                                        cursor: 'pointer',
-                                        backgroundColor: 'var(--hover-bg)'
-                                    },
-                                    '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-cell:focus': {
-                                        outline: 'none'
-                                    },
-                                    '& .MuiDataGrid-overlay': {
-                                        backgroundColor: 'var(--card-bg)',
-                                        color: 'var(--text-secondary)'
+                                    '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                    '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' }
+                                }}
+                                slotProps={{
+                                    input: {
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton onClick={handleSearch} edge="end" sx={{ color: 'var(--text-secondary)' }}>
+                                                    <Search size={18} />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
                                     }
                                 }}
-                                onRowClick={(params) => navigate(`/board/${params.row._id}`)}
-                            />
-                        </div>
-
-                        {/* Pagination */}
-                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                            <Pagination
-                                count={Math.ceil(totalCount / 10)}
-                                page={page}
-                                onChange={(e, v) => setPage(v)}
-                                color="primary"
-                                size="large"
-                                shape="rounded"
                             />
                         </Box>
-                    </Paper>
-                </Box>
-            </div>
-        </div>
+
+                        <Button
+                            variant="contained"
+                            startIcon={<PenLine size={18} />}
+                            onClick={() => navigate('/board/write')}
+                            sx={{
+                                textTransform: 'none',
+                                fontWeight: 600,
+                                bgcolor: '#3b82f6',
+                                borderRadius: 2,
+                                py: 1,
+                                px: 3,
+                                boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)',
+                                '&:hover': { bgcolor: '#2563eb' }
+                            }}
+                        >
+                            글쓰기
+                        </Button>
+                    </Stack>
+
+                    {/* DataGrid */}
+                    <div style={{ width: '100%', minHeight: 500 }}>
+                        <DataGrid
+                            rows={posts}
+                            columns={columns}
+                            getRowId={(row) => row._id}
+                            loading={loading}
+                            paginationMode="server"
+                            rowCount={totalCount}
+                            hideFooterPagination
+                            hideFooter
+                            disableSelectionOnClick
+                            sx={{
+                                border: 'none',
+                                '& .MuiDataGrid-columnHeaders': {
+                                    backgroundColor: 'var(--bg-secondary)',
+                                    color: 'var(--text-secondary)',
+                                    fontWeight: 700,
+                                    fontSize: '0.875rem',
+                                    borderBottom: '1px solid var(--border-color)'
+                                },
+                                '& .MuiDataGrid-columnHeader': {
+                                    backgroundColor: 'var(--bg-secondary)'
+                                },
+                                '& .MuiDataGrid-cell': {
+                                    borderBottom: '1px solid var(--border-color)',
+                                    backgroundColor: 'var(--card-bg)',
+                                    color: 'var(--text-primary)',
+                                    fontSize: '0.875rem'
+                                },
+                                '& .MuiDataGrid-iconSeparator': {
+                                    display: 'none'
+                                },
+                                '& .MuiDataGrid-row:hover': {
+                                    cursor: 'pointer',
+                                    backgroundColor: 'var(--hover-bg)'
+                                },
+                                '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-cell:focus': {
+                                    outline: 'none'
+                                },
+                                '& .MuiDataGrid-overlay': {
+                                    backgroundColor: 'var(--card-bg)',
+                                    color: 'var(--text-secondary)'
+                                }
+                            }}
+                            onRowClick={(params) => navigate(`/board/${params.row._id}`)}
+                        />
+                    </div>
+
+                    {/* Pagination */}
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                        <Pagination
+                            count={Math.ceil(totalCount / 10)}
+                            page={page}
+                            onChange={(e, v) => setPage(v)}
+                            color="primary"
+                            size="large"
+                            shape="rounded"
+                        />
+                    </Box>
+                </Paper>
+            </Box>
+        </MainLayout>
     )
 }
 

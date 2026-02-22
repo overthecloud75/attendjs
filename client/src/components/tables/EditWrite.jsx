@@ -2,15 +2,15 @@ import { useState } from 'react'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
 import axios from 'axios'
 import { format } from 'date-fns'
-import { useSelector } from 'react-redux'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 import { User, Type, Calendar, Save, Trash2, X, PenTool, Edit } from 'lucide-react'
 import { InputAdornment } from '@mui/material'
+import { useAuth } from '../../hooks/useAuth'
 
 const EditWrite = ({ writeMode, page, columns, data, setData, open, setOpen, rowData }) => {
 
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
     const [focus, setFocus] = useState('name')
     const [value, setValue] = useState(writeMode ? {
         id: '',

@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, InputAdornment } from '@mui/material'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 import { Edit, Save, X, List, FileText, User, Calendar, CheckCircle } from 'lucide-react'
+import { useAuth } from '../../hooks/useAuth'
 
 import { EditableSelects } from '../../configs/pages.js'
 import { approvalAttendUpdate, approvalPaymentUpdate } from '../../utils/Approval'
@@ -21,7 +21,7 @@ const COLUMNS_MAP = {
 }
 
 const ApprovalUpdate = ({ data, setData, open, setOpen, rowData }) => {
-    const user = useSelector(state => state.user)
+    const { user } = useAuth()
     const { status: previousStatus, approvalType } = rowData
 
     const options = OPTIONS_MAP[approvalType] || paymentOptions
