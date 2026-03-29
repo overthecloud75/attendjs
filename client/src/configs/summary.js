@@ -30,6 +30,11 @@ export const columnHeaders = [
         enableSorting: true,
     },
     {
+        accessorKey: '병가',
+        header: '병가',
+        enableSorting: true,
+    },
+    {
         accessorKey: '반차',
         header: '반차',
         enableSorting: true,
@@ -99,6 +104,10 @@ export const csvHeaders = [
     {
         key: '휴가',
         label: '휴가',
+    },
+    {
+        key: '병가',
+        label: '병가',
     },
     {
         key: '반차',

@@ -93,6 +93,6 @@ export const getApprovalLeaveHistoryByEmployeeId = async (employeeId, start, end
         const dd = String(end.getDate()).padStart(2, '0')
         endStr = `${yyyy}-${mm}-${dd}`
     }
-    const query = { employeeId, start: { $gte: start, $lt: endStr }, reason: { $in: ['휴가', '반차'] }, status: { $ne: 'Cancel' } }
+    const query = { employeeId, start: { $gte: start, $lt: endStr }, reason: { $in: ['휴가', '반차', '병가'] }, status: { $ne: 'Cancel' } }
     return Approval.find(query).sort({ createdAt: -1 })
 }

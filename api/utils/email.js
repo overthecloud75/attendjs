@@ -176,8 +176,7 @@ export const sendAttendConfirmationEmail = async (approval, status) => {
 
     if (status === 'Active') {
         action = '승인'
-        // 휴가 또는 반차 승인 시 인사팀 참조
-        if (['휴가', '반차'].includes(approval.reason)) {
+        if (['휴가', '반차', '병가'].includes(approval.reason)) {
             cc = process.env.CC_EMAIL || ''
         }
     } else if (status === 'Cancel') {

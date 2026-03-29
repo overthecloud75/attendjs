@@ -12,14 +12,32 @@ import { LoadingSpinner } from '../../utils/GeneralUtil'
 import { useApproval } from '../../hooks/useApproval'
 
 const REASON_OPTIONS = Object.keys(WORKING.outStatus)
-const HALF_LEAVE_OPTIONS = WORKING.outStatus['반차']
+
+/**
+ * UI Configuration for extra fields based on the selected reason.
+ * This removes hardcoded logic from the component rendering.
+ */
+const EXTRA_FIELD_CONFIG = {
+    '기타': {
+        type: 'text',
+        label: '기타 사유 (10자 이내)',
+        placeholder: '사유를 입력하세요',
+    },
+    '반차': {
+        type: 'select',
+        label: '반차 구분',
+        options: WORKING.outStatus['반차'],
+        defaultValue: '오전반차'
+    }
+}
 
 const Approval = ({ navigate, open, setOpen }) => {
     const { t } = useTranslation()
     const { value, setValue, leftLeave, leftStatus } = useApproval()
 
-    // Derived state for 'etc' field visibility
-    const isEtcVisible = value.reason === '기타' || value.reason === '반차'
+    // Derived state for 'extra field' configuration
+    const fieldConfig = EXTRA_FIELD_CONFIG[value.reason]
+    const hasExtraField = !!fieldConfig
 
     const handleClose = () => setOpen(false)
 
@@ -48,6 +66,9 @@ const Approval = ({ navigate, open, setOpen }) => {
         if (name === 'etc') {
             if (inputValue.length > 10) return alert('10글자 이하로 적어주세요.')
             if (/[\/ ]/.test(inputValue)) return alert('특수 문자와 공백은 허용되지 않습니다.')
+            if (['휴가', '반차', '병가', '연차'].some(word => inputValue.includes(word))) {
+                return alert('휴가, 반차, 병가, 연차는 신청 사유에서 직접 선택해 주세요.')
+            }
         }
 
         setValue(prev => ({ ...prev, [name]: inputValue }))
@@ -69,63 +90,63 @@ const Approval = ({ navigate, open, setOpen }) => {
         </Stack>
     )
 
-    const renderEtcField = () => {
-        if (value.reason === '기타') {
-            return (
-                <Fade in={true}>
-                    <TextField
-                        name='etc'
-                        label='기타 사유 (10자 이내)'
-                        fullWidth
-                        variant='outlined'
-                        value={value.etc || ''}
-                        onChange={handleChange}
-                        size="small"
-                        sx={{
-                            bgcolor: 'var(--card-bg)',
-                            '& .MuiOutlinedInput-root': {
-                                color: 'var(--text-primary)',
-                                '& fieldset': { borderColor: 'var(--border-color)' },
-                                '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
-                                '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
-                            },
-                            '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
-                            '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' }
-                        }}
-                    />
-                </Fade>
-            )
-        }
-        if (value.reason === '반차') {
-            return (
-                <Fade in={true}>
-                    <FormControl fullWidth size="small">
-                        <InputLabel>반차 구분</InputLabel>
-                        <Select
+    const renderExtraField = () => {
+        if (!fieldConfig) return null
+
+        return (
+            <Fade in={hasExtraField}>
+                <Box>
+                    {fieldConfig.type === 'text' ? (
+                        <TextField
                             name='etc'
-                            value={value.etc || '오전반차'}
-                            label='반차 구분'
+                            label={fieldConfig.label}
+                            fullWidth
+                            variant='outlined'
+                            value={value.etc || ''}
                             onChange={handleChange}
+                            size="small"
+                            placeholder={fieldConfig.placeholder}
                             sx={{
                                 bgcolor: 'var(--card-bg)',
-                                color: 'var(--text-primary)',
-                                '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
-                                '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
-                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
-                                '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                                '& .MuiOutlinedInput-root': {
+                                    color: 'var(--text-primary)',
+                                    '& fieldset': { borderColor: 'var(--border-color)' },
+                                    '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                    '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+                                },
+                                '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' }
                             }}
-                        >
-                            {HALF_LEAVE_OPTIONS.map((option) => (
-                                <MenuItem key={option} value={option}>
-                                    {option}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Fade>
-            )
-        }
-        return null
+                        />
+                    ) : (
+                        <FormControl fullWidth size="small">
+                            <InputLabel id="extra-field-label">{fieldConfig.label}</InputLabel>
+                            <Select
+                                labelId="extra-field-label"
+                                name='etc'
+                                value={value.etc || fieldConfig.defaultValue}
+                                label={fieldConfig.label}
+                                onChange={handleChange}
+                                sx={{
+                                    bgcolor: 'var(--card-bg)',
+                                    color: 'var(--text-primary)',
+                                    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
+                                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
+                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
+                                    '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
+                                }}
+                            >
+                                {fieldConfig.options.map((option) => (
+                                    <MenuItem key={option} value={option}>
+                                        {option}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    )}
+                </Box>
+            </Fade>
+        )
     }
 
     const isLoading = leftLeave === '' || leftStatus === '' || value.approver === ''
@@ -261,7 +282,7 @@ const Approval = ({ navigate, open, setOpen }) => {
                         </Select>
                     </FormControl>
 
-                    {isEtcVisible && renderEtcField()}
+                    {hasExtraField && renderExtraField()}
                 </Stack>
             </DialogContent>
 

@@ -11,6 +11,8 @@ import { AdminEditablePages, UserEditablePages, pagesInfo } from '../../configs/
 
 const getEditablePages = (user) => (user.isAdmin ? AdminEditablePages : UserEditablePages)
 
+import { ApprovalActions, EditableActions } from './ActionGroups.jsx'
+
 const CustomTableButtons = ({
     page,
     data,
@@ -25,7 +27,6 @@ const CustomTableButtons = ({
     const navigate = useNavigate()
     const { user } = useAuth()
 
-    // Determine which pages are editable for the current user
     const editablePages = useMemo(() => getEditablePages(user), [user])
 
     const [openApproval, setOpenApproval] = useState(false)
@@ -83,41 +84,20 @@ const CustomTableButtons = ({
 
             {/* Action Buttons */}
             <Stack direction='row' spacing={1.5} sx={{ alignItems: 'center' }}>
+                {/* 1. Page-specific Actions */}
                 {page === 'approval' && (
-                    <>
-                        <Button
-                            variant='contained'
-                            color='primary'
-                            startIcon={<FileCheck size={18} />}
-                            onClick={() => setOpenApproval(true)}
-                            sx={{ display: { xs: 'none', sm: 'flex' }, textTransform: 'none', borderRadius: 2, boxShadow: 'none' }}
-                        >
-                            근태 결재
-                        </Button>
-                        <Button
-                            variant='contained'
-                            color='secondary'
-                            startIcon={<CreditCard size={18} />}
-                            onClick={() => setOpenPayment(true)}
-                            sx={{ display: { xs: 'none', sm: 'flex' }, textTransform: 'none', borderRadius: 2, boxShadow: 'none' }}
-                        >
-                            지출 결재
-                        </Button>
-                    </>
+                    <ApprovalActions 
+                        onOpenApproval={() => setOpenApproval(true)} 
+                        onOpenPayment={() => setOpenPayment(true)} 
+                    />
                 )}
 
+                {/* 2. Editable Content Actions */}
                 {editablePages.includes(page) && (
-                    <Button
-                        variant='contained'
-                        color='success'
-                        startIcon={<Plus size={18} />}
-                        onClick={handleWriteClick}
-                        sx={{ display: { xs: 'none', sm: 'flex' }, textTransform: 'none', borderRadius: 2, boxShadow: 'none' }}
-                    >
-                        New
-                    </Button>
+                    <EditableActions onWriteClick={handleWriteClick} />
                 )}
 
+                {/* 3. Global Tools (Download, etc.) */}
                 <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                     <CsvDownload data={data} csvHeaders={csvHeaders} fileName={fileName} />
                 </Box>

@@ -72,15 +72,13 @@ export default class LeaveService {
         // 1. 해당 날짜에 휴가/반차를 사용한(Active) 내역 조회
         const approvals = await Approval.find({
             status: 'Active',
-            reason: { $in: ['휴가', '반차'] },
+            reason: { $in: ['휴가', '반차', '병가'] },
             start: { $lte: targetDate },
             end: { $gte: targetDate }
         })
 
         for (const app of approvals) {
-            let deduction = 0
-            if (app.reason === '휴가') deduction = 1
-            else if (app.reason === '반차') deduction = 0.5
+            const deduction = WORKING.offDay[app.reason] || 0
 
             if (deduction === 0) continue
 
@@ -125,9 +123,7 @@ export default class LeaveService {
 
     // [New] 특정 휴가 건에 대해 연차 차감 (Late Approval 대응용)
     static async deductLeaveForApproval(approval) {
-        let deduction = 0
-        if (approval.reason === '휴가') deduction = 1
-        else if (approval.reason === '반차') deduction = 0.5
+        const deduction = WORKING.offDay[approval.reason] || 0
 
         if (deduction === 0) return
 
@@ -168,9 +164,7 @@ export default class LeaveService {
 
     // [New] 연차 취소 시 환급 처리 (Approval Controller에서 호출)
     static async refundLeave(approval) {
-        let refund = 0
-        if (approval.reason === '휴가') refund = 1
-        else if (approval.reason === '반차') refund = 0.5
+        const refund = WORKING.offDay[approval.reason] || 0
 
         if (refund === 0) return
 
@@ -223,19 +217,12 @@ export default class LeaveService {
         for (const approval of approvalHistory) {
             let baseDay = approval.start
             while (baseDay <= approval.end && baseDay < nextYearDay) {
+                const deduction = WORKING.offDay[approval.reason] || 0
                 if (approval.status === 'Active') {
-                    if (approval.reason === '휴가') {
-                        summary.notUsed = summary.notUsed + 1
-                    } else if (approval.reason === '반차') {
-                        summary.notUsed = summary.notUsed + 0.5
-                    }
+                    summary.notUsed += deduction
                 }
                 else if (approval.status === 'Pending') {
-                    if (approval.reason === '휴가') {
-                        summary.pending = summary.pending + 1
-                    } else if (approval.reason === '반차') {
-                        summary.pending = summary.pending + 0.5
-                    }
+                    summary.pending += deduction
                 }
                 baseDay = getNextDay(baseDay)
             }

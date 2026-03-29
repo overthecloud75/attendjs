@@ -65,7 +65,8 @@ const LeaveSummary = ({ leftLeave }) => {
 
     const usedHalfDays = leftLeave?.['반차'] || 0
     const usedFullDays = leftLeave?.['휴가'] || 0
-    const totalUsedDays = usedHalfDays * 0.5 + usedFullDays
+    const usedSickDays = leftLeave?.['병가'] || 0
+    const totalUsedDays = usedHalfDays * 0.5 + usedFullDays + usedSickDays
     const totalLeave = leftLeave?.defaultAnnualLeave || 0
     const usedRate = totalLeave ? (totalUsedDays / totalLeave) * 100 : 0
 
