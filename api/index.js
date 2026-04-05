@@ -28,6 +28,7 @@ import boardRoute from './routes/board.js'
 import confirmRoute from './routes/confirm.js'
 import uploadRoute from './routes/upload.js'
 import chatRoute from './routes/chat.js'
+import agentRoute from './routes/agent.js'
 import swaggerRoute from './routes/swagger.js'
 import settingsRoute from './routes/settings.js'
 import { getClientIP } from './utils/util.js'
@@ -72,8 +73,12 @@ app.use(express.urlencoded({ extended: true }))
 const csrfProtection = csrf({ cookie: true })
 
 app.use((req, res, next) => {
-    const exemptPaths = ['/api/auth/setAttend', '/api/auth/callback', '/api/auth/verify']
-    if (exemptPaths.includes(req.path)) {
+    const exemptPaths = [
+        '/api/auth/setAttend', 
+        '/api/auth/callback', 
+        '/api/auth/verify'
+    ]
+    if (exemptPaths.includes(req.path) || req.path.startsWith('/api/agent/')) {
         return next()
     }
     csrfProtection(req, res, next)
@@ -115,6 +120,7 @@ app.use('/api/board', boardRoute)
 app.use('/api/confirm', confirmRoute)
 app.use('/api/upload', uploadRoute)
 app.use('/api/chat', chatRoute)
+app.use('/api/agent', agentRoute)
 app.use('/api/settings', settingsRoute)
 app.use('/swagger', swaggerRoute)
 
@@ -125,10 +131,11 @@ app.use((err, req, res, next) => {
     return res.status(errorStatus).json({ message: errorMessage })
 })
 
-app.listen(8888, () => {
+const server = app.listen(8888, () => {
     connect()
     startLeaveScheduler()
     runLeaveMigration() // [New] 마이그레이션 자동 실행
     logger.warn('Connected to backend.')
 })
+server.timeout = 600000;
 // Force Restart for Migration Check 4 - Full History

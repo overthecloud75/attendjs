@@ -21,7 +21,7 @@ export const columnHeaders = [
     },
     {
         accessorKey: 'leftAnnualLeave',
-        header: '남은 연자',
+        header: '남은 연차',
         enableSorting: true,
     },
     {
@@ -99,7 +99,7 @@ export const csvHeaders = [
     },
     {
         key: 'leftAnnualLeave',
-        label: '남은 연자',
+        label: '남은 연차',
     },
     {
         key: '휴가',

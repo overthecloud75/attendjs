@@ -85,7 +85,7 @@ const Update = ({ writeMode, page, columns, data, setData, open, setOpen, rowDat
                                 margin='dense'
                                 id={item.accessorKey}
                                 name={item.accessorKey}
-                                label={item.accessorKey}
+                                label={item.header || item.accessorKey}
                                 fullWidth
                                 variant='outlined'
                                 defaultValue={value[item.accessorKey] ? value[item.accessorKey] : ''}
@@ -131,7 +131,7 @@ const Update = ({ writeMode, page, columns, data, setData, open, setOpen, rowDat
                                 margin='dense'
                                 id={item.accessorKey}
                                 name={item.accessorKey}
-                                label={item.accessorKey}
+                                label={item.header || item.accessorKey}
                                 fullWidth
                                 variant='outlined'
                                 value={value[item.accessorKey] ? value[item.accessorKey] : ''}
@@ -169,7 +169,7 @@ const Update = ({ writeMode, page, columns, data, setData, open, setOpen, rowDat
                                 margin='dense'
                                 id={item.accessorKey}
                                 name={item.accessorKey}
-                                label={item.accessorKey}
+                                label={item.header || item.accessorKey}
                                 fullWidth
                                 variant='standard'
                                 value={rowData[item.accessorKey] ? rowData[item.accessorKey] : ''}

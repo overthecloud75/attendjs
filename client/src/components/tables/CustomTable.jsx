@@ -73,7 +73,7 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdC
     // eslint-disable-next-line
     const table =
         useReactTable({
-            columns,
+            columns: columns.filter(col => !col.hidden),
             data,
             state: { pagination },
             getCoreRowModel: getCoreRowModel(),
@@ -159,6 +159,10 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdC
                                             '&:hover': {
                                                 backgroundColor: 'var(--hover-bg) !important',
                                             },
+                                            // '취소'된 항목은 흐리게(Grey-out) 처리
+                                            opacity: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 0.6 : 1,
+                                            backgroundColor: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 'var(--bg-secondary) !important' : 'inherit',
+                                            filter: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 'grayscale(0.5)' : 'none'
                                         }}
                                     >
                                         <Td align="center" onClick={(e) => onIdClick ? onIdClick(row.original) : handleUpdateClick(e, row.original)}>

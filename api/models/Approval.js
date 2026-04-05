@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { APPROVAL_STATUS } from '../config/domain.js'
 
 const ApprovalSchema = new mongoose.Schema(
     {
@@ -64,8 +65,8 @@ const ApprovalSchema = new mongoose.Schema(
         },
         status: {
             type: String, 
-            enum: ['Pending', 'Active', 'Cancel', 'InProgress'],
-            default: 'Pending'
+            enum: Object.values(APPROVAL_STATUS),
+            default: APPROVAL_STATUS.PENDING
         },
         content: {
             type: String

@@ -1,4 +1,4 @@
-import { getEmployeeByEmail } from './employee.js'
+import EmployeeService from '../services/EmployeeService.js'
 import CreditCard from '../models/CreditCard.js'
 import { sanitizeData } from '../utils/util.js'
 
@@ -16,7 +16,7 @@ export const search = async (req, res, next) => {
 export const getCreditCardNo = async (req, res, next) => {
     try {
         const { email } = req.user
-        const employee = await getEmployeeByEmail(email)
+        const employee = await EmployeeService.getEmployeeByEmail(email)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json({cardNo: employee.cardNo})
     } catch (err) {
         next(err)
@@ -30,7 +30,7 @@ export const write = async (req, res, next) => {
         const price = Number(priceStr)
         const people = Number(peopleStr)
         const { name, email } = req.user
-        const employee = await getEmployeeByEmail(email)
+        const employee = await EmployeeService.getEmployeeByEmail(email)
         const perPrice = Math.round(price / people)
         if (!content) {
             content = ''

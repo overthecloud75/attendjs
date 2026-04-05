@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import { APPROVAL_STATUS } from '../config/domain.js'
+import { EMPLOYEE_STATUS, WORK_MODE, POSITIONS } from '../config/domain.js'
 
 const EmployeeSchema = new mongoose.Schema(
     {
@@ -28,7 +30,7 @@ const EmployeeSchema = new mongoose.Schema(
         },
         position: {
             type: String,
-            enum: ['팀원', '파트장', '팀장', '본부장', '대표이사']
+            enum: POSITIONS
         },
         email: {
             type: String,
@@ -40,12 +42,12 @@ const EmployeeSchema = new mongoose.Schema(
         },
         regular: {
             type: String,
-            enum: ['상근', '비상근', '병특', '퇴사'],
+            enum: Object.values(EMPLOYEE_STATUS),
             required: true,
         },
         mode: {
             type: String,
-            enum: ['내근', '파견'],
+            enum: Object.values(WORK_MODE),
             required: true,
         },
         attendMode: {

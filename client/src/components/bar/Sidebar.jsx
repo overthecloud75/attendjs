@@ -24,6 +24,9 @@ const itemDict = {
         pagesInfo['approval'],
         pagesInfo['board'],
     ],
+    '🤖 AI Workspace': [
+        pagesInfo['agentic-smartwork'],
+    ],
     Admin: [
         pagesInfo['summary'],
         pagesInfo['settings'],

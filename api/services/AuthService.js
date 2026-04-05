@@ -6,8 +6,8 @@ import Employee from '../models/Employee.js'
 import Login from '../models/Login.js'
 import SystemSettings from '../models/SystemSettings.js'
 import { createError } from '../utils/error.js'
-import { getToday, dateAndTime, getRandomInt, sanitizeData } from '../utils/util.js'
-import { getEmployeeByEmail } from '../controllers/employee.js' // Consider refactoring this dependency too
+import { DateUtil, dateAndTime, getRandomInt, sanitizeData } from '../utils/util.js'
+import EmployeeService from './EmployeeService.js'
 import LocationService from './LocationService.js'
 import EmailService from './EmailService.js'
 import InfrastructureService from './InfrastructureService.js'
@@ -27,7 +27,7 @@ export default class AuthService {
         if (userCount === 0) {
             isAdmin = true
             employeeId = 0
-            const beginDate = getToday()
+            const beginDate = DateUtil.today()
             const rootEmployee = new Employee({
                 employeeId, name, email, beginDate,
                 department: 'IT', rank: '관리자', position: '팀장',
@@ -53,21 +53,24 @@ export default class AuthService {
     }
 
     static async validateNewUser(name, email) {
-        const employee = await getEmployeeByEmail(email)
-        if (!employee) throw createError(403, 'Forbidden')
-        if (employee.name !== name) throw createError(403, 'User not found!')
-        if (employee.regular === '퇴사') throw createError(403, 'Employee not found!')
+        const check = await EmployeeService.validateActiveEmployee(email, name)
+        if (!check.valid) {
+            if (check.reason === 'Employee not found') throw createError(403, 'Forbidden')
+            if (check.reason === 'Employee is retired') throw createError(403, 'Employee not found!')
+            throw createError(403, check.reason || 'User not found!')
+        }
 
         const existingUser = await this.getUserByEmail(email)
         if (existingUser) throw createError(409, 'The User is already created')
-        return employee
+        return check.employee
     }
 
     static async login(rawEmail, password, platform, width, height, cloudflareToken, ip, user_agent) {
         const email = sanitizeData(rawEmail, 'email')
         const user = await this.validateUserCredentials(email, password)
 
-        const { beginDate, department, rank, regular } = await getEmployeeByEmail(email)
+        const employee = await EmployeeService.getEmployeeByEmail(email)
+        const { beginDate, department, rank, regular } = employee
         const token = jwt.sign(
             { name: user.name, employeeId: user.employeeId, isAdmin: user.isAdmin, email, department },
             process.env.JWT,
@@ -234,7 +237,7 @@ export default class AuthService {
         const user = await this.getUserByEmail(email)
         if (user) { isAdmin = user.isAdmin }
 
-        const { name, employeeId, department } = await getEmployeeByEmail(email)
+        const { name, employeeId, department } = await EmployeeService.getEmployeeByEmail(email)
         const token = jwt.sign(
             { name, employeeId, isAdmin, email, department },
             process.env.JWT,

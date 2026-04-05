@@ -1,6 +1,6 @@
 import ExcelJS from 'exceljs'
 import { v4 as uuidv4 } from 'uuid'
-import { getYearMonth } from './util.js'
+import { DateUtil } from './util.js'
 import { ensureDirectoryExists } from './file.js'
 import { getReSize } from './image.js'
 
@@ -38,7 +38,7 @@ export const fillPaymentExcelTemplate = async (approval, uploadImage) => {
     })
 
     // 변경된 내용을 새 파일로 저장
-    const { year, month } = getYearMonth()
+    const { year, month } = DateUtil.getYearMonth()
     ensureDirectoryExists(`payments/${year}/${month}/`)  
     const destination = `payments/${year}/${month}/${uuidv4()}.xlsx`
    

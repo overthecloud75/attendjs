@@ -24,6 +24,12 @@ const SystemSettingsSchema = new mongoose.Schema(
                 allowedIps: [String],
                 blockExternalAccess: { type: Boolean, default: false }
             }
+        },
+        llm: {
+            apiKey: { type: String, default: '' },
+            baseURL: { type: String, default: 'https://api.openai.com/v1' },
+            model: { type: String, default: 'gpt-4o' },
+            temperature: { type: Number, default: 0.7 }
         }
     },
     { timestamps: true }

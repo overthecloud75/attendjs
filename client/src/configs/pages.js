@@ -6,6 +6,13 @@ export const pagesInfo = {
         auth: true,
         visible: true
     },
+    'agentic-smartwork': {
+        to: '/agentic-canvas',
+        emoji: '🤖',
+        title: 'Agentic Canvas',
+        auth: true,
+        visible: true
+    },
     'attend': {
         to: '/attend',
         emoji: '🕒',

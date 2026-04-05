@@ -2,8 +2,9 @@ import { WORKING, getReverseStatus } from '../config/working.js'
 import { logger } from '../config/winston.js'
 import Report from '../models/Report.js'
 import LeaveHistory from '../models/LeaveHistory.js'
-import { getToday, getNextDay, getNextYear, getDefaultAnnualLeave } from '../utils/util.js'
-import { getApprovalLeaveHistoryByEmployeeId } from '../controllers/attendApproval.js' // Consider refactoring if possible
+import Approval from '../models/Approval.js'
+import { DateUtil, getDefaultAnnualLeave } from '../utils/util.js'
+import { APPROVAL_STATUS, LEAVE_TYPE } from '../config/domain.js'
 
 export default class LeaveService {
 
@@ -31,10 +32,11 @@ export default class LeaveService {
         const reverseStatus = getReverseStatus()
 
         const { defaultAnnualLeave, employeementPeriod, baseDate, baseMonth } = getDefaultAnnualLeave(beginDate)
-        const nextYearDay = getNextYear(baseDate)
+        // nextYearDay: 기준일의 다음날의 1년 뒤 (연차 만료일)
+        const nextYearDay = DateUtil.format(DateUtil.addYears(DateUtil.addDays(baseDate, 1), 1))
         const summary = this.initializeLeftLeaveSummary(name, employeeId, beginDate, baseDate, baseMonth, defaultAnnualLeave, employeementPeriod)
-        const attends = await Report.find({ employeeId, date: { $gte: baseDate, $lte: getToday() } }).sort({ date: 1 })
-        const approvalHistory = await getApprovalLeaveHistoryByEmployeeId(employeeId, getToday(), nextYearDay)
+        const attends = await Report.find({ employeeId, date: { $gte: baseDate, $lte: DateUtil.today() } }).sort({ date: 1 })
+        const approvalHistory = await this.getApprovalLeaveHistoryByEmployeeId(employeeId, DateUtil.today(), nextYearDay)
         this.updateLeftLeaveSummary(summary, attends, reverseStatus, approvalHistory, nextYearDay)
         return summary
     }
@@ -71,8 +73,8 @@ export default class LeaveService {
     static async deductLeave(targetDate) {
         // 1. 해당 날짜에 휴가/반차를 사용한(Active) 내역 조회
         const approvals = await Approval.find({
-            status: 'Active',
-            reason: { $in: ['휴가', '반차', '병가'] },
+            status: APPROVAL_STATUS.ACTIVE,
+            reason: { $in: [LEAVE_TYPE.ANNUAL, LEAVE_TYPE.HALF, LEAVE_TYPE.SICK] },
             start: { $lte: targetDate },
             end: { $gte: targetDate }
         })
@@ -218,15 +220,32 @@ export default class LeaveService {
             let baseDay = approval.start
             while (baseDay <= approval.end && baseDay < nextYearDay) {
                 const deduction = WORKING.offDay[approval.reason] || 0
-                if (approval.status === 'Active') {
+                if (approval.status === APPROVAL_STATUS.ACTIVE) {
                     summary.notUsed += deduction
                 }
-                else if (approval.status === 'Pending') {
+                else if (approval.status === APPROVAL_STATUS.PENDING) {
                     summary.pending += deduction
                 }
-                baseDay = getNextDay(baseDay)
+                baseDay = DateUtil.formatNextDay(baseDay)
             }
         }
         summary.leftAnnualLeave = summary.leftAnnualLeave - summary.notUsed
+    }
+
+    static async getApprovalLeaveHistoryByEmployeeId(employeeId, start, end) {
+        let endStr = end
+        if (end instanceof Date) {
+            const yyyy = end.getFullYear()
+            const mm = String(end.getMonth() + 1).padStart(2, '0')
+            const dd = String(end.getDate()).padStart(2, '0')
+            endStr = `${yyyy}-${mm}-${dd}`
+        }
+        const query = { 
+            employeeId, 
+            start: { $gte: start, $lt: endStr }, 
+            reason: { $in: [LEAVE_TYPE.ANNUAL, LEAVE_TYPE.HALF, LEAVE_TYPE.SICK] }, 
+            status: { $ne: APPROVAL_STATUS.CANCEL } 
+        }
+        return Approval.find(query).sort({ createdAt: -1 })
     }
 }

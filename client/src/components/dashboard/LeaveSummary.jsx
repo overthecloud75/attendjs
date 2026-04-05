@@ -4,6 +4,7 @@ import { Paper, Typography, Box, LinearProgress, Button, Stack, Grid } from '@mu
 import { FileSignature, Calculator, Clock, CheckCircle2, AlertCircle } from 'lucide-react'
 
 import Approval from './Approval'
+import { LEAVE_TYPE } from '../../configs/domain'
 
 // 커스텀 게이지 바
 function LeaveProgressBar(props) {
@@ -63,9 +64,9 @@ const LeaveSummary = ({ leftLeave }) => {
     const [openApproval, setOpenApproval] = useState(false)
     const navigate = useNavigate()
 
-    const usedHalfDays = leftLeave?.['반차'] || 0
-    const usedFullDays = leftLeave?.['휴가'] || 0
-    const usedSickDays = leftLeave?.['병가'] || 0
+    const usedHalfDays = leftLeave?.[LEAVE_TYPE.HALF] || 0
+    const usedFullDays = leftLeave?.[LEAVE_TYPE.ANNUAL] || 0
+    const usedSickDays = leftLeave?.[LEAVE_TYPE.SICK] || 0
     const totalUsedDays = usedHalfDays * 0.5 + usedFullDays + usedSickDays
     const totalLeave = leftLeave?.defaultAnnualLeave || 0
     const usedRate = totalLeave ? (totalUsedDays / totalLeave) * 100 : 0

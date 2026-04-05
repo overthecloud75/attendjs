@@ -19,6 +19,7 @@ import Employee from './pages/Employee'
 import MeetingRoom from './pages/MeetingRoom'
 import LoginHistory from './pages/LoginHistory'
 import ApprovalHistory from './pages/ApprovalHistory'
+import AgenticCanvas from './pages/AgenticCanvas'
 import TooManyRequests from './pages/TooManyRequests'
 import NotFound from './pages/NotFound'
 import { LoadingSpinner } from './utils/GeneralUtil'
@@ -35,6 +36,7 @@ const CheckEmail = lazy(() => import('./pages/CheckEmail'))
 const SettingsLayout = lazy(() => import('./pages/admin/SettingsLayout'))
 const GeneralSettings = lazy(() => import('./pages/admin/settings/General'))
 const SecuritySettings = lazy(() => import('./pages/admin/settings/Security'))
+const AISettings = lazy(() => import('./pages/admin/settings/AISettings'))
 const NotificationSettings = lazy(() => import('./pages/admin/settings/Notifications'))
 
 function App() {
@@ -60,6 +62,7 @@ function App() {
 
                     {/* Protected Routes */}
                     <Route exact path='/map' element={<ProtectedRoute><Map menu={menu} setMenu={setMenu} /></ProtectedRoute>} />
+                    <Route exact path='/agentic-canvas' element={<ProtectedRoute><AgenticCanvas menu={menu} setMenu={setMenu} /></ProtectedRoute>} />
                     <Route exact path='/dashboard' element={<ProtectedRoute><Dashboard menu={menu} setMenu={setMenu} /></ProtectedRoute>} />
                     <Route exact path='/attend' element={<ProtectedRoute><Attend menu={menu} setMenu={setMenu} /></ProtectedRoute>} />
                     <Route exact path='/wifi-attend' element={<ProtectedRoute><Wifi menu={menu} setMenu={setMenu} /></ProtectedRoute>} />
@@ -71,6 +74,7 @@ function App() {
                         <Route index element={<Navigate to='/admin/settings/location' replace />} />
                         <Route path='location' element={<Location />} />
                         <Route path='general' element={<GeneralSettings />} />
+                        <Route path='ai' element={<AISettings />} />
                         <Route path='security' element={<SecuritySettings />} />
                         <Route path='notifications' element={<NotificationSettings />} />
                     </Route>

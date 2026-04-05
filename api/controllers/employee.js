@@ -1,8 +1,11 @@
 import Employee from '../models/Employee.js'
 import User from '../models/User.js'
 import { sanitizeData } from '../utils/util.js'
+import EmployeeService from '../services/EmployeeService.js'
 
-const RETIRED_STATUS = '퇴사'
+/**
+ * Controller for Employee management
+ */
 
 export const search = async (req, res, next) => {
     try {
@@ -19,8 +22,9 @@ export const update = async (req, res, next) => {
         const beginDate = sanitizeData(rawBeginDate, 'date')
         const mobileNo = sanitizeData(mobileNoStr, 'mobile')
         await Employee.updateOne({ _id }, { $set: { beginDate, email, mobileNo, department, rank, position, regular, mode, attendMode, cardNo } }, { runValidators: true })
-        // 퇴사하는 경우 id 삭제 
-        if (regular === RETIRED_STATUS) {
+        
+        // 퇴사하는 경우 User 계정도 삭제 
+        if (regular === EmployeeService.STATUS.RETIRED) {
             await User.deleteOne({ email })
         }
         res.status(204).send()
@@ -55,23 +59,21 @@ export const deleteEmployee = async (req, res, next) => {
 const getEmployees = async (req) => {
     const name = req.query.name
     const isAdmin = req.user.isAdmin
-    // const startDate = sanitizeData(req.query.startDate, 'date')
-    // const endDate = sanitizeData(req.query.endDate, 'date')
-    let employees
-    if (name) {
-        employees = await Employee.find({ name, regular: { $ne: RETIRED_STATUS } }, { cardNo: 0 }).sort({ name: 1 })
+    
+    let query = {}
+    if (name) query.name = name
+
+    // 관리자가 아닌 경우 cardNo 필드 제외 (기존 로직 유지)
+    if (isAdmin) {
+        return await EmployeeService.getActiveEmployees(query)
     } else {
-        if (isAdmin) {
-            employees = await Employee.find({ regular: { $ne: RETIRED_STATUS } }).sort({ name: 1 })
-        } else {
-            employees = await Employee.find({ regular: { $ne: RETIRED_STATUS } }, { cardNo: 0 }).sort({ name: 1 })
-        }
+        return await Employee.find({ ...query, regular: { $ne: EmployeeService.STATUS.RETIRED } }, { cardNo: 0 }).sort({ name: 1 })
     }
-    return employees
 }
 
+/**
+ * Proxy for legacy internal calls or other services
+ */
 export const getEmployeeByEmail = async (email) => {
-    // 퇴사자가 아닌 경우 이메일 중복 허용하지 않음 
-    const employee = await Employee.findOne({ email, regular: { $ne: RETIRED_STATUS } })
-    return employee
+    return await EmployeeService.validateActiveEmployee(email).then(res => res.employee)
 }

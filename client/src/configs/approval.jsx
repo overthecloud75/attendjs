@@ -1,4 +1,53 @@
-import { Chip } from '@mui/material'
+import { Chip, Button, Tooltip, IconButton } from '@mui/material'
+import { X as XIcon } from 'lucide-react'
+import axios from 'axios'
+import { getToday } from '../utils/DateUtil'
+import { APPROVAL_STATUS } from '../configs/domain'
+
+const CancelRequestButton = ({ row }) => {
+    const today = getToday()
+    const status = row.status // 'Pending', 'Active', 'Cancel', etc.
+    const isCancelable = (status === APPROVAL_STATUS.PENDING || status === APPROVAL_STATUS.ACTIVE) && row.start >= today
+
+    if (!isCancelable || status === APPROVAL_STATUS.CANCEL) return null
+
+    const handleCancel = async (e) => {
+        e.stopPropagation() // 상세 모달이 뜨는 것을 방지
+
+        const confirmMsg = status === APPROVAL_STATUS.ACTIVE
+            ? "승인 완료된 신청입니다. 취소 시 관리자에게 알림이 전송됩니다.\n정말로 이 결재 신청을 취소하시겠습니까? 취소된 내용은 복구할 수 없습니다."
+            : "정말로 이 결재 신청을 취소하시겠습니까? 취소된 내용은 복구할 수 없습니다."
+
+        if (!window.confirm(confirmMsg)) return
+
+        try {
+            await axios.post(`/api/event/approval/cancel-by-user/${row._id}`)
+            alert('결재 신청이 취소되었습니다.')
+            window.location.reload()
+        } catch (err) {
+            console.error('Cancel Error:', err)
+            alert('취소 처리 중 오류가 발생했습니다.')
+        }
+    }
+
+    return (
+        <Tooltip title="결재 신청 취소">
+            <IconButton
+                size="small"
+                color="error"
+                onClick={handleCancel}
+                sx={{
+                    width: 28,
+                    height: 28,
+                    bgcolor: 'rgba(239, 68, 68, 0.08)',
+                    '&:hover': { bgcolor: 'rgba(239, 68, 68, 0.15)' }
+                }}
+            >
+                <XIcon size={16} />
+            </IconButton>
+        </Tooltip>
+    )
+}
 
 const StatusBadge = ({ value }) => {
     // value가 없을 경우 처리
@@ -94,6 +143,11 @@ export const columnHeaders = [
         cell: ({ getValue }) => <StatusBadge value={getValue()} />
     },
     {
+        id: 'cancel',
+        header: '취소',
+        cell: ({ row }) => <CancelRequestButton row={row.original} />
+    },
+    {
         accessorKey: 'createdAt',
         header: 'CreatedAt',
         enableSorting: true,
@@ -136,6 +190,11 @@ export const mobileColumnHeaders = [
         header: '상태',
         enableSorting: true,
         cell: ({ getValue }) => <StatusBadge value={getValue()} />
+    },
+    {
+        id: 'cancel',
+        header: '취소',
+        cell: ({ row }) => <CancelRequestButton row={row.original} />
     },
 ]
 

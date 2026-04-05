@@ -10,6 +10,7 @@ import { postApproval } from '../../utils/EventUtil'
 import { WORKING } from '../../configs/working'
 import { LoadingSpinner } from '../../utils/GeneralUtil'
 import { useApproval } from '../../hooks/useApproval'
+import { LEAVE_TYPE } from '../../configs/domain'
 
 const REASON_OPTIONS = Object.keys(WORKING.outStatus)
 
@@ -18,15 +19,15 @@ const REASON_OPTIONS = Object.keys(WORKING.outStatus)
  * This removes hardcoded logic from the component rendering.
  */
 const EXTRA_FIELD_CONFIG = {
-    '기타': {
+    [LEAVE_TYPE.OTHER]: {
         type: 'text',
         label: '기타 사유 (10자 이내)',
         placeholder: '사유를 입력하세요',
     },
-    '반차': {
+    [LEAVE_TYPE.HALF]: {
         type: 'select',
         label: '반차 구분',
-        options: WORKING.outStatus['반차'],
+        options: WORKING.outStatus[LEAVE_TYPE.HALF],
         defaultValue: '오전반차'
     }
 }
@@ -46,7 +47,7 @@ const Approval = ({ navigate, open, setOpen }) => {
             alert('출근 신청은 당일 이전 날짜에서만 가능합니다.')
             return false
         }
-        if (formValue.reason === '기타' && (!formValue.etc || formValue.etc.trim().length === 0)) {
+        if (formValue.reason === LEAVE_TYPE.OTHER && (!formValue.etc || formValue.etc.trim().length === 0)) {
             alert('사유를 적어 주세요.')
             return false
         }
@@ -66,7 +67,7 @@ const Approval = ({ navigate, open, setOpen }) => {
         if (name === 'etc') {
             if (inputValue.length > 10) return alert('10글자 이하로 적어주세요.')
             if (/[\/ ]/.test(inputValue)) return alert('특수 문자와 공백은 허용되지 않습니다.')
-            if (['휴가', '반차', '병가', '연차'].some(word => inputValue.includes(word))) {
+            if ([LEAVE_TYPE.ANNUAL, LEAVE_TYPE.HALF, LEAVE_TYPE.SICK, '연차'].some(word => inputValue.includes(word))) {
                 return alert('휴가, 반차, 병가, 연차는 신청 사유에서 직접 선택해 주세요.')
             }
         }

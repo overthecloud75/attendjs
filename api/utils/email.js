@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer'
 import { renderAuthTemplate, renderRequestTemplate, renderBaseTemplate } from './htmlTemplate.js'
 import { logger } from '../config/winston.js'
+import { APPROVAL_STATUS, LEAVE_TYPE } from '../config/domain.js'
 
 const makeTransport = () => {
     const host = process.env.MAIL_HOST
@@ -174,12 +175,12 @@ export const sendAttendConfirmationEmail = async (approval, status) => {
     let action
     let cc = ''
 
-    if (status === 'Active') {
+    if (status === APPROVAL_STATUS.ACTIVE) {
         action = '승인'
-        if (['휴가', '반차', '병가'].includes(approval.reason)) {
+        if ([LEAVE_TYPE.ANNUAL, LEAVE_TYPE.HALF, LEAVE_TYPE.SICK].includes(approval.reason)) {
             cc = process.env.CC_EMAIL || ''
         }
-    } else if (status === 'Cancel') {
+    } else if (status === APPROVAL_STATUS.CANCEL) {
         action = '반려'
     } else {
         action = '취소'
@@ -220,7 +221,7 @@ export const sendAttendConfirmationEmail = async (approval, status) => {
 export const sendPaymentRequestEmail = async (approval, status, payment) => {
     let term, recipient, approverName, order
 
-    if (status === 'Pending') {
+    if (status === APPROVAL_STATUS.PENDING) {
         logger.info('📨 Sending payment approval request email')
         term = '결재'
         recipient = approval.approverEmail
@@ -284,8 +285,8 @@ export const sendPaymentConfirmationEmail = async (approval, status) => {
     logger.info('📨 Sending payment confirmation email')
 
     let action
-    if (status === 'Active') action = '승인'
-    else if (status === 'Cancel') action = '반려'
+    if (status === APPROVAL_STATUS.ACTIVE) action = '승인'
+    else if (status === APPROVAL_STATUS.CANCEL) action = '반려'
     else action = '취소'
 
     const actionHtml = `

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getToday } from '../utils/DateUtil'
+import { APPROVAL_STATUS } from '../configs/domain'
 
 const ERROR_MESSAGES = {
     NO_CHANGE: 'status가 바뀌지 않았습니다.',
@@ -17,18 +18,18 @@ export const approvalAttendUpdate = async (user, previousStatus, value, setValue
         alert(ERROR_MESSAGES.NO_CHANGE)
         return 
     } 
-    if (previousStatus === 'Cancel') {
+    if (previousStatus === APPROVAL_STATUS.CANCEL) {
         alert(ERROR_MESSAGES.INVALID_CONDITION)
         return 
     } 
     if (user.isAdmin) {
-        if (previousStatus === 'Pending' || (previousStatus === 'Active' && value.status === 'Cancel')) {
+        if (previousStatus === APPROVAL_STATUS.PENDING || (previousStatus === APPROVAL_STATUS.ACTIVE && value.status === APPROVAL_STATUS.CANCEL)) {
             await updateApprovalStatus('/api/approval/update', value, setValue, updateData)
         } else {
             alert(ERROR_MESSAGES.INVALID_CONDITION)
         }     
-    } else if ((previousStatus === 'Pending' && value.status === 'Cancel') ||
-        (previousStatus === 'Active' && value.status === 'Cancel' && value.start) > getToday()) {
+    } else if ((previousStatus === APPROVAL_STATUS.PENDING && value.status === APPROVAL_STATUS.CANCEL) ||
+        (previousStatus === APPROVAL_STATUS.ACTIVE && value.status === APPROVAL_STATUS.CANCEL && value.start) > getToday()) {
         await updateApprovalStatus('/api/approval/update', value, setValue, updateData)
     } else {
         alert(ERROR_MESSAGES.INVALID_CONDITION)
@@ -40,23 +41,23 @@ export const approvalPaymentUpdate = async (user, previousStatus, value, setValu
         alert(ERROR_MESSAGES.NO_CHANGE)
         return 
     } 
-    if (previousStatus === 'Cancel') {
+    if (previousStatus === APPROVAL_STATUS.CANCEL) {
         alert(ERROR_MESSAGES.INVALID_CONDITION)
         return 
     }  
     if (user.email === value.approverEmail) {
-        if (value.status === 'Cancel' || (previousStatus ==='Pending' && value.status === 'InProgress')) {
+        if (value.status === APPROVAL_STATUS.CANCEL || (previousStatus === APPROVAL_STATUS.PENDING && value.status === APPROVAL_STATUS.IN_PROGRESS)) {
             await updateApprovalStatus('/api/payment/update', value, setValue, updateData)
         } else {
             alert(ERROR_MESSAGES.INVALID_CONDITION)
         }     
     } else if (user.email === value.consenterEmail) {
-        if (value.status === 'Cancel' || (previousStatus ==='InProgress' && value.status === 'Active')) {
+        if (value.status === APPROVAL_STATUS.CANCEL || (previousStatus === APPROVAL_STATUS.IN_PROGRESS && value.status === APPROVAL_STATUS.ACTIVE)) {
             await updateApprovalStatus('/api/payment/update', value, setValue, updateData)
         } else {
             alert(ERROR_MESSAGES.INVALID_CONDITION)
         }     
-    } else if (previousStatus !=='Active' && value.status === 'Cancel'){
+    } else if (previousStatus !== APPROVAL_STATUS.ACTIVE && value.status === APPROVAL_STATUS.CANCEL){
         await updateApprovalStatus('/api/payment/update', value, setValue, updateData)
     } else {
         alert(ERROR_MESSAGES.INVALID_CONDITION)

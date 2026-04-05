@@ -1,23 +1,15 @@
-import Event from '../models/Event.js'
-import Employee from '../models/Employee.js'
-import Approval from '../models/Approval.js'
-import Report from '../models/Report.js'
-import { isValidObjectId } from '../models/utils.js'
-import { getEmployeeByEmail } from './employee.js'
-import { reportUpdate } from './eventReport.js'
-import { sanitizeData, getNextDay, getToday } from '../utils/util.js'
-import { sendAttendRequestEmail, sendAttendConfirmationEmail } from '../utils/email.js'
+import EventService from '../services/EventService.js'
+import EmployeeService from '../services/EmployeeService.js'
+import { DateUtil, sanitizeData } from '../utils/util.js'
+import { sendAttendRequestEmail } from '../utils/email.js'
 import LeaveService from '../services/LeaveService.js'
 import { createError } from '../utils/error.js'
 import { renderSimpleMessage } from '../utils/htmlTemplate.js'
 import { WORKING } from '../config/working.js'
+import { isValidObjectId } from '../models/utils.js'
+import Approval from '../models/Approval.js'
 
-const APPROVAL_STATUS = {
-    PENDING: 'Pending',
-    ACTIVE: 'Active',
-    CANCEL: 'Cancel',
-    WRONG: 'Wrong'
-}
+const APPROVAL_STATUS = EventService.APPROVAL_STATUS
 
 const getReasons = () => Object.keys(WORKING.reason)
 
@@ -26,34 +18,11 @@ export const getEventsInCalendar = async (req, res, next) => {
         const { option } = req.query
         const start = sanitizeData(req.query.start, 'date')
         const end = sanitizeData(req.query.end, 'date')
-        const events = await fetchEvents(start, end, option, req.user)
+        const events = await EventService.fetchEvents(start, end, option, req.user)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(events)
     } catch (err) {
         next(err)
     }
-}
-
-const fetchEvents = async (start, end, option, user) => {
-    const baseQuery = { start: { $gte: start, $lt: end }, employeeId: { $exists: true } }
-    let events = []
-    let attendStatus = []
-    const notExistEmployeeIdEvent = await Event.find({ ...baseQuery, employeeId: { $exists: false } }).sort({ start: 1 })
-
-    switch (option) {
-        case 'private':
-            const employeeId = user.employeeId
-            events = await Event.find({ ...baseQuery, employeeId }).sort({ start: 1 })
-            attendStatus = await getEventFromStatus(start, employeeId)
-            break
-        case 'company':
-            events = await Event.find(baseQuery).sort({ start: 1 })
-            break
-        case 'team':
-            events = await Event.find({ ...baseQuery, department: user.department }).sort({ start: 1 })
-            break
-    }
-    events = [...events, ...notExistEmployeeIdEvent, ...attendStatus]
-    return events
 }
 
 export const addEventInCalendar = async (req, res, next) => {
@@ -95,13 +64,9 @@ export const deleteEventInCalendar = async (req, res, next) => {
 }
 
 export const getApproval = async (req, res, next) => {
-    /* 
-        1. apporover 확인 
-        2. 연차 기록 확인 
-    */
     try {
-        const employee = await getEmployeeByEmail(req.user.email)
-        const approverWithEmployeeId = await getApprover(employee)
+        const employee = await EmployeeService.getEmployeeByEmail(req.user.email)
+        const approverWithEmployeeId = await EventService.getApprover(employee)
         const { employeeId, ...approver } = approverWithEmployeeId
         const summary = await LeaveService.getLeftLeaveSummary(employee)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json({ approver, summary })
@@ -118,8 +83,8 @@ export const postApproval = async (req, res, next) => {
         const start = sanitizeData(req.body.start, 'date')
         const end = sanitizeData(req.body.end, 'date')
         const email = req.user.email
-        const employee = await getEmployeeByEmail(email)
-        const approver = await getApprover(employee)
+        const employee = await EmployeeService.getEmployeeByEmail(email)
+        const approver = await EventService.getApprover(employee)
         const reasons = getReasons()
         if (!reasons.includes(reason)) {
             throw createError(400, 'Something Wrong!')
@@ -150,54 +115,16 @@ const getEtcValue = (reason, rawEtc) => {
 }
 
 
-export const getApprover = async (employee) => {
-    let approver
-    switch (employee.position) {
-        case '팀원':
-            approver = await Employee.findOne({ position: '팀장', department: employee.department, regular: { $ne: '퇴사' } })
-            if (!approver) { approver = await Employee.findOne({ position: '본부장', regular: { $ne: '퇴사' } }) }
-            break
-        case '팀장':
-            approver = await Employee.findOne({ position: '본부장', regular: { $ne: '퇴사' } })
-            break
-        case '본부장':
-            approver = employee
-            break
-        case '대표이사':
-            approver = employee
-            break
-        default:
-            approver = await Employee.findOne({ position: '본부장', regular: { $ne: '퇴사' } })
-    }
-
-    if (!approver) {
-        approver = await Employee.findOne({ position: '대표이사', regular: { $ne: '퇴사' } })
-    }
-
-    if (!approver) {
-        approver = employee
-    }
-
-    const baseApprover = { name: approver.name, position: approver.position, department: approver.department, email: approver.email, employeeId: approver.employeeId }
-    return baseApprover
-}
-
-export const getConsenter = async (employee) => {
-    let consenter = await Employee.findOne({ position: '팀장', department: '관리팀', regular: { $ne: '퇴사' } })
-    if (!consenter) {
-        consenter = await Employee.findOne({ position: '대표이사', regular: { $ne: '퇴사' } })
-    }
-    return consenter
-}
+export const getApprover = (employee) => EventService.getApprover(employee)
+export const getConsenter = (employee) => EventService.getConsenter(employee)
 
 // ✅ 결재 승인 함수
 export const confirmApproval = async (req, res, next) => {
-    await handleApprovalAction(req, res, next, makeActive, '결재 승인 완료')
+    await handleApprovalAction(req, res, next, EventService.makeActive.bind(EventService), '결재 승인 완료')
 }
 
-// ✅ 결재 반려 함수
 export const confirmCancel = async (req, res, next) => {
-    await handleApprovalAction(req, res, next, makeCancel, '결재 반려 완료')
+    await handleApprovalAction(req, res, next, EventService.makeCancel.bind(EventService), '결재 반려 완료')
 }
 
 // ✅ 공용 결재 처리 함수
@@ -220,68 +147,22 @@ const handleApprovalAction = async (req, res, next, actionFn, successTitle) => {
     }
 }
 
-export const makeActive = async (approval) => {
-    const { _id, start, end } = approval
-    let status
-    let msg
-    if (end >= start) {
-        const title = makeTitle(approval)
-        await makeEvent(title, approval)
-        status = APPROVAL_STATUS.ACTIVE
-        msg = '승인하였습니다.'
-        await Approval.updateOne({ _id }, { $set: { status } }, { runValidators: true })
-        await sendAttendConfirmationEmail(approval, status)
-    } else {
-        status = APPROVAL_STATUS.WRONG
-        msg = '기간에 문제가 있습니다.'
-    }
-    return { status, msg }
-}
+export const makeActive = (approval) => EventService.makeActive(approval)
+export const makeCancel = (approval) => EventService.makeCancel(approval)
 
-export const makeCancel = async (approval) => {
-    const { _id } = approval
-    const status = APPROVAL_STATUS.CANCEL
-    if (approval.status === APPROVAL_STATUS.ACTIVE) {
-        await deleteEvent(approval)
-    }
-    await Approval.updateOne({ _id }, { $set: { status } }, { runValidators: true })
-    await sendAttendConfirmationEmail(approval, status)
-    const msg = '취소하였습니다.'
-    return { status, msg }
-}
+export const cancelByUser = async (req, res, next) => {
+    try {
+        const { _id } = req.params
+        const approval = await Approval.findById(_id)
+        if (!approval) throw createError(404, 'Approval not found.')
 
-const makeTitle = (approval) => {
-    const title = (approval.etc) ? (`${approval.name}/${approval.etc}`) : (`${approval.name}/${approval.reason}`)
-    return title
-}
-
-const makeEvent = async (title, approval) => {
-    // reason이 출근인 경우 calendar에 기록 안 함 
-    const end = getNextDay(approval.end)
-    if (approval.reason !== '출근') {
-        const newEvent = new Event({ title, start: approval.start, end, department: approval.department, employeeId: approval.employeeId })
-        await newEvent.save()
-    }
-    await reportUpdate('add', title, approval.start, end)
-}
-
-const deleteEvent = async (approval) => {
-    const start = approval.start
-    const end = getNextDay(approval.end)
-    const title = makeTitle(approval)
-    await Event.deleteOne({ employeeId: approval.employeeId, start, end, title })
-}
-
-const getEventFromStatus = async (start, employeeId) => {
-    const today = getToday()
-    let attendStatus = []
-    if (start <= today) {
-        const attends = await Report.find({ date: { $gte: start, $lte: today }, employeeId, status: { $in: ['미출근', '지각'] } }).sort({ date: 1 })
-        for (const attend of attends) {
-            attendStatus.push({ title: attend['status'], start: attend['date'], end: getNextDay(attend['date']) })
+        const result = await EventService.cancelApprovalByUser(approval, req.user.email, req.user.isAdmin)
+        
+        if (!result.success) {
+            return res.status(result.code || 200).send(result.msg)
         }
+        res.status(200).send(result.msg)
+    } catch (err) {
+        next(err)
     }
-    return attendStatus
 }
-
-

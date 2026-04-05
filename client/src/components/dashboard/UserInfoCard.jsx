@@ -76,7 +76,7 @@ const UserInfoCard = ({ leftLeave }) => {
                         <Briefcase size={18} />
                     </Box>
                     <Box display="flex" justifyContent="space-between" width="100%" alignItems="center">
-                        <Typography variant='body2' color='var(--text-secondary)'>근무 형태</Typography>
+                        <Typography variant='body2' color='var(--text-secondary)'>고용 형태</Typography>
                         <Typography variant='body2' fontWeight='600' color='var(--text-primary)'>
                             {user.regular}
                         </Typography>

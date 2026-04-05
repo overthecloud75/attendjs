@@ -1,76 +1,98 @@
 import { formatToTimeZone } from 'date-fns-timezone'
 
-export const getToday = () => {
-    const today = new Date()
-    const yyyy = today.getFullYear()
-    const mm = String(today.getMonth() + 1).padStart(2, '0')
-    const dd = String(today.getDate()).padStart(2, '0')
-    return `${yyyy}-${mm}-${dd}`
+/**
+ * ------------------------------------------------------------------
+ * DateUtil (Unified Date Management Interface)
+ * 리포지토리 전체에서 날짜 처리를 표준화하기 위한 객체입니다.
+ * ------------------------------------------------------------------
+ */
+export const DateUtil = {
+    // 날짜 객체 또는 문자열(YYYY-MM-DD)을 Date 객체로 표준화하여 파싱
+    parse(input) {
+        if (!input) return new Date()
+        if (input instanceof Date) return new Date(input)
+        if (typeof input === 'string' && input.includes('-')) {
+            const [year, month, day] = input.split('-').map(Number)
+            // month-1: JS Date는 월이 0부터 시작
+            return new Date(year, month - 1, day)
+        }
+        return new Date(input)
+    },
+
+    // Date 객체를 YYYY-MM-DD 문자열로 변환
+    format(date) {
+        const d = this.parse(date)
+        const yyyy = d.getFullYear()
+        const mm = String(d.getMonth() + 1).padStart(2, '0')
+        const dd = String(d.getDate()).padStart(2, '0')
+        return `${yyyy}-${mm}-${dd}`
+    },
+
+    // 오늘 날짜를 YYYY-MM-DD 문자열로 반환
+    today() {
+        return this.format(new Date())
+    },
+
+    // 내일 날짜를 YYYY-MM-DD 문자열로 반환
+    tomorrow() {
+        return this.format(this.addDays(this.today(), 1))
+    },
+
+    // 지정일의 다음 날을 YYYY-MM-DD 문자열로 반환
+    formatNextDay(dateStr) {
+        return this.format(this.addDays(dateStr, 1))
+    },
+
+    // 날짜 계산: 일 단위 (Date 객체 반환)
+    addDays(date, amount) {
+        const d = this.parse(date)
+        d.setDate(d.getDate() + amount)
+        return d
+    },
+
+    // 날짜 계산: 연 단위 (Date 객체 반환)
+    addYears(date, amount) {
+        const d = this.parse(date)
+        d.setFullYear(d.getFullYear() + amount)
+        return d
+    },
+
+    // 현재 연도와 월 추출 (문자열 객체 반환)
+    getYearMonth() {
+        const now = new Date()
+        return {
+            year: now.getFullYear(),
+            month: String(now.getMonth() + 1).padStart(2, '0')
+        }
+    },
+
+    // 내부 계산용: 현재 연도와 월-일 추출
+    _getSeparateDay() {
+        const now = new Date()
+        return {
+            thisYear: now.getFullYear(),
+            monthDay: `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+        }
+    }
 }
 
-export const getNextDay = (dateStr) => {
-    let [year, month, day] = dateStr.split('-').map(Number)
-    const newDate = new Date(year, month - 1, day)
-    const nextDate = new Date(newDate.getTime() + (24 * 60 * 60 * 1000))
-
-    year = nextDate.getFullYear()
-    month = String(nextDate.getMonth() + 1).padStart(2, '0')
-    day = String(nextDate.getDate()).padStart(2, '0')
-    return `${year}-${month}-${day}`
-}
-
-export const getNextYear = (dateStr) => {
-    let [year, month, day] = dateStr.split('-').map(Number)
-    const newDate = new Date(year, month - 1, day)
-    const nextDate = new Date(newDate.getTime() + (24 * 60 * 60 * 1000))
-
-    year = nextDate.getFullYear() + 1
-    month = String(nextDate.getMonth() + 1).padStart(2, '0')
-    day = String(nextDate.getDate()).padStart(2, '0')
-    return `${year}-${month}-${day}`
-}
-
-export const getYearMonth = () => {
-    const today = new Date()
-    const year = today.getFullYear()
-    const month = String(today.getMonth() + 1).padStart(2, '0')
-    return { year, month }
-}
-
-const getSeparateDay = () => {
-    const today = new Date()
-    const thisYear = today.getFullYear()
-    const month = `0${today.getMonth() + 1}`.slice(-2)
-    const day = `0${today.getDate()}`.slice(-2)
-    const monthDay = `${month}-${day}`
-    return { thisYear, monthDay }
-}
-
-export const getDate = (dateStr) => {
-    const [year, month, day] = dateStr.split('-').map(Number)
-    return new Date(year, month - 1, day)
-}
-
-export const getNextDate = (dateStr) => {
-    const date = new Date(dateStr)
-    date.setDate(date.getDate() + 1)
-    return date
-}
+/**
+ * ------------------------------------------------------------------
+ * Business Calculation Utilities (Can be moved to services eventually)
+ * ------------------------------------------------------------------
+ */
 
 const getEmployeementPeriod = (beginDate) => {
-    const { thisYear, monthDay } = getSeparateDay()
+    const { thisYear, monthDay } = DateUtil._getSeparateDay()
     const thisMonth = Number(monthDay.split('-')[0])
     let baseYear = thisYear
 
-    const beginDateSplit = beginDate.split('-')
-    const beginYear = Number(beginDateSplit[0])
-    const beginMonthDay = `${beginDateSplit[1]}-${beginDateSplit[2]}`
-    const beginMonth = Number(beginDateSplit[1])
+    const [beginYear, beginMonth, beginDay] = beginDate.split('-').map(Number)
+    const beginMonthDay = `${String(beginMonth).padStart(2, '0')}-${String(beginDay).padStart(2, '0')}`
 
     let baseMonth = 0
     if (thisMonth > beginMonth) { baseMonth = thisMonth - beginMonth }
     else if (thisMonth < beginMonth) { baseMonth = 12 + thisMonth - beginMonth }
-    // 근무 기간이 1년이 안 된 경우 정교한 계산 필요 
     else if ((thisYear - beginYear) === 1 && monthDay < beginMonthDay) { baseMonth = 12 }
     else if ((thisYear - beginYear) > 1 && monthDay < beginMonthDay) { baseMonth = 11 }
 
@@ -101,6 +123,12 @@ export const getDefaultAnnualLeave = (beginDate) => {
     return { defaultAnnualLeave, employeementPeriod, baseDate, baseMonth }
 }
 
+/**
+ * ------------------------------------------------------------------
+ * Network & Security Utilities
+ * ------------------------------------------------------------------
+ */
+
 export const separateIP = (x_forwarded_for) => {
     const ipList = x_forwarded_for.split(',')
     if (ipList.length > 1) {
@@ -115,45 +143,43 @@ export const separateIP = (x_forwarded_for) => {
 }
 
 export const getClientIP = (req) => {
-    if ('x-forwarded-for' in req.headers) { return req.headers['x-forwarded-for'].split(',')[0].split(':')[0] }
-    else {
-        return req.connection.remoteAddress
+    if ('x-forwarded-for' in req.headers) {
+        return req.headers['x-forwarded-for'].split(',')[0].split(':')[0]
     }
+    return req.connection.remoteAddress
 }
 
+/**
+ * ------------------------------------------------------------------
+ * Data Sanitization & General Utilities
+ * ------------------------------------------------------------------
+ */
+
 export const sanitizeData = (data, type) => {
-    // Handle empty or null data immediately
     if (!data) {
-        if (type === 'date') return getToday()
+        if (type === 'date') return DateUtil.today()
         return ''
     }
 
     switch (type) {
         case 'date': {
             const dateRegex = /^\d{4}-\d{2}-\d{2}$/
-            return dateRegex.test(data) ? data : getToday()
+            return dateRegex.test(data) ? data : DateUtil.today()
         }
         case 'email': {
             const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
             return emailRegex.test(data) ? data : ''
         }
         case 'mobile': {
-            // Remove dashes to just check digits
             const digits = String(data).replace(/-/g, '')
-
-            // Basic validation for Korean mobile numbers (starts with 01, followed by 0,1,6,7,8,9, and total length 10 or 11)
             const mobileRegex = /^01[016789]\d{7,8}$/
 
-            if (!mobileRegex.test(digits)) {
-                return ''
-            }
+            if (!mobileRegex.test(digits)) return ''
 
-            // Format: 010-1234-5678 or 011-123-4567
             if (digits.length === 10) {
                 return digits.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')
-            } else {
-                return digits.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
             }
+            return digits.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
         }
         default:
             return data
@@ -161,15 +187,14 @@ export const sanitizeData = (data, type) => {
 }
 
 export const dateAndTime = () => {
-    const dateTime = new Date()
-    const output = formatToTimeZone(dateTime, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })
-    const date = output.split(' ')[0]
-    const time = output.split(' ')[1]
+    const now = new Date()
+    const output = formatToTimeZone(now, 'YYYY-MM-DD HHmmss', { timeZone: process.env.TIME_ZONE })
+    const [date, time] = output.split(' ')
     return { date, time }
 }
 
 export const getRandomInt = (min = 1, max = 1000) => {
-    min = Math.ceil(min)
-    max = Math.floor(max)
-    return Math.floor(Math.random() * (max - min)) + min //최댓값은 제외, 최솟값은 포함
+    const cMin = Math.ceil(min)
+    const cMax = Math.floor(max)
+    return Math.floor(Math.random() * (cMax - cMin)) + cMin
 }

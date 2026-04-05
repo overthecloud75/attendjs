@@ -1,36 +1,27 @@
 import Approval from '../models/Approval.js'
-import Upload from '../models/Upload.js'
-import Payment from '../models/Payment.js'
 import { isValidObjectId } from '../models/utils.js'
-import { getEmployeeByEmail } from './employee.js'
-import { getApprover, getConsenter } from './event.js'
+import EmployeeService from '../services/EmployeeService.js'
+import EventService from '../services/EventService.js'
+import PaymentService from '../services/PaymentService.js'
 import { sanitizeData } from '../utils/util.js'
-import { sendPaymentRequestEmail, sendPaymentConfirmationEmail } from '../utils/email.js'
-import { fillPaymentExcelTemplate } from '../utils/xls.js'
-import { getImageId } from '../utils/image.js'
 import { createError } from '../utils/error.js'
 import { renderSimpleMessage } from '../utils/htmlTemplate.js'
 
-const APPROVAL_STATUS = {
-    PENDING: 'Pending',
-    IN_PROGRESS: 'InProgress',
-    ACTIVE: 'Active',
-    CANCEL: 'Cancel'
-}
+const { APPROVAL_STATUS } = PaymentService
 
 export const update = async (req, res, next) => {
     try {
         const { _id, status } = req.body
-        if (!_id) throw createError(404, 'Approval not found!')
+        if (!isValidObjectId(_id)) throw createError(404, 'Approval not found!')
 
-        const approval = await Approval.findOne({ _id })
+        const approval = await Approval.findById(_id)
         if (!approval) throw createError(404, 'Approval not found!')
 
         if (approval.status === status || approval.status === APPROVAL_STATUS.CANCEL) {
             throw createError(400, 'Invalid status change')
         }
 
-        const updateResult = await updateApprovalStatus(approval, status, req.user.email)
+        const updateResult = await handleStatusUpdate(approval, status, req.user.email)
         if (!updateResult.success) {
             throw createError(400, updateResult.message)
         }
@@ -40,25 +31,28 @@ export const update = async (req, res, next) => {
     }
 }
 
-const updateApprovalStatus = async (approval, newStatus, userEmail) => {
+/**
+ * Controller-specific routing for manual status updates (approver vs consenter)
+ */
+async function handleStatusUpdate(approval, newStatus, userEmail) {
     if (userEmail === approval.approverEmail) {
         if (newStatus === APPROVAL_STATUS.CANCEL) {
-            await makePaymentCancel(approval)
+            await PaymentService.makePaymentCancel(approval)
         } else if (approval.status === APPROVAL_STATUS.PENDING && newStatus === APPROVAL_STATUS.IN_PROGRESS) {
-            await makePaymentInProgress(approval)
+            await PaymentService.makePaymentInProgress(approval)
         } else {
             return { success: false, message: 'Invalid status change for approver' }
         }
     } else if (userEmail === approval.consenterEmail) {
         if (newStatus === APPROVAL_STATUS.CANCEL) {
-            await makePaymentCancel(approval)
+            await PaymentService.makePaymentCancel(approval)
         } else if (approval.status === APPROVAL_STATUS.IN_PROGRESS && newStatus === APPROVAL_STATUS.ACTIVE) {
-            await makePaymentActive(approval)
+            await PaymentService.makePaymentActive(approval)
         } else {
             return { success: false, message: 'Invalid status change for consenter' }
         }
     } else if (approval.status !== APPROVAL_STATUS.ACTIVE && newStatus === APPROVAL_STATUS.CANCEL) {
-        await makePaymentCancel(approval)
+        await PaymentService.makePaymentCancel(approval)
     } else {
         return { success: false, message: 'Unauthorized status change' }
     }
@@ -68,53 +62,31 @@ const updateApprovalStatus = async (approval, newStatus, userEmail) => {
 }
 
 export const getPayment = async (req, res, next) => {
-    /* 
-        1. apporover 확인 
-    */
     try {
-        const employee = await getEmployeeByEmail(req.user.email)
-        const approverWithEmployeeId = await getApprover(employee)
-        const {employeeId, ...approver} = approverWithEmployeeId
-        const consenter = await getConsenter(employee)
-        res.status(200).setHeader('csrftoken', req.csrfToken()).json({approver, consenter})
+        const employee = await EmployeeService.getEmployeeByEmail(req.user.email)
+        const approverWithEmployeeId = await EventService.getApprover(employee)
+        const { employeeId, ...approver } = approverWithEmployeeId
+        const consenter = await EventService.getConsenter(employee)
+        res.status(200).setHeader('csrftoken', req.csrfToken()).json({ approver, consenter })
     } catch (err) {
         next(err)
     }
 }
 
 export const postPayment = async (req, res, next) => {
-    /* 
-        1. approval 내용 저장 
-        2. content의 imagePath 및 id 확인 
-        3. 개인경비 청구서 excel 작성 
-        4. paymentReqeustEmail 송부 
-    */
     try {
-        const { reason, etc, cardNo, content, start: startStr } = req.body
-        const start = sanitizeData(startStr, 'date')
-        const end = start
-        const employee = await getEmployeeByEmail(req.user.email)
-        const approver = await getApprover(employee)
-        const consenter = await getConsenter(employee)
-        const checkTheSameApproval = await Approval.findOne({email: req.user.email, start, end, reason, etc})
-        if (checkTheSameApproval && checkTheSameApproval.status !==  APPROVAL_STATUS.CANCEL) {
-            res.status(200).send('Already there is the same approval.')
-        } 
-
-        let approval = {approvalType: 'payment', employeeId: employee.employeeId, name: employee.name, email: employee.email, department: employee.department, start, end, cardNo, reason, etc, approverName: approver.name, approverEmail: approver.email, consenterName: consenter.name, consenterEmail: consenter.email, content}
-        const imageId = getImageId(approval.content) 
-
-        if (!imageId) throw createError(400, 'Image is missing')
-
-        const uploadImage = await Upload.findOne({_id: imageId}) 
-        const {destination, fileName} = await fillPaymentExcelTemplate(approval, uploadImage)
-        const newPayment = new Payment({employeeId: approval.employeeId, destination, fileName})
-        const payment = await newPayment.save()
-
-        approval.paymentId = payment._id
-        const newApproval = new Approval(approval)
-        await newApproval.save()
-        await sendPaymentRequestEmail(newApproval, newApproval.status, payment)
+        const start = sanitizeData(req.body.start, 'date')
+        const email = req.user.email
+        
+        const employee = await EmployeeService.getEmployeeByEmail(email)
+        const approver = await EventService.getApprover(employee)
+        const consenter = await EventService.getConsenter(employee)
+        
+        const result = await PaymentService.createPaymentRequest(employee, approver, consenter, { ...req.body, start })
+        
+        if (!result.success) {
+            return res.status(200).send(result.message)
+        }
 
         res.status(200).send('Event has been created.')
     } catch (err) {
@@ -122,91 +94,41 @@ export const postPayment = async (req, res, next) => {
     }
 }
 
-/**
- * 결제 승인 처리
- * 1차 승인 (_order = 0) → 결제 진행중(IN_PROGRESS)
- * 2차 승인 (_order = 1) → 결제 완료(ACTIVE)
- */
 export const paymentApproval = async (req, res, next) => {
     try {
         const { _id, _order } = req.params
-
-        if (!isValidObjectId(_id))
-            throw createError(400, 'Invalid ID format.')
+        if (!isValidObjectId(_id)) throw createError(400, 'Invalid ID format.')
 
         const approval = await Approval.findById(_id)
-        if (!approval)
-            throw createError(404, 'Approval not found.')
+        if (!approval) throw createError(404, 'Approval not found.')
 
-        let result, title
-
-        if (approval.status === APPROVAL_STATUS.PENDING && _order === '0') {
-            result = await makePaymentInProgress(approval)
-            title = '결제 진행 중으로 변경되었습니다.'
-        } 
-        else if (approval.status === APPROVAL_STATUS.IN_PROGRESS && _order === '1') {
-            result = await makePaymentActive(approval)
-            title = '결제가 완료되었습니다.'
-        } 
-        else {
+        const result = await PaymentService.processApprovalStage(approval, _order)
+        
+        if (!result.valid) {
             return res.status(200).send(renderSimpleMessage('이미 처리된 결제입니다.', '이 결제 요청은 더 이상 유효하지 않습니다.'))
         }
 
-        return res.status(200).send(renderSimpleMessage(title, result.msg))
+        return res.status(200).send(renderSimpleMessage(result.title, result.msg))
     } catch (err) {
         next(err)
     }
 }
 
-/**
- * 결제 취소 처리
- * 결제가 완료되지 않은 상태에서만 취소 가능
- */
 export const paymentCancel = async (req, res, next) => {
     try {
         const { _id } = req.params
-
-        if (!isValidObjectId(_id))
-            throw createError(400, 'Invalid ID format.')
+        if (!isValidObjectId(_id)) throw createError(400, 'Invalid ID format.')
 
         const approval = await Approval.findById(_id)
-        if (!approval)
-            throw createError(404, 'Approval not found.')
+        if (!approval) throw createError(404, 'Approval not found.')
 
         if (approval.status === APPROVAL_STATUS.ACTIVE) {
             return res.status(200).send(renderSimpleMessage('이미 처리된 결제입니다.', '완료된 결제는 취소할 수 없습니다.'))
         }
 
-        const result = await makePaymentCancel(approval)
+        const result = await PaymentService.makePaymentCancel(approval)
         return res.status(200).send(renderSimpleMessage('결제가 취소되었습니다.', result.msg))
     } catch (err) {
         next(err)
     }
 }
-
-export const makePaymentActive = async (approval) => {
-    const status = APPROVAL_STATUS.ACTIVE
-    const msg = '승인하였습니다.'
-    await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
-    await sendPaymentConfirmationEmail(approval, status) // 합의자 승인 후 요청자에게 메일 송부 
-    return {status, msg}
-}
-
-export const makePaymentCancel = async (approval) => {
-    const status = APPROVAL_STATUS.CANCEL
-    const msg = '취소하였습니다.'
-    await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
-    await sendPaymentConfirmationEmail(approval, status) // 반려 후 요청자에게 메일 송부 
-    return {status, msg}
-}
-
-export const makePaymentInProgress = async (approval) => {
-    const status = approval.status === APPROVAL_STATUS.PENDING ? APPROVAL_STATUS.IN_PROGRESS : APPROVAL_STATUS.ACTIVE
-    const msg = '승인하였습니다.'
-    await Approval.updateOne({_id: approval._id}, {$set: {status}}, {runValidators: true})
-    const payment = await Payment.findOne({_id: approval.paymentId})
-    await sendPaymentRequestEmail(approval, status, payment) // 승인 후 합의권자에게 메일 송부 
-    return {status, msg}
-}
-
-

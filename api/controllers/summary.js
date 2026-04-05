@@ -1,13 +1,12 @@
-import { getAttends } from './attend.js'
-import Employee from '../models/Employee.js'
 import AttendanceSummaryService from '../services/AttendanceSummaryService.js'
+import AttendanceService from '../services/AttendanceService.js'
 import LeaveService from '../services/LeaveService.js'
-
-const RETIRED_STATUS = '퇴사'
+import EmployeeService from '../services/EmployeeService.js'
+import Employee from '../models/Employee.js'
 
 export const search = async (req, res, next) => {
     try {
-        const attends = await getAttends(req)
+        const attends = await AttendanceService.getAttends(req.query)
         const summary = AttendanceSummaryService.summarizeAttends(attends)
         const summaryList = AttendanceSummaryService.summaryWorkingHours(summary)
         res.status(200).setHeader('csrftoken', req.csrfToken()).json(summaryList)
@@ -45,7 +44,7 @@ export const getLeftLeaveList = async (req, res, next) => {
         if (name) {
             employees = await Employee.find({ name })
         } else {
-            employees = await Employee.find({ regular: { $ne: RETIRED_STATUS } }).sort({ name: 1 })
+            employees = await EmployeeService.getActiveEmployees()
         }
         const summaryList = await Promise.all(employees.map(emp => LeaveService.getLeftLeaveSummary(emp)))
 
@@ -54,3 +53,4 @@ export const getLeftLeaveList = async (req, res, next) => {
         next(err)
     }
 }
+

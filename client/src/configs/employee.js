@@ -41,23 +41,24 @@ export const columnHeaders = [
     },
     {
         accessorKey: 'regular',
-        header: 'regular',
+        header: '고용형태',
         enableSorting: true,
     },
     {
         accessorKey: 'mode',
-        header: 'mode',
+        header: '근무모드',
         enableSorting: true,
     },
     {
         accessorKey: 'attendMode',
-        header: '적용',
+        header: '근태적용',
         enableSorting: true,
     },
     {
         accessorKey: 'cardNo',
-        header: 'Card No',
+        header: '카드 번호',
         enableSorting: true,
+        hidden: true,
     },
 ]
 
@@ -106,11 +107,11 @@ export const csvHeaders = [
     },
     {
         key: 'regular',
-        label: 'regular',
+        label: '고용형태',
     },
     {
         key: 'mode',
-        label: 'mode',
+        label: '근무모드',
     },
     {
         key: 'attendMode',

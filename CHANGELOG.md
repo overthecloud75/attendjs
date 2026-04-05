@@ -1,3 +1,6 @@
+#### 26/04/05
+**2.6.4 (client, API)** :  Smartwork Intelligence: Multi-Agent Orchestration
+
 #### 26/03/29
 **2.6.3 (client)** : Added validation logic for 'etc' field in Approval component to prevent leave-related keywords ('휴가', '반차', '병가', '연차') and restricted characters.
 
