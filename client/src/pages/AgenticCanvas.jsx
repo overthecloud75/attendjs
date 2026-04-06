@@ -4,6 +4,8 @@ import { Send, Sparkles, Calendar, CheckCircle, AlertTriangle, UserCircle, Bot, 
 import MainLayout from '../components/layout/MainLayout'
 import axios from 'axios'
 import { useTranslation } from 'react-i18next'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 // 에이전트 카드 (중앙 정렬 최적화)
 const AgentStatusCard = ({ id, title, status, icon: Icon, color, onHide }) => (
@@ -105,6 +107,8 @@ const AgenticCanvas = ({ menu, setMenu }) => {
     const SUGGESTIONS = [
         { label: '남은 연차 확인', cmd: '남은 연차 확인해줘' },
         { label: '내일 연차 신청', cmd: '내일 연차 신청할게' },
+        { label: '지난달 근무 분석', cmd: '지난달 근무 시간 분석해줘' },
+        { label: '출퇴근 기록 확인', cmd: '최근 일주일 출퇴근 기록 보여줘' },
         { label: '휴가 정책 문의', cmd: '연차 신청 정책 알려줘' }
     ]
 
@@ -130,8 +134,20 @@ const AgenticCanvas = ({ menu, setMenu }) => {
         const isEnglish = /[a-zA-Z]/.test(userCommand) && !/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(userCommand)
         
         const statusSteps = isEnglish 
-            ? ['Formulating Strategy...', 'Delegating to Specialist...', 'Analyzing HR Logic...', 'Synthesizing Response...']
-            : ['전략 수립 중...', '전문가 위임 로직 가동...', '인사(HR) 실무 유닛 분석 중...', '데이터 취합 및 최종 답변 생성 중...']
+            ? [
+                'Analyzing intent...', 
+                'Formulating execution plan...', 
+                'Searching for optimal agent path...', 
+                'Delegating to Specialist...', 
+                'Synthesizing final response...'
+              ]
+            : [
+                '사용자 의도 분석 중...', 
+                '실행 전략 및 계획 수립 중...', 
+                '최적 에이전트 경로 검색 중...', 
+                '전문가 유닛 위임 로직 가동...', 
+                '데이터 취합 및 답변 합성 중...'
+              ]
         
         let stepIdx = 0
         const pulseInterval = setInterval(() => {
@@ -310,7 +326,7 @@ const AgenticCanvas = ({ menu, setMenu }) => {
 
                             <Box sx={{ pb: 10 }}>
                                 <Typography variant="subtitle2" fontWeight="800" mb={2} sx={{ opacity: 0.6, letterSpacing: '1px' }}>
-                                    EXPERIENCE FEED
+                                    {i18n.language === 'en' ? 'EXPERIENCE FEED' : '실시간 에이전트 활동 피드'}
                                 </Typography>
                                 <Stack spacing={2.5}>
                                     {activities.map((item, idx) => (
@@ -323,10 +339,25 @@ const AgenticCanvas = ({ menu, setMenu }) => {
                                                     <Box sx={{ p: 0.8, bgcolor: 'var(--bg-primary)', borderRadius: 2, color: item.type === 'user' ? '#f59e0b' : '#3b82f6' }}>
                                                         <item.icon size={18} />
                                                     </Box>
-                                                    <Box flex={1}>
-                                                        <Typography variant="body2" color="var(--text-primary)" fontWeight={600} sx={{ lineHeight: 1.4 }}>
-                                                            {item.text}
-                                                        </Typography>
+                                                    <Box flex={1} sx={{ 
+                                                        '& p': { m: 0 }, 
+                                                        '& table': { borderCollapse: 'collapse', width: '100%', my: 2, border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden' },
+                                                        '& th, & td': { border: '1px solid var(--border-color)', p: 1, textAlign: 'left', fontSize: '0.75rem' },
+                                                        '& th': { bgcolor: 'var(--bg-primary)', fontWeight: 800 },
+                                                        '& ul, & ol': { pl: 2, my: 1 },
+                                                        '& code': { bgcolor: '#f1f5f9', p: '2px 4px', borderRadius: '4px', fontFormat: 'monospace', fontSize: '0.8rem' }
+                                                    }}>
+                                                        {item.type === 'assistant' ? (
+                                                            <div className="markdown-content">
+                                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                                    {String(item.text || '')}
+                                                                </ReactMarkdown>
+                                                            </div>
+                                                        ) : (
+                                                            <Typography variant="body2" color="var(--text-primary)" fontWeight={600} sx={{ lineHeight: 1.4 }}>
+                                                                {item.text}
+                                                            </Typography>
+                                                        )}
 
                                                         {item.trail && item.trail.length > 0 && (
                                                             <Stack direction="row" spacing={0.5} sx={{ mt: 1, opacity: 0.5 }} alignItems="center">
@@ -351,18 +382,36 @@ const AgenticCanvas = ({ menu, setMenu }) => {
                                                                         <Stack direction="row" spacing={1} alignItems="center" mb={0.5}>
                                                                             <Lightbulb size={12} color="#3b82f6" />
                                                                             <Typography variant="caption" fontWeight="900" color="#3b82f6" sx={{ letterSpacing: '0.5px', fontSize: '0.65rem' }}>
-                                                                                AI ANALYSIS INSIGHT / 지능형 사고 경로
+                                                                                {i18n.language === 'en' ? 'AI ANALYSIS INSIGHT / REASONING PATH' : '지능형 사고 경로 및 분석 인사이트'}
                                                                             </Typography>
                                                                         </Stack>
                                                                         {item.reasoning && (
-                                                                            <Typography variant="caption" display="block" sx={{ opacity: 0.7, fontStyle: 'italic', mb: 0.5 }}>
-                                                                                [THOUGHT] {item.reasoning}
-                                                                            </Typography>
+                                                                            <Box sx={{ 
+                                                                                opacity: 0.7, fontStyle: 'italic', mb: 1, fontSize: '0.75rem',
+                                                                                '& p': { m: 0 },
+                                                                                '& table': { borderCollapse: 'collapse', width: '100%', my: 1, border: '1px solid var(--border-color)' },
+                                                                                '& th, & td': { border: '1px solid var(--border-color)', p: 0.5, textAlign: 'left' }
+                                                                            }}>
+                                                                              <Typography variant="caption" sx={{ fontWeight: 800, color: 'var(--text-secondary)', display: 'block', mb: 0.5 }}>
+                                                    {i18n.language === 'en' ? '[THOUGHT]' : '[AI 추론 프로세스]'}
+                                                </Typography>
+                                                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                                                    {String(item.reasoning || '')}
+                                                                                </ReactMarkdown>
+                                                                            </Box>
                                                                         )}
                                                                         {item.observation && (
-                                                                            <Typography variant="caption" display="block" sx={{ opacity: 0.8, color: '#3b82f6', fontWeight: 600 }}>
-                                                                                [OBSERVATION] {item.observation}
-                                                                            </Typography>
+                                                                            <Box sx={{ 
+                                                                                opacity: 0.8, color: '#3b82f6', fontWeight: 600, fontSize: '0.75rem', mt: 1,
+                                                                                '& p': { m: 0 }
+                                                                            }}>
+                                                                                <Typography variant="caption" sx={{ fontWeight: 800, color: '#3b82f6', display: 'block' }}>
+                                                    {i18n.language === 'en' ? '[OBSERVATION]' : '[데이터 분석 관찰]'}
+                                                  </Typography>
+                                                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                                                    {String(item.observation || '')}
+                                                                                </ReactMarkdown>
+                                                                            </Box>
                                                                         )}
                                                                     </Box>
                                                                 </Fade>
@@ -418,7 +467,7 @@ const AgenticCanvas = ({ menu, setMenu }) => {
                     {/* Sidebar Header */}
                     <Box sx={{ p: 2.5, borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Typography variant="subtitle2" fontWeight="900" sx={{ letterSpacing: '1px', color: 'var(--text-primary)' }}>
-                            AGENT SQUAD
+                            {i18n.language === 'en' ? 'AGENT SQUAD' : '에이전트 스쿼드 유닛'}
                         </Typography>
                         <IconButton size="small" onClick={() => setShowRightPanel(false)} sx={{ opacity: 0.5 }}>
                             <PanelRightClose size={18} />
@@ -430,72 +479,86 @@ const AgenticCanvas = ({ menu, setMenu }) => {
                         <Stack spacing={2} mb={3}>
                             {/* Main Orchestrator */}
                             <Box sx={{ p: 2, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid #3b82f630', boxShadow: '0 4px 20px rgba(59, 130, 246, 0.05)' }}>
-                                <Stack direction="row" spacing={1.5} alignItems="center" mb={1}>
-                                    <Box sx={{ p: 0.8, bgcolor: '#3b82f615', color: '#3b82f6', borderRadius: 2 }}>
-                                        <Layers size={16} />
-                                    </Box>
-                                    <Typography variant="body2" fontWeight="800">Main Orchestrator</Typography>
+                                <Stack direction="row" spacing={1.5} alignItems="center" mb={1} sx={{ justifyContent: 'space-between', width: '100%' }}>
+                                    <Stack direction="row" spacing={1.5} alignItems="center">
+                                        <Box sx={{ p: 0.8, bgcolor: '#3b82f615', color: '#3b82f6', borderRadius: 2 }}>
+                                            <Layers size={16} />
+                                        </Box>
+                                        <Typography variant="body2" fontWeight="800">Main Orchestrator</Typography>
+                                    </Stack>
                                     <Chip label="ONLINE" size="small" sx={{ height: 16, fontSize: '0.6rem', bgcolor: '#10b98120', color: '#10b981', fontWeight: 900 }} />
                                 </Stack>
                                 <Typography variant="caption" color="var(--text-secondary)" sx={{ display: 'block', lineHeight: 1.4, mb: 1.5 }}>
-                                    Strategic reasoning and task delegation center.
+                                    {i18n.language === 'en' 
+                                        ? 'Strategic reasoning and expert delegation hub for Smartwork.'
+                                        : '스마트워크 시스템을 위한 전략적 추론 및 전문가 위임 허브'}
                                 </Typography>
                                 {/* Tool List */}
                                 <Stack spacing={0.5} sx={{ pl: 0.5 }}>
-                                    <Typography variant="caption" fontWeight="900" sx={{ opacity: 0.4, fontSize: '0.6rem', mb: 0.5, letterSpacing: '1px' }}>CORE TOOLS</Typography>
-                                    <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.8, fontWeight: 600 }}>
-                                        <History size={10} /> Specialist Delegation
+                                    <Typography variant="caption" fontWeight="900" sx={{ opacity: 0.4, fontSize: '0.6rem', mb: 0.5, letterSpacing: '1px' }}>
+                                        {i18n.language === 'en' ? 'SYSTEM CAPABILITIES' : '시스템 핵심 역량'}
                                     </Typography>
                                     <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.8, fontWeight: 600 }}>
-                                        <Lightbulb size={10} /> Result Synthesis
+                                        <History size={10} /> {i18n.language === 'en' ? 'Specialist Delegation' : '전문가 위임 및 오케스트레이션'}
+                                    </Typography>
+                                    <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.8, fontWeight: 600 }}>
+                                        <Lightbulb size={10} /> {i18n.language === 'en' ? 'High-Fidelity Synthesis' : '고신뢰 지능형 답변 합성'}
                                     </Typography>
                                 </Stack>
                             </Box>
 
                             {/* HR Specialist */}
                             <Box sx={{ p: 2, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid #f59e0b30' }}>
-                                <Stack direction="row" spacing={1.5} alignItems="center" mb={1}>
-                                    <Box sx={{ p: 0.8, bgcolor: '#f59e0b15', color: '#f59e0b', borderRadius: 2 }}>
-                                        <Users size={16} />
-                                    </Box>
-                                    <Typography variant="body2" fontWeight="800">HR Specialist</Typography>
+                                <Stack direction="row" spacing={1.5} alignItems="center" mb={1} sx={{ justifyContent: 'space-between', width: '100%' }}>
+                                    <Stack direction="row" spacing={1.5} alignItems="center">
+                                        <Box sx={{ p: 0.8, bgcolor: '#f59e0b15', color: '#f59e0b', borderRadius: 2 }}>
+                                            <Users size={16} />
+                                        </Box>
+                                        <Typography variant="body2" fontWeight="800">HR Specialist</Typography>
+                                    </Stack>
                                     <Chip label="ACTIVE" size="small" sx={{ height: 16, fontSize: '0.6rem', bgcolor: '#10b98120', color: '#10b981', fontWeight: 900 }} />
                                 </Stack>
                                 <Typography variant="caption" color="var(--text-secondary)" sx={{ display: 'block', lineHeight: 1.4, mb: 1.5 }}>
-                                    연차 제도 및 결재 정책 전문가
+                                    {i18n.language === 'en' ? 'Expert in leave policies and approval procedures.' : '연차 제도 및 결재 정책 전문가'}
                                 </Typography>
                                 {/* Tool List */}
                                 <Stack spacing={0.5} sx={{ pl: 0.5 }}>
-                                    <Typography variant="caption" fontWeight="900" sx={{ opacity: 0.4, fontSize: '0.6rem', mb: 0.5, letterSpacing: '1px' }}>CAPABILITIES</Typography>
-                                    <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.8, fontWeight: 600 }}>
-                                        <Zap size={10} /> Leave Balance Check
+                                    <Typography variant="caption" fontWeight="900" sx={{ opacity: 0.4, fontSize: '0.6rem', mb: 0.5, letterSpacing: '1px' }}>
+                                        {i18n.language === 'en' ? 'CAPABILITIES' : '보유 기술'}
                                     </Typography>
                                     <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.8, fontWeight: 600 }}>
-                                        <Calendar size={10} /> Leave Request
+                                        <Zap size={10} /> {i18n.language === 'en' ? 'Leave Balance Check' : '연차 잔여량 정산'}
+                                    </Typography>
+                                    <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.8, fontWeight: 600 }}>
+                                        <Calendar size={10} /> {i18n.language === 'en' ? 'Leave Request' : '연차 상신 및 승인'}
                                     </Typography>
                                 </Stack>
                             </Box>
 
                             {/* Attendance Analyst */}
                             <Box sx={{ p: 2, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid #10b98130' }}>
-                                <Stack direction="row" spacing={1.5} alignItems="center" mb={1}>
-                                    <Box sx={{ p: 0.8, bgcolor: '#10b98115', color: '#10b981', borderRadius: 2 }}>
-                                        <TrendingUp size={16} />
-                                    </Box>
-                                    <Typography variant="body2" fontWeight="800">Attendance Analyst</Typography>
+                                <Stack direction="row" spacing={1.5} alignItems="center" mb={1} sx={{ justifyContent: 'space-between', width: '100%' }}>
+                                    <Stack direction="row" spacing={1.5} alignItems="center">
+                                        <Box sx={{ p: 0.8, bgcolor: '#10b98115', color: '#10b981', borderRadius: 2 }}>
+                                            <TrendingUp size={16} />
+                                        </Box>
+                                        <Typography variant="body2" fontWeight="800">Attendance Analyst</Typography>
+                                    </Stack>
                                     <Chip label="ACTIVE" size="small" sx={{ height: 16, fontSize: '0.6rem', bgcolor: '#10b98120', color: '#10b981', fontWeight: 900 }} />
                                 </Stack>
                                 <Typography variant="caption" color="var(--text-secondary)" sx={{ display: 'block', lineHeight: 1.4, mb: 1.5 }}>
-                                    출퇴근 기록 및 근무 시간 분석 전문가
+                                    {i18n.language === 'en' ? 'Specialist in work hours and attendance patterns.' : '출퇴근 기록 및 근무 시간 분석 전문가'}
                                 </Typography>
                                 {/* Tool List */}
                                 <Stack spacing={0.5} sx={{ pl: 0.5 }}>
-                                    <Typography variant="caption" fontWeight="900" sx={{ opacity: 0.4, fontSize: '0.6rem', mb: 0.5, letterSpacing: '1px' }}>CAPABILITIES</Typography>
-                                    <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.8, fontWeight: 600 }}>
-                                        <History size={10} /> Work History Analysis
+                                    <Typography variant="caption" fontWeight="900" sx={{ opacity: 0.4, fontSize: '0.6rem', mb: 0.5, letterSpacing: '1px' }}>
+                                        {i18n.language === 'en' ? 'CAPABILITIES' : '보유 기술'}
                                     </Typography>
                                     <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.8, fontWeight: 600 }}>
-                                        <Bot size={10} /> Real-time Clock Insight
+                                        <History size={10} /> {i18n.language === 'en' ? 'Work History Analysis' : '업무 시간 및 근태 기록 분석'}
+                                    </Typography>
+                                    <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.8, fontWeight: 600 }}>
+                                        <Bot size={10} /> {i18n.language === 'en' ? 'Real-time Clock Insight' : '지능형 근태 분석 리포트'}
                                     </Typography>
                                 </Stack>
                             </Box>
@@ -503,7 +566,7 @@ const AgenticCanvas = ({ menu, setMenu }) => {
 
                         {/* 2. Recent History */}
                         <Typography variant="subtitle2" fontWeight="900" sx={{ letterSpacing: '1px', mb: 2, mt: 4, opacity: 0.6 }}>
-                            RECENT HISTORY
+                            {i18n.language === 'en' ? 'RECENT HISTORY' : '최근 분석 히스토리'}
                         </Typography>
                         <Stack spacing={1}>
                             {history.length > 0 ? history.slice(0, 3).map((h, i) => (
@@ -564,7 +627,7 @@ const AgenticCanvas = ({ menu, setMenu }) => {
                                 </Typography>
                             ) : (
                                 <Typography variant="caption" sx={{ fontSize: '0.75rem', display: 'block', color: 'var(--text-primary)', fontWeight: 800, mt: 0.5, letterSpacing: '0.5px' }}>
-                                    전략 수립 ➡️ 도구 위임 ➡️ 결과 관찰 ➡️ 답변 합성
+                                    전략 수립 ➡️ 전문가 위임 ➡️ 결과 분석 ➡️ 답변 합성
                                 </Typography>
                             )}
                         </Box>

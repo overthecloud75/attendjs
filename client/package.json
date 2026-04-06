@@ -27,9 +27,11 @@
     "react-date-range": "^2.0.1",
     "react-dom": "^19.2.3",
     "react-i18next": "^16.5.0",
+    "react-markdown": "^10.1.0",
     "react-quill-new": "^3.7.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.11.0",
+    "remark-gfm": "^4.0.1",
     "sass": "^1.97.1",
     "tippy.js": "^6.3.7"
   },

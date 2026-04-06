@@ -1,10 +1,11 @@
 import BaseAgent from '../BaseAgent.js';
-import AttendanceService from '../../services/AttendanceService.js';
-import AttendanceSummaryService from '../../services/AttendanceSummaryService.js';
+import { agentLogger } from '../../config/winston.js';
+import getAttendanceHistoryTool from '../tools/attendance/GetAttendanceHistoryTool.js';
 
 /**
  * Attendance Analyst Agent (Smartwork)
  * Focuses on daily clock-in/out patterns and work hour analytics.
+ * UPDATED: Uses modular BaseTool architecture for better observability.
  */
 export default class AttendanceAgent extends BaseAgent {
     constructor() {
@@ -13,43 +14,39 @@ export default class AttendanceAgent extends BaseAgent {
     }
 
     async run(user, subTask, llmConfig, sessionId) {
+        const now = new Date();
+        const formattedNow = now.toISOString().split('T')[0];
+        const dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][now.getDay()];
+
         const messages = [
             { 
                 role: 'system', 
                 content: `You are the Attendance Analyst for Smartwork. 
+                         - Current Time: ${formattedNow} (${dayOfWeek})
                          - Current User: ${user.name} (Employee: ${user.employeeId})
                          - OBJECTIVE: Analyze daily attendance patterns and work hours.
+                         - DATE_LOGIC: "Last month" means the month preceding ${formattedNow}.
                          - Format: Professional, logic-driven, and concise.` 
             },
             { role: 'user', content: subTask }
         ];
 
-        const tools = [
-            {
-                type: 'function',
-                function: {
-                    name: 'get_attendance_history',
-                    description: '특정 기간의 출퇴근 기록 및 근무 시간 분석 데이터를 조회합니다.',
-                    parameters: {
-                        type: 'object',
-                        properties: {
-                            startDate: { type: 'string', description: '조회 시작일 (YYYY-MM-DD)' },
-                            endDate: { type: 'string', description: '조회 종료일 (YYYY-MM-DD)' }
-                        },
-                        required: ['startDate', 'endDate']
-                    }
-                }
-            }
-        ];
+        // Tools are now fetched from modular tool definitions
+        const tools = [getAttendanceHistoryTool.getDefinition()];
 
         try {
             const message = await this.callLLM({ command: subTask, messages, tools, llmConfig, sessionId });
 
+            // TOOL CALL HANDLING
             if (message.tool_calls) {
                 const toolCall = message.tool_calls[0];
-                if (toolCall.function.name === 'get_attendance_history') {
+                const funcName = toolCall.function.name;
+
+                if (funcName === 'get_attendance_history') {
                     const args = JSON.parse(toolCall.function.arguments);
-                    const result = await this.getAttendanceHistory(user, args);
+                    
+                    // Unified Execution & Logging via BaseTool
+                    const result = await getAttendanceHistoryTool.execute(user, args, sessionId);
                     
                     const finalResponse = await this.callLLM({
                         command: subTask,
@@ -64,44 +61,20 @@ export default class AttendanceAgent extends BaseAgent {
 
                     return this.wrapResponse(finalResponse.content, { 
                         type: 'TECHNICAL_REPORT', 
-                        observation: `[AttendanceService] Fetched data for ${user.name} (${args.startDate} ~ ${args.endDate}).` 
+                        reasoning: message.reasoning,
+                        observation: `${user.name}님의 ${args.startDate} ~ ${args.endDate} 기간 내 총 ${result.records?.length || 0}건의 출퇴근 원장 데이터를 분석했습니다.`,
+                        toolUsed: getAttendanceHistoryTool.name,
+                        toolArgs: args,
+                        rawToolResult: result
                     });
                 }
             }
 
-            return this.wrapResponse(message.content || "근태 행 기록을 찾는 데 문제가 발생했습니다.", { type: 'DIRECT' });
+            return this.wrapResponse(message.content || "근태 관련 정보를 찾는 데 문제가 발생했습니다.", { type: 'DIRECT' });
 
         } catch (error) {
             return this.handleError(error, sessionId);
         }
     }
-
-    /**
-     * Tool: get_attendance_history
-     * Uses AttendanceService and AttendanceSummaryService for logic.
-     */
-    async getAttendanceHistory(user, { startDate, endDate }) {
-        const query = { name: user.name, startDate, endDate };
-        const records = await AttendanceService.getAttends(query);
-        
-        this.validateTarget(records, "해당 기간의 출퇴근 기록");
-
-        const summary = AttendanceSummaryService.summarizeAttends(records);
-        const userSummary = summary[user.employeeId] || {};
-
-        return {
-            records: records.map(r => ({
-                date: r.date,
-                clockIn: r.start,
-                clockOut: r.end,
-                workingHours: r.workingHours,
-                status: r.status,
-                reason: r.reason
-            })),
-            totalSummary: {
-                workingDays: userSummary.days || 0,
-                totalWorkingHours: Math.round((userSummary.workingHours || 0) * 10) / 10
-            }
-        };
-    }
 }
+

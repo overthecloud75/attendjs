@@ -74,21 +74,22 @@ const agentFormat = printf(rawInfo => {
     const info = (typeof rawInfo.message === 'object' && rawInfo.message !== null) ? { ...rawInfo, ...rawInfo.message } : rawInfo;
     const { timestamp, level, sessionId, agentTrail, intent, command, toolUsed, toolArgs, llmRaw, observation, requestPayload, responsePayload, durationMs, message } = info;
     const sessionStr = sessionId ? `[Session: ${sessionId}] ` : '';
-    const agentStr = (agentTrail && Array.isArray(agentTrail)) ? `[Agent: ${agentTrail.join(' -> ')}] ` : '';
+    const agentStr = (agentTrail && Array.isArray(agentTrail)) ? `[Agent: ${agentTrail.join(' -> ')}] ` : (agentTrail ? `[${agentTrail}] ` : '');
     const levelStr = level.toUpperCase();
     
     // 1. 단순 메시지 (필수 정보가 하나도 없을 때만 출력하고 종료)
     if (!command && !requestPayload && !llmRaw && !observation && !toolUsed && typeof message === 'string') {
-        return `${timestamp} ${levelStr}: ${sessionStr}${message}\n`;
+        const trailPre = agentStr ? agentStr : '';
+        return `${timestamp} ${levelStr}: ${sessionStr}${trailPre}${message}\n`;
     }
 
     let output = '';
 
-    // 2. [Q] 질문 라인 (커맨드가 있을 때만 표시)
+    // 2. [Q] 질문 라인 (커멘드가 있을 때만 표시)
     if (command) {
         output += `${timestamp} ${levelStr}: ${sessionStr}${agentStr}[Intent: ${intent || 'NONE'}] [Q: ${command}] [Duration: ${durationMs || 0}ms]\n`;
-    } else if (message && typeof message === 'string') {
-        output += `${timestamp} ${levelStr}: ${sessionStr}${message}\n`;
+    } else if (message && typeof message === 'string' && !observation && !llmRaw) {
+        output += `${timestamp} ${levelStr}: ${sessionStr}${agentStr}${message}\n`;
     }
     
     // 3. [LLM_REQ]
@@ -105,13 +106,14 @@ const agentFormat = printf(rawInfo => {
         output += `${timestamp} ${levelStr}: ${sessionStr}${agentStr}[LLM_RES] ${resContent}${usage}\n`;
     }
 
-    // 5. [OBSERVATION]
+    // 5. [OBSERVATION] (도구 실행 결과)
     if (observation) {
-        output += `${timestamp} ${levelStr}: ${sessionStr}${agentStr}[OBSERVATION] Raw Data: ${observation}\n`;
+        const toolLabel = toolUsed ? ` (${toolUsed})` : '';
+        output += `${timestamp} ${levelStr}: ${sessionStr}${agentStr}[OBSERVATION]${toolLabel} Raw Data: ${observation}\n`;
     }
 
-    // 6. [TOOL_CALL]
-    if (toolUsed) {
+    // 6. [TOOL_CALL] (도구 호출 시점만 출력, 결과 시점에는 observation이 있으므로 스킵)
+    if (toolUsed && !observation) {
         output += `${timestamp} ${levelStr}: ${sessionStr}${agentStr}[TOOL_CALL: ${toolUsed}] ${JSON.stringify(toolArgs || {})}\n`;
     }
 
@@ -122,6 +124,7 @@ const agentFormat = printf(rawInfo => {
 
     return output;
 });
+
 
 export const agentLogger = winston.createLogger({
     format: combine(

@@ -50,16 +50,22 @@ class BaseAgent {
             const duration = Date.now() - startTime;
             const message = response.data.choices[0].message;
 
+            // Extract reasoning/thought if available (Supported by Gemma 4:26b, GPT-4, etc.)
+            const reasoning = message.reasoning || message.thought || "";
+
             agentLogger.info({
                 message: `[${this.name}] LLM Response`,
                 sessionId,
                 agentTrail: [this.name],
                 llmRaw: message,
+                reasoning, // Explicitly log reasoning for audit
                 durationMs: duration
             });
 
-            return message;
+            // Return both message and its reasoning
+            return { ...message, reasoning };
         } catch (error) {
+
             agentLogger.error({
                 message: `[${this.name}] LLM Error: ${error.message}`,
                 sessionId,
@@ -83,19 +89,22 @@ class BaseAgent {
 
     /**
      * Standard error handler for specialists.
-     * Reports errors in a way the Master AI can synthesize gracefully.
+     * Implements Error Masking to prevent Information Leakage.
      */
     handleError(error, sessionId, userFriendlyMsg = null) {
+        // Detailed log stays SECURE on the server
         agentLogger.error({
             message: `[${this.name}] Specialized Error: ${error.message}`,
             sessionId,
+            code: error.code,
             errorStack: error.stack
         });
 
-        return this.wrapResponse(userFriendlyMsg || `[${this.name}] 요청을 처리하는 과정에서 기술적인 오류가 발생했습니다.`, {
+        // ONLY sanitized metadata is returned to Master AI / Client
+        return this.wrapResponse(userFriendlyMsg || `[${this.name}] 요청하신 작업을 처리하는 중 기술적인 이슈가 발생했습니다.`, {
             type: 'ERROR',
-            code: error.code || 'INTERNAL_ERROR',
-            originalError: error.message
+            code: error.code || 'INTERNAL_ERROR'
+            // [SECURITY] Removed 'originalError: error.message' to prevent leakage
         });
     }
 

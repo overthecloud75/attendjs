@@ -112,63 +112,23 @@ class AgentService {
      * Master AI Orchestration: Decides whether to handle directly or delegate.
      */
     async orchestrate(user, command, logEntry, llmConfig, startTime, activityId) {
-        // Safety: Ensure agents are loaded
         if (Object.keys(this.agents).length === 0) {
             await this.initializeAgents();
         }
-
-        const systemPrompt = `You are a Master AI Orchestrator for Smartwork (User: ${user?.name}, Role: ${user?.role}).
-        Your goal is to understand user intent and delegate tasks to specialized agents.
-
-        AVAILABLE AGENTS:
-        1. HR_Agent: Handles vacations, leaves, and attendance data.
-        2. Attendance_Agent: Handles daily clock-in/out records and work hour analytics.
-
-        [SECURITY POLICY]
-        1. Access Control: You ONLY provide info for the current user (${user?.name}).
-        2. Unauthorized Requests: Refuse immediately if the user asks for another employee's private info.
         
-        [RESPONSE PROTOCOL]
-        - HR tasks: Call 'call_hr_agent'.
-        - Attendance tasks: Call 'call_attendance_agent'.
-        - General questions / Refusals: Answer directly in Korean.
-        - CRITICAL: DO NOT start with "안녕하세요" or introduce yourself. Skip greetings. Answer the question directly.`
-
-        const tools = [
-            {
-                type: 'function',
-                function: {
-                    name: 'call_hr_agent',
-                    description: 'HR 관련 질문(연차, 휴가 조회 등) 시 호출',
-                    parameters: {
-                        type: 'object',
-                        properties: { subTask: { type: 'string' } },
-                        required: ['subTask']
-                    }
-                }
-            },
-            {
-                type: 'function',
-                function: {
-                    name: 'call_attendance_agent',
-                    description: '출퇴근 기록, 근무 시간 통계 등 일일 근태 분석 시 호출',
-                    parameters: {
-                        type: 'object',
-                        properties: { subTask: { type: 'string' } },
-                        required: ['subTask']
-                    }
-                }
-            }
-        ]
-
+        const mainAgent = this.agents['Main_Agent'] || this.agents['MainAgent'];
+        const systemPrompt = mainAgent?.getOrchestrationPrompt(user) || "You are an AI assistant.";
+        const tools = mainAgent?.getTools() || [];
         const messages = [{ role: 'system', content: systemPrompt }, { role: 'user', content: command }]
 
-        // Request Master Plan
-        const response = await axios.post(`${llmConfig.baseURL}/chat/completions`, { 
-            model: llmConfig.model, messages, tools, tool_choice: 'auto'
-        }, { headers: { 'Authorization': `Bearer ${llmConfig.apiKey}`, 'Content-Type': 'application/json' } });
-
-        const firstMessage = response.data.choices[0].message
+        // Request Master Plan via standardized callLLM for traceability
+        const firstMessage = await mainAgent.callLLM({ 
+            command, 
+            messages, 
+            tools, 
+            llmConfig, 
+            sessionId: logEntry.sessionId 
+        });
         
         // --- DELEGATION FLOW ---
         if (firstMessage.tool_calls && firstMessage.tool_calls.length > 0) {
@@ -187,7 +147,10 @@ class AgentService {
                     agent: subAgentName,
                     task: args.subTask,
                     thought: subResult.reasoning || `Handling ${args.subTask}`,
-                    observation: subResult.observation || `Processed task: ${args.subTask}`
+                    observation: subResult.observation || `Processed task: ${args.subTask}`,
+                    toolUsed: subResult.toolUsed,
+                    toolArgs: subResult.toolArgs,
+                    rawToolResult: subResult.rawToolResult
                 })
 
                 // Determine Output Voice (Main vs Specialist)
@@ -218,27 +181,27 @@ class AgentService {
      */
     async synthesize(userQuestion, technicalReport, llmConfig, sessionId) {
         try {
-            const now = new Date();
-            const timestampStr = `${now.getFullYear()}. ${now.getMonth() + 1}. ${now.getDate()}. ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            const mainAgent = this.agents['Main_Agent'] || this.agents['MainAgent'];
+            const messages = [
+                { role: 'system', content: mainAgent?.getSynthesisPrompt() || "Synthesize a professional final response." },
+                { role: 'user', content: `User Question: ${userQuestion}\nTechnical Data: ${technicalReport}` }
+            ];
 
-            const polishPayload = {
-                model: llmConfig.model,
-                messages: [
-                    { role: 'system', content: `You are the Master AI Orchestrator for Smartwork. 
-                    Based on the provided technical data, generate a high-fidelity, professional final response in Korean. 
-                    - Focus on being authoritative, helpful, and clear.
-                    - Do NOT use generic greetings (안녕하세요 등).
-                    - Ensure the answer sounds like a finalized report from the central system intelligence.` },
-                    { role: 'user', content: `User Question: ${userQuestion}\nTechnical Data: ${technicalReport}` }
-                ]
-            };
-            const response = await axios.post(`${llmConfig.baseURL}/chat/completions`, polishPayload, { headers: { 'Authorization': `Bearer ${llmConfig.apiKey}`, 'Content-Type': 'application/json' } });
+            // Ensure synthesis is logged as a Main Agent response
+            const synthesisResponse = await mainAgent.callLLM({
+                command: `Synthesis for: ${userQuestion}`,
+                messages,
+                llmConfig,
+                sessionId
+            });
 
-            return response.data.choices[0].message.content || "";
+            return synthesisResponse.content || "";
         } catch (error) {
-            return ""; // Fail gracefully to allow fallback
+            agentLogger.error({ message: `Synthesis failed: ${error.message}`, sessionId });
+            return ""; 
         }
     }
+
 
     /**
      * Asynchronous persistence of the agent trace.
