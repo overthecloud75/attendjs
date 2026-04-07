@@ -44,10 +44,7 @@ const AgenticCanvas = () => {
     const [visibleCards, setVisibleCards] = useState(['leave', 'approval', 'sync', 'hub'])
     const [expandedInsights, setExpandedInsights] = useState({})
     const [history, setHistory] = useState([])
-    const [activities, setActivities] = useState([
-        { user: 'System', text: 'Smartwork 인텔리전트 오케스트레이션 엔진이 활성화되었습니다.', time: '지금', icon: ShieldCheck },
-        { user: 'Assistant', text: 'Smartwork 에이전틱 캔버스입니다. 연차 조회부터 보안 위임까지 무엇을 도와드릴까요?', time: '방금', icon: Bot },
-    ])
+    const [activities, setActivities] = useState([])
 
     const formatDate = (dateInput) => {
         const d = new Date(dateInput)
@@ -69,8 +66,8 @@ const AgenticCanvas = () => {
             setHistory(historyData)
             
             // Rehydrate the activities feed with the MOST RECENT history as well
-            if (historyData.length > 0 && activities.length <= 2) {
-                const recentActivities = historyData.slice(0, 3).reverse().flatMap(h => [
+            if (historyData.length > 0 && activities.length === 0) {
+                const recentActivities = historyData.slice(0, 3).flatMap(h => [
                     { 
                         user: 'You', text: h.command, time: formatDate(h.createdAt), icon: UserCircle, type: 'user' 
                     },
@@ -164,18 +161,22 @@ const AgenticCanvas = () => {
             const isAction = result && typeof result === 'object' && result.type === 'ACTION_REQUIRED'
             const displayText = isAction ? result.message : (result?.content || result || (isEnglish ? 'Unknown response.' : '알 수 없는 응답입니다.'))
 
-            // 2. Add Assistant's Response to Feed
-            setActivities(prev => [{ 
-                user: 'Assistant', 
-                text: displayText, 
-                trail: result?.trail || [],
-                observation: result?.observation || null,
-                reasoning: result?.reasoning || null,
-                time: getNowTimestamp(), 
-                icon: isAction ? ShieldCheck : Bot,
-                type: 'assistant',
-                actionRequired: isAction ? result : null
-            }, ...prev])
+            // 2. Add Assistant's Response to Feed (Place it right AFTER the new User Command which is at index 0)
+            setActivities(prev => {
+                const newActivities = [...prev]
+                newActivities.splice(1, 0, { 
+                    user: 'Assistant', 
+                    text: displayText, 
+                    trail: result?.trail || [],
+                    observation: result?.observation || null,
+                    reasoning: result?.reasoning || null,
+                    time: getNowTimestamp(), 
+                    icon: isAction ? ShieldCheck : Bot,
+                    type: 'assistant',
+                    actionRequired: isAction ? result : null
+                })
+                return newActivities
+            })
             
             // Refresh history after success
             fetchHistory()
@@ -209,9 +210,13 @@ const AgenticCanvas = () => {
                 isConfirmed: true, 
                 pendingAction: action 
             })
-            setActivities(prev => [{ 
-                user: 'Assistant', text: data.response, time: getNowTimestamp(), icon: CheckCircle, type: 'assistant' 
-            }, ...prev])
+            setActivities(prev => {
+                const newActivities = [...prev]
+                newActivities.splice(1, 0, { 
+                    user: 'Assistant', text: data.response, time: getNowTimestamp(), icon: CheckCircle, type: 'assistant' 
+                })
+                return newActivities
+            })
         } catch (error) {
             console.error('Action failed:', error)
         } finally {

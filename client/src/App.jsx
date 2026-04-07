@@ -68,8 +68,8 @@ function App() {
                         <Route path='/agentic-canvas' element={<AgenticCanvas />} />
                         <Route path='/dashboard' element={<Dashboard />} />
                         <Route path='/attend' element={<Attend />} />
-                        <Route path='/wifi-attend' element={<Wifi />} />
-                        <Route path='/gps-attend' element={<GPS />} />
+                        <Route path='/wifi' element={<Wifi />} />
+                        <Route path='/gps' element={<GPS />} />
                         <Route path='/summary' element={<Summary />} />
                         <Route path='/device' element={<Device />} />
                         <Route path='/creditcard' element={<CreditCard />} />

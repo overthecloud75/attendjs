@@ -20,17 +20,17 @@ export const pagesInfo = {
         auth: true,
         visible: true
     },
-    'wifi-attend': {
-        to: '/wifi-attend',
+    'wifi': {
+        to: '/wifi',
         emoji: '📶',
-        title: 'Wifi-Attend',
+        title: 'Wifi',
         auth: false,
         visible: false
     },
-    'gps-attend': {
-        to: '/gps-attend',
+    'gps': {
+        to: '/gps',
         emoji: '📍',
-        title: 'GPS-Attend',
+        title: 'GPS',
         auth: true,
         visible: true
     },
@@ -81,7 +81,8 @@ export const pagesInfo = {
         emoji: '📄',
         title: 'Summary',
         auth: false,
-        visible: true
+        visible: true,
+        apiPath: '/api/summary/leftleavelist'
     },
     'location': {
         to: '/admin/settings/location',
@@ -102,7 +103,8 @@ export const pagesInfo = {
         emoji: '🔐',
         title: 'LoginHistory',
         auth: false,
-        visible: true
+        visible: true,
+        apiPath: '/api/auth/search'
     }
 }
 export const UserEditablePages = ['board', 'creditcard']
@@ -113,6 +115,6 @@ export const UserEditableTitles = ['info', 'type', 'location', 'charge', 'status
 export const EditableSelects = ['position', 'regular', 'mode', 'attendMode', 'status']
 export const CardEditableTitles = ['price', 'people']
 export const CardEditableSelects = ['use']
-export const SearchPages = ['attend', 'wifi-attend', 'gps-attend', 'summary', 'device', 'creditcard', 'loginhistory', 'approval', 'board']
+export const SearchPages = ['attend', 'wifi', 'gps', 'summary', 'device', 'creditcard', 'loginhistory', 'approval', 'board']
 export const SearchMonthPages = ['summary', 'creditcard', 'approval', 'board']
 

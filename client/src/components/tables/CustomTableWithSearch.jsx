@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { Box } from '@mui/material'
 import useFetch from '../../hooks/useFetch'
 import Search from './Search'
-import { SearchPages, SearchMonthPages } from '../../configs/pages'
+import { SearchPages, SearchMonthPages, pagesInfo } from '../../configs/pages'
 import { LoadingSpinner } from '../../utils/GeneralUtil'
 
 // Lazy load CustomTable to improve initial load performance
@@ -39,10 +39,12 @@ const CustomTableWithSearch = ({ searchKeyword, page, url, columnHeaders, csvHea
     const [clickCount, setClickCount] = useState(0)
     const [fileName, setFileName] = useState(`${page}.csv`)
 
+    const resolvedUrl = url || pagesInfo[page]?.apiPath || `/api/${page}/search`
+
     // Fetch data based on search criteria
     const { data, setData, loading } = useFetch(
         page,
-        url,
+        resolvedUrl,
         {
             [searchKeyword]: name,
             startDate: format(date[0].startDate, 'yyyy-MM-dd'),

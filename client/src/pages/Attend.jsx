@@ -9,7 +9,6 @@ const Attend = () => {
         <CustomTableWithSearch
             searchKeyword='name'
             page='attend'
-            url='/api/attend/search'
             columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
             csvHeaders={csvHeaders}
         />

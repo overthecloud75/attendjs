@@ -8,8 +8,7 @@ const GPS = () => {
     return (
         <CustomTableWithSearch
             searchKeyword='name'
-            page='gps-attend'
-            url='/api/gps-attend/search'
+            page='gps'
             columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
             csvHeaders={csvHeaders}
         />

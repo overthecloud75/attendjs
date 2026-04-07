@@ -11,8 +11,8 @@ const itemDict = {
     Attendance: [
         pagesInfo['dashboard'],
         pagesInfo['attend'],
-        pagesInfo['wifi-attend'],
-        pagesInfo['gps-attend']
+        pagesInfo['wifi'],
+        pagesInfo['gps']
     ],
     Management: [
         pagesInfo['employee'],

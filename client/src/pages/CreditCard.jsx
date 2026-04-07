@@ -9,7 +9,6 @@ const CreditCard = () => {
         <CustomTableWithSearch
             searchKeyword='name'
             page='creditcard'
-            url='/api/creditcard/search'
             columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
             csvHeaders={csvHeaders}
         />
