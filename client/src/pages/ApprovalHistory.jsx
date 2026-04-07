@@ -9,7 +9,7 @@ const ApprovalHistory = () => {
         <CustomTableWithSearch
             searchKeyword='name'
             page='approval'
-            url='/api/approval/history'
+            url='/api/approval/search'
             columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
             csvHeaders={csvHeaders}
         />

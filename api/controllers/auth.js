@@ -119,7 +119,7 @@ export const getApiKey = async (req, res, next) => {
     try {
         const { email } = req.user
         const user = await AuthService.getUserByEmail(email)
-        res.status(200).setHeader('csrftoken', req.csrfToken()).json({ apiKey: user.apiKey })
+        res.status(200).json({ apiKey: user.apiKey })
     } catch (err) {
         next(err)
     }

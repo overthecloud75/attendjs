@@ -9,7 +9,7 @@ const Wifi = () => {
         <CustomTableWithSearch
             searchKeyword='mac'
             page='wifi-attend'
-            url='/api/wifi/search'
+            url='/api/wifi-attend/search'
             columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
             csvHeaders={csvHeaders}
         />

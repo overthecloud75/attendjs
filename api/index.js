@@ -76,7 +76,8 @@ app.use((req, res, next) => {
     const exemptPaths = [
         '/api/auth/setAttend', 
         '/api/auth/callback', 
-        '/api/auth/verify'
+        '/api/auth/verify',
+        '/api/auth/apiKey'
     ]
     if (exemptPaths.includes(req.path) || req.path.startsWith('/api/agent/')) {
         return next()
