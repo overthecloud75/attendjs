@@ -8,7 +8,7 @@ const ApprovalHistory = () => {
     return (
         <CustomTableWithSearch
             searchKeyword='name'
-            page='approvalhistory'
+            page='approval'
             url='/api/approval/history'
             columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
             csvHeaders={csvHeaders}
