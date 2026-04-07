@@ -1,22 +1,18 @@
 import { useResponsive } from '../hooks/useResponsive'
-import MainLayout from '../components/layout/MainLayout'
 import CustomTableWithSearch from '../components/tables/CustomTableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/gps'
 
-const GPS = ({ menu, setMenu }) => {
+const GPS = () => {
     const { isMobile } = useResponsive()
 
     return (
-        <MainLayout menu={menu} setMenu={setMenu}>
-            <CustomTableWithSearch
-                menu={menu}
-                searchKeyword='name'
-                page='gps-attend'
-                url='/api/gps-attend/search'
-                columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
-                csvHeaders={csvHeaders}
-            />
-        </MainLayout>
+        <CustomTableWithSearch
+            searchKeyword='name'
+            page='gps'
+            url='/api/gps/search'
+            columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
+            csvHeaders={csvHeaders}
+        />
     )
 }
 

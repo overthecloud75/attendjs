@@ -8,7 +8,6 @@ import {
 import {
     User, Calendar, Eye, ArrowLeft, Trash2, Download, MessageSquare, CornerDownRight, FileText
 } from 'lucide-react'
-import MainLayout from '../../components/layout/MainLayout'
 import DOMPurify from 'dompurify' // HTML XSS 방지용
 
 // 링크 보안 설정 (Hook)
@@ -19,7 +18,7 @@ DOMPurify.addHook('afterSanitizeAttributes', function (node) {
     }
 })
 
-const BoardDetailPage = ({ menu, setMenu }) => {
+const BoardDetailPage = () => {
     const { id } = useParams()
     const navigate = useNavigate()
     const { user: currentUser } = useAuth()
@@ -210,8 +209,7 @@ const BoardDetailPage = ({ menu, setMenu }) => {
     const isAuthor = currentUser.isAdmin || currentUser.email === post.authorEmail
 
     return (
-        <MainLayout menu={menu} setMenu={setMenu}>
-            <Box sx={{ p: { xs: 2, md: 4 }, width: '100%', maxWidth: 1400, mx: 'auto', boxSizing: 'border-box' }}>
+        <Box sx={{ p: { xs: 2, md: 4 }, width: '100%', maxWidth: 1400, mx: 'auto', boxSizing: 'border-box' }}>
 
                 {/* 상단 네비게이션 */}
                 <Button
@@ -419,7 +417,6 @@ const BoardDetailPage = ({ menu, setMenu }) => {
                     </Box>
                 </Box>
             </Box>
-        </MainLayout>
     )
 }
 

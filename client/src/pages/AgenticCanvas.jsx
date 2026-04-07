@@ -35,7 +35,7 @@ const AgentStatusCard = ({ id, title, status, icon: Icon, color, onHide }) => (
     </Card>
 )
 
-const AgenticCanvas = ({ menu, setMenu }) => {
+const AgenticCanvas = () => {
     const { i18n } = useTranslation()
     const [command, setCommand] = useState('')
     const [isLoading, setIsLoading] = useState(false)
@@ -228,8 +228,7 @@ const AgenticCanvas = ({ menu, setMenu }) => {
     }
 
     return (
-        <MainLayout menu={menu} setMenu={setMenu}>
-            <Box sx={{ display: 'flex', height: '100%', bgcolor: 'var(--bg-primary)', overflow: 'hidden', position: 'relative' }}>
+        <Box sx={{ display: 'flex', height: '100%', bgcolor: 'var(--bg-primary)', overflow: 'hidden', position: 'relative' }}>
                 
                 {/* 1. Main Interaction Area */}
                 <Box sx={{ 
@@ -634,7 +633,6 @@ const AgenticCanvas = ({ menu, setMenu }) => {
                     </Box>
                 </Box>
             </Box>
-        </MainLayout>
     )
 }
 

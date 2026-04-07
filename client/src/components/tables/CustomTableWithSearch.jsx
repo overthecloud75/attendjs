@@ -31,7 +31,7 @@ const getInitialDate = (page) => {
     }]
 }
 
-const CustomTableWithSearch = ({ menu, searchKeyword, page, url, columnHeaders, csvHeaders, onIdClick }) => {
+const CustomTableWithSearch = ({ searchKeyword, page, url, columnHeaders, csvHeaders, onIdClick }) => {
     // State initialization
     const [name, setName] = useState('')
     // Use lazy initialization for date to avoid recalculating on every render
@@ -57,7 +57,6 @@ const CustomTableWithSearch = ({ menu, searchKeyword, page, url, columnHeaders, 
         <Box sx={{ width: '100%', position: 'relative' }}>
             {showSearch && (
                 <Search
-                    menu={menu}
                     page={page}
                     searchKeyword={searchKeyword}
                     name={name}

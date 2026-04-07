@@ -64,7 +64,7 @@ const Approval = ({ navigate, open, setOpen }) => {
     const handleChange = (event) => {
         const { name, value: inputValue } = event.target
 
-        if (name === 'etc') {
+        if (name === 'etc' && value.reason === LEAVE_TYPE.OTHER) {
             if (inputValue.length > 10) return alert('10글자 이하로 적어주세요.')
             if (/[\/ ]/.test(inputValue)) return alert('특수 문자와 공백은 허용되지 않습니다.')
             if ([LEAVE_TYPE.ANNUAL, LEAVE_TYPE.HALF, LEAVE_TYPE.SICK, '연차'].some(word => inputValue.includes(word))) {

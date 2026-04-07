@@ -10,7 +10,7 @@ class RequestLeaveApplicationTool extends BaseTool {
             type: "object",
             properties: {
                 date: { type: "string", description: "The date of leave (YYYY-MM-DD)" },
-                leaveType: { type: "string", enum: ["Full", "AM", "PM"], description: "Type of leave" },
+                leaveType: { type: "string", enum: ["Full", "AM", "PM"], description: "Type of leave. Mapping: Full='연차', AM='오전반차', PM='오후반차'." },
                 reason: { type: "string", description: "Reason for taking leave" }
             },
             required: ["date", "leaveType", "reason"]

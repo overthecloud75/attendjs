@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { useResponsive } from '../hooks/useResponsive'
-import MainLayout from '../components/layout/MainLayout'
 import CustomTableWithSearch from '../components/tables/CustomTableWithSearch'
 import LeaveHistoryModal from '../components/modals/LeaveHistoryModal'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/summary'
 
-const Summary = ({ menu, setMenu }) => {
+const Summary = () => {
     const { isMobile } = useResponsive()
 
     const [openModal, setOpenModal] = useState(false)
@@ -17,9 +16,8 @@ const Summary = ({ menu, setMenu }) => {
     }
 
     return (
-        <MainLayout menu={menu} setMenu={setMenu}>
+        <>
             <CustomTableWithSearch
-                menu={menu}
                 searchKeyword='name'
                 page='summary'
                 url='/api/summary/leftleavelist'
@@ -32,7 +30,7 @@ const Summary = ({ menu, setMenu }) => {
                 setOpen={setOpenModal}
                 employee={selectedEmployee}
             />
-        </MainLayout>
+        </>
     )
 }
 

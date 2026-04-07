@@ -8,7 +8,6 @@ import { Box, TextField, Button, Typography, Popover } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 const Search = ({
-    menu,
     page,
     searchKeyword,
     name,

@@ -9,10 +9,9 @@ import {
 import { DataGrid } from '@mui/x-data-grid'
 import { Search, PenLine, FileText } from 'lucide-react'
 
-import MainLayout from '../../components/layout/MainLayout'
 import { BOARD_TYPES } from '../../configs/board'
 
-const BoardListPage = ({ menu, setMenu }) => {
+const BoardListPage = () => {
     const navigate = useNavigate()
     // eslint-disable-next-line
     const { user: currentUser } = useAuth()
@@ -130,29 +129,27 @@ const BoardListPage = ({ menu, setMenu }) => {
     }
 
     return (
-        <MainLayout menu={menu} setMenu={setMenu}>
-            <Box sx={{ p: { xs: 2, md: 2 }, height: 'calc(100vh - 80px)', overflow: 'auto' }}>
+        <Box sx={{ p: { xs: 2, md: 2 }, height: 'calc(100vh - 80px)', overflow: 'auto' }}>
+            {/* Header */}
+            <Box sx={{ mb: 2 }}>
+                <Typography variant="h4" fontWeight="700" color="var(--text-primary)" gutterBottom>
+                    사내 게시판 📋
+                </Typography>
+                <Typography variant="body1" color="var(--text-secondary)">
+                    공지사항 및 자유로운 소통 공간입니다.
+                </Typography>
+            </Box>
 
-                {/* Header */}
-                <Box sx={{ mb: 2 }}>
-                    <Typography variant="h4" fontWeight="700" color="var(--text-primary)" gutterBottom>
-                        사내 게시판 📋
-                    </Typography>
-                    <Typography variant="body1" color="var(--text-secondary)">
-                        공지사항 및 자유로운 소통 공간입니다.
-                    </Typography>
-                </Box>
-
-                <Paper
-                    elevation={0}
-                    sx={{
-                        p: 3,
-                        borderRadius: 3,
-                        border: '1px solid var(--border-color)',
-                        bgcolor: 'var(--card-bg)',
-                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
-                    }}
-                >
+            <Paper
+                elevation={0}
+                sx={{
+                    p: 3,
+                    borderRadius: 3,
+                    border: '1px solid var(--border-color)',
+                    bgcolor: 'var(--card-bg)',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                }}
+            >
                     {/* Tabs */}
                     <Tabs
                         value={currentTab}
@@ -308,7 +305,6 @@ const BoardListPage = ({ menu, setMenu }) => {
                     </Box>
                 </Paper>
             </Box>
-        </MainLayout>
     )
 }
 

@@ -10,10 +10,9 @@ import { Save, X, ArrowLeft, Upload, CloudUpload } from 'lucide-react'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 
-import MainLayout from '../../components/layout/MainLayout'
 import { BOARD_TYPES } from '../../configs/board'
 
-const BoardWritePage = ({ menu, setMenu }) => {
+const BoardWritePage = () => {
     const navigate = useNavigate()
     const { user: currentUser } = useAuth()
     const quillRef = useRef(null)
@@ -138,8 +137,7 @@ const BoardWritePage = ({ menu, setMenu }) => {
     }
 
     return (
-        <MainLayout menu={menu} setMenu={setMenu}>
-            <Box sx={{ p: { xs: 2, md: 4 }, width: '100%', maxWidth: 1400, mx: 'auto', boxSizing: 'border-box' }}>
+        <Box sx={{ p: { xs: 2, md: 4 }, width: '100%', maxWidth: 1400, mx: 'auto', boxSizing: 'border-box' }}>
 
                 {/* Header */}
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 3 }}>
@@ -280,7 +278,6 @@ const BoardWritePage = ({ menu, setMenu }) => {
                     </Stack>
                 </Paper>
             </Box>
-        </MainLayout>
     )
 }
 

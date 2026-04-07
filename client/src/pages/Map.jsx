@@ -1,5 +1,4 @@
 import { useLocation } from 'react-router-dom'
-import MainLayout from '../components/layout/MainLayout'
 import NMap from '../components/NaverMap'
 
 const defaultState = {
@@ -18,14 +17,11 @@ const defaultState = {
     }
 }
 
-const Map = ({ menu, setMenu }) => {
-
+const Map = () => {
     const { state } = useLocation()
 
     return (
-        <MainLayout menu={menu} setMenu={setMenu}>
-            <NMap state={state ?? defaultState} />
-        </MainLayout>
+        <NMap state={state ?? defaultState} />
     )
 }
 
