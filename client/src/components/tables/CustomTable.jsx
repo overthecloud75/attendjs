@@ -128,70 +128,132 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdC
                 }}
             >
                 {data && data.length > 0 ? (
-                    <TableContainer sx={{ maxHeight: '70vh' }}>
-                        <Table stickyHeader aria-label="custom table">
-                            <TableHead>
-                                {table.getHeaderGroups().map(headerGroup => (
-                                    <TableRow key={headerGroup.id}>
-                                        <Th width="60px" align="center">No</Th>
-                                        {headerGroup.headers.map(header => (
-                                            <Th
-                                                key={header.id}
-                                                colSpan={header.colSpan}
-                                                onClick={header.column.getToggleSortingHandler()}
-                                            >
-                                                {flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
-                                            </Th>
-                                        ))}
-                                    </TableRow>
-                                ))}
-                            </TableHead>
-                            <TableBody>
-                                {table.getRowModel().rows.map((row, rowIndex) => (
-                                    <TableRow
-                                        key={row.id}
-                                        hover
-                                        sx={{
-                                            transition: 'background-color 0.1s',
-                                            '&:hover': {
-                                                backgroundColor: 'var(--hover-bg) !important',
-                                            },
-                                            // '취소'된 항목은 흐리게(Grey-out) 처리
-                                            opacity: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 0.6 : 1,
-                                            backgroundColor: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 'var(--bg-secondary) !important' : 'inherit',
-                                            filter: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 'grayscale(0.5)' : 'none'
-                                        }}
-                                    >
-                                        <Td align="center" onClick={(e) => onIdClick ? onIdClick(row.original) : handleUpdateClick(e, row.original)}>
-                                            <Typography
-                                                variant="body2"
-                                                sx={{
-                                                    color: 'var(--text-secondary)',
-                                                    fontWeight: 500,
-                                                    cursor: 'pointer',
-                                                    textDecoration: 'none',
-                                                    '&:hover': { textDecoration: 'underline', color: '#3b82f6' }
-                                                }}
-                                            >
-                                                {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + rowIndex + 1}
+                    <>
+                        {/* Mobile Grid View (Hidden on sm+) */}
+                        <Box sx={{ display: { xs: 'grid', sm: 'none' }, gridTemplateColumns: '1fr', gap: 1.5, p: 1.5, bgcolor: 'var(--bg-secondary)' }}>
+                            {table.getRowModel().rows.map((row, rowIndex) => (
+                                <Box
+                                    key={row.id}
+                                    onClick={(e) => onIdClick ? onIdClick(row.original) : handleUpdateClick(e, row.original)}
+                                    sx={{
+                                        p: 2,
+                                        borderRadius: 3,
+                                        bgcolor: 'var(--card-bg)',
+                                        border: '1px solid var(--border-color)',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: 1,
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                                        opacity: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 0.6 : 1,
+                                        filter: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 'grayscale(0.5)' : 'none'
+                                    }}
+                                >
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                                        <Typography variant="caption" sx={{ color: 'var(--text-active)', fontWeight: 800 }}>
+                                            No.{table.getState().pagination.pageIndex * table.getState().pagination.pageSize + rowIndex + 1}
+                                        </Typography>
+                                        {row.getVisibleCells().find(c => c.column.id === 'status' || c.column.id === 'approvalStatus') && (
+                                            flexRender(
+                                                row.getVisibleCells().find(c => c.column.id === 'status' || c.column.id === 'approvalStatus').column.columnDef.cell,
+                                                row.getVisibleCells().find(c => c.column.id === 'status' || c.column.id === 'approvalStatus').getContext()
+                                            )
+                                        )}
+                                    </Box>
+
+                                    {row.getVisibleCells().filter(c => !['status', 'approvalStatus', 'cancel'].includes(c.column.id)).map(cell => (
+                                        <Box key={cell.id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px dashed var(--border-color)', pb: 0.5 }}>
+                                            <Typography variant="caption" sx={{ color: 'var(--text-secondary)', fontWeight: 600, minWidth: '80px' }}>
+                                                {flexRender(cell.column.columnDef.header, cell.getContext())}
                                             </Typography>
-                                        </Td>
-                                        {row.getVisibleCells().map(cell => (
-                                            <Td key={cell.id}>
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
+                                            <Box sx={{ 
+                                                fontSize: '0.825rem', 
+                                                color: 'var(--text-primary)', 
+                                                fontWeight: 500,
+                                                textAlign: 'right',
+                                                wordBreak: 'break-all'
+                                            }}>
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </Box>
+                                        </Box>
+                                    ))}
+                                    
+                                    {row.getVisibleCells().find(c => c.column.id === 'cancel') && (
+                                        <Box sx={{ mt: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                                             {flexRender(
+                                                row.getVisibleCells().find(c => c.column.id === 'cancel').column.columnDef.cell,
+                                                row.getVisibleCells().find(c => c.column.id === 'cancel').getContext()
+                                            )}
+                                        </Box>
+                                    )}
+                                </Box>
+                            ))}
+                        </Box>
+
+                        {/* Desktop Table View (Hidden on xs) */}
+                        <TableContainer sx={{ display: { xs: 'none', sm: 'block' }, maxHeight: '70vh' }}>
+                            <Table stickyHeader aria-label="custom table">
+                                <TableHead>
+                                    {table.getHeaderGroups().map(headerGroup => (
+                                        <TableRow key={headerGroup.id}>
+                                            <Th width="60px" align="center">No</Th>
+                                            {headerGroup.headers.map(header => (
+                                                <Th
+                                                    key={header.id}
+                                                    colSpan={header.colSpan}
+                                                    onClick={header.column.getToggleSortingHandler()}
+                                                >
+                                                    {flexRender(
+                                                        header.column.columnDef.header,
+                                                        header.getContext()
+                                                    )}
+                                                </Th>
+                                            ))}
+                                        </TableRow>
+                                    ))}
+                                </TableHead>
+                                <TableBody>
+                                    {table.getRowModel().rows.map((row, rowIndex) => (
+                                        <TableRow
+                                            key={row.id}
+                                            hover
+                                            sx={{
+                                                transition: 'background-color 0.1s',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-bg) !important',
+                                                },
+                                                opacity: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 0.6 : 1,
+                                                backgroundColor: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 'var(--bg-secondary) !important' : 'inherit',
+                                                filter: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 'grayscale(0.5)' : 'none'
+                                            }}
+                                        >
+                                            <Td align="center" onClick={(e) => onIdClick ? onIdClick(row.original) : handleUpdateClick(e, row.original)}>
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{
+                                                        color: 'var(--text-secondary)',
+                                                        fontWeight: 500,
+                                                        cursor: 'pointer',
+                                                        textDecoration: 'none',
+                                                        '&:hover': { textDecoration: 'underline', color: '#3b82f6' }
+                                                    }}
+                                                >
+                                                    {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + rowIndex + 1}
+                                                </Typography>
                                             </Td>
-                                        ))}
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                            {row.getVisibleCells().map(cell => (
+                                                <Td key={cell.id}>
+                                                    {flexRender(
+                                                        cell.column.columnDef.cell,
+                                                        cell.getContext()
+                                                    )}
+                                                </Td>
+                                            ))}
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </>
                 ) : (
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 8, color: 'var(--text-secondary)', textAlign: 'center' }}>
                         <Typography sx={{ fontSize: 48, mb: 2, filter: 'grayscale(1)', opacity: 0.5 }}>📊</Typography>
