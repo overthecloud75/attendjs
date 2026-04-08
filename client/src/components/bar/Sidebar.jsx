@@ -2,36 +2,51 @@ import { Box, AppBar, Toolbar, List, Typography, ListItemButton, Tooltip, Collap
 import { styled } from '@mui/material/styles'
 import { Link, useLocation } from 'react-router-dom'
 import { pagesInfo } from '../../configs/pages'
-import { ChevronUp, ChevronDown } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
+import { ChevronUp, ChevronDown, CalendarDays, BarChart3, Users, MessageSquare, Bot, ShieldCheck } from 'lucide-react'
 
 const itemDict = {
-    Attendance: [
-        pagesInfo['dashboard'],
-        pagesInfo['attend'],
-        pagesInfo['wifi'],
-        pagesInfo['gps']
-    ],
-    Management: [
-        pagesInfo['employee'],
-        pagesInfo['meetings'],
-        pagesInfo['device'],
-        pagesInfo['creditcard']
-    ],
-    Community: [
-        pagesInfo['approval'],
-        pagesInfo['board'],
-    ],
-    '🤖 AI Workspace': [
-        pagesInfo['agentic-smartwork'],
-    ],
-    Admin: [
-        pagesInfo['summary'],
-        pagesInfo['settings'],
-        pagesInfo['loginhistory'],
-    ]
+    Attendance: {
+        icon: CalendarDays,
+        items: [
+            pagesInfo['dashboard'],
+            pagesInfo['attend'],
+            pagesInfo['wifi'],
+            pagesInfo['gps']
+        ]
+    },
+    Management: {
+        icon: Users,
+        items: [
+            pagesInfo['employee'],
+            pagesInfo['meetings'],
+            pagesInfo['device'],
+            pagesInfo['creditcard']
+        ]
+    },
+    Community: {
+        icon: MessageSquare,
+        items: [
+            pagesInfo['approval'],
+            pagesInfo['board'],
+        ]
+    },
+    'AI Workspace': {
+        icon: Bot,
+        items: [
+            pagesInfo['agentic-smartwork'],
+        ]
+    },
+    Admin: {
+        icon: ShieldCheck,
+        items: [
+            pagesInfo['summary'],
+            pagesInfo['settings'],
+            pagesInfo['loginhistory'],
+        ]
+    }
 }
 
 const SidebarItems = ({ itemList }) => {
@@ -106,7 +121,7 @@ const SidebarItem = ({ item }) => {
 
             {hasChildren && (
                 <Collapse in={open} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding sx={{ pl: 2 }}>
+                    <List component="div" disablePadding sx={{ pl: 2.5 }}>
                         {item.children.map((child, index) => (
                             <SidebarItem key={index} item={child} />
                         ))}
@@ -120,14 +135,19 @@ const SidebarItem = ({ item }) => {
 const SidebarCategories = () => {
     const { t } = useTranslation()
     return (
-        Object.keys(itemDict).map((title, titleIndex) => (
-            <div key={titleIndex}>
-                <CategoryTitle component='div'>
-                    {t(title.toLowerCase(), title)}
-                </CategoryTitle>
-                <SidebarItems itemList={itemDict[title]} />
-            </div>
-        ))
+        Object.keys(itemDict).map((title, titleIndex) => {
+            const category = itemDict[title]
+            const Icon = category.icon
+            return (
+                <div key={titleIndex}>
+                    <CategoryTitle component='div' sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Icon size={14} strokeWidth={2.5} />
+                        {t(title.toLowerCase(), title)}
+                    </CategoryTitle>
+                    <SidebarItems itemList={category.items} />
+                </div>
+            )
+        })
     )
 }
 
@@ -285,17 +305,18 @@ const StyledListItemButton = styled(ListItemButton)(({ theme, active }) => ({
     },
 
     [theme.breakpoints.down('md')]: {
-        justifyContent: 'center',
-        padding: '0 8px',
+        justifyContent: 'flex-start',
+        padding: '0 16px',
         '&:hover': {
-            transform: 'none', // 모바일에서는 이동 효과 제거
+            transform: 'none',
         }
     },
 }))
 
 const IconWrapper = styled('div')(({ active }) => ({
     fontSize: '20px',
-    minWidth: '32px',
+    minWidth: '24px',
+    width: '24px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

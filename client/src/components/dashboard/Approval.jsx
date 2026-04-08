@@ -83,7 +83,7 @@ const Approval = ({ navigate, open, setOpen }) => {
         <Stack direction="row" alignItems="center" spacing={1.5} sx={{ p: 1.5, bgcolor: 'var(--bg-secondary)', borderRadius: 2 }}>
             <Box sx={{ color: 'var(--text-secondary)', display: 'flex' }}>{icon}</Box>
             <Box>
-                <Typography variant="caption" color="#64748b" display="block">{label}</Typography>
+                <Typography variant="caption" color="var(--text-secondary)" display="block">{label}</Typography>
                 <Typography variant="body2" fontWeight="600" color={color}>
                     {fieldValue || '-'}
                 </Typography>

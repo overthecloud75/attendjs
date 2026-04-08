@@ -257,11 +257,6 @@ a:link {
 }
 
 /* MUI Dark Mode Overrides */
-[data-theme='dark'] .MuiInputBase-input,
-[data-theme='dark'] .MuiOutlinedInput-input {
-    color: var(--text-primary) !important;
-}
-
 [data-theme='dark'] .MuiInputLabel-root,
 [data-theme='dark'] .MuiInputLabel-formControl {
     color: var(--text-secondary) !important;
@@ -289,6 +284,159 @@ a:link {
 
 [data-theme='dark'] .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
     border-color: var(--text-active) !important;
+}
+
+[data-theme='dark'] .MuiInputBase-root,
+[data-theme='dark'] .MuiSelect-select,
+[data-theme='dark'] .MuiSelect-icon,
+[data-theme='dark'] .MuiSvgIcon-root,
+[data-theme='dark'] .MuiTypography-root,
+[data-theme='dark'] .MuiListItemText-primary,
+[data-theme='dark'] .MuiChip-label,
+[data-theme='dark'] .MuiInputBase-input::placeholder,
+[data-theme='dark'] .MuiInputBase-input,
+[data-theme='dark'] .MuiInput-input,
+[data-theme='dark'] input.MuiInputBase-input,
+[data-theme='dark'] .MuiOutlinedInput-input,
+[data-theme='dark'] input::placeholder {
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+}
+
+/* DatePicker specific placeholder/input fixes */
+[data-theme='dark'] input[type="text"].MuiInputBase-input,
+[data-theme='dark'] .MuiMobileDatePicker-root .MuiInputBase-input,
+[data-theme='dark'] .MuiDesktopDatePicker-root .MuiInputBase-input,
+[data-theme='dark'] .MuiInputBase-input[placeholder] {
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+}
+
+/* MUI X DatePicker Calendar Overrides */
+[data-theme='dark'] .MuiPickersPopper-root .MuiPaper-root {
+    background-color: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .MuiPickersDay-root {
+    color: var(--text-primary) !important;
+    background-color: transparent;
+}
+
+[data-theme='dark'] .MuiPickersDay-root:hover {
+    background-color: var(--hover-bg) !important;
+}
+
+[data-theme='dark'] .MuiPickersDay-root.Mui-selected {
+    background-color: var(--text-active) !important;
+    color: white !important;
+}
+
+[data-theme='dark'] .MuiPickersDay-today {
+    border: 1px solid var(--text-active) !important;
+}
+
+[data-theme='dark'] .MuiPickersCalendarHeader-label,
+[data-theme='dark'] .MuiPickersCalendarHeader-switchViewButton,
+[data-theme='dark'] .MuiPickersArrowSwitcher-button,
+[data-theme='dark'] .MuiDayCalendar-weekDayLabel {
+    color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .MuiTypography-root.MuiDayCalendar-weekDayLabel {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme='dark'] .MuiYearCalendar-root .MuiPickersYear-yearButton {
+    color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .MuiPaper-root {
+    background-color: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .MuiFormHelperText-root {
+    color: var(--text-secondary) !important;
+}
+
+/* Agentic Canvas Markdown Content Styling */
+.markdown-content {
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.markdown-content p {
+    margin-bottom: 1em;
+}
+
+.markdown-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--card-bg);
+}
+
+.markdown-content th,
+.markdown-content td {
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    text-align: left;
+    font-size: 0.875rem;
+}
+
+.markdown-content th {
+    background-color: var(--bg-secondary);
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.markdown-content td {
+    color: var(--text-secondary);
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+
+.markdown-content li {
+    margin-bottom: 0.5rem;
+}
+
+.markdown-content code {
+    background-color: var(--bg-secondary);
+    color: #ef4444;
+    /* Standard alert color for code inline */
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+[data-theme='dark'] .markdown-content code {
+    color: #f87171;
+}
+
+.markdown-content pre {
+    background-color: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    border: 1px solid var(--border-color);
+}
+
+.markdown-content pre code {
+    background-color: transparent;
+    color: var(--text-primary);
+    padding: 0;
 }
 
 /* React Quill Dark Mode Overrides */

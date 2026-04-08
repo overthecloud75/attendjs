@@ -40,7 +40,7 @@ const AgenticCanvas = () => {
     const [command, setCommand] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [statusMsg, setStatusMsg] = useState('')
-    const [showRightPanel, setShowRightPanel] = useState(true)
+    const [showRightPanel, setShowRightPanel] = useState(window.innerWidth > 900)
     const [visibleCards, setVisibleCards] = useState(['leave', 'approval', 'sync', 'hub'])
     const [expandedInsights, setExpandedInsights] = useState({})
     const [history, setHistory] = useState([])
@@ -284,9 +284,12 @@ const AgenticCanvas = () => {
                                             onClick={() => handleSendCommand(s.cmd)}
                                             icon={<Sparkles size={14} />}
                                             sx={{ 
-                                                borderRadius: 2, bgcolor: 'var(--card-bg)', border: '1px solid var(--border-color)',
-                                                fontWeight: 700, fontSize: '0.75rem', px: 0.5,
-                                                '&:hover': { bgcolor: '#3b82f610', borderColor: '#3b82f640' }
+                                                borderRadius: '12px', bgcolor: 'var(--card-bg)', border: '1px solid var(--border-color)',
+                                                fontWeight: 800, fontSize: '0.8rem', px: 1, py: 2,
+                                                color: 'var(--text-primary)',
+                                                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                                                '&:hover': { bgcolor: 'var(--bg-active)', borderColor: 'var(--text-active)', transform: 'translateY(-1px)' },
+                                                '& .MuiChip-icon': { color: 'var(--text-active)' }
                                             }}
                                         />
                                     ))}
@@ -347,9 +350,10 @@ const AgenticCanvas = () => {
                                                         '& p': { m: 0 }, 
                                                         '& table': { borderCollapse: 'collapse', width: '100%', my: 2, border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden' },
                                                         '& th, & td': { border: '1px solid var(--border-color)', p: 1, textAlign: 'left', fontSize: '0.75rem' },
-                                                        '& th': { bgcolor: 'var(--bg-primary)', fontWeight: 800 },
+                                                        '& th': { bgcolor: 'var(--bg-secondary)', color: 'var(--text-primary)', fontWeight: 800 },
+                                                        '& td': { color: 'var(--text-secondary)' },
                                                         '& ul, & ol': { pl: 2, my: 1 },
-                                                        '& code': { bgcolor: '#f1f5f9', p: '2px 4px', borderRadius: '4px', fontFormat: 'monospace', fontSize: '0.8rem' }
+                                                        '& code': { bgcolor: 'var(--bg-secondary)', color: '#ef4444', p: '2px 4px', borderRadius: '4px', fontFormat: 'monospace', fontSize: '0.8rem' }
                                                     }}>
                                                         {item.type === 'assistant' ? (
                                                             <div className="markdown-content">
@@ -364,10 +368,15 @@ const AgenticCanvas = () => {
                                                         )}
 
                                                         {item.trail && item.trail.length > 0 && (
-                                                            <Stack direction="row" spacing={0.5} sx={{ mt: 1, opacity: 0.5 }} alignItems="center">
-                                                                <History size={10} />
-                                                                <Typography variant="caption" sx={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.5px' }}>
-                                                                    TRACE: {item.trail.map(t => typeof t === 'object' ? `${t.agent} (${t.task || 'Delegation'})` : t).join(' ➡️ ')}
+                                                            <Stack direction="row" spacing={0.8} sx={{ mt: 1.5, opacity: 0.8 }} alignItems="center">
+                                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 1, py: 0.3, bgcolor: 'var(--bg-active)', borderRadius: 1.5, border: '1px solid var(--text-active)20' }}>
+                                                                    <History size={12} color="var(--text-active)" />
+                                                                    <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--text-active)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                                                        Execution Trace
+                                                                    </Typography>
+                                                                </Box>
+                                                                <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)' }}>
+                                                                    {item.trail.map(t => typeof t === 'object' ? `${t.agent.replace('_Agent', '')} » ${t.task || 'Delegation'}` : t).join(' ➜ ')}
                                                                 </Typography>
                                                             </Stack>
                                                         )}
@@ -391,30 +400,34 @@ const AgenticCanvas = () => {
                                                                         </Stack>
                                                                         {item.reasoning && (
                                                                             <Box sx={{ 
-                                                                                opacity: 0.7, fontStyle: 'italic', mb: 1, fontSize: '0.75rem',
+                                                                                opacity: 0.9, fontStyle: 'italic', mb: 1, fontSize: '0.85rem', color: 'var(--text-primary)',
                                                                                 '& p': { m: 0 },
                                                                                 '& table': { borderCollapse: 'collapse', width: '100%', my: 1, border: '1px solid var(--border-color)' },
                                                                                 '& th, & td': { border: '1px solid var(--border-color)', p: 0.5, textAlign: 'left' }
                                                                             }}>
-                                                                              <Typography variant="caption" sx={{ fontWeight: 800, color: 'var(--text-secondary)', display: 'block', mb: 0.5 }}>
-                                                    {i18n.language === 'en' ? '[THOUGHT]' : '[AI 추론 프로세스]'}
-                                                </Typography>
-                                                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                                                                    {String(item.reasoning || '')}
-                                                                                </ReactMarkdown>
+                                                                                <Typography variant="caption" sx={{ fontWeight: 800, color: 'var(--text-secondary)', display: 'block', mb: 0.5 }}>
+                                                                                    {i18n.language === 'en' ? '[THOUGHT]' : '[AI 추론 프로세스]'}
+                                                                                </Typography>
+                                                                                <div className="markdown-content">
+                                                                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                                                        {String(item.reasoning || '')}
+                                                                                    </ReactMarkdown>
+                                                                                </div>
                                                                             </Box>
                                                                         )}
                                                                         {item.observation && (
                                                                             <Box sx={{ 
-                                                                                opacity: 0.8, color: '#3b82f6', fontWeight: 600, fontSize: '0.75rem', mt: 1,
+                                                                                opacity: 1.0, color: '#3b82f6', fontWeight: 600, fontSize: '0.85rem', mt: 1,
                                                                                 '& p': { m: 0 }
                                                                             }}>
                                                                                 <Typography variant="caption" sx={{ fontWeight: 800, color: '#3b82f6', display: 'block' }}>
-                                                    {i18n.language === 'en' ? '[OBSERVATION]' : '[데이터 분석 관찰]'}
-                                                  </Typography>
-                                                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                                                                    {String(item.observation || '')}
-                                                                                </ReactMarkdown>
+                                                                                    {i18n.language === 'en' ? '[OBSERVATION]' : '[데이터 분석 관찰]'}
+                                                                                </Typography>
+                                                                                <div className="markdown-content">
+                                                                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                                                        {String(item.observation || '')}
+                                                                                    </ReactMarkdown>
+                                                                                </div>
                                                                             </Box>
                                                                         )}
                                                                     </Box>
@@ -465,15 +478,19 @@ const AgenticCanvas = () => {
                     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                     overflowX: 'hidden',
                     overflowY: 'auto',
-                    display: 'flex',
+                    display: { xs: showRightPanel ? 'flex' : 'none', md: 'flex' },
                     flexDirection: 'column',
+                    position: { xs: 'absolute', md: 'relative' },
+                    right: 0,
+                    zIndex: 1000,
+                    boxShadow: { xs: '-10px 0 20px rgba(0,0,0,0.1)', md: 'none' }
                 }}>
                     {/* Sidebar Header */}
                     <Box sx={{ p: 2.5, borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Typography variant="subtitle2" fontWeight="900" sx={{ letterSpacing: '1px', color: 'var(--text-primary)' }}>
                             {i18n.language === 'en' ? 'AGENT SQUAD' : '에이전트 스쿼드 유닛'}
                         </Typography>
-                        <IconButton size="small" onClick={() => setShowRightPanel(false)} sx={{ opacity: 0.5 }}>
+                        <IconButton size="small" onClick={() => setShowRightPanel(false)} sx={{ opacity: 0.5, color: 'var(--text-primary)' }}>
                             <PanelRightClose size={18} />
                         </IconButton>
                     </Box>
@@ -606,7 +623,14 @@ const AgenticCanvas = () => {
                                                 {formatDate(h.createdAt)}
                                             </Typography>
                                         </Box>
-                                        <IconButton size="small" onClick={(e) => handleDeleteHistory(e, h._id)} sx={{ opacity: 0.3, '&:hover': { opacity: 1, color: '#ef4444' } }}>
+                                        <IconButton size="small" 
+                                            onClick={(e) => handleDeleteHistory(e, h._id)} 
+                                            sx={{ 
+                                                opacity: 0.6, 
+                                                color: 'var(--text-secondary)',
+                                                '&:hover': { opacity: 1, color: '#ef4444', bgcolor: 'rgba(239, 68, 68, 0.1)' } 
+                                            }}
+                                        >
                                             <Trash2 size={12} />
                                         </IconButton>
                                     </Stack>

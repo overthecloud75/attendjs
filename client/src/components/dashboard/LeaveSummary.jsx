@@ -12,7 +12,7 @@ function LeaveProgressBar(props) {
         <Box sx={{ width: '100%', mb: 1 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                 <Typography variant="body2" color="var(--text-secondary)" fontWeight={500}>연차 사용률</Typography>
-                <Typography variant="body2" color="#3b82f6" fontWeight={700}>{Math.round(props.value)}%</Typography>
+                <Typography variant="body2" color="#60a5fa" fontWeight={700}>{Math.round(props.value)}%</Typography>
             </Box>
             <LinearProgress
                 variant='determinate'

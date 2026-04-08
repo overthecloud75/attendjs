@@ -39,8 +39,12 @@ const CancelRequestButton = ({ row }) => {
                 sx={{
                     width: 28,
                     height: 28,
-                    bgcolor: 'rgba(239, 68, 68, 0.08)',
-                    '&:hover': { bgcolor: 'rgba(239, 68, 68, 0.15)' }
+                    bgcolor: 'rgba(239, 68, 68, 0.1)',
+                    border: '1px solid rgba(239, 68, 68, 0.2)',
+                    '&:hover': { 
+                        bgcolor: 'rgba(239, 68, 68, 0.2)',
+                        border: '1px solid rgba(239, 68, 68, 0.4)'
+                    }
                 }}
             >
                 <XIcon size={16} />
@@ -55,24 +59,66 @@ const StatusBadge = ({ value }) => {
 
     const status = value.toLowerCase()
 
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    
     const statusConfig = {
         // 승인됨/완료
-        active: { label: '승인', bg: '#dcfce7', color: '#166534', border: '#bbf7d0' },
-        approved: { label: '승인', bg: '#dcfce7', color: '#166534', border: '#bbf7d0' },
+        active: { 
+            label: '승인', 
+            bg: isDark ? 'rgba(34, 197, 94, 0.15)' : '#dcfce7', 
+            color: isDark ? '#4ade80' : '#166534', 
+            border: isDark ? 'rgba(34, 197, 94, 0.3)' : '#bbf7d0' 
+        },
+        approved: { 
+            label: '승인', 
+            bg: isDark ? 'rgba(34, 197, 94, 0.15)' : '#dcfce7', 
+            color: isDark ? '#4ade80' : '#166534', 
+            border: isDark ? 'rgba(34, 197, 94, 0.3)' : '#bbf7d0' 
+        },
 
         // 대기중
-        pending: { label: '대기', bg: '#fef9c3', color: '#854d0e', border: '#fde047' },
-        wait: { label: '대기', bg: '#fef9c3', color: '#854d0e', border: '#fde047' },
+        pending: { 
+            label: '대기', 
+            bg: isDark ? 'rgba(234, 179, 8, 0.15)' : '#fef9c3', 
+            color: isDark ? '#facc15' : '#854d0e', 
+            border: isDark ? 'rgba(234, 179, 8, 0.3)' : '#fde047' 
+        },
+        wait: { 
+            label: '대기', 
+            bg: isDark ? 'rgba(234, 179, 8, 0.15)' : '#fef9c3', 
+            color: isDark ? '#facc15' : '#854d0e', 
+            border: isDark ? 'rgba(234, 179, 8, 0.3)' : '#fde047' 
+        },
 
         // 진행중
-        inprogress: { label: '진행중', bg: '#e0f2fe', color: '#075985', border: '#bae6fd' },
+        inprogress: { 
+            label: '진행중', 
+            bg: isDark ? 'rgba(14, 165, 233, 0.15)' : '#e0f2fe', 
+            color: isDark ? '#38bdf8' : '#075985', 
+            border: isDark ? 'rgba(14, 165, 233, 0.3)' : '#bae6fd' 
+        },
 
         // 반려/취소/거절
-        cancel: { label: '취소', bg: '#fee2e2', color: '#991b1b', border: '#fecaca' },
-        rejected: { label: '반려', bg: '#fee2e2', color: '#991b1b', border: '#fecaca' },
+        cancel: { 
+            label: '취소', 
+            bg: isDark ? 'rgba(239, 68, 68, 0.15)' : '#fee2e2', 
+            color: isDark ? '#f87171' : '#991b1b', 
+            border: isDark ? 'rgba(239, 68, 68, 0.3)' : '#fecaca' 
+        },
+        rejected: { 
+            label: '반려', 
+            bg: isDark ? 'rgba(239, 68, 68, 0.15)' : '#fee2e2', 
+            color: isDark ? '#f87171' : '#991b1b', 
+            border: isDark ? 'rgba(239, 68, 68, 0.3)' : '#fecaca' 
+        },
 
         // 기본
-        default: { label: value, bg: '#f1f5f9', color: '#475569', border: '#e2e8f0' }
+        default: { 
+            label: value, 
+            bg: isDark ? 'rgba(148, 163, 184, 0.1)' : '#f1f5f9', 
+            color: isDark ? '#cbd5e1' : '#475569', 
+            border: isDark ? 'rgba(148, 163, 184, 0.2)' : '#e2e8f0' 
+        }
     }
 
     const config = statusConfig[status] || statusConfig.default
