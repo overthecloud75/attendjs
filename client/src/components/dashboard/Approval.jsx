@@ -113,10 +113,10 @@ const Approval = ({ navigate, open, setOpen }) => {
                                     color: 'var(--text-primary)',
                                     '& fieldset': { borderColor: 'var(--border-color)' },
                                     '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
-                                    '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
+                                    '&.Mui-focused fieldset': { borderColor: 'var(--text-active)' }
                                 },
                                 '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
-                                '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' }
+                                '& .MuiInputLabel-root.Mui-focused': { color: 'var(--text-active)' }
                             }}
                         />
                     ) : (
@@ -133,7 +133,7 @@ const Approval = ({ navigate, open, setOpen }) => {
                                     color: 'var(--text-primary)',
                                     '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
                                     '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
-                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
+                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-active)' },
                                     '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
                                 }}
                             >
@@ -182,8 +182,8 @@ const Approval = ({ navigate, open, setOpen }) => {
                         </Box>
                     ) : (
                         <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
-                            {renderInfoRow(<Clock size={16} />, '남은 연차', leftLeave, '#3b82f6')}
-                            {renderInfoRow(<CheckCircle2 size={16} />, '근태 상태', leftStatus, leftStatus === '정상' ? '#166534' : '#d97706')}
+                            {renderInfoRow(<Clock size={16} />, '남은 연차', leftLeave, 'var(--info)')}
+                            {renderInfoRow(<CheckCircle2 size={16} />, '근태 상태', leftStatus, leftStatus === '정상' ? 'var(--success)' : 'var(--warning)')}
                             <Box sx={{ gridColumn: '1 / -1' }}>
                                 {renderInfoRow(<User size={16} />, '결재 승인자', value.approver)}
                             </Box>
@@ -214,13 +214,13 @@ const Approval = ({ navigate, open, setOpen }) => {
                                                 color: 'var(--text-primary)',
                                                 '& fieldset': { borderColor: 'var(--border-color)' },
                                                 '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
-                                                '&.Mui-focused fieldset': { borderColor: '#3b82f6' },
+                                                '&.Mui-focused fieldset': { borderColor: 'var(--text-active)' },
                                             },
                                             '& .MuiOutlinedInput-input': {
                                                 color: 'var(--text-primary)',
                                             },
                                             '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
-                                            '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' },
+                                            '& .MuiInputLabel-root.Mui-focused': { color: 'var(--text-active)' },
                                             '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
                                         }
                                     }
@@ -260,7 +260,7 @@ const Approval = ({ navigate, open, setOpen }) => {
                     </LocalizationProvider>
 
                     <FormControl fullWidth size="small">
-                        <InputLabel sx={{ color: 'var(--text-secondary)', '&.Mui-focused': { color: '#3b82f6' } }}>신청 사유</InputLabel>
+                        <InputLabel sx={{ color: 'var(--text-secondary)', '&.Mui-focused': { color: 'var(--text-active)' } }}>신청 사유</InputLabel>
                         <Select
                             name='reason'
                             label='신청 사유'
@@ -271,7 +271,7 @@ const Approval = ({ navigate, open, setOpen }) => {
                                 color: 'var(--text-primary)',
                                 '& .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--border-color)' },
                                 '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-secondary)' },
-                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6' },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--text-active)' },
                                 '& .MuiSvgIcon-root': { color: 'var(--text-secondary)' }
                             }}
                         >
@@ -307,12 +307,12 @@ const Approval = ({ navigate, open, setOpen }) => {
                     variant='contained'
                     sx={{
                         borderRadius: 2,
-                        bgcolor: '#3b82f6',
+                        bgcolor: 'var(--text-active)',
                         fontSize: '0.9rem',
                         fontWeight: 600,
                         px: 3,
                         boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)',
-                        '&:hover': { bgcolor: '#2563eb' }
+                        '&:hover': { bgcolor: 'var(--text-active)', opacity: 0.9 }
                     }}
                 >
                     신청하기

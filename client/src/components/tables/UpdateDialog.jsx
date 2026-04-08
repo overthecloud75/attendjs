@@ -69,166 +69,184 @@ const Update = ({ writeMode, page, columns, data, setData, open, setOpen, rowDat
     // autofocus disappear after typing, 한글 입력 문제 
     // https://stackoverflow.com/questions/42573017/in-react-es6-why-does-the-input-field-lose-focus-after-typing-a-character
 
-    return (
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-            <DialogTitle sx={{ bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: 1 }}>
-                {writeMode ? <Plus size={20} /> : <Edit size={20} />}
-                {writeMode ? `${page} 생성` : `${page} 수정`}
-            </DialogTitle>
-            <DialogContent sx={{ bgcolor: 'var(--card-bg)', color: 'var(--text-primary)', pt: 3 }}>
-                {columns.map((item, index) => {
-                    if (EditableSelects.includes(item.accessorKey) && options[item.accessorKey]) {
-                        return (
-                            <TextField
-                                autoFocus={focus === item.accessorKey}
-                                select
-                                margin='dense'
-                                id={item.accessorKey}
-                                name={item.accessorKey}
-                                label={item.header || item.accessorKey}
-                                fullWidth
-                                variant='outlined'
-                                defaultValue={value[item.accessorKey] ? value[item.accessorKey] : ''}
-                                key={index}
-                                onChange={handleChange}
-                                autoComplete='false'
-                                sx={{
-                                    mt: 2,
-                                    '& .MuiOutlinedInput-root': {
-                                        color: 'var(--text-primary)',
-                                        '& fieldset': { borderColor: 'var(--border-color)' },
-                                        '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
-                                        '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
-                                    },
-                                    '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
-                                    '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' },
-                                    '& .MuiSelect-icon': { color: 'var(--text-secondary)' }
-                                }}
-                                slotProps={{
-                                    input: {
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <List size={18} style={{ color: 'var(--text-secondary)' }} />
-                                            </InputAdornment>
-                                        ),
-                                    }
-                                }}
-                            >
-                                {options[item.accessorKey].map((option) => (
-                                    <MenuItem
-                                        key={option}
-                                        value={option}
-                                    >
-                                        {option}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        )
-                    } else if (editableTitles.includes(item.accessorKey) || writeMode) {
-                        return (
-                            <TextField
-                                autoFocus={focus === item.accessorKey}
-                                margin='dense'
-                                id={item.accessorKey}
-                                name={item.accessorKey}
-                                label={item.header || item.accessorKey}
-                                fullWidth
-                                variant='outlined'
-                                value={value[item.accessorKey] ? value[item.accessorKey] : ''}
-                                key={index}
-                                onChange={handleChange}
-                                autoComplete='false'
-                                sx={{
-                                    mt: 2,
-                                    '& .MuiOutlinedInput-root': {
-                                        color: 'var(--text-primary)',
-                                        '& fieldset': { borderColor: 'var(--border-color)' },
-                                        '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
-                                        '&.Mui-focused fieldset': { borderColor: '#3b82f6' }
-                                    },
-                                    '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
-                                    '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' }
-                                }}
-                                slotProps={{
-                                    input: {
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                {['email'].includes(item.accessorKey) && <Mail size={18} style={{ color: 'var(--text-secondary)' }} />}
-                                                {['phone', 'phoneNumber'].includes(item.accessorKey) && <Phone size={18} style={{ color: 'var(--text-secondary)' }} />}
-                                                {['name', 'username'].includes(item.accessorKey) && <User size={18} style={{ color: 'var(--text-secondary)' }} />}
-                                                {['department', 'rank', 'position'].includes(item.accessorKey) && <Briefcase size={18} style={{ color: 'var(--text-secondary)' }} />}
-                                            </InputAdornment>
-                                        ),
-                                    }
-                                }}
-                            />
-                        )
-                    } else {
-                        return (
-                            <TextField
-                                margin='dense'
-                                id={item.accessorKey}
-                                name={item.accessorKey}
-                                label={item.header || item.accessorKey}
-                                fullWidth
-                                variant='standard'
-                                value={rowData[item.accessorKey] ? rowData[item.accessorKey] : ''}
-                                key={index}
-                                autoComplete='false'
-                                sx={{ mt: 2 }}
-                                slotProps={{
-                                    input: {
-                                        readOnly: true,
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                {['createdAt', 'updatedAt'].includes(item.accessorKey) ?
-                                                    <Calendar size={18} style={{ color: 'var(--text-secondary)' }} /> :
-                                                    (['_id', 'id'].includes(item.accessorKey) ?
-                                                        <Hash size={18} style={{ color: 'var(--text-secondary)' }} /> :
-                                                        <Lock size={18} style={{ color: 'var(--text-secondary)' }} />
-                                                    )
-                                                }
-                                            </InputAdornment>
-                                        ),
-                                        sx: { color: 'var(--text-secondary)' }
-                                    },
-                                    inputLabel: { sx: { color: 'var(--text-secondary)' } }
-                                }}
-                            />
-                        )
-                    }
-                })}
-            </DialogContent>
-            <DialogActions sx={{ p: 3, bgcolor: 'var(--card-bg)', borderTop: '1px solid var(--border-color)' }}>
-                <Button
-                    onClick={handleClose}
+    const Actions = (
+        <>
+            <Button
+                onClick={handleClose}
+                variant='outlined'
+                sx={{ 
+                    flex: { xs: 1, sm: 'none' },
+                    color: 'var(--text-secondary)', 
+                    borderColor: 'var(--border-color)', 
+                    borderRadius: 2,
+                    '&:hover': { bgcolor: 'var(--bg-secondary)', borderColor: 'var(--text-secondary)' } 
+                }}
+                startIcon={<X size={18} />}
+            >
+                취소
+            </Button>
+            {!writeMode &&
+                (<Button
+                    onClick={handleDelete}
                     variant='outlined'
-                    sx={{ color: 'var(--text-secondary)', borderColor: 'var(--border-color)', '&:hover': { bgcolor: 'var(--bg-secondary)', borderColor: 'var(--text-secondary)' } }}
-                    startIcon={<X size={18} />}
+                    color="error"
+                    sx={{ 
+                        flex: { xs: 1, sm: 'none' },
+                        borderColor: 'var(--danger)', 
+                        color: 'var(--danger)',
+                        borderRadius: 2,
+                        '&:hover': { bgcolor: 'var(--bg-active)', borderColor: 'var(--danger)' } 
+                    }}
+                    startIcon={<Trash2 size={18} />}
                 >
-                    취소
-                </Button>
-                {!writeMode &&
-                    (<Button
-                        onClick={handleDelete}
-                        variant='outlined'
-                        color="error"
-                        sx={{ borderColor: 'error.main', '&:hover': { bgcolor: 'error.light', color: 'white', borderColor: 'error.main' } }}
-                        startIcon={<Trash2 size={18} />}
-                    >
-                        삭제
-                    </Button>)
+                    삭제
+                </Button>)
+            }
+            <Button
+                onClick={handleUpdate}
+                variant='contained'
+                sx={{ 
+                    flex: { xs: 1, sm: 'none' },
+                    bgcolor: 'var(--text-active)', 
+                    borderRadius: 2,
+                    '&:hover': { bgcolor: 'var(--text-active)', opacity: 0.9 } 
+                }}
+                startIcon={<Save size={18} />}
+            >
+                {writeMode ? '생성' : '수정'}
+            </Button>
+        </>
+    )
+
+    return (
+        <BaseDialog
+            open={open}
+            onClose={handleClose}
+            title={writeMode ? `${page} 생성` : `${page} 수정`}
+            titleIcon={writeMode ? <Plus size={20} /> : <Edit size={20} />}
+            actions={Actions}
+            maxWidth="sm"
+        >
+            {columns.map((item, index) => {
+                if (EditableSelects.includes(item.accessorKey) && options[item.accessorKey]) {
+                    return (
+                        <TextField
+                            autoFocus={focus === item.accessorKey}
+                            select
+                            margin='dense'
+                            id={item.accessorKey}
+                            name={item.accessorKey}
+                            label={item.header || item.accessorKey}
+                            fullWidth
+                            variant='outlined'
+                            defaultValue={value[item.accessorKey] ? value[item.accessorKey] : ''}
+                            key={index}
+                            onChange={handleChange}
+                            autoComplete='false'
+                            sx={{
+                                mt: 2,
+                                '& .MuiOutlinedInput-root': {
+                                    color: 'var(--text-primary)',
+                                    '& fieldset': { borderColor: 'var(--border-color)' },
+                                    '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                    '&.Mui-focused fieldset': { borderColor: 'var(--text-active)' }
+                                },
+                                '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                '& .MuiInputLabel-root.Mui-focused': { color: 'var(--text-active)' },
+                                '& .MuiSelect-icon': { color: 'var(--text-secondary)' }
+                            }}
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <List size={18} style={{ color: 'var(--text-secondary)' }} />
+                                        </InputAdornment>
+                                    ),
+                                }
+                            }}
+                        >
+                            {options[item.accessorKey].map((option) => (
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    )
+                } else if (editableTitles.includes(item.accessorKey) || writeMode) {
+                    return (
+                        <TextField
+                            autoFocus={focus === item.accessorKey}
+                            margin='dense'
+                            id={item.accessorKey}
+                            name={item.accessorKey}
+                            label={item.header || item.accessorKey}
+                            fullWidth
+                            variant='outlined'
+                            value={value[item.accessorKey] ? value[item.accessorKey] : ''}
+                            key={index}
+                            onChange={handleChange}
+                            autoComplete='false'
+                            sx={{
+                                mt: 2,
+                                '& .MuiOutlinedInput-root': {
+                                    color: 'var(--text-primary)',
+                                    '& fieldset': { borderColor: 'var(--border-color)' },
+                                    '&:hover fieldset': { borderColor: 'var(--text-secondary)' },
+                                    '&.Mui-focused fieldset': { borderColor: 'var(--text-active)' }
+                                },
+                                '& .MuiInputLabel-root': { color: 'var(--text-secondary)' },
+                                '& .MuiInputLabel-root.Mui-focused': { color: 'var(--text-active)' }
+                            }}
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            {['email'].includes(item.accessorKey) && <Mail size={18} style={{ color: 'var(--text-secondary)' }} />}
+                                            {['phone', 'phoneNumber'].includes(item.accessorKey) && <Phone size={18} style={{ color: 'var(--text-secondary)' }} />}
+                                            {['name', 'username'].includes(item.accessorKey) && <User size={18} style={{ color: 'var(--text-secondary)' }} />}
+                                            {['department', 'rank', 'position'].includes(item.accessorKey) && <Briefcase size={18} style={{ color: 'var(--text-secondary)' }} />}
+                                        </InputAdornment>
+                                    ),
+                                }
+                            }}
+                        />
+                    )
+                } else {
+                    return (
+                        <TextField
+                            margin='dense'
+                            id={item.accessorKey}
+                            name={item.accessorKey}
+                            label={item.header || item.accessorKey}
+                            fullWidth
+                            variant='standard'
+                            value={rowData[item.accessorKey] ? rowData[item.accessorKey] : ''}
+                            key={index}
+                            autoComplete='false'
+                            sx={{ mt: 2 }}
+                            slotProps={{
+                                input: {
+                                    readOnly: true,
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            {['createdAt', 'updatedAt'].includes(item.accessorKey) ?
+                                                <Calendar size={18} style={{ color: 'var(--text-secondary)' }} /> :
+                                                (['_id', 'id'].includes(item.accessorKey) ?
+                                                    <Hash size={18} style={{ color: 'var(--text-secondary)' }} /> :
+                                                    <Lock size={18} style={{ color: 'var(--text-secondary)' }} />
+                                                )
+                                            }
+                                        </InputAdornment>
+                                    ),
+                                    sx: { color: 'var(--text-secondary)' }
+                                },
+                                inputLabel: { sx: { color: 'var(--text-secondary)' } }
+                            }}
+                        />
+                    )
                 }
-                <Button
-                    onClick={handleUpdate}
-                    variant='contained'
-                    sx={{ bgcolor: '#3b82f6', '&:hover': { bgcolor: '#2563eb' } }}
-                    startIcon={<Save size={18} />}
-                >
-                    {writeMode ? '생성' : '수정'}
-                </Button>
-            </DialogActions>
-        </Dialog>
+            })}
+        </BaseDialog>
     )
 }
 

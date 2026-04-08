@@ -12,7 +12,7 @@ function LeaveProgressBar(props) {
         <Box sx={{ width: '100%', mb: 1 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                 <Typography variant="body2" color="var(--text-secondary)" fontWeight={500}>연차 사용률</Typography>
-                <Typography variant="body2" color="#60a5fa" fontWeight={700}>{Math.round(props.value)}%</Typography>
+                <Typography variant="body2" color="var(--info)" fontWeight={700}>{Math.round(props.value)}%</Typography>
             </Box>
             <LinearProgress
                 variant='determinate'
@@ -23,7 +23,7 @@ function LeaveProgressBar(props) {
                     backgroundColor: 'var(--hover-bg)',
                     '& .MuiLinearProgress-bar': {
                         borderRadius: 4,
-                        backgroundColor: props.value > 80 ? '#ef4444' : '#3b82f6',
+                        backgroundColor: props.value > 80 ? 'var(--danger)' : 'var(--info)',
                     },
                 }}
             />
@@ -110,13 +110,14 @@ const LeaveSummary = ({ leftLeave }) => {
                             startIcon={<FileSignature size={16} />}
                             onClick={handleApplyClick}
                             sx={{
-                                bgcolor: '#3b82f6',
+                                bgcolor: 'var(--text-active)',
                                 borderRadius: 2,
                                 textTransform: 'none',
                                 fontWeight: 600,
                                 boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)',
                                 '&:hover': {
-                                    bgcolor: '#2563eb',
+                                    bgcolor: 'var(--text-active)',
+                                    opacity: 0.9,
                                     boxShadow: '0 4px 12px rgba(59, 130, 246, 0.5)',
                                 },
                             }}
@@ -135,7 +136,7 @@ const LeaveSummary = ({ leftLeave }) => {
                                 icon={Calculator}
                                 label="총 연차"
                                 value={totalLeave}
-                                color="#64748b"
+                                color="var(--text-secondary)"
                             />
                         </Grid>
                         <Grid size={6}>
@@ -143,7 +144,7 @@ const LeaveSummary = ({ leftLeave }) => {
                                 icon={CheckCircle2}
                                 label="사용 완료"
                                 value={totalUsedDays}
-                                color="#22c55e"
+                                color="var(--success)"
                             />
                         </Grid>
                         <Grid size={6}>
@@ -151,7 +152,7 @@ const LeaveSummary = ({ leftLeave }) => {
                                 icon={Clock}
                                 label="잔여 연차"
                                 value={leftDays}
-                                color="#3b82f6"
+                                color="var(--info)"
                             />
                         </Grid>
                         <Grid size={6}>
@@ -159,7 +160,7 @@ const LeaveSummary = ({ leftLeave }) => {
                                 icon={AlertCircle}
                                 label="승인 대기"
                                 value={pendingDays}
-                                color="#f59e0b"
+                                color="var(--warning)"
                             />
                         </Grid>
                     </Grid>
