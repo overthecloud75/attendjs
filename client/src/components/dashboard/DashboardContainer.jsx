@@ -11,8 +11,8 @@ const DashboardContainer = () => {
     const { user } = useAuth()
 
     return (
-        <Container maxWidth='xl' sx={{ mt: { xs: 0, md: 1 }, px: { xs: 2, sm: 3 } }}>
-            <Box sx={{ mb: { xs: 2, md: 1 }, mt: { xs: 1, md: 0 } }}>
+        <Container maxWidth='xl' sx={{ mt: 1 }}>
+            <Box sx={{ mb: 1 }}>
                 <Typography
                     variant='h4'
                     fontWeight='900'
@@ -33,13 +33,13 @@ const DashboardContainer = () => {
                 </Typography>
             </Box>
 
-            <Grid container spacing={{ xs: 2, md: 4 }}>
-                <Grid item xs={12} md={6}>
+           <Grid container spacing={4}>
+                <Grid size={{ xs: 12, md: 6 }}>
                     <UserInfoCard
                         leftLeave={leftLeave}
                     />
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                     <LeaveSummary
                         leftLeave={leftLeave}
                     />

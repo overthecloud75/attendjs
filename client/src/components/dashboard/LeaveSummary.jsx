@@ -90,6 +90,8 @@ const LeaveSummary = ({ leftLeave }) => {
                 sx={{
                     px: 3,
                     py: 1,
+                    width: '100%',
+                    boxSizing: 'border-box',
                     height: '100%',
                     borderRadius: 3,
                     border: '1px solid var(--border-color)',

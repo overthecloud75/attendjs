@@ -182,9 +182,12 @@ const AgenticCanvas = () => {
             fetchHistory()
         } catch (error) {
             console.error('Orchestration error:', error)
+            // Display high-fidelity error message from server (e.g., TOOLS_NOT_SUPPORTED)
+            const serverMsg = error.response?.data?.message || (isEnglish ? 'Communication error with services.' : '서비스와 통신 중 응답이 없거나 오류가 발생했습니다.')
+            
             setActivities(prev => [{ 
                 user: 'System', 
-                text: isEnglish ? 'Communication error with services.' : '서비스와 통신 중 응답이 없거나 오류가 발생했습니다.', 
+                text: serverMsg, 
                 time: getNowTimestamp(), 
                 icon: AlertTriangle,
                 type: 'system'
@@ -323,7 +326,14 @@ const AgenticCanvas = () => {
                                         />
                                         <IconButton 
                                             onClick={handleSendCommand} disabled={isLoading || !command.trim()}
-                                            sx={{ width: 44, height: 44, bgcolor: '#3b82f6', color: 'white', '&:hover': { bgcolor: '#2563eb' } }}
+                                            sx={{ 
+                                                width: 44, height: 44, 
+                                                bgcolor: '#3b82f6', 
+                                                color: '#ffffff !important',
+                                                '&:hover': { bgcolor: '#2563eb', transform: 'scale(1.05)' },
+                                                '&.Mui-disabled': { bgcolor: 'var(--hover-bg)', color: 'var(--text-secondary)' },
+                                                transition: 'all 0.2s'
+                                            }}
                                         >
                                             <Send size={22} />
                                         </IconButton>

@@ -65,6 +65,17 @@ class BaseAgent {
             // Return both message and its reasoning
             return { ...message, reasoning };
         } catch (error) {
+            // [CRITICAL] Native Tools Support Check
+            // Detect if the model fails because it doesn't support the 'tools' parameter
+            const errorData = error.response?.data?.error || {};
+            const errorMsg = errorData.message || "";
+            
+            if (error.response?.status === 400 && (errorMsg.includes("tools") || errorMsg.includes("functions") || errorMsg.includes("unsupported_parameter"))) {
+                const toolError = new Error("현재 설정된 모델이 Native Tools(함수 호출) 기능을 지원하지 않아 지능형 에이전트 가동이 불가능합니다. 작업을 중단합니다.");
+                toolError.code = "TOOLS_NOT_SUPPORTED";
+                toolError.status = 400; 
+                throw toolError;
+            }
 
             agentLogger.error({
                 message: `[${this.name}] LLM Error: ${error.message}`,
