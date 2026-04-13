@@ -44,6 +44,11 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
+input, textarea, select, button {
+    font-family: inherit;
+    color: inherit;
+}
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
         monospace;
@@ -73,13 +78,12 @@ a:link {
 }
 
 #cf-turnstile {
-    width: 300px !important;
-    /* 원하는 크기로 조정 */
+    width: 100% !important;
     max-width: 100%;
 }
 
 #cf-turnstile iframe {
-    width: 300px !important;
+    width: 100% !important;
     height: 50px !important;
     max-width: 100%;
 }

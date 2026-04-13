@@ -1,0 +1,1956 @@
+[dotenv@17.2.3] injecting env (21) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[TEST] Fetching calendar for: room0@mirageworks.co.kr
+[TEST] Range: 2026-03-11T00:00:00Z ~ 2026-04-11T23:59:59Z
+[TEST] Step 1: Getting App Access Token...
+[TEST] Token acquired (starts with): eyJ0eXAiOiJKV1QiLCJu...
+[TEST] Step 2: Fetching Calendar View (Direct Call for Debug)...
+
+[TEST] Result:
+Found 10 events (FULL DATA):
+
+--- Event #1 ---
+{
+  "@odata.etag": "W/\"01KyL/kpRk2JJ/L7IUWvygALVOef6g==\"",
+  "id": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAtUxf6VAAA=",
+  "createdDateTime": "2026-03-13T04:44:18.374223Z",
+  "lastModifiedDateTime": "2026-03-13T04:45:03.8045061Z",
+  "changeKey": "01KyL/kpRk2JJ/L7IUWvygALVOef6g==",
+  "categories": [],
+  "transactionId": null,
+  "originalStartTimeZone": "Korea Standard Time",
+  "originalEndTimeZone": "Korea Standard Time",
+  "iCalUId": "040000008200E00074C5B7101A82E00800000000FA8C6B08A4B2DC01000000000000000010000000A51F91FB93EDEC4884ECD68F2FEB0F49",
+  "uid": "040000008200E00074C5B7101A82E00800000000FA8C6B08A4B2DC01000000000000000010000000A51F91FB93EDEC4884ECD68F2FEB0F49",
+  "reminderMinutesBeforeStart": 15,
+  "isReminderOn": false,
+  "hasAttachments": false,
+  "subject": "양 시열 ",
+  "bodyPreview": "",
+  "importance": "normal",
+  "sensitivity": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": false,
+  "responseRequested": true,
+  "seriesMasterId": null,
+  "showAs": "busy",
+  "type": "singleInstance",
+  "webLink": "https://outlook.office365.com/owa/?itemid=AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI%2Flq3x8WL4JBwDTUrIv%2BSlGTYkn8vshRa%2FKAAAAAAEOAADTUrIv%2BSlGTYkn8vshRa%2FKAAtUxf6VAAA%3D&exvsurl=1&path=/calendar/item",
+  "onlineMeetingUrl": null,
+  "isOnlineMeeting": true,
+  "onlineMeetingProvider": "teamsForBusiness",
+  "allowNewTimeProposals": true,
+  "occurrenceId": null,
+  "isDraft": false,
+  "hideAttendees": false,
+  "responseStatus": {
+    "response": "accepted",
+    "time": "2026-03-13T13:44:26.9240686+09:00"
+  },
+  "body": {
+    "contentType": "html",
+    "content": "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n<meta name=\"Generator\" content=\"Microsoft Exchange Server\">\r\n<!-- converted from text -->\r\n<style><!-- .EmailQuote { margin-left: 1pt; padding-left: 4pt; border-left: #800000 2px solid; } --></style></head>\r\n<body>\r\n<font size=\"2\"><span style=\"font-size:11pt;\"><div class=\"PlainText\">&nbsp;</div></span></font>\r\n</body>\r\n</html>\r\n"
+  },
+  "start": {
+    "dateTime": "2026-03-13T14:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "end": {
+    "dateTime": "2026-03-13T15:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "location": {
+    "displayName": "대회의실",
+    "locationUri": "room0@mirageworks.co.kr",
+    "locationType": "conferenceRoom",
+    "uniqueId": "room0@mirageworks.co.kr",
+    "uniqueIdType": "directory",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "",
+      "countryOrRegion": "KR",
+      "postalCode": ""
+    },
+    "coordinates": {}
+  },
+  "locations": [
+    {
+      "displayName": "대회의실",
+      "locationUri": "room0@mirageworks.co.kr",
+      "locationType": "conferenceRoom",
+      "uniqueId": "room0@mirageworks.co.kr",
+      "uniqueIdType": "directory",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "",
+        "countryOrRegion": "KR",
+        "postalCode": ""
+      },
+      "coordinates": {}
+    }
+  ],
+  "recurrence": null,
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "양 시열",
+        "address": "ysydash@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "%본사연구소",
+        "address": "labho@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 금남",
+        "address": "keywe@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "최 현정",
+        "address": "hjchoi@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 승곤",
+        "address": "gordonbaek@adoscompany.com"
+      }
+    },
+    {
+      "type": "resource",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "대회의실",
+        "address": "room0@mirageworks.co.kr"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "양 시열",
+      "address": "ysydash@adoscompany.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MGJhYTZiNTYtOWQ1ZS00MThhLWFiYzEtY2JmMDFmMjllNDU5%40thread.v2/0?context=%7b%22Tid%22%3a%2216199f85-5169-4f4e-b933-d7edc09804ca%22%2c%22Oid%22%3a%229db00ed4-7e9d-470d-bff6-8e9e0aadbc5a%22%7d"
+  }
+}
+
+--- Event #2 ---
+{
+  "@odata.etag": "W/\"01KyL/kpRk2JJ/L7IUWvygALXVn0sg==\"",
+  "id": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAtdN-XAAAA=",
+  "createdDateTime": "2026-03-24T07:25:37.8927109Z",
+  "lastModifiedDateTime": "2026-03-24T07:45:58.5574559Z",
+  "changeKey": "01KyL/kpRk2JJ/L7IUWvygALXVn0sg==",
+  "categories": [],
+  "transactionId": null,
+  "originalStartTimeZone": "Korea Standard Time",
+  "originalEndTimeZone": "Korea Standard Time",
+  "iCalUId": "040000008200E00074C5B7101A82E00800000000A38045C25EBBDC01000000000000000010000000C82DCF745A2B31418987CDC2176CDC2B",
+  "uid": "040000008200E00074C5B7101A82E00800000000A38045C25EBBDC01000000000000000010000000C82DCF745A2B31418987CDC2176CDC2B",
+  "reminderMinutesBeforeStart": 15,
+  "isReminderOn": false,
+  "hasAttachments": false,
+  "subject": "김 민혁 ",
+  "bodyPreview": "",
+  "importance": "normal",
+  "sensitivity": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": false,
+  "responseRequested": true,
+  "seriesMasterId": null,
+  "showAs": "busy",
+  "type": "singleInstance",
+  "webLink": "https://outlook.office365.com/owa/?itemid=AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI%2Flq3x8WL4JBwDTUrIv%2BSlGTYkn8vshRa%2FKAAAAAAEOAADTUrIv%2BSlGTYkn8vshRa%2FKAAtdN%2FXAAAA%3D&exvsurl=1&path=/calendar/item",
+  "onlineMeetingUrl": null,
+  "isOnlineMeeting": true,
+  "onlineMeetingProvider": "teamsForBusiness",
+  "allowNewTimeProposals": true,
+  "occurrenceId": null,
+  "isDraft": false,
+  "hideAttendees": false,
+  "responseStatus": {
+    "response": "accepted",
+    "time": "2026-03-24T16:25:44.7620587+09:00"
+  },
+  "body": {
+    "contentType": "html",
+    "content": "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n<meta name=\"Generator\" content=\"Microsoft Exchange Server\">\r\n<!-- converted from text -->\r\n<style><!-- .EmailQuote { margin-left: 1pt; padding-left: 4pt; border-left: #800000 2px solid; } --></style></head>\r\n<body>\r\n<font size=\"2\"><span style=\"font-size:11pt;\"><div class=\"PlainText\">&nbsp;</div></span></font>\r\n</body>\r\n</html>\r\n"
+  },
+  "start": {
+    "dateTime": "2026-03-24T17:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "end": {
+    "dateTime": "2026-03-24T17:30:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "location": {
+    "displayName": "대회의실",
+    "locationUri": "room0@mirageworks.co.kr",
+    "locationType": "conferenceRoom",
+    "uniqueId": "room0@mirageworks.co.kr",
+    "uniqueIdType": "directory",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "",
+      "countryOrRegion": "KR",
+      "postalCode": ""
+    },
+    "coordinates": {}
+  },
+  "locations": [
+    {
+      "displayName": "대회의실",
+      "locationUri": "room0@mirageworks.co.kr",
+      "locationType": "conferenceRoom",
+      "uniqueId": "room0@mirageworks.co.kr",
+      "uniqueIdType": "directory",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "",
+        "countryOrRegion": "KR",
+        "postalCode": ""
+      },
+      "coordinates": {}
+    }
+  ],
+  "recurrence": null,
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민혁",
+        "address": "bicter@adoscompany.com"
+      }
+    },
+    {
+      "type": "resource",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "대회의실",
+        "address": "room0@mirageworks.co.kr"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 종현",
+        "address": "baek011226@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 승곤",
+        "address": "gordonbaek@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "한 성민",
+        "address": "smhan@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "윤 영섭",
+        "address": "victor.yoon@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "declined",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 인겸",
+        "address": "igkim@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "윤 재윤",
+        "address": "jjyjj@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재식",
+        "address": "neubaum@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "양 시열",
+        "address": "ysydash@adoscompany.com"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "김 민혁",
+      "address": "bicter@adoscompany.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_NGQyMDJhNzMtYjhhZS00MGI0LTk4YTgtN2EyNDNjYmRhZTk2%40thread.v2/0?context=%7b%22Tid%22%3a%2216199f85-5169-4f4e-b933-d7edc09804ca%22%2c%22Oid%22%3a%22a71ddde0-c516-4ede-889e-f2cb15c859a3%22%7d"
+  }
+}
+
+--- Event #3 ---
+{
+  "@odata.etag": "W/\"01KyL/kpRk2JJ/L7IUWvygALXht8Vw==\"",
+  "id": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAtd_ZMPAAA=",
+  "createdDateTime": "2026-03-25T02:06:15.39407Z",
+  "lastModifiedDateTime": "2026-03-25T02:07:11.116547Z",
+  "changeKey": "01KyL/kpRk2JJ/L7IUWvygALXht8Vw==",
+  "categories": [],
+  "transactionId": null,
+  "originalStartTimeZone": "Korea Standard Time",
+  "originalEndTimeZone": "Korea Standard Time",
+  "iCalUId": "040000008200E00074C5B7101A82E0080000000048D485F1FBBBDC01000000000000000010000000DD06FDDB57D81349AF6C43B0838BAF15",
+  "uid": "040000008200E00074C5B7101A82E0080000000048D485F1FBBBDC01000000000000000010000000DD06FDDB57D81349AF6C43B0838BAF15",
+  "reminderMinutesBeforeStart": 15,
+  "isReminderOn": false,
+  "hasAttachments": false,
+  "subject": "백 종현 ",
+  "bodyPreview": "",
+  "importance": "normal",
+  "sensitivity": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": false,
+  "responseRequested": true,
+  "seriesMasterId": null,
+  "showAs": "busy",
+  "type": "singleInstance",
+  "webLink": "https://outlook.office365.com/owa/?itemid=AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI%2Flq3x8WL4JBwDTUrIv%2BSlGTYkn8vshRa%2FKAAAAAAEOAADTUrIv%2BSlGTYkn8vshRa%2FKAAtd%2BZMPAAA%3D&exvsurl=1&path=/calendar/item",
+  "onlineMeetingUrl": null,
+  "isOnlineMeeting": true,
+  "onlineMeetingProvider": "teamsForBusiness",
+  "allowNewTimeProposals": true,
+  "occurrenceId": null,
+  "isDraft": false,
+  "hideAttendees": false,
+  "responseStatus": {
+    "response": "accepted",
+    "time": "2026-03-25T11:06:20.6452859+09:00"
+  },
+  "body": {
+    "contentType": "html",
+    "content": "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n<meta name=\"Generator\" content=\"Microsoft Exchange Server\">\r\n<!-- converted from text -->\r\n<style><!-- .EmailQuote { margin-left: 1pt; padding-left: 4pt; border-left: #800000 2px solid; } --></style></head>\r\n<body>\r\n<font size=\"2\"><span style=\"font-size:11pt;\"><div class=\"PlainText\">&nbsp;</div></span></font>\r\n</body>\r\n</html>\r\n"
+  },
+  "start": {
+    "dateTime": "2026-03-25T11:30:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "end": {
+    "dateTime": "2026-03-25T12:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "location": {
+    "displayName": "대회의실",
+    "locationUri": "room0@mirageworks.co.kr",
+    "locationType": "conferenceRoom",
+    "uniqueId": "room0@mirageworks.co.kr",
+    "uniqueIdType": "directory",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "",
+      "countryOrRegion": "KR",
+      "postalCode": ""
+    },
+    "coordinates": {}
+  },
+  "locations": [
+    {
+      "displayName": "대회의실",
+      "locationUri": "room0@mirageworks.co.kr",
+      "locationType": "conferenceRoom",
+      "uniqueId": "room0@mirageworks.co.kr",
+      "uniqueIdType": "directory",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "",
+        "countryOrRegion": "KR",
+        "postalCode": ""
+      },
+      "coordinates": {}
+    }
+  ],
+  "recurrence": null,
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 종현",
+        "address": "baek011226@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재환",
+        "address": "ljhwan0812@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민석",
+        "address": "frozensnow@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "양 시열",
+        "address": "ysydash@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "박 수연",
+        "address": "syp@adoscompany.com"
+      }
+    },
+    {
+      "type": "resource",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "대회의실",
+        "address": "room0@mirageworks.co.kr"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "백 종현",
+      "address": "baek011226@adoscompany.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_OTkxZmNiNWYtNDViMS00NmMzLWI5M2MtOGM1ZGEzNjQxYzU2%40thread.v2/0?context=%7b%22Tid%22%3a%2216199f85-5169-4f4e-b933-d7edc09804ca%22%2c%22Oid%22%3a%221fbca87b-7ee1-4d87-a8da-b26d392e5e97%22%7d"
+  }
+}
+
+--- Event #4 ---
+{
+  "@odata.etag": "W/\"01KyL/kpRk2JJ/L7IUWvygALXhuhHA==\"",
+  "id": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAtd_ZMQAAA=",
+  "createdDateTime": "2026-03-26T01:22:02.7077767Z",
+  "lastModifiedDateTime": "2026-03-26T02:04:48.1366607Z",
+  "changeKey": "01KyL/kpRk2JJ/L7IUWvygALXhuhHA==",
+  "categories": [],
+  "transactionId": null,
+  "originalStartTimeZone": "Korea Standard Time",
+  "originalEndTimeZone": "Korea Standard Time",
+  "iCalUId": "040000008200E00074C5B7101A82E00800000000C198AAF0BEBCDC010000000000000000100000001A9EB3AD96AEBA449219EA2F9B91378E",
+  "uid": "040000008200E00074C5B7101A82E00800000000C198AAF0BEBCDC010000000000000000100000001A9EB3AD96AEBA449219EA2F9B91378E",
+  "reminderMinutesBeforeStart": 15,
+  "isReminderOn": false,
+  "hasAttachments": false,
+  "subject": "백 종현 ",
+  "bodyPreview": "",
+  "importance": "normal",
+  "sensitivity": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": false,
+  "responseRequested": true,
+  "seriesMasterId": null,
+  "showAs": "busy",
+  "type": "singleInstance",
+  "webLink": "https://outlook.office365.com/owa/?itemid=AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI%2Flq3x8WL4JBwDTUrIv%2BSlGTYkn8vshRa%2FKAAAAAAEOAADTUrIv%2BSlGTYkn8vshRa%2FKAAtd%2BZMQAAA%3D&exvsurl=1&path=/calendar/item",
+  "onlineMeetingUrl": null,
+  "isOnlineMeeting": true,
+  "onlineMeetingProvider": "teamsForBusiness",
+  "allowNewTimeProposals": true,
+  "occurrenceId": null,
+  "isDraft": false,
+  "hideAttendees": false,
+  "responseStatus": {
+    "response": "accepted",
+    "time": "2026-03-26T10:22:06.0275764+09:00"
+  },
+  "body": {
+    "contentType": "html",
+    "content": "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n<meta name=\"Generator\" content=\"Microsoft Exchange Server\">\r\n<!-- converted from text -->\r\n<style><!-- .EmailQuote { margin-left: 1pt; padding-left: 4pt; border-left: #800000 2px solid; } --></style></head>\r\n<body>\r\n<font size=\"2\"><span style=\"font-size:11pt;\"><div class=\"PlainText\">&nbsp;</div></span></font>\r\n</body>\r\n</html>\r\n"
+  },
+  "start": {
+    "dateTime": "2026-03-26T11:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "end": {
+    "dateTime": "2026-03-26T12:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "location": {
+    "displayName": "대회의실",
+    "locationUri": "room0@mirageworks.co.kr",
+    "locationType": "conferenceRoom",
+    "uniqueId": "room0@mirageworks.co.kr",
+    "uniqueIdType": "directory",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "",
+      "countryOrRegion": "KR",
+      "postalCode": ""
+    },
+    "coordinates": {}
+  },
+  "locations": [
+    {
+      "displayName": "대회의실",
+      "locationUri": "room0@mirageworks.co.kr",
+      "locationType": "conferenceRoom",
+      "uniqueId": "room0@mirageworks.co.kr",
+      "uniqueIdType": "directory",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "",
+        "countryOrRegion": "KR",
+        "postalCode": ""
+      },
+      "coordinates": {}
+    }
+  ],
+  "recurrence": null,
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 종현",
+        "address": "baek011226@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "양 시열",
+        "address": "ysydash@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재환",
+        "address": "ljhwan0812@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민석",
+        "address": "frozensnow@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "박 수연",
+        "address": "syp@adoscompany.com"
+      }
+    },
+    {
+      "type": "resource",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "대회의실",
+        "address": "room0@mirageworks.co.kr"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "백 종현",
+      "address": "baek011226@adoscompany.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZjVjNGU3MmEtNDBmYy00ODBmLTljZjAtYWUyNmZkZjE2ZjNm%40thread.v2/0?context=%7b%22Tid%22%3a%2216199f85-5169-4f4e-b933-d7edc09804ca%22%2c%22Oid%22%3a%221fbca87b-7ee1-4d87-a8da-b26d392e5e97%22%7d"
+  }
+}
+
+--- Event #5 ---
+{
+  "@odata.etag": "W/\"01KyL/kpRk2JJ/L7IUWvygALXhupcw==\"",
+  "id": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAtd_ZMRAAA=",
+  "createdDateTime": "2026-03-26T05:30:00.4630837Z",
+  "lastModifiedDateTime": "2026-03-26T05:46:43.7699635Z",
+  "changeKey": "01KyL/kpRk2JJ/L7IUWvygALXhupcw==",
+  "categories": [],
+  "transactionId": null,
+  "originalStartTimeZone": "Korea Standard Time",
+  "originalEndTimeZone": "Korea Standard Time",
+  "iCalUId": "040000008200E00074C5B7101A82E0080000000083FE3495E1BCDC01000000000000000010000000817C8A7374A83745BB88A1BB408B5A6B",
+  "uid": "040000008200E00074C5B7101A82E0080000000083FE3495E1BCDC01000000000000000010000000817C8A7374A83745BB88A1BB408B5A6B",
+  "reminderMinutesBeforeStart": 15,
+  "isReminderOn": false,
+  "hasAttachments": false,
+  "subject": "윤 재윤 ",
+  "bodyPreview": "",
+  "importance": "normal",
+  "sensitivity": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": false,
+  "responseRequested": true,
+  "seriesMasterId": null,
+  "showAs": "busy",
+  "type": "singleInstance",
+  "webLink": "https://outlook.office365.com/owa/?itemid=AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI%2Flq3x8WL4JBwDTUrIv%2BSlGTYkn8vshRa%2FKAAAAAAEOAADTUrIv%2BSlGTYkn8vshRa%2FKAAtd%2BZMRAAA%3D&exvsurl=1&path=/calendar/item",
+  "onlineMeetingUrl": null,
+  "isOnlineMeeting": false,
+  "onlineMeetingProvider": "unknown",
+  "allowNewTimeProposals": true,
+  "occurrenceId": null,
+  "isDraft": false,
+  "hideAttendees": false,
+  "responseStatus": {
+    "response": "accepted",
+    "time": "2026-03-26T14:30:03.8301374+09:00"
+  },
+  "body": {
+    "contentType": "html",
+    "content": "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n<meta name=\"Generator\" content=\"Microsoft Exchange Server\">\r\n<!-- converted from text -->\r\n<style><!-- .EmailQuote { margin-left: 1pt; padding-left: 4pt; border-left: #800000 2px solid; } --></style></head>\r\n<body>\r\n<font size=\"2\"><span style=\"font-size:11pt;\"><div class=\"PlainText\">&nbsp;</div></span></font>\r\n</body>\r\n</html>\r\n"
+  },
+  "start": {
+    "dateTime": "2026-03-26T15:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "end": {
+    "dateTime": "2026-03-26T15:30:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "location": {
+    "displayName": "대회의실",
+    "locationUri": "room0@mirageworks.co.kr",
+    "locationType": "conferenceRoom",
+    "uniqueId": "room0@mirageworks.co.kr",
+    "uniqueIdType": "directory",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "",
+      "countryOrRegion": "KR",
+      "postalCode": ""
+    },
+    "coordinates": {}
+  },
+  "locations": [
+    {
+      "displayName": "대회의실",
+      "locationUri": "room0@mirageworks.co.kr",
+      "locationType": "conferenceRoom",
+      "uniqueId": "room0@mirageworks.co.kr",
+      "uniqueIdType": "directory",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "",
+        "countryOrRegion": "KR",
+        "postalCode": ""
+      },
+      "coordinates": {}
+    }
+  ],
+  "recurrence": null,
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "윤 재윤",
+        "address": "jjyjj@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "한 성민",
+        "address": "smhan@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민혁",
+        "address": "bicter@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 승곤",
+        "address": "gordonbaek@adoscompany.com"
+      }
+    },
+    {
+      "type": "resource",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "대회의실",
+        "address": "room0@mirageworks.co.kr"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재식",
+        "address": "neubaum@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "양 시열",
+        "address": "ysydash@adoscompany.com"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "윤 재윤",
+      "address": "jjyjj@adoscompany.com"
+    }
+  },
+  "onlineMeeting": null
+}
+
+--- Event #6 ---
+{
+  "@odata.etag": "W/\"01KyL/kpRk2JJ/L7IUWvygALZAE6tg==\"",
+  "id": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAtj3oXlAAA=",
+  "createdDateTime": "2026-04-06T05:28:05.960778Z",
+  "lastModifiedDateTime": "2026-04-06T06:29:29.557009Z",
+  "changeKey": "01KyL/kpRk2JJ/L7IUWvygALZAE6tg==",
+  "categories": [],
+  "transactionId": null,
+  "originalStartTimeZone": "Korea Standard Time",
+  "originalEndTimeZone": "Korea Standard Time",
+  "iCalUId": "040000008200E00074C5B7101A82E00800000000FE30162286C5DC0100000000000000001000000002CF287684262E459F5E4004CAED5392",
+  "uid": "040000008200E00074C5B7101A82E00800000000FE30162286C5DC0100000000000000001000000002CF287684262E459F5E4004CAED5392",
+  "reminderMinutesBeforeStart": 15,
+  "isReminderOn": false,
+  "hasAttachments": false,
+  "subject": "백 종현 ",
+  "bodyPreview": "",
+  "importance": "normal",
+  "sensitivity": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": false,
+  "responseRequested": true,
+  "seriesMasterId": null,
+  "showAs": "busy",
+  "type": "singleInstance",
+  "webLink": "https://outlook.office365.com/owa/?itemid=AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI%2Flq3x8WL4JBwDTUrIv%2BSlGTYkn8vshRa%2FKAAAAAAEOAADTUrIv%2BSlGTYkn8vshRa%2FKAAtj3oXlAAA%3D&exvsurl=1&path=/calendar/item",
+  "onlineMeetingUrl": null,
+  "isOnlineMeeting": true,
+  "onlineMeetingProvider": "teamsForBusiness",
+  "allowNewTimeProposals": true,
+  "occurrenceId": null,
+  "isDraft": false,
+  "hideAttendees": false,
+  "responseStatus": {
+    "response": "accepted",
+    "time": "2026-04-06T15:28:50.3543382+09:00"
+  },
+  "body": {
+    "contentType": "html",
+    "content": "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n<meta name=\"Generator\" content=\"Microsoft Exchange Server\">\r\n<!-- converted from text -->\r\n<style><!-- .EmailQuote { margin-left: 1pt; padding-left: 4pt; border-left: #800000 2px solid; } --></style></head>\r\n<body>\r\n<font size=\"2\"><span style=\"font-size:11pt;\"><div class=\"PlainText\">&nbsp;</div></span></font>\r\n</body>\r\n</html>\r\n"
+  },
+  "start": {
+    "dateTime": "2026-04-06T16:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "end": {
+    "dateTime": "2026-04-06T17:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "location": {
+    "displayName": "대회의실",
+    "locationUri": "room0@mirageworks.co.kr",
+    "locationType": "conferenceRoom",
+    "uniqueId": "room0@mirageworks.co.kr",
+    "uniqueIdType": "directory",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "",
+      "countryOrRegion": "KR",
+      "postalCode": ""
+    },
+    "coordinates": {}
+  },
+  "locations": [
+    {
+      "displayName": "대회의실",
+      "locationUri": "room0@mirageworks.co.kr",
+      "locationType": "conferenceRoom",
+      "uniqueId": "room0@mirageworks.co.kr",
+      "uniqueIdType": "directory",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "",
+        "countryOrRegion": "KR",
+        "postalCode": ""
+      },
+      "coordinates": {}
+    }
+  ],
+  "recurrence": null,
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 종현",
+        "address": "baek011226@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "양 시열",
+        "address": "ysydash@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재환",
+        "address": "ljhwan0812@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민석",
+        "address": "frozensnow@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "박 수연",
+        "address": "syp@adoscompany.com"
+      }
+    },
+    {
+      "type": "resource",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "대회의실",
+        "address": "room0@mirageworks.co.kr"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "백 종현",
+      "address": "baek011226@adoscompany.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzE3YzQ2MTMtMGY1Ni00YThlLTljNjctYzViNTdjZGE3YzY0%40thread.v2/0?context=%7b%22Tid%22%3a%2216199f85-5169-4f4e-b933-d7edc09804ca%22%2c%22Oid%22%3a%221fbca87b-7ee1-4d87-a8da-b26d392e5e97%22%7d"
+  }
+}
+
+--- Event #7 ---
+{
+  "@odata.etag": "W/\"01KyL/kpRk2JJ/L7IUWvygALZAFu6w==\"",
+  "id": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAtj3oXmAAA=",
+  "createdDateTime": "2026-04-08T02:41:13.5399942Z",
+  "lastModifiedDateTime": "2026-04-08T02:42:40.9235376Z",
+  "changeKey": "01KyL/kpRk2JJ/L7IUWvygALZAFu6w==",
+  "categories": [],
+  "transactionId": null,
+  "originalStartTimeZone": "Korea Standard Time",
+  "originalEndTimeZone": "Korea Standard Time",
+  "iCalUId": "040000008200E00074C5B7101A82E00800000000C052F32601C7DC010000000000000000100000003D6228B345F3C14B858DE67CE18390DB",
+  "uid": "040000008200E00074C5B7101A82E00800000000C052F32601C7DC010000000000000000100000003D6228B345F3C14B858DE67CE18390DB",
+  "reminderMinutesBeforeStart": 15,
+  "isReminderOn": false,
+  "hasAttachments": false,
+  "subject": "백 종현 ",
+  "bodyPreview": "",
+  "importance": "normal",
+  "sensitivity": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": false,
+  "responseRequested": true,
+  "seriesMasterId": null,
+  "showAs": "busy",
+  "type": "singleInstance",
+  "webLink": "https://outlook.office365.com/owa/?itemid=AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI%2Flq3x8WL4JBwDTUrIv%2BSlGTYkn8vshRa%2FKAAAAAAEOAADTUrIv%2BSlGTYkn8vshRa%2FKAAtj3oXmAAA%3D&exvsurl=1&path=/calendar/item",
+  "onlineMeetingUrl": null,
+  "isOnlineMeeting": true,
+  "onlineMeetingProvider": "teamsForBusiness",
+  "allowNewTimeProposals": true,
+  "occurrenceId": null,
+  "isDraft": false,
+  "hideAttendees": false,
+  "responseStatus": {
+    "response": "accepted",
+    "time": "2026-04-08T11:41:17.6103197+09:00"
+  },
+  "body": {
+    "contentType": "html",
+    "content": "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n<meta name=\"Generator\" content=\"Microsoft Exchange Server\">\r\n<!-- converted from text -->\r\n<style><!-- .EmailQuote { margin-left: 1pt; padding-left: 4pt; border-left: #800000 2px solid; } --></style></head>\r\n<body>\r\n<font size=\"2\"><span style=\"font-size:11pt;\"><div class=\"PlainText\">&nbsp;</div></span></font>\r\n</body>\r\n</html>\r\n"
+  },
+  "start": {
+    "dateTime": "2026-04-08T15:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "end": {
+    "dateTime": "2026-04-08T16:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "location": {
+    "displayName": "대회의실",
+    "locationUri": "room0@mirageworks.co.kr",
+    "locationType": "conferenceRoom",
+    "uniqueId": "room0@mirageworks.co.kr",
+    "uniqueIdType": "directory",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "",
+      "countryOrRegion": "KR",
+      "postalCode": ""
+    },
+    "coordinates": {}
+  },
+  "locations": [
+    {
+      "displayName": "대회의실",
+      "locationUri": "room0@mirageworks.co.kr",
+      "locationType": "conferenceRoom",
+      "uniqueId": "room0@mirageworks.co.kr",
+      "uniqueIdType": "directory",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "",
+        "countryOrRegion": "KR",
+        "postalCode": ""
+      },
+      "coordinates": {}
+    }
+  ],
+  "recurrence": null,
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 종현",
+        "address": "baek011226@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "양 시열",
+        "address": "ysydash@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민석",
+        "address": "frozensnow@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재환",
+        "address": "ljhwan0812@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "박 수연",
+        "address": "syp@adoscompany.com"
+      }
+    },
+    {
+      "type": "resource",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "대회의실",
+        "address": "room0@mirageworks.co.kr"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "백 종현",
+      "address": "baek011226@adoscompany.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MTZjYTY1ZmEtNWUxZC00MmRiLTljNmQtNDI3NWZkZmI1MTEz%40thread.v2/0?context=%7b%22Tid%22%3a%2216199f85-5169-4f4e-b933-d7edc09804ca%22%2c%22Oid%22%3a%221fbca87b-7ee1-4d87-a8da-b26d392e5e97%22%7d"
+  }
+}
+
+--- Event #8 ---
+{
+  "@odata.etag": "W/\"01KyL/kpRk2JJ/L7IUWvygALXKzMPA==\"",
+  "id": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQFRAAgI3oLu94mAAEYAAAAAM1tIuCDCoEiP5at8fFi_CQcA01KyL-kpRk2JJ-L7IUWvygAAAAABDgAA01KyL-kpRk2JJ-L7IUWvygALFvnK8QAAEA==",
+  "createdDateTime": "2025-12-08T01:40:46.4958284Z",
+  "lastModifiedDateTime": "2026-03-23T02:48:39.0881205Z",
+  "changeKey": "01KyL/kpRk2JJ/L7IUWvygALXKzMPA==",
+  "categories": [],
+  "transactionId": null,
+  "originalStartTimeZone": "Korea Standard Time",
+  "originalEndTimeZone": "Korea Standard Time",
+  "iCalUId": "040000008200E00074C5B7101A82E00807EA03104132E1A7E367DC0100000000000000001000000064150F7CAFE0AB4894CE1DEBF30D342D",
+  "uid": "040000008200E00074C5B7101A82E008000000004132E1A7E367DC0100000000000000001000000064150F7CAFE0AB4894CE1DEBF30D342D",
+  "reminderMinutesBeforeStart": 15,
+  "isReminderOn": false,
+  "hasAttachments": false,
+  "subject": "양 시열 ",
+  "bodyPreview": "",
+  "importance": "normal",
+  "sensitivity": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": false,
+  "responseRequested": true,
+  "seriesMasterId": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAsW_crxAAA=",
+  "showAs": "busy",
+  "type": "occurrence",
+  "webLink": "https://outlook.office365.com/owa/?itemid=AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQFRAAgI3oLu94mAAEYAAAAAM1tIuCDCoEiP5at8fFi%2BCQcA01KyL%2FkpRk2JJ%2FL7IUWvygAAAAABDgAA01KyL%2FkpRk2JJ%2FL7IUWvygALFvnK8QAAEA%3D%3D&exvsurl=1&path=/calendar/item",
+  "onlineMeetingUrl": null,
+  "isOnlineMeeting": true,
+  "onlineMeetingProvider": "teamsForBusiness",
+  "allowNewTimeProposals": true,
+  "occurrenceId": "OID.AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAsW_crxAAA=.2026-03-16",
+  "isDraft": false,
+  "hideAttendees": false,
+  "responseStatus": {
+    "response": "accepted",
+    "time": "2026-03-16T10:32:09.0906474+09:00"
+  },
+  "body": {
+    "contentType": "html",
+    "content": "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n<meta name=\"Generator\" content=\"Microsoft Exchange Server\">\r\n<!-- converted from text -->\r\n<style><!-- .EmailQuote { margin-left: 1pt; padding-left: 4pt; border-left: #800000 2px solid; } --></style></head>\r\n<body>\r\n<font size=\"2\"><span style=\"font-size:11pt;\"><div class=\"PlainText\">&nbsp;</div></span></font>\r\n</body>\r\n</html>\r\n"
+  },
+  "start": {
+    "dateTime": "2026-03-16T11:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "end": {
+    "dateTime": "2026-03-16T12:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "location": {
+    "displayName": "대회의실",
+    "locationUri": "room0@mirageworks.co.kr",
+    "locationType": "conferenceRoom",
+    "uniqueId": "room0@mirageworks.co.kr",
+    "uniqueIdType": "directory",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "",
+      "countryOrRegion": "",
+      "postalCode": ""
+    },
+    "coordinates": {}
+  },
+  "locations": [
+    {
+      "displayName": "대회의실",
+      "locationUri": "room0@mirageworks.co.kr",
+      "locationType": "conferenceRoom",
+      "uniqueId": "room0@mirageworks.co.kr",
+      "uniqueIdType": "directory",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "",
+        "countryOrRegion": "",
+        "postalCode": ""
+      },
+      "coordinates": {}
+    }
+  ],
+  "recurrence": null,
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "양 시열",
+        "address": "ysydash@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민혁",
+        "address": "bicter@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "윤 재윤",
+        "address": "jjyjj@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "박 수연",
+        "address": "syp@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 인겸",
+        "address": "igkim@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 승곤",
+        "address": "gordonbaek@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재식",
+        "address": "neubaum@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 종현",
+        "address": "baek011226@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 금남",
+        "address": "keywe@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "최 현정",
+        "address": "hjchoi@adoscompany.com"
+      }
+    },
+    {
+      "type": "resource",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "대회의실",
+        "address": "room0@mirageworks.co.kr"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재환",
+        "address": "ljhwan0812@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민석",
+        "address": "frozensnow@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "한 성민",
+        "address": "smhan@adoscompany.com"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "양 시열",
+      "address": "ysydash@adoscompany.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MWI0YTVjMDUtMWU1ZS00NWYxLWFhYWEtM2FhZTkyNWFmYzMx%40thread.v2/0?context=%7b%22Tid%22%3a%2216199f85-5169-4f4e-b933-d7edc09804ca%22%2c%22Oid%22%3a%229db00ed4-7e9d-470d-bff6-8e9e0aadbc5a%22%7d"
+  }
+}
+
+--- Event #9 ---
+{
+  "@odata.etag": "W/\"01KyL/kpRk2JJ/L7IUWvygALXKzMPA==\"",
+  "id": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQFRAAgI3ohvIG3AAEYAAAAAM1tIuCDCoEiP5at8fFi_CQcA01KyL-kpRk2JJ-L7IUWvygAAAAABDgAA01KyL-kpRk2JJ-L7IUWvygALFvnK8QAAEA==",
+  "createdDateTime": "2025-12-08T01:40:46.4958284Z",
+  "lastModifiedDateTime": "2026-03-23T02:48:39.0881205Z",
+  "changeKey": "01KyL/kpRk2JJ/L7IUWvygALXKzMPA==",
+  "categories": [],
+  "transactionId": null,
+  "originalStartTimeZone": "Korea Standard Time",
+  "originalEndTimeZone": "Korea Standard Time",
+  "iCalUId": "040000008200E00074C5B7101A82E00807EA03174132E1A7E367DC0100000000000000001000000064150F7CAFE0AB4894CE1DEBF30D342D",
+  "uid": "040000008200E00074C5B7101A82E008000000004132E1A7E367DC0100000000000000001000000064150F7CAFE0AB4894CE1DEBF30D342D",
+  "reminderMinutesBeforeStart": 15,
+  "isReminderOn": false,
+  "hasAttachments": false,
+  "subject": "양 시열 ",
+  "bodyPreview": "",
+  "importance": "normal",
+  "sensitivity": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": false,
+  "responseRequested": true,
+  "seriesMasterId": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAsW_crxAAA=",
+  "showAs": "busy",
+  "type": "occurrence",
+  "webLink": "https://outlook.office365.com/owa/?itemid=AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQFRAAgI3ohvIG3AAEYAAAAAM1tIuCDCoEiP5at8fFi%2BCQcA01KyL%2FkpRk2JJ%2FL7IUWvygAAAAABDgAA01KyL%2FkpRk2JJ%2FL7IUWvygALFvnK8QAAEA%3D%3D&exvsurl=1&path=/calendar/item",
+  "onlineMeetingUrl": null,
+  "isOnlineMeeting": true,
+  "onlineMeetingProvider": "teamsForBusiness",
+  "allowNewTimeProposals": true,
+  "occurrenceId": "OID.AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAsW_crxAAA=.2026-03-23",
+  "isDraft": false,
+  "hideAttendees": false,
+  "responseStatus": {
+    "response": "accepted",
+    "time": "2026-03-16T10:32:09.0906474+09:00"
+  },
+  "body": {
+    "contentType": "html",
+    "content": "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n<meta name=\"Generator\" content=\"Microsoft Exchange Server\">\r\n<!-- converted from text -->\r\n<style><!-- .EmailQuote { margin-left: 1pt; padding-left: 4pt; border-left: #800000 2px solid; } --></style></head>\r\n<body>\r\n<font size=\"2\"><span style=\"font-size:11pt;\"><div class=\"PlainText\">&nbsp;</div></span></font>\r\n</body>\r\n</html>\r\n"
+  },
+  "start": {
+    "dateTime": "2026-03-23T11:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "end": {
+    "dateTime": "2026-03-23T12:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "location": {
+    "displayName": "대회의실",
+    "locationUri": "room0@mirageworks.co.kr",
+    "locationType": "conferenceRoom",
+    "uniqueId": "room0@mirageworks.co.kr",
+    "uniqueIdType": "directory",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "",
+      "countryOrRegion": "",
+      "postalCode": ""
+    },
+    "coordinates": {}
+  },
+  "locations": [
+    {
+      "displayName": "대회의실",
+      "locationUri": "room0@mirageworks.co.kr",
+      "locationType": "conferenceRoom",
+      "uniqueId": "room0@mirageworks.co.kr",
+      "uniqueIdType": "directory",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "",
+        "countryOrRegion": "",
+        "postalCode": ""
+      },
+      "coordinates": {}
+    }
+  ],
+  "recurrence": null,
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "양 시열",
+        "address": "ysydash@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민혁",
+        "address": "bicter@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "윤 재윤",
+        "address": "jjyjj@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "박 수연",
+        "address": "syp@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 인겸",
+        "address": "igkim@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 승곤",
+        "address": "gordonbaek@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재식",
+        "address": "neubaum@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 종현",
+        "address": "baek011226@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 금남",
+        "address": "keywe@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "최 현정",
+        "address": "hjchoi@adoscompany.com"
+      }
+    },
+    {
+      "type": "resource",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "대회의실",
+        "address": "room0@mirageworks.co.kr"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재환",
+        "address": "ljhwan0812@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민석",
+        "address": "frozensnow@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "한 성민",
+        "address": "smhan@adoscompany.com"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "양 시열",
+      "address": "ysydash@adoscompany.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MWI0YTVjMDUtMWU1ZS00NWYxLWFhYWEtM2FhZTkyNWFmYzMx%40thread.v2/0?context=%7b%22Tid%22%3a%2216199f85-5169-4f4e-b933-d7edc09804ca%22%2c%22Oid%22%3a%229db00ed4-7e9d-470d-bff6-8e9e0aadbc5a%22%7d"
+  }
+}
+
+--- Event #10 ---
+{
+  "@odata.etag": "W/\"01KyL/kpRk2JJ/L7IUWvygALXKzMPA==\"",
+  "id": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQFRAAgI3o3vSVIAAEYAAAAAM1tIuCDCoEiP5at8fFi_CQcA01KyL-kpRk2JJ-L7IUWvygAAAAABDgAA01KyL-kpRk2JJ-L7IUWvygALFvnK8QAAEA==",
+  "createdDateTime": "2025-12-08T01:40:46.4958284Z",
+  "lastModifiedDateTime": "2026-03-23T02:48:39.0881205Z",
+  "changeKey": "01KyL/kpRk2JJ/L7IUWvygALXKzMPA==",
+  "categories": [],
+  "transactionId": null,
+  "originalStartTimeZone": "Korea Standard Time",
+  "originalEndTimeZone": "Korea Standard Time",
+  "iCalUId": "040000008200E00074C5B7101A82E00807EA031E4132E1A7E367DC0100000000000000001000000064150F7CAFE0AB4894CE1DEBF30D342D",
+  "uid": "040000008200E00074C5B7101A82E008000000004132E1A7E367DC0100000000000000001000000064150F7CAFE0AB4894CE1DEBF30D342D",
+  "reminderMinutesBeforeStart": 15,
+  "isReminderOn": false,
+  "hasAttachments": false,
+  "subject": "양 시열 ",
+  "bodyPreview": "",
+  "importance": "normal",
+  "sensitivity": "normal",
+  "isAllDay": false,
+  "isCancelled": false,
+  "isOrganizer": false,
+  "responseRequested": true,
+  "seriesMasterId": "AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAsW_crxAAA=",
+  "showAs": "busy",
+  "type": "occurrence",
+  "webLink": "https://outlook.office365.com/owa/?itemid=AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQFRAAgI3o3vSVIAAEYAAAAAM1tIuCDCoEiP5at8fFi%2BCQcA01KyL%2FkpRk2JJ%2FL7IUWvygAAAAABDgAA01KyL%2FkpRk2JJ%2FL7IUWvygALFvnK8QAAEA%3D%3D&exvsurl=1&path=/calendar/item",
+  "onlineMeetingUrl": null,
+  "isOnlineMeeting": true,
+  "onlineMeetingProvider": "teamsForBusiness",
+  "allowNewTimeProposals": true,
+  "occurrenceId": "OID.AAMkAGJjM2UwOGM5LTMwMjAtNDYxNS1iM2FhLTJjZTM5OGFlYTI3OQBGAAAAAAAzW0i4IMKgSI-lq3x8WL4JBwDTUrIv_SlGTYkn8vshRa-KAAAAAAEOAADTUrIv_SlGTYkn8vshRa-KAAsW_crxAAA=.2026-03-30",
+  "isDraft": false,
+  "hideAttendees": false,
+  "responseStatus": {
+    "response": "accepted",
+    "time": "2026-03-16T10:32:09.0906474+09:00"
+  },
+  "body": {
+    "contentType": "html",
+    "content": "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n<meta name=\"Generator\" content=\"Microsoft Exchange Server\">\r\n<!-- converted from text -->\r\n<style><!-- .EmailQuote { margin-left: 1pt; padding-left: 4pt; border-left: #800000 2px solid; } --></style></head>\r\n<body>\r\n<font size=\"2\"><span style=\"font-size:11pt;\"><div class=\"PlainText\">&nbsp;</div></span></font>\r\n</body>\r\n</html>\r\n"
+  },
+  "start": {
+    "dateTime": "2026-03-30T11:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "end": {
+    "dateTime": "2026-03-30T12:00:00.0000000",
+    "timeZone": "Korea Standard Time"
+  },
+  "location": {
+    "displayName": "대회의실",
+    "locationUri": "room0@mirageworks.co.kr",
+    "locationType": "conferenceRoom",
+    "uniqueId": "room0@mirageworks.co.kr",
+    "uniqueIdType": "directory",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "",
+      "countryOrRegion": "",
+      "postalCode": ""
+    },
+    "coordinates": {}
+  },
+  "locations": [
+    {
+      "displayName": "대회의실",
+      "locationUri": "room0@mirageworks.co.kr",
+      "locationType": "conferenceRoom",
+      "uniqueId": "room0@mirageworks.co.kr",
+      "uniqueIdType": "directory",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "",
+        "countryOrRegion": "",
+        "postalCode": ""
+      },
+      "coordinates": {}
+    }
+  ],
+  "recurrence": null,
+  "attendees": [
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "양 시열",
+        "address": "ysydash@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민혁",
+        "address": "bicter@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "윤 재윤",
+        "address": "jjyjj@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "박 수연",
+        "address": "syp@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 인겸",
+        "address": "igkim@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 승곤",
+        "address": "gordonbaek@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재식",
+        "address": "neubaum@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "백 종현",
+        "address": "baek011226@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 금남",
+        "address": "keywe@adoscompany.com"
+      }
+    },
+    {
+      "type": "optional",
+      "status": {
+        "response": "none",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "최 현정",
+        "address": "hjchoi@adoscompany.com"
+      }
+    },
+    {
+      "type": "resource",
+      "status": {
+        "response": "accepted",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "대회의실",
+        "address": "room0@mirageworks.co.kr"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "이 재환",
+        "address": "ljhwan0812@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "김 민석",
+        "address": "frozensnow@adoscompany.com"
+      }
+    },
+    {
+      "type": "required",
+      "status": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+      },
+      "emailAddress": {
+        "name": "한 성민",
+        "address": "smhan@adoscompany.com"
+      }
+    }
+  ],
+  "organizer": {
+    "emailAddress": {
+      "name": "양 시열",
+      "address": "ysydash@adoscompany.com"
+    }
+  },
+  "onlineMeeting": {
+    "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_MWI0YTVjMDUtMWU1ZS00NWYxLWFhYWEtM2FhZTkyNWFmYzMx%40thread.v2/0?context=%7b%22Tid%22%3a%2216199f85-5169-4f4e-b933-d7edc09804ca%22%2c%22Oid%22%3a%229db00ed4-7e9d-470d-bff6-8e9e0aadbc5a%22%7d"
+  }
+}

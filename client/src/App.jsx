@@ -13,6 +13,7 @@ import Login from './pages/auth/Login'
 import ResetPassword from './pages/auth/ResetPassword'
 import LostPassword from './pages/auth/LostPassword'
 import ResetPasswordWithOtp from './pages/auth/ResetPasswordWithOtp'
+import Callback from './pages/auth/Callback'
 import TooManyRequests from './pages/TooManyRequests'
 import NotFound from './pages/NotFound'
 
@@ -60,6 +61,7 @@ function App() {
                     <Route exact path='/auth/reset-password' element={<ResetPassword />} />
                     <Route exact path='/auth/lost-password' element={<LostPassword />} />
                     <Route exact path='/auth/reset-password-with-otp' element={<ResetPasswordWithOtp />} />
+                    <Route exact path='/auth/callback' element={<Callback />} />
                     <Route exact path='/too-many-requests' element={<TooManyRequests />} />
 
                     {/* Shared Service Layout Cluster */}

@@ -1,5 +1,13 @@
 import Meeting from '../models/Meeting.js'
 import { sanitizeData } from '../utils/util.js'
+import GraphService from '../services/GraphService.js'
+
+// 회의실명과 Microsoft 365 사서함 이메일 매핑
+const ROOM_EMAIL_MAP = {
+    '대회의실': 'room0@mirageworks.co.kr',
+    'A 회의실': 'room1@mirageworks.co.kr',
+    'B 회의실': 'room2@mirageworks.co.kr' // 필요에 따라 추가
+}
 
 export const getMeetings = async (req, res, next) => {
     try {
@@ -15,8 +23,31 @@ export const getMeetings = async (req, res, next) => {
 
 const fetchEvents = async (start, end, room) => {
     const baseQuery = { start: {$gte: start, $lt: end}, room }
-    const events = await Meeting.find({ ...baseQuery}).sort({ start: 1 })
-    return events
+    
+    // 1. DB 로컬 데이터 조회
+    const localEvents = await Meeting.find({ ...baseQuery}).sort({ start: 1 })
+    
+    // 2. Microsoft Graph 데이터 조회 (해당 회의실에 매핑된 이메일이 있는 경우)
+    let graphEvents = []
+    const roomEmail = ROOM_EMAIL_MAP[room]
+    if (roomEmail) {
+        const rawGraphEvents = await GraphService.getUserCalendarView(roomEmail, start, end)
+        graphEvents = rawGraphEvents.map(event => ({
+            _id: `graph_${event.id}`,
+            title: event.subject,
+            start: event.start,
+            end: event.end,
+            name: event.organizer || '외부 예약',
+            meetingType: 'MS 365', // 구분값
+            room: room,
+            source: 'graph', // 추가 필드
+            color: '#8b5cf6', // MS Outlook 스타일의 보라색 계열
+            editable: false // 외부 데이터는 삭제 불가하게 설정
+        }))
+    }
+
+    // 3. 데이터 병합
+    return [...localEvents, ...graphEvents]
 }
 
 export const addMeeting = async (req, res, next) => {

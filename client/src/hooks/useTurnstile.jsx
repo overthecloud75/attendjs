@@ -23,7 +23,8 @@ export const useTurnstile = (mode) => {
             waitForTurnstileLoad(() => {
                 widgetId = window.turnstile.render('#cf-turnstile', {
                     sitekey: siteKey,
-                    theme: 'light',
+                    theme: 'auto',
+                    size: 'flexible',
                     callback: (token) => setToken(token),
                 })
             turnstileRef.current = true

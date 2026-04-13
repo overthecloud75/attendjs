@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { Box, Typography, Paper, Stack } from '@mui/material'
+import { Box, Typography, Paper, Stack, FormControlLabel, Switch } from '@mui/material'
 import { format } from 'date-fns'
 import tippy from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
@@ -35,7 +35,6 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
     useEffect(() => {
         const calendarApi = calendarRef.current?.getApi()
         if (width < MOBILE.size) {
-            setWeekends(false)
             setHeaderToolbar({
                 left: 'prev,next today',
                 center: '',
@@ -43,7 +42,6 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
             })
             if (calendarApi) calendarApi.changeView('timeGridDay')
         } else {
-            setWeekends(true)
             setHeaderToolbar({
                 left: 'prev,next today',
                 center: 'title',
@@ -79,6 +77,13 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
     }, [thisWeek, room])
 
     const handleEventClick = async (clickInfo) => {
+        // Microsoft 365 동기화 일정은 삭제 처리 방지
+        const isGraphEvent = clickInfo.event.extendedProps.source === 'graph'
+        if (isGraphEvent) {
+            alert('Microsoft 365에서 동기화된 외부 일정은 이 시스템에서 삭제할 수 없습니다. Outlook에서 관리해 주세요.')
+            return
+        }
+
         if (window.confirm(`'${clickInfo.event.title}' 회의실 예약을 삭제하시겠습니까?`)) {
             const result = await deleteMeetingInCalendar(clickInfo.event)
             if (!result.err) {
@@ -124,11 +129,31 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
                     </Typography>
                 </Box>
 
-                <Box sx={{ minWidth: 200 }}>
-                    <SmallMeetingRoomForm
-                        room={room}
-                        setRoom={setRoom}
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <FormControlLabel
+                        control={
+                            <Switch 
+                                checked={weekends} 
+                                onChange={(e) => setWeekends(e.target.checked)}
+                                size="small"
+                                sx={{
+                                    '& .MuiSwitch-switchBase.Mui-checked': { color: '#3b82f6' },
+                                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { bgcolor: '#3b82f6' }
+                                }}
+                            />
+                        }
+                        label={
+                            <Typography variant="body2" fontWeight="500" color="var(--text-secondary)">
+                                주말 표시
+                            </Typography>
+                        }
                     />
+                    <Box sx={{ minWidth: 200 }}>
+                        <SmallMeetingRoomForm
+                            room={room}
+                            setRoom={setRoom}
+                        />
+                    </Box>
                 </Box>
             </Stack>
 
@@ -199,6 +224,7 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
                             tippy(info.el, {
                                 content: `
                                     <div style="padding: 4px;">
+                                        <div style="margin-bottom: 2px;">출처: <span style="font-weight: 600; color: ${extendedProps.source === 'graph' ? '#8b5cf6' : '#3b82f6'}">${extendedProps.source === 'graph' ? 'MS Outlook' : '사내 예약 시스템'}</span></div>
                                         <div style="margin-bottom: 2px;">신청자: <span style="font-weight: 600;">${name}</span></div>
                                         <div style="margin-bottom: 2px;">주제: <span style="font-weight: 600;">${title}</span></div>
                                         <div style="margin-bottom: 2px;">시간: <span style="font-weight: 600;">${timeRange}</span></div>
