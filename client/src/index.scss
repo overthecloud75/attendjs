@@ -456,3 +456,96 @@ a:link {
     color: var(--text-secondary) !important;
     font-style: normal;
 }
+  
+.formContainer {
+    margin: 5% 10% 5% 5%;
+    display: flex;
+    max-width: 450px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+  
+    @media screen and (max-width: 800px) {
+        margin: 5% auto;
+    }
+  
+    .formWrapper {
+        padding: 20px 20px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        align-items: center;
+  
+        .logo {
+            color: var(--text-active);
+            font-weight: bold;
+            font-size: 24px;
+        }
+  
+        .title {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+    
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            width: 100%;
+            margin: 0 auto;
+    
+            input {
+                box-sizing: border-box;
+                padding: 15px;
+                border: none;
+                border-bottom: 1px solid var(--border-color);
+                width: 100%;
+                background-color: transparent;
+                color: var(--text-primary);
+                &::placeholder {
+                    color: var(--text-secondary);
+                }
+            }
+    
+            button {
+                background-color: var(--info);
+                color: white;
+                padding: 10px;
+                font-weight: bold;
+                border: none;
+                border-radius: 8px;
+                width: 100%;
+                cursor: pointer;
+                &:hover {
+                    opacity: 0.9;
+                }
+            }
+    
+            label {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: var(--text-secondary);
+                font-size: 12px;
+                cursor: pointer;
+        
+                img {
+                    width: 32px;
+                }
+            }
+
+            span {
+                color: var(--danger);
+                font-size: 12px;
+            }
+        }
+        p {
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin: 3px;
+        }
+    }
+}

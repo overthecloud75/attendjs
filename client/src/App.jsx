@@ -1,6 +1,5 @@
 import { useState, Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import './style.scss'
 import { useSelector } from 'react-redux'
 import { useResponsive } from './hooks/useResponsive'
 import ProtectedRoute from './components/auth/ProtectedRoute'
