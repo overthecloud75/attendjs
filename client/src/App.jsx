@@ -84,14 +84,13 @@ function App() {
                         <Route path='/board/:id' element={<BoardDetailPage />} />
                         
                         <Route path='/admin/settings' element={<SettingsLayout />}>
-                            <Route index element={<Navigate to='/admin/settings/location' replace />} />
+                            <Route index element={<Navigate to='/admin/settings/general' replace />} />
                             <Route path='location' element={<Location />} />
                             <Route path='general' element={<GeneralSettings />} />
                             <Route path='ai' element={<AISettings />} />
                             <Route path='security' element={<SecuritySettings />} />
                             <Route path='notifications' element={<NotificationSettings />} />
                         </Route>
-                        <Route path='/location' element={<Navigate to='/admin/settings/location' replace />} />
                     </Route>
 
                     <Route path='*' element={<NotFound />} />
