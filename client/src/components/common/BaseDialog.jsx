@@ -47,7 +47,7 @@ const BaseDialog = ({ open, onClose, title, titleIcon, children, actions, maxWid
                     }} />
                     
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Stack direction="row" alignItems="center" spacing={1}>
+                        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                             {titleIcon && <Box sx={{ color: 'var(--text-active)', display: 'flex' }}>{titleIcon}</Box>}
                             <Typography variant="h6" fontWeight="700" color="var(--text-primary)">
                                 {title}
@@ -89,7 +89,7 @@ const BaseDialog = ({ open, onClose, title, titleIcon, children, actions, maxWid
                 justifyContent: 'space-between',
                 py: 2 
             }}>
-                <Stack direction="row" alignItems="center" spacing={1.5}>
+                <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                     {titleIcon && <Box sx={{ color: 'var(--text-active)', display: 'flex' }}>{titleIcon}</Box>}
                     <Typography variant="h6" fontWeight="700">{title}</Typography>
                 </Stack>

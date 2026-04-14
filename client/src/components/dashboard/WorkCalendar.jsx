@@ -121,10 +121,12 @@ const WorkCalendar = () => {
         >
             <Stack
                 direction={{ xs: 'column', sm: 'row' }}
-                justifyContent="space-between"
-                alignItems={{ xs: 'flex-start', sm: 'center' }}
-                mb={1}
-                gap={2}
+                spacing={2}
+                sx={{ 
+                    justifyContent: "space-between", 
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                    mb: 1 
+                }}
             >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                     <Box sx={{
@@ -139,7 +141,7 @@ const WorkCalendar = () => {
                     }}>
                         <CalendarIcon size={20} />
                     </Box>
-                    <Typography variant='h6' fontWeight='600' color="var(--text-primary)">
+                    <Typography variant='h6' color="var(--text-primary)" sx={{ fontWeight: '600' }}>
                         근무 캘린더
                     </Typography>
                 </Box>
@@ -171,19 +173,19 @@ const WorkCalendar = () => {
                         }}
                     >
                         <ToggleButton value="private">
-                            <Stack direction="row" spacing={1} alignItems="center">
+                            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                                 <User size={14} />
                                 <span>개인</span>
                             </Stack>
                         </ToggleButton>
                         <ToggleButton value="team">
-                            <Stack direction="row" spacing={1} alignItems="center">
+                            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                                 <Users size={14} />
                                 <span>팀</span>
                             </Stack>
                         </ToggleButton>
                         <ToggleButton value="company">
-                            <Stack direction="row" spacing={1} alignItems="center">
+                            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                                 <Building2 size={14} />
                                 <span>회사</span>
                             </Stack>

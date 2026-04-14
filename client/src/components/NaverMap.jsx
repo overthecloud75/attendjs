@@ -84,7 +84,7 @@ const NMap = ({ state }) => {
         <Box sx={{ width: '100%', maxWidth: '800px', margin: '0 auto', p: 2 }}>
             {state && (
                 <Paper elevation={3} sx={{ p: 3, mb: 3, borderRadius: 3, backgroundColor: '#f8f9fa' }}>
-                    <Stack spacing={2} alignItems="center">
+                    <Stack spacing={2} sx={{ alignItems: "center" }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#555' }}>
                             <MapPin size={20} color="#2F2F91" />
                             <Typography variant="h6" sx={{ fontWeight: 600 }}>
@@ -108,7 +108,7 @@ const NMap = ({ state }) => {
                                 sx={{ px: 2, py: 2.5, fontSize: '1rem', fontWeight: 'bold' }}
                             />
                         ) : (
-                            <Stack alignItems="center" spacing={1}>
+                            <Stack sx={{ alignItems: "center" }} spacing={1}>
                                 <Chip
                                     icon={<XCircle size={18} />}
                                     label="출근 미완료"

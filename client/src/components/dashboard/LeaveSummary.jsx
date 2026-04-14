@@ -11,8 +11,8 @@ function LeaveProgressBar(props) {
     return (
         <Box sx={{ width: '100%', mb: 1 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body2" color="var(--text-secondary)" fontWeight={500}>연차 사용률</Typography>
-                <Typography variant="body2" color="var(--info)" fontWeight={700}>{Math.round(props.value)}%</Typography>
+                <Typography variant="body2" color="var(--text-secondary)" sx={{ fontWeight: 500 }}>연차 사용률</Typography>
+                <Typography variant="body2" color="var(--info)" sx={{ fontWeight: 700 }}>{Math.round(props.value)}%</Typography>
             </Box>
             <LinearProgress
                 variant='determinate'
@@ -53,8 +53,8 @@ const StatItem = ({ icon: Icon, label, value, color }) => (
             <Icon size={16} strokeWidth={2} />
         </Box>
         <Box>
-            <Typography variant="caption" display="block" color="var(--text-secondary)" fontWeight={500}>{label}</Typography>
-            <Typography variant="body2" fontWeight={700} color="var(--text-primary)">{value}일</Typography>
+            <Typography variant="caption" display="block" color="var(--text-secondary)" sx={{ fontWeight: 500 }}>{label}</Typography>
+            <Typography variant="body2" color="var(--text-primary)" sx={{ fontWeight: 700 }}>{value}일</Typography>
         </Box>
     </Box>
 )
@@ -103,8 +103,8 @@ const LeaveSummary = ({ leftLeave }) => {
                 }}
             >
                 <Box>
-                    <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-                        <Typography variant='h6' fontWeight='700' color='var(--text-primary)'>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+                        <Typography variant='h6' color='var(--text-primary)' sx={{ fontWeight: '700' }}>
                             연차 사용 현황
                         </Typography>
                         <Button

@@ -10,14 +10,16 @@ const NotFound = () => {
         <div>
             <Feature/>
             <Box
-                display='flex'
-                flexDirection='column'
-                alignItems='center'
-                justifyContent='center'
-                height='100vh'
-                textAlign='center'
-                sx={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
-                px={2}
+                sx={{ 
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100vh',
+                    textAlign: 'center',
+                    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                    px: 2
+                }}
             >
                 <div
                     style={{
@@ -27,10 +29,10 @@ const NotFound = () => {
                 >
                     ⚠️
                 </div>
-                <Typography variant='h4' fontWeight='bold' gutterBottom>
+                <Typography variant='h4' gutterBottom sx={{ fontWeight: 'bold' }}>
                     404 Not Found
                 </Typography>
-                <Typography variant='body1' color='text.secondary' mb={4}>
+                <Typography variant='body1' color='text.secondary' sx={{ mb: 4 }}>
                     요청하신 페이지를 찾을 수 없습니다. URL을 확인하시거나 홈으로 돌아가세요.
                 </Typography>
                 <Button 

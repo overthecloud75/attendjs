@@ -106,10 +106,12 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
         >
             <Stack
                 direction={{ xs: 'column', sm: 'row' }}
-                justifyContent="space-between"
-                alignItems={{ xs: 'flex-start', sm: 'center' }}
-                mb={1}
-                gap={2}
+                sx={{ 
+                    justifyContent: "space-between", 
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                    mb: 1, 
+                    gap: 2 
+                }}
             >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                     <Box sx={{

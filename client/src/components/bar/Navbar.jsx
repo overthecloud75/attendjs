@@ -249,7 +249,9 @@ const MenuToggleButton = styled(Box, {
     },
 }))
 
-const LanguageButton = styled(Typography)(({ active }) => ({
+const LanguageButton = styled(Typography, {
+    shouldForwardProp: (prop) => prop !== 'active'
+})(({ active }) => ({
     fontSize: '12px',
     fontWeight: 700,
     cursor: 'pointer',

@@ -24,7 +24,7 @@ const UserInfoCard = ({ leftLeave }) => {
                 justifyContent: 'center'
             }}
         >
-            <Box display='flex' alignItems='flex-start' mb={3}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
                 <Avatar
                     sx={{
                         width: 56,
@@ -37,35 +37,35 @@ const UserInfoCard = ({ leftLeave }) => {
                     <User size={28} strokeWidth={1.5} />
                 </Avatar>
                 <Box sx={{ mt: 0.5 }}>
-                    <Typography variant='h6' fontWeight='700' color='var(--text-primary)' lineHeight={1.2}>
+                    <Typography variant='h6' color='var(--text-primary)' sx={{ fontWeight: '700', lineHeight: 1.2 }}>
                         {user.name} {user.rank}
                     </Typography>
-                    <Typography variant='body2' color='var(--text-secondary)' mt={0.5} fontWeight={500}>
+                    <Typography variant='body2' color='var(--text-secondary)' sx={{ mt: 0.5, fontWeight: 500 }}>
                         {user.position} {user.department && `· ${user.department}`}
                     </Typography>
                 </Box>
             </Box>
 
             <Stack spacing={2}>
-                <Box display="flex" alignItems="center">
+                <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Box sx={{ minWidth: 24, display: 'flex', justifyContent: 'center', mr: 1.5, color: 'var(--text-secondary)' }}>
                         <Calendar size={18} />
                     </Box>
-                    <Box display="flex" justifyContent="space-between" width="100%" alignItems="center">
+                    <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
                         <Typography variant='body2' color='var(--text-secondary)'>입사일</Typography>
-                        <Typography variant='body2' fontWeight='600' color='var(--text-primary)'>{user.beginDate}</Typography>
+                        <Typography variant='body2' sx={{ fontWeight: '600', color: 'var(--text-primary)' }}>{user.beginDate}</Typography>
                     </Box>
                 </Box>
 
                 <Divider sx={{ borderColor: 'var(--border-color)' }} />
 
-                <Box display="flex" alignItems="center">
+                <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Box sx={{ minWidth: 24, display: 'flex', justifyContent: 'center', mr: 1.5, color: 'var(--text-secondary)' }}>
                         <Clock size={18} />
                     </Box>
-                    <Box display="flex" justifyContent="space-between" width="100%" alignItems="center">
+                    <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
                         <Typography variant='body2' color='var(--text-secondary)'>근속 기간</Typography>
-                        <Typography variant='body2' fontWeight='600' color='var(--text-primary)'>
+                        <Typography variant='body2' color='var(--text-primary)' sx={{ fontWeight: '600' }}>
                             {leftLeave?.employeementPeriod}년 {leftLeave?.baseMonth}개월
                         </Typography>
                     </Box>
@@ -73,13 +73,13 @@ const UserInfoCard = ({ leftLeave }) => {
 
                 <Divider sx={{ borderColor: 'var(--border-color)' }} />
 
-                <Box display="flex" alignItems="center">
+                <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Box sx={{ minWidth: 24, display: 'flex', justifyContent: 'center', mr: 1.5, color: 'var(--text-secondary)' }}>
                         <Briefcase size={18} />
                     </Box>
-                    <Box display="flex" justifyContent="space-between" width="100%" alignItems="center">
+                    <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
                         <Typography variant='body2' color='var(--text-secondary)'>고용 형태</Typography>
-                        <Typography variant='body2' fontWeight='600' color='var(--text-primary)'>
+                        <Typography variant='body2' color='var(--text-primary)' sx={{ fontWeight: '600' }}>
                             {user.regular}
                         </Typography>
                     </Box>

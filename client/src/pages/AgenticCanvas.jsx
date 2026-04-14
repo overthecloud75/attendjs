@@ -16,13 +16,13 @@ const AgentStatusCard = ({ id, title, status, icon: Icon, color, onHide }) => (
         '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 12px 30px rgba(0,0,0,0.1)', borderColor: color }
     }}>
         <CardContent sx={{ p: 2 }}>
-            <Stack direction="row" spacing={2} alignItems="center">
+            <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
                 <Box sx={{ p: 1, bgcolor: `${color}15`, color: color, borderRadius: 2 }}>
                     <Icon size={20} />
                 </Box>
                 <Box sx={{ flex: 1 }}>
                     <Typography variant="body2" fontWeight="800" sx={{ opacity: 0.9 }}>{title}</Typography>
-                    <Stack direction="row" spacing={0.5} alignItems="center">
+                    <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
                         <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: '#10b981' }} />
                         <Typography variant="caption" color="#10b981" fontWeight="700">{status}</Typography>
                     </Stack>
@@ -300,7 +300,7 @@ const AgenticCanvas = () => {
                                 
                                 {isLoading && statusMsg && (
                                     <Fade in={true}>
-                                        <Stack direction="row" spacing={1} alignItems="center" mb={1} sx={{ pl: 2 }}>
+                                        <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 1, pl: 2 }}>
                                             <CircularProgress size={12} sx={{ color: '#3b82f6' }} />
                                             <Typography variant="caption" fontWeight="800" color="#3b82f6" sx={{ letterSpacing: '0.5px' }}>
                                                 {statusMsg}
@@ -313,7 +313,7 @@ const AgenticCanvas = () => {
                                     p: 1.5, borderRadius: 6, bgcolor: 'var(--card-bg)', border: '2px solid #3b82f6',
                                     boxShadow: '0 20px 40px rgba(59, 130, 246, 0.1)'
                                 }}>
-                                    <Stack direction="row" spacing={2} alignItems="center">
+                                    <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
                                         <Avatar sx={{ bgcolor: '#3b82f6', width: 44, height: 44 }}>
                                             {isLoading ? <CircularProgress size={24} color="inherit" /> : <Bot size={24} />}
                                         </Avatar>
@@ -321,7 +321,7 @@ const AgenticCanvas = () => {
                                             fullWidth placeholder="명령어를 입력하세요..." variant="standard"
                                             value={command} onChange={(e) => setCommand(e.target.value)}
                                             onKeyDown={(e) => e.key === 'Enter' && handleSendCommand()}
-                                            disabled={isLoading} InputProps={{ disableUnderline: true }}
+                                            disabled={isLoading} slotProps={{ input: { disableUnderline: true } }}
                                             sx={{ '& input': { fontSize: '1.2rem', fontWeight: 700 } }}
                                         />
                                         <IconButton 
@@ -352,7 +352,7 @@ const AgenticCanvas = () => {
                                                 p: 1.5, borderRadius: 4, border: '1px solid var(--border-color)', bgcolor: 'var(--bg-secondary)',
                                                 transition: 'all 0.3s', '&:hover': { bgcolor: 'var(--card-bg)', borderColor: '#3b82f640' }
                                             }}>
-                                                <Stack direction="row" spacing={2} alignItems="flex-start">
+                                                <Stack direction="row" spacing={2} sx={{ alignItems: "flex-start" }}>
                                                     <Box sx={{ p: 0.8, bgcolor: 'var(--bg-primary)', borderRadius: 2, color: item.type === 'user' ? '#f59e0b' : '#3b82f6' }}>
                                                         <item.icon size={18} />
                                                     </Box>
@@ -378,7 +378,7 @@ const AgenticCanvas = () => {
                                                         )}
 
                                                         {item.trail && item.trail.length > 0 && (
-                                                            <Stack direction="row" spacing={0.8} sx={{ mt: 1.5, opacity: 0.8 }} alignItems="center">
+                                                            <Stack direction="row" spacing={0.8} sx={{ mt: 1.5, opacity: 0.8, alignItems: "center" }}>
                                                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 1, py: 0.3, bgcolor: 'var(--bg-active)', borderRadius: 1.5, border: '1px solid var(--text-active)20' }}>
                                                                     <History size={12} color="var(--text-active)" />
                                                                     <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--text-active)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
@@ -402,7 +402,7 @@ const AgenticCanvas = () => {
                                                                 </Button>
                                                                 <Fade in={expandedInsights[idx]} unmountOnExit>
                                                                     <Box sx={{ p: 1.2, bgcolor: '#3b82f608', borderRadius: 2, border: '1px dashed #3b82f630' }}>
-                                                                        <Stack direction="row" spacing={1} alignItems="center" mb={0.5}>
+                                                                        <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 0.5 }}>
                                                                             <Lightbulb size={12} color="#3b82f6" />
                                                                             <Typography variant="caption" fontWeight="900" color="#3b82f6" sx={{ letterSpacing: '0.5px', fontSize: '0.65rem' }}>
                                                                                 {i18n.language === 'en' ? 'AI ANALYSIS INSIGHT / REASONING PATH' : '지능형 사고 경로 및 분석 인사이트'}
@@ -510,8 +510,8 @@ const AgenticCanvas = () => {
                         <Stack spacing={2} mb={3}>
                             {/* Main Orchestrator */}
                             <Box sx={{ p: 2, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid #3b82f630', boxShadow: '0 4px 20px rgba(59, 130, 246, 0.05)' }}>
-                                <Stack direction="row" spacing={1.5} alignItems="center" mb={1} sx={{ justifyContent: 'space-between', width: '100%' }}>
-                                    <Stack direction="row" spacing={1.5} alignItems="center">
+                                <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 1, justifyContent: 'space-between', width: '100%' }}>
+                                    <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                                         <Box sx={{ p: 0.8, bgcolor: '#3b82f615', color: '#3b82f6', borderRadius: 2 }}>
                                             <Layers size={16} />
                                         </Box>
@@ -540,8 +540,8 @@ const AgenticCanvas = () => {
 
                             {/* HR Specialist */}
                             <Box sx={{ p: 2, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid #f59e0b30' }}>
-                                <Stack direction="row" spacing={1.5} alignItems="center" mb={1} sx={{ justifyContent: 'space-between', width: '100%' }}>
-                                    <Stack direction="row" spacing={1.5} alignItems="center">
+                                <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 1, justifyContent: 'space-between', width: '100%' }}>
+                                    <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                                         <Box sx={{ p: 0.8, bgcolor: '#f59e0b15', color: '#f59e0b', borderRadius: 2 }}>
                                             <Users size={16} />
                                         </Box>
@@ -568,8 +568,8 @@ const AgenticCanvas = () => {
 
                             {/* Attendance Analyst */}
                             <Box sx={{ p: 2, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid #10b98130' }}>
-                                <Stack direction="row" spacing={1.5} alignItems="center" mb={1} sx={{ justifyContent: 'space-between', width: '100%' }}>
-                                    <Stack direction="row" spacing={1.5} alignItems="center">
+                                <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 1, justifyContent: 'space-between', width: '100%' }}>
+                                    <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                                         <Box sx={{ p: 0.8, bgcolor: '#10b98115', color: '#10b981', borderRadius: 2 }}>
                                             <TrendingUp size={16} />
                                         </Box>
@@ -619,7 +619,7 @@ const AgenticCanvas = () => {
                                         transition: 'all 0.2s', '&:hover': { bgcolor: 'var(--card-bg)', borderColor: '#3b82f640', transform: 'translateX(4px)' }
                                     }}
                                 >
-                                    <Stack direction="row" spacing={1.5} alignItems="center">
+                                    <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                                         <Box sx={{ color: '#3b82f6', opacity: 0.5 }}>
                                             <MessageSquare size={14} />
                                         </Box>

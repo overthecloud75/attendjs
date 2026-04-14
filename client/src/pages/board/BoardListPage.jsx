@@ -96,7 +96,7 @@ const BoardListPage = () => {
         <Box sx={{ p: { xs: 2, md: 3 }, height: 'calc(100vh - 64px)', overflow: 'auto' }}>
             {/* Header 섹션 */}
             <Box sx={{ mb: 3 }}>
-                <Typography variant="h4" fontWeight="900" color="var(--text-primary)" letterSpacing="-1px">
+                <Typography variant="h4" color="var(--text-primary)" sx={{ fontWeight: "900", letterSpacing: "-1px" }}>
                     사내 게시판 📋
                 </Typography>
                 <Typography variant="body2" color="var(--text-secondary)" sx={{ mt: 0.5 }}>

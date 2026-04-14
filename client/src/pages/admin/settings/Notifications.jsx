@@ -49,11 +49,11 @@ const NotificationSettings = () => {
 
             <Grid container spacing={4} sx={{ width: '100%', m: 0 }}>
                 {/* Left: Configuration Form (6/12) */}
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                     <Stack spacing={3}>
                         {/* Email Channel */}
                         <Paper sx={{ p: 3, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
-                            <Typography variant="subtitle2" fontWeight="700" mb={3} display="flex" alignItems="center" gap={1}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: "700", mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
                                 <Mail size={18} color="#3b82f6" /> Email Notifications
                             </Typography>
                             <Stack spacing={1}>
@@ -72,7 +72,7 @@ const NotificationSettings = () => {
 
                         {/* Push Content */}
                         <Paper sx={{ p: 3, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
-                            <Typography variant="subtitle2" fontWeight="700" mb={3} display="flex" alignItems="center" gap={1}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: "700", mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
                                 <Smartphone size={18} color="#10b981" /> App Push Notifications
                             </Typography>
                             <Stack spacing={1}>
@@ -102,11 +102,11 @@ const NotificationSettings = () => {
                 </Grid>
 
                 {/* Right: Insight (6/12) */}
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                     <Stack spacing={3}>
                         <Card sx={{ borderRadius: 4, border: '1px solid var(--border-color)', bgcolor: 'var(--card-bg)' }}>
                             <CardContent sx={{ p: 3 }}>
-                                <Typography variant="subtitle2" color="var(--text-secondary)" mb={2} display="flex" alignItems="center" gap={1}>
+                                <Typography variant="subtitle2" color="var(--text-secondary)" sx={{ mb: 2, display: "flex", alignItems: "center", gap: 1 }}>
                                     <MessageSquare size={16} /> Communication Policy
                                 </Typography>
                                 <Typography variant="body2" sx={{ lineHeight: 1.8, color: 'var(--text-primary)' }}>
@@ -117,7 +117,7 @@ const NotificationSettings = () => {
                         </Card>
 
                         <Paper sx={{ p: 3, borderRadius: 4, bgcolor: '#f59e0b05', border: '1px solid #f59e0b20' }}>
-                            <Typography variant="subtitle2" fontWeight="700" mb={1.5} display="flex" alignItems="center" gap={1}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: "700", mb: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
                                 <Sparkles size={18} color="#f59e0b" /> Notification Intelligence
                             </Typography>
                             <Typography variant="body2" color="var(--text-secondary)" sx={{ lineHeight: 1.8 }}>

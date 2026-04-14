@@ -83,7 +83,7 @@ const Approval = ({ navigate, open, setOpen }) => {
         <Stack direction="row" alignItems="center" spacing={1.5} sx={{ p: 1.5, bgcolor: 'var(--bg-secondary)', borderRadius: 2 }}>
             <Box sx={{ color: 'var(--text-secondary)', display: 'flex' }}>{icon}</Box>
             <Box>
-                <Typography variant="caption" color="var(--text-secondary)" display="block">{label}</Typography>
+                <Typography variant="caption" color="var(--text-secondary)" sx={{ display: "block" }}>{label}</Typography>
                 <Typography variant="body2" fontWeight="600" color={color}>
                     {fieldValue || '-'}
                 </Typography>
@@ -161,7 +161,7 @@ const Approval = ({ navigate, open, setOpen }) => {
             }}
         >
             <DialogTitle sx={{ pb: 1, pt: 3, px: 3 }}>
-                <Stack direction="row" alignItems="center" gap={1.5}>
+                <Stack direction="row" sx={{ alignItems: "center" }} gap={1.5}>
                     <Box sx={{ p: 1, bgcolor: 'var(--bg-active)', borderRadius: '50%', color: 'var(--text-active)' }}>
                         <FileText size={24} />
                     </Box>
@@ -177,7 +177,7 @@ const Approval = ({ navigate, open, setOpen }) => {
             <DialogContent sx={{ px: 3, pb: 2 }}>
                 <Stack spacing={3} sx={{ mt: 1 }}>
                     {isLoading ? (
-                        <Box py={4} display="flex" justifyContent="center">
+                        <Box sx={{ py: 4, display: "flex", justifyContent: "center" }}>
                             <LoadingSpinner />
                         </Box>
                     ) : (

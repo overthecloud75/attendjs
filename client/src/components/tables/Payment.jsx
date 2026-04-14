@@ -163,7 +163,7 @@ const Payment = ({ writeMode, open, setOpen }) => {
             }}
         >
             <DialogTitle sx={{ pb: 1, pt: 3, px: 3 }}>
-                <Stack direction="row" alignItems="center" gap={1.5}>
+                <Stack direction="row" gap={1.5} sx={{ alignItems: "center" }}>
                     <Box sx={{ p: 1, bgcolor: 'var(--bg-active)', borderRadius: '50%', color: 'var(--text-active)' }}>
                         <Receipt size={24} />
                     </Box>

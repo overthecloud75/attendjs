@@ -289,7 +289,9 @@ const CategoryTitle = styled(Typography)(({ theme }) => ({
     letterSpacing: '1px'
 }))
 
-const StyledListItemButton = styled(ListItemButton)(({ theme, active }) => ({
+const StyledListItemButton = styled(ListItemButton, {
+    shouldForwardProp: (prop) => prop !== 'active'
+})(({ theme, active }) => ({
     minHeight: 48,
     padding: '0 16px',
     marginBottom: 4,
@@ -313,7 +315,9 @@ const StyledListItemButton = styled(ListItemButton)(({ theme, active }) => ({
     },
 }))
 
-const IconWrapper = styled('div')(({ active }) => ({
+const IconWrapper = styled('div', {
+    shouldForwardProp: (prop) => prop !== 'active'
+})(({ active }) => ({
     fontSize: '20px',
     minWidth: '24px',
     width: '24px',
@@ -323,7 +327,9 @@ const IconWrapper = styled('div')(({ active }) => ({
     opacity: active ? 1 : 0.8,
 }))
 
-const ItemText = styled(Typography)(({ theme, active }) => ({
+const ItemText = styled(Typography, {
+    shouldForwardProp: (prop) => prop !== 'active'
+})(({ theme, active }) => ({
     display: 'block',
     fontSize: '0.925rem',
     fontWeight: active ? 600 : 500,

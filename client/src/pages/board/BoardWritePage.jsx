@@ -175,7 +175,7 @@ const BoardWritePage = () => {
         <Box sx={{ p: { xs: 2, md: 4 }, width: '100%', maxWidth: 1400, mx: 'auto', boxSizing: 'border-box' }}>
 
                 {/* Header */}
-                <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 3 }}>
+                <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 3 }}>
                     <IconButton onClick={() => navigate('/board')}>
                         <ArrowLeft size={24} color="var(--text-secondary)" />
                     </IconButton>
@@ -247,8 +247,12 @@ const BoardWritePage = () => {
                         </Box>
 
                         <Box sx={{ p: 2, border: '1px solid var(--border-color)', borderRadius: 2, bgcolor: 'var(--bg-secondary)' }}>
-                            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-                                <Typography variant="subtitle2" fontWeight="600" color="var(--text-secondary)" display="flex" alignItems="center" gap={1}>
+                            <Stack direction="row" sx={{ alignItems: "center", justifyContent: "space-between", mb: 2 }}>
+                                <Typography 
+                                    variant="subtitle2" 
+                                    color="var(--text-secondary)" 
+                                    sx={{ fontWeight: "600", display: "flex", alignItems: "center", gap: 1 }}
+                                >
                                     <Upload size={18} /> 파일 첨부
                                 </Typography>
                                 <Button

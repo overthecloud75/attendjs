@@ -40,7 +40,7 @@ const LeaveHistoryModal = ({ open, setOpen, employee }) => {
                 bgcolor: 'var(--bg-secondary)',
                 color: 'var(--text-primary)'
             }}>
-                <Box display="flex" alignItems="center" gap={1}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <Calendar size={20} color="#3b82f6" />
                     <Typography component="div" variant="h6" fontWeight={700}>
                         {employee.name}님의 연차 상세 이력
@@ -59,7 +59,7 @@ const LeaveHistoryModal = ({ open, setOpen, employee }) => {
             </DialogTitle>
             <DialogContent sx={{ p: 3, borderTop: '1px solid var(--border-color)', bgcolor: 'var(--card-bg)' }}>
                 {historyList.length === 0 ? (
-                    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" py={4}>
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", py: 4 }}>
                         <Typography color="var(--text-secondary)">상세 이력이 존재하지 않습니다.</Typography>
                     </Box>
                 ) : (
@@ -134,16 +134,16 @@ const LeaveHistoryModal = ({ open, setOpen, employee }) => {
                 )}
 
                 <Box mt={3} p={2} bgcolor="var(--bg-secondary)" borderRadius={2}>
-                    <Box display="flex" gap={1} mb={1}>
+                    <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
                         <AlertCircle size={18} color="var(--text-secondary)" />
                         <Typography variant="subtitle2" fontWeight={600} color="var(--text-secondary)">
                             참고 사항
                         </Typography>
                     </Box>
-                    <Typography variant="caption" display="block" color="var(--text-secondary)" gutterBottom>
+                    <Typography variant="caption" sx={{ display: "block" }} color="var(--text-secondary)" gutterBottom>
                         • 2026년 1월 시스템 개편 이전의 과거 데이터는 마이그레이션된 합계입니다.
                     </Typography>
-                    <Typography variant="caption" display="block" color="var(--text-secondary)">
+                    <Typography variant="caption" sx={{ display: "block" }} color="var(--text-secondary)">
                         • '잔여'가 음수인 경우 다음 해 연차를 미리 당겨쓴 것(Overdraft)을 의미합니다.
                     </Typography>
                 </Box>

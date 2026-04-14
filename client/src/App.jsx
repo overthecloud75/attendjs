@@ -80,7 +80,7 @@ function App() {
                         <Route path='/loginhistory' element={<LoginHistory />} />
                         <Route path='/approvalhistory' element={<ApprovalHistory />} />
                         <Route path='/board' element={<BoardListPage />} />
-                        <Route path='/board/write/:id?' element={<BoardWritePage />} />
+                        <Route path='/board/write' element={<BoardWritePage />} />
                         <Route path='/board/:id' element={<BoardDetailPage />} />
                         
                         <Route path='/admin/settings' element={<SettingsLayout />}>

@@ -81,11 +81,11 @@ const GeneralSettings = () => {
 
             <Grid container spacing={4} sx={{ width: '100%', m: 0 }}>
                 {/* Left: Configuration Form (6/12) */}
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                     <Stack spacing={3}>
                         {/* Job Titles */}
                         <Paper sx={{ p: 3, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
-                            <Typography variant="subtitle2" fontWeight="700" mb={3} display="flex" alignItems="center" gap={1}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: "700", mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
                                 <Users size={18} color="#3b82f6" /> {t('general-job-titles')}
                             </Typography>
                             
@@ -112,7 +112,7 @@ const GeneralSettings = () => {
 
                         {/* Ranks */}
                         <Paper sx={{ p: 3, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
-                            <Typography variant="subtitle2" fontWeight="700" mb={3} display="flex" alignItems="center" gap={1}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: "700", mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
                                 <Layers size={18} color="#10b981" /> {t('general-ranks')}
                             </Typography>
                             
@@ -150,11 +150,11 @@ const GeneralSettings = () => {
                 </Grid>
 
                 {/* Right: Guidance (6/12) */}
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                     <Stack spacing={3}>
                         <Card sx={{ borderRadius: 4, border: '1px solid var(--border-color)', bgcolor: 'var(--card-bg)' }}>
                             <CardContent sx={{ p: 3 }}>
-                                <Typography variant="subtitle2" color="var(--text-secondary)" mb={2} display="flex" alignItems="center" gap={1}>
+                                <Typography variant="subtitle2" color="var(--text-secondary)" sx={{ mb: 2, display: "flex", alignItems: "center", gap: 1 }}>
                                     <Info size={16} /> Configuration Insight
                                 </Typography>
                                 <Typography variant="body2" sx={{ lineHeight: 1.8, color: 'var(--text-primary)' }}>
@@ -165,7 +165,7 @@ const GeneralSettings = () => {
                         </Card>
 
                         <Paper sx={{ p: 3, borderRadius: 4, bgcolor: '#3b82f605', border: '1px solid #3b82f620' }}>
-                            <Typography variant="subtitle2" fontWeight="700" mb={1.5} display="flex" alignItems="center" gap={1}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: "700", mb: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
                                 <Sparkles size={18} color="#3b82f6" /> AI Readiness Tips
                             </Typography>
                             <Typography variant="body2" color="var(--text-secondary)" sx={{ lineHeight: 1.8 }}>

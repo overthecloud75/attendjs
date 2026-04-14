@@ -76,11 +76,11 @@ const SecuritySettings = () => {
 
             <Grid container spacing={4} sx={{ width: '100%', m: 0 }}>
                 {/* Left: Configuration Form (6/12) */}
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                     <Stack spacing={3}>
                         {/* Password Policy */}
                         <Paper sx={{ p: 3, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
-                            <Typography variant="subtitle2" fontWeight="700" mb={3} display="flex" alignItems="center" gap={1}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: "700", mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
                                 <KeyRound size={18} color="#ef4444" /> Password Policy
                             </Typography>
                             <Stack spacing={2.5}>
@@ -115,7 +115,7 @@ const SecuritySettings = () => {
 
                         {/* Session Management */}
                         <Paper sx={{ p: 3, borderRadius: 4, bgcolor: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
-                            <Typography variant="subtitle2" fontWeight="700" mb={3} display="flex" alignItems="center" gap={1}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: "700", mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
                                 <Clock size={18} color="#3b82f6" /> Session Management
                             </Typography>
                             <Stack spacing={2.5}>
@@ -149,11 +149,11 @@ const SecuritySettings = () => {
                 </Grid>
 
                 {/* Right: Security Insight (6/12) */}
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                     <Stack spacing={3}>
                         <Card sx={{ borderRadius: 4, border: '1px solid var(--border-color)', bgcolor: 'var(--card-bg)' }}>
                             <CardContent sx={{ p: 3 }}>
-                                <Typography variant="subtitle2" color="var(--text-secondary)" mb={2} display="flex" alignItems="center" gap={1}>
+                                <Typography variant="subtitle2" color="var(--text-secondary)" sx={{ mb: 2, display: "flex", alignItems: "center", gap: 1 }}>
                                     <ShieldAlert size={16} /> Security Compliance
                                 </Typography>
                                 <Typography variant="body2" sx={{ lineHeight: 1.8, color: 'var(--text-primary)' }}>
@@ -164,7 +164,7 @@ const SecuritySettings = () => {
                         </Card>
 
                         <Paper sx={{ p: 3, borderRadius: 4, bgcolor: '#ef444405', border: '1px solid #ef444420' }}>
-                            <Typography variant="subtitle2" fontWeight="700" mb={1.5} display="flex" alignItems="center" gap={1}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: "700", mb: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
                                 <Sparkles size={18} color="#ef4444" /> Security Recommendations
                             </Typography>
                             <Typography variant="body2" color="var(--text-secondary)" sx={{ lineHeight: 1.8 }}>

@@ -93,10 +93,12 @@ const SettingsLayout = () => {
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={item.title}
-                                    primaryTypographyProps={{
-                                        fontSize: '0.925rem',
-                                        fontWeight: active ? 700 : 500,
-                                        color: active ? item.color : 'var(--text-primary)'
+                                    slotProps={{
+                                        primary: {
+                                            fontSize: '0.925rem',
+                                            fontWeight: active ? 700 : 500,
+                                            color: active ? item.color : 'var(--text-primary)'
+                                        }
                                     }}
                                 />
                                 {active && <ChevronRight size={16} color={item.color} />}

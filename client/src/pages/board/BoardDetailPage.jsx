@@ -117,7 +117,7 @@ const BoardDetailPage = () => {
                         border: '1px solid var(--border-color)'
                     }}
                 >
-                    <Stack direction="row" spacing={2} alignItems="flex-start">
+                    <Stack direction="row" spacing={2} sx={{ alignItems: "flex-start" }}>
                         <Avatar
                             sx={{
                                 width: 32,
@@ -131,8 +131,8 @@ const BoardDetailPage = () => {
                             {comment.authorName[0]}
                         </Avatar>
                         <Box sx={{ flex: 1 }}>
-                            <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                <Stack direction="row" spacing={1} alignItems="center">
+                            <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                                <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                                     <Typography variant="subtitle2" fontWeight="700" color="var(--text-primary)">
                                         {comment.authorName}
                                     </Typography>
@@ -180,7 +180,7 @@ const BoardDetailPage = () => {
                                             '& .MuiOutlinedInput-root': { bgcolor: 'var(--card-bg)' }
                                         }}
                                     />
-                                    <Stack direction="row" justifyContent="flex-end" spacing={1}>
+                                    <Stack direction="row" spacing={1} sx={{ justifyContent: "flex-end" }}>
                                         <Button size="small" onClick={() => setReplyTarget(null)} sx={{ color: '#64748b' }}>취소</Button>
                                         <Button variant="contained" size="small" onClick={handleCommentSubmit} sx={{ bgcolor: '#3b82f6', boxShadow: 'none' }}>등록</Button>
                                     </Stack>
@@ -253,10 +253,13 @@ const BoardDetailPage = () => {
 
                         <Stack
                             direction={{ xs: 'column', sm: 'row' }}
-                            justifyContent="space-between"
-                            alignItems={{ xs: 'flex-start', sm: 'center' }}
                             spacing={2}
-                            sx={{ pb: 3, borderBottom: '1px solid #f1f5f9' }}
+                            sx={{ 
+                                justifyContent: "space-between", 
+                                alignItems: { xs: 'flex-start', sm: 'center' },
+                                pb: 3, 
+                                borderBottom: '1px solid #f1f5f9' 
+                            }}
                         >
                             <Stack direction="row" spacing={3}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)' }}>
@@ -339,7 +342,7 @@ const BoardDetailPage = () => {
                     )}
 
                     {/* 버튼들 */}
-                    <Stack direction="row" justifyContent="flex-end" spacing={1}>
+                    <Stack direction="row" spacing={1} sx={{ justifyContent: "flex-end" }}>
                         {isAuthor && (
                             <Stack direction="row" spacing={1}>
                                 <Button
@@ -366,7 +369,7 @@ const BoardDetailPage = () => {
 
                 {/* 댓글 섹션 */}
                 <Box sx={{ mb: 4 }}>
-                    <Typography variant="h6" fontWeight="700" color="var(--text-primary)" sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Typography variant="h6" color="var(--text-primary)" sx={{ fontWeight: "700", mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
                         <MessageSquare size={20} /> 댓글 <Box component="span" sx={{ color: 'var(--text-active)' }}>{comments.length}</Box>
                     </Typography>
 

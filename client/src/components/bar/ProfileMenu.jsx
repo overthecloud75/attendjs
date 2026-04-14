@@ -108,21 +108,21 @@ const ProfileMenu = ({ user, anchorEl, setAnchorEl, setMenu }) => {
                     <ListItemIcon sx={{ color: 'var(--text-secondary)' }}>
                         <User size={18} />
                     </ListItemIcon>
-                    <ListItemText primary="내 프로필 (Profile)" primaryTypographyProps={{ fontSize: '0.9rem', color: 'var(--text-primary)' }} />
+                    <ListItemText primary="내 프로필 (Profile)" slotProps={{ primary: { fontSize: '0.9rem', color: 'var(--text-primary)' } }} />
                 </MenuItem>
 
                 <MenuItem onClick={handleAPIClick} sx={{ py: 1.5, '&:hover': { bgcolor: 'var(--hover-bg)' } }}>
                     <ListItemIcon sx={{ color: 'var(--text-secondary)' }}>
                         <Key size={18} />
                     </ListItemIcon>
-                    <ListItemText primary="API Key 관리" primaryTypographyProps={{ fontSize: '0.9rem', color: 'var(--text-primary)' }} />
+                    <ListItemText primary="API Key 관리" slotProps={{ primary: { fontSize: '0.9rem', color: 'var(--text-primary)' } }} />
                 </MenuItem>
 
                 <MenuItem component={Link} to="/auth/reset-password" sx={{ py: 1.5, '&:hover': { bgcolor: 'var(--hover-bg)' } }}>
                     <ListItemIcon sx={{ color: 'var(--text-secondary)' }}>
                         <Lock size={18} />
                     </ListItemIcon>
-                    <ListItemText primary="비밀번호 변경" primaryTypographyProps={{ fontSize: '0.9rem', color: 'var(--text-primary)' }} />
+                    <ListItemText primary="비밀번호 변경" slotProps={{ primary: { fontSize: '0.9rem', color: 'var(--text-primary)' } }} />
                 </MenuItem>
 
                 <Divider />
@@ -131,7 +131,7 @@ const ProfileMenu = ({ user, anchorEl, setAnchorEl, setMenu }) => {
                     <ListItemIcon sx={{ color: 'error.main' }}>
                         <LogOut size={18} />
                     </ListItemIcon>
-                    <ListItemText primary="로그아웃" primaryTypographyProps={{ fontSize: '0.9rem' }} />
+                    <ListItemText primary="로그아웃" slotProps={{ primary: { fontSize: '0.9rem' } }} />
                 </MenuItem>
             </Menu>
 

@@ -15,8 +15,8 @@ const DashboardContainer = () => {
             <Box sx={{ mb: 1 }}>
                 <Typography
                     variant='h4'
-                    fontWeight='900'
                     sx={{
+                        fontWeight: '900',
                         color: 'var(--text-primary)',
                         fontSize: { xs: '1.25rem', md: '2rem' },
                         display: 'flex',
@@ -44,7 +44,7 @@ const DashboardContainer = () => {
                         leftLeave={leftLeave}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <WorkCalendar />
                 </Grid>
             </Grid>
