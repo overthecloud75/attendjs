@@ -41,8 +41,25 @@ const useFetch = (page, url, params, clickCount) => {
             setLoading(true)
             try {
                 const response = await axios.get(url, { params })
-                axios.defaults.headers.post['X-CSRF-Token'] = response.headers.csrftoken
-                const formattedData = response.data.map(formatDates)
+                
+                // CSRF Token synchronization
+                const csrfTokenFromHeader = response.headers.csrftoken
+                if (csrfTokenFromHeader) {
+                    axios.defaults.headers.post['X-CSRF-Token'] = csrfTokenFromHeader
+                }
+
+                // Handle both straight arrays and wrapped objects { history: [], data: [], posts: [], etc }
+                let rawData = response.data
+                if (!Array.isArray(rawData)) {
+                    // Try to extract common array fields if the response is an object
+                    rawData = rawData.history || rawData.data || rawData.items || rawData.posts || []
+                    if (!Array.isArray(rawData)) {
+                        console.warn(`[useFetch] Expected array from ${url} but got:`, response.data)
+                        rawData = []
+                    }
+                }
+
+                const formattedData = rawData.map(formatDates)
                 setData(formattedData)
             } catch (error) {
                 handleError(error)

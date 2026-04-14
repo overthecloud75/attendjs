@@ -65,9 +65,18 @@ const EditWrite = ({ writeMode, page, columns, data, setData, open, setOpen, row
 
     const handleUpdate = async () => {
         if (!checkValue()) return
-        const url = `/api/${page}/${writeMode ? 'write' : 'update'}`
+        
+        let url, method
+        if (page === 'board') {
+            url = writeMode ? '/api/board' : `/api/board/${value._id}`
+            method = writeMode ? 'post' : 'put'
+        } else {
+            url = `/api/${page}/${writeMode ? 'write' : 'update'}`
+            method = 'post'
+        }
+
         try {
-            const res = await axios.post(url, value)
+            const res = await axios({ method, url, data: value })
             setValue(res.data)
             if (writeMode) { insertData() }
             else { updateData() }
@@ -79,9 +88,12 @@ const EditWrite = ({ writeMode, page, columns, data, setData, open, setOpen, row
 
     const handleDelete = async () => {
         if (!window.confirm('정말로 삭제하시겠습니까?')) return
-        const url = `/api/${page}/delete`
+        
+        const url = page === 'board' ? `/api/board/${value._id}` : `/api/${page}/delete`
+        const method = page === 'board' ? 'delete' : 'post'
+        
         try {
-            await axios.post(url, value)
+            await axios({ method, url, data: value })
             deleteData()
         } catch (err) {
             alert(err)

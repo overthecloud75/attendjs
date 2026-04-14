@@ -84,12 +84,13 @@ export const sendPasswordResetOtpEmail = async (name, email, otp) => {
 
         const title = '비밀번호 재설정'
         const bodyHtml = `
-            <p style="line-height: 1.6; color: #555;">
+            <p style="line-height: 1.6; color: #475569;">
                         비밀번호 재설정을 요청하셨습니다.<br />
                         아래의 OTP 코드를 입력하여 비밀번호를 재설정해주세요.
             </p>
 
             <div style="background-color: #f1f5ff; 
+                        border: 1px solid #dbeafe;
                         border-radius: 10px; 
                         text-align: center; 
                         padding: 24px; 
@@ -102,7 +103,7 @@ export const sendPasswordResetOtpEmail = async (name, email, otp) => {
                 </h3>
             </div>
 
-            <p style="font-size: 14px; color: #777;">
+            <p style="font-size: 14px; color: #64748b;">
                 이 OTP는 <strong>보안을 위해 제한된 시간</strong> 동안만 유효합니다.<br>
                 본인이 요청하지 않은 경우, 이 메일은 무시하셔도 됩니다.
             </p>

@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { authenticator } from 'otplib'
+import { generateSecret, generateSync } from 'otplib'
 import User from '../models/User.js'
 import Employee from '../models/Employee.js'
 import Login from '../models/Login.js'
@@ -12,7 +12,7 @@ import LocationService from './LocationService.js'
 import EmailService from './EmailService.js'
 import InfrastructureService from './InfrastructureService.js'
 
-authenticator.options = { digits: 6 }
+// otplib v13 defaults are used directly in functions below
 
 export default class AuthService {
 
@@ -183,8 +183,8 @@ export default class AuthService {
         const user = await this.getUserByEmail(email)
         if (!user) throw createError(401, 'Wrong email!')
 
-        const otpSecret = authenticator.generateSecret()
-        const otp = authenticator.generate(otpSecret)
+        const otpSecret = generateSecret()
+        const otp = generateSync({ secret: otpSecret, digits: 6 })
         await User.updateOne({ email }, { $set: { otp } }, { runValidators: true })
 
         EmailService.sendPasswordResetOtp(user.name, email, otp)

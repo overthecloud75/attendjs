@@ -112,7 +112,7 @@ const AuthWithOtp = () => {
                             onChange={handleInputChange}
                             required
                         />
-                        <div id='cf-turnstile' style={styles.turnstile} />
+                        <div id='cf-turnstile' style={{ width: '100%', margin: '15px 0' }} />
                         <button disabled={loading} style={styles.submitButton}>비밀번호 재설정</button>
                         {loading && <LoadingSpinner />}
                         {!loading && errorMsg && <span>{errorMsg}</span>}
@@ -129,15 +129,10 @@ const styles = {
     },
     headerText: {
         textAlign: 'center',
-        color: '#2F2F91',
+        color: 'var(--text-active)',
         fontSize: '16px',
         marginBottom: '20px',
         fontWeight: '600'
-    },
-    turnstile: {
-        display: 'flex',
-        justifyContent: 'center',
-        margin: '15px 0'
     },
     submitButton: {
         borderRadius: '8px',

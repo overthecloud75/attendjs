@@ -78,7 +78,7 @@ const BoardListPage = () => {
             if (col.accessorKey === 'createdAt') {
                 return {
                     ...col,
-                    cell: (info) => info.getValue()?.substring(0, 10) || '-'
+                    cell: (info) => info.getValue() || '-'
                 }
             }
             return col

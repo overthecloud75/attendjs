@@ -6,7 +6,7 @@ import {
     Box, Typography, Paper, Button, TextField, IconButton, Chip, Stack, Avatar
 } from '@mui/material'
 import {
-    User, Calendar, Eye, ArrowLeft, Trash2, Download, MessageSquare, CornerDownRight, FileText
+    User, Calendar, Eye, ArrowLeft, Trash2, Download, MessageSquare, CornerDownRight, FileText, Edit3
 } from 'lucide-react'
 import DOMPurify from 'dompurify' // HTML XSS 방지용
 
@@ -137,7 +137,7 @@ const BoardDetailPage = () => {
                                         {comment.authorName}
                                     </Typography>
                                     <Typography variant="caption" color="var(--text-secondary)">
-                                        {comment.createdAt?.substring(0, 16).replace('T', ' ')}
+                                        {comment.createdAt?.substring(2, 19).replace('T', ' ')}
                                     </Typography>
                                 </Stack>
                                 {(currentUser.isAdmin || currentUser.email === comment.authorEmail) && (
@@ -265,7 +265,7 @@ const BoardDetailPage = () => {
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)' }}>
                                     <Calendar size={16} />
-                                    <Typography variant="body2">{post.createdAt?.substring(0, 16).replace('T', ' ')}</Typography>
+                                    <Typography variant="body2">{post.createdAt?.substring(2, 19).replace('T', ' ')}</Typography>
                                 </Box>
                             </Stack>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)', bgcolor: 'var(--bg-secondary)', px: 1.5, py: 0.5, borderRadius: 2 }}>
@@ -341,15 +341,25 @@ const BoardDetailPage = () => {
                     {/* 버튼들 */}
                     <Stack direction="row" justifyContent="flex-end" spacing={1}>
                         {isAuthor && (
-                            <Button
-                                variant="outlined"
-                                color="error"
-                                startIcon={<Trash2 size={16} />}
-                                onClick={handleDelete}
-                                sx={{ borderRadius: 2, textTransform: 'none' }}
-                            >
-                                게시글 삭제
-                            </Button>
+                            <Stack direction="row" spacing={1}>
+                                <Button
+                                    variant="outlined"
+                                    startIcon={<Edit3 size={16} />}
+                                    onClick={() => navigate(`/board/write/${id}`)}
+                                    sx={{ borderRadius: 2, textTransform: 'none', color: 'var(--text-secondary)', borderColor: 'var(--border-color)' }}
+                                >
+                                    게시글 수정
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    startIcon={<Trash2 size={16} />}
+                                    onClick={handleDelete}
+                                    sx={{ borderRadius: 2, textTransform: 'none' }}
+                                >
+                                    게시글 삭제
+                                </Button>
+                            </Stack>
                         )}
                     </Stack>
                 </Paper>

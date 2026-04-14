@@ -36,7 +36,12 @@ const CustomTableButtons = ({
         setSelectedRowData({})
         setWriteMode(true)
 
-        if (['board', 'report'].includes(page)) {
+        if (page === 'board') {
+            navigate('/board/write')
+            return
+        }
+
+        if (page === 'report') {
             setOpenEditWrite(true)
             return
         }

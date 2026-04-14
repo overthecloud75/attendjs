@@ -1,5 +1,5 @@
-import { useState, useRef, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useRef, useMemo, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../../hooks/useAuth'
 import {
@@ -14,6 +14,7 @@ import { BOARD_TYPES } from '../../configs/board'
 
 const BoardWritePage = () => {
     const navigate = useNavigate()
+    const { id } = useParams() // For editing
     const { user: currentUser } = useAuth()
     const quillRef = useRef(null)
 
@@ -22,7 +23,31 @@ const BoardWritePage = () => {
     const [content, setContent] = useState('') // HTML string
     const [isPinned, setIsPinned] = useState(false)
     const [files, setFiles] = useState([]) // File objects
+    const [existingFiles, setExistingFiles] = useState([]) // Files already on server
     const [loading, setLoading] = useState(false)
+
+    const isEdit = !!id
+
+    useEffect(() => {
+        if (isEdit) {
+            const fetchPost = async () => {
+                try {
+                    const res = await axios.get(`/api/board/${id}`)
+                    const { post } = res.data
+                    setBoardType(post.boardType)
+                    setTitle(post.title)
+                    setContent(post.content)
+                    setIsPinned(post.isPinned)
+                    setExistingFiles(post.files || [])
+                } catch (err) {
+                    console.error(err)
+                    alert('게시글을 불러오지 못했습니다.')
+                    navigate('/board')
+                }
+            }
+            fetchPost()
+        }
+    }, [id, isEdit, navigate])
 
     // 관리자 또는 HR인지 확인
     const canPin = currentUser.isAdmin || currentUser.department === 'HR'
@@ -100,8 +125,8 @@ const BoardWritePage = () => {
 
         setLoading(true)
         try {
-            // 1. 파일 업로드
-            const uploadedFiles = []
+            // 1. New file upload
+            const newUploadedFiles = []
             if (files.length > 0) {
                 for (const file of files) {
                     const formData = new FormData()
@@ -109,7 +134,7 @@ const BoardWritePage = () => {
                     const res = await axios.post('/api/upload/file', formData, {
                         headers: { 'Content-Type': 'multipart/form-data' }
                     })
-                    uploadedFiles.push({
+                    newUploadedFiles.push({
                         filename: res.data.filename,
                         path: res.data.path,
                         size: res.data.size,
@@ -117,20 +142,30 @@ const BoardWritePage = () => {
                 }
             }
 
-            // 2. 게시글 저장 (기존 API 유지)
-            await axios.post('/api/board', {
+            // Combine existing and new files
+            const finalFiles = [...existingFiles, ...newUploadedFiles]
+
+            // 2. Save (Create or Update)
+            const payload = {
                 boardType,
                 title,
-                content, // HTML string
+                content,
                 isPinned,
-                files: uploadedFiles
-            })
+                files: finalFiles
+            }
 
-            alert('게시글이 등록되었습니다.')
-            navigate('/board')
+            if (isEdit) {
+                await axios.put(`/api/board/${id}`, payload)
+                alert('게시글이 수정되었습니다.')
+            } else {
+                await axios.post('/api/board', payload)
+                alert('게시글이 등록되었습니다.')
+            }
+
+            navigate(isEdit ? `/board/${id}` : '/board')
         } catch (err) {
             console.error(err)
-            alert('게시글 등록에 실패했습니다.')
+            alert('저장에 실패했습니다.')
         } finally {
             setLoading(false)
         }
@@ -228,6 +263,20 @@ const BoardWritePage = () => {
                                 </Button>
                             </Stack>
 
+                            {existingFiles.length > 0 && (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+                                    {existingFiles.map((file, i) => (
+                                        <Chip
+                                            key={`exist-${i}`}
+                                            label={file.filename}
+                                            onDelete={() => setExistingFiles(existingFiles.filter((_, idx) => idx !== i))}
+                                            color="primary"
+                                            variant="outlined"
+                                            sx={{ bgcolor: 'var(--bg-active)', color: 'var(--text-active)', borderColor: 'var(--text-active)40' }}
+                                        />
+                                    ))}
+                                </Box>
+                            )}
                             {files.length > 0 ? (
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                                     {files.map((file, i) => (
@@ -241,9 +290,11 @@ const BoardWritePage = () => {
                                     ))}
                                 </Box>
                             ) : (
-                                <Typography variant="body2" color="var(--text-secondary)" align="center" py={2}>
-                                    첨부할 파일을 선택해주세요.
-                                </Typography>
+                                (!existingFiles.length) && (
+                                    <Typography variant="body2" color="var(--text-secondary)" align="center" py={2}>
+                                        첨부할 파일을 선택해주세요.
+                                    </Typography>
+                                )
                             )}
                         </Box>
 
