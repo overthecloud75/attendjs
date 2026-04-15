@@ -5,10 +5,13 @@ import { useAuth } from '../../hooks/useAuth'
 import {
     Box, Typography, Paper, Button, TextField, IconButton, Chip, Stack, Avatar
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import {
-    User, Calendar, Eye, ArrowLeft, Trash2, Download, MessageSquare, CornerDownRight, FileText, Edit3
+    User, Calendar, Eye, ArrowLeft, Trash2, Download, MessageSquare, CornerDownRight, FileText, Edit3, MessageCircle
 } from 'lucide-react'
 import DOMPurify from 'dompurify' // HTML XSS 방지용
+import EmptyState from '../../components/common/EmptyState'
+import AppBreadcrumbs from '../../components/common/AppBreadcrumbs'
 
 // 링크 보안 설정 (Hook)
 DOMPurify.addHook('afterSanitizeAttributes', function (node) {
@@ -22,6 +25,7 @@ const BoardDetailPage = () => {
     const { id } = useParams()
     const navigate = useNavigate()
     const { user: currentUser } = useAuth()
+    const { t } = useTranslation()
 
     const [post, setPost] = useState(null)
     const [comments, setComments] = useState([])
@@ -137,7 +141,16 @@ const BoardDetailPage = () => {
                                         {comment.authorName}
                                     </Typography>
                                     <Typography variant="caption" color="var(--text-secondary)">
-                                        {comment.createdAt?.substring(2, 19).replace('T', ' ')}
+                                        {comment.createdAt ? (() => {
+                                            const d = new Date(comment.createdAt);
+                                            const yy = String(d.getFullYear()).slice(-2);
+                                            const mm = String(d.getMonth() + 1).padStart(2, '0');
+                                            const dd = String(d.getDate()).padStart(2, '0');
+                                            const hh = String(d.getHours()).padStart(2, '0');
+                                            const min = String(d.getMinutes()).padStart(2, '0');
+                                            const ss = String(d.getSeconds()).padStart(2, '0');
+                                            return `${yy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+                                        })() : '-'}
                                     </Typography>
                                 </Stack>
                                 {(currentUser.isAdmin || currentUser.email === comment.authorEmail) && (
@@ -163,7 +176,7 @@ const BoardDetailPage = () => {
                                     '&:hover': { bg: 'transparent', color: 'var(--text-active)' }
                                 }}
                             >
-                                답글 달기
+                                {t('button-reply', '답글 달기')}
                             </Button>
 
                             {/* 대댓글 입력창 */}
@@ -172,7 +185,7 @@ const BoardDetailPage = () => {
                                     <TextField
                                         fullWidth
                                         size="small"
-                                        placeholder="답글을 입력하세요"
+                                        placeholder={t('placeholder-reply', '답글을 입력하세요')}
                                         value={commentContent}
                                         onChange={(e) => setCommentContent(e.target.value)}
                                         sx={{
@@ -209,21 +222,27 @@ const BoardDetailPage = () => {
     const isAuthor = currentUser.isAdmin || currentUser.email === post.authorEmail
 
     return (
-        <Box sx={{ p: { xs: 2, md: 4 }, width: '100%', maxWidth: 1400, mx: 'auto', boxSizing: 'border-box' }}>
+        <Box sx={{ px: { xs: 1, md: 2 }, py: 2, width: '100%', maxWidth: 1600, mx: 'auto', boxSizing: 'border-box' }}>
 
                 {/* 상단 네비게이션 */}
+                <AppBreadcrumbs 
+                    items={[
+                        { label: t('sidebar-board', '사내 게시판'), path: '/board' },
+                        { label: t(`board-type-${post.boardType}`, post.boardType) }
+                    ]}
+                />
                 <Button
                     startIcon={<ArrowLeft size={18} />}
                     onClick={() => navigate('/board')}
                     sx={{ mb: 2, color: 'var(--text-secondary)', '&:hover': { color: 'var(--text-primary)', bgcolor: 'transparent' } }}
                 >
-                    목록으로 돌아가기
+                    {t('button-back-to-list', '목록으로 돌아가기')}
                 </Button>
 
                 <Paper
                     elevation={0}
                     sx={{
-                        p: 4,
+                        p: { xs: 2, md: 3 },
                         mb: 3,
                         borderRadius: 3,
                         border: '1px solid var(--border-color)',
@@ -235,19 +254,19 @@ const BoardDetailPage = () => {
                     <Box sx={{ mb: 4 }}>
                         <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
                             <Chip
-                                label={post.boardType}
+                                label={t(`board-type-${post.boardType}`, post.boardType)}
                                 size="small"
                                 sx={{ bgcolor: 'var(--bg-active)', color: 'var(--text-active)', fontWeight: 600, border: '1px solid var(--border-color)' }}
                             />
                             {post.isPinned && (
                                 <Chip
-                                    label="공지"
+                                    label={t('board-label-pinned', '공지')}
                                     size="small"
                                     sx={{ bgcolor: '#fee2e2', color: '#ef4444', fontWeight: 600, border: '1px solid #fecaca' }}
                                 />
                             )}
                         </Stack>
-                        <Typography variant="h5" fontWeight="800" color="var(--text-primary)" sx={{ mb: 3, lineHeight: 1.3 }}>
+                        <Typography variant="h5" fontWeight="700" color="var(--text-primary)" sx={{ mb: 2, lineHeight: 1.3 }}>
                             {post.title}
                         </Typography>
 
@@ -268,7 +287,18 @@ const BoardDetailPage = () => {
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)' }}>
                                     <Calendar size={16} />
-                                    <Typography variant="body2">{post.createdAt?.substring(2, 19).replace('T', ' ')}</Typography>
+                                    <Typography variant="body2">
+                                        {post.createdAt ? (() => {
+                                            const d = new Date(post.createdAt);
+                                            const yy = String(d.getFullYear()).slice(-2);
+                                            const mm = String(d.getMonth() + 1).padStart(2, '0');
+                                            const dd = String(d.getDate()).padStart(2, '0');
+                                            const hh = String(d.getHours()).padStart(2, '0');
+                                            const min = String(d.getMinutes()).padStart(2, '0');
+                                            const ss = String(d.getSeconds()).padStart(2, '0');
+                                            return `${yy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+                                        })() : '-'}
+                                    </Typography>
                                 </Box>
                             </Stack>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)', bgcolor: 'var(--bg-secondary)', px: 1.5, py: 0.5, borderRadius: 2 }}>
@@ -299,8 +329,8 @@ const BoardDetailPage = () => {
                     {/* 첨부파일 */}
                     {post.files && post.files.length > 0 && (
                         <Box sx={{ mb: 4 }}>
-                            <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: '700', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <FileText size={16} /> 첨부파일
+                            <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: '600', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <FileText size={16} /> {t('attachments', '첨부파일')}
                             </Typography>
                             <Stack direction="row" flexWrap="wrap" gap={1}>
                                 {post.files.map((file, i) => (
@@ -346,12 +376,16 @@ const BoardDetailPage = () => {
                         {isAuthor && (
                             <Stack direction="row" spacing={1}>
                                 <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     startIcon={<Edit3 size={16} />}
                                     onClick={() => navigate(`/board/write/${id}`)}
-                                    sx={{ borderRadius: 2, textTransform: 'none', color: 'var(--text-secondary)', borderColor: 'var(--border-color)' }}
+                                    sx={{ 
+                                        borderRadius: 2, textTransform: 'none', 
+                                        bgcolor: 'var(--bg-active)', color: 'var(--text-active)',
+                                        '&:hover': { bgcolor: 'var(--bg-active)', opacity: 0.9 }
+                                    }}
                                 >
-                                    게시글 수정
+                                    {t('button-edit-post', '게시글 수정')}
                                 </Button>
                                 <Button
                                     variant="outlined"
@@ -360,7 +394,7 @@ const BoardDetailPage = () => {
                                     onClick={handleDelete}
                                     sx={{ borderRadius: 2, textTransform: 'none' }}
                                 >
-                                    게시글 삭제
+                                    {t('button-delete-post', '게시글 삭제')}
                                 </Button>
                             </Stack>
                         )}
@@ -369,14 +403,14 @@ const BoardDetailPage = () => {
 
                 {/* 댓글 섹션 */}
                 <Box sx={{ mb: 4 }}>
-                    <Typography variant="h6" color="var(--text-primary)" sx={{ fontWeight: "700", mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <MessageSquare size={20} /> 댓글 <Box component="span" sx={{ color: 'var(--text-active)' }}>{comments.length}</Box>
+                    <Typography variant="h6" color="var(--text-primary)" sx={{ fontWeight: "600", mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <MessageSquare size={20} /> {t('comments', '댓글')} <Box component="span" sx={{ color: 'var(--text-active)' }}>{comments.length}</Box>
                     </Typography>
 
                     <Paper
                         elevation={0}
                         sx={{
-                            p: 3,
+                            p: { xs: 2, md: 3 },
                             mb: 3,
                             borderRadius: 3,
                             border: '1px solid var(--border-color)',
@@ -421,12 +455,22 @@ const BoardDetailPage = () => {
                     </Paper>
 
                     <Box>
-                        {commentTree.map(parent => (
-                            <Box key={parent._id}>
-                                {renderComments([parent])}
-                                {parent.children.length > 0 && renderComments(parent.children, 1)}
-                            </Box>
-                        ))}
+                        {commentTree.length > 0 ? (
+                            commentTree.map(parent => (
+                                <Box key={parent._id}>
+                                    {renderComments([parent])}
+                                    {parent.children.length > 0 && renderComments(parent.children, 1)}
+                                </Box>
+                            ))
+                        ) : (
+                            <EmptyState
+                                compact
+                                icon={MessageCircle}
+                                title={t('comments-empty-title', '댓글이 없습니다')}
+                                description={t('comments-empty-desc', '첫 번째 댓글의 주인공이 되어보세요!')}
+                                iconColor="var(--text-secondary)"
+                            />
+                        )}
                     </Box>
                 </Box>
             </Box>

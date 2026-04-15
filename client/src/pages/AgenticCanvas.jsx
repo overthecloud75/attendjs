@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import AppBreadcrumbs from '../components/common/AppBreadcrumbs'
 
 // 에이전트 카드 (중앙 정렬 최적화)
 const AgentStatusCard = ({ id, title, status, icon: Icon, color, onHide }) => (
@@ -48,7 +49,7 @@ const AgenticCanvas = () => {
 
     const formatDate = (dateInput) => {
         const d = new Date(dateInput)
-        const y = d.getFullYear()
+        const y = String(d.getFullYear()).slice(-2)
         const m = d.getMonth() + 1
         const dd = d.getDate()
         const hh = String(d.getHours()).padStart(2, '0')
@@ -244,18 +245,23 @@ const AgenticCanvas = () => {
                     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                     position: 'relative'
                 }}>
-                    <Container maxWidth="xl" sx={{ py: 4, px: { xs: 2, md: 3 }, flex: 1, position: 'relative' }}>
+                    <Container maxWidth="xl" sx={{ py: 2, px: { xs: 2, md: 3 }, flex: 1, position: 'relative' }}>
+                        {/* Breadcrumbs */}
+                        <AppBreadcrumbs 
+                            items={[ { label: 'Agentic Canvas' } ]}
+                        />
+
                         {/* Header Area */}
-                        <Box mb={4} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Box mb={2} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                                 <Box sx={{ p: 1, bgcolor: '#3b82f615', color: '#3b82f6', borderRadius: 2.5 }}>
                                     <Layers size={24} />
                                 </Box>
                                 <Box>
-                                    <Typography variant="h5" fontWeight="900" sx={{ color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
+                                    <Typography variant="h6" fontWeight="700" sx={{ color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
                                         Agentic Canvas
                                     </Typography>
-                                    <Typography variant="body2" color="var(--text-secondary)" sx={{ opacity: 0.7 }}>
+                                    <Typography variant="caption" color="var(--text-secondary)" sx={{ opacity: 0.7 }}>
                                         Intelligent Assistant Orchestration
                                     </Typography>
                                 </Box>
@@ -278,7 +284,7 @@ const AgenticCanvas = () => {
                             )}
                         </Box>
 
-                        <Stack spacing={4}>
+                        <Stack spacing={2}>
                             <Box>
                                 <Stack direction="row" spacing={1} mb={1.5} sx={{ overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { display: 'none' } }}>
                                     {SUGGESTIONS.map((s, i) => (
@@ -288,7 +294,7 @@ const AgenticCanvas = () => {
                                             icon={<Sparkles size={14} />}
                                             sx={{ 
                                                 borderRadius: '12px', bgcolor: 'var(--card-bg)', border: '1px solid var(--border-color)',
-                                                fontWeight: 800, fontSize: '0.8rem', px: 1, py: 2,
+                                                fontWeight: 600, fontSize: '0.8rem', px: 1, py: 0.5,
                                                 color: 'var(--text-primary)',
                                                 boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                                                 '&:hover': { bgcolor: 'var(--bg-active)', borderColor: 'var(--text-active)', transform: 'translateY(-1px)' },
@@ -302,7 +308,7 @@ const AgenticCanvas = () => {
                                     <Fade in={true}>
                                         <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 1, pl: 2 }}>
                                             <CircularProgress size={12} sx={{ color: '#3b82f6' }} />
-                                            <Typography variant="caption" fontWeight="800" color="#3b82f6" sx={{ letterSpacing: '0.5px' }}>
+                                            <Typography variant="caption" fontWeight="600" color="#3b82f6" sx={{ letterSpacing: '0.5px' }}>
                                                 {statusMsg}
                                             </Typography>
                                         </Stack>
@@ -322,7 +328,7 @@ const AgenticCanvas = () => {
                                             value={command} onChange={(e) => setCommand(e.target.value)}
                                             onKeyDown={(e) => e.key === 'Enter' && handleSendCommand()}
                                             disabled={isLoading} slotProps={{ input: { disableUnderline: true } }}
-                                            sx={{ '& input': { fontSize: '1.2rem', fontWeight: 700 } }}
+                                            sx={{ '& input': { fontSize: '1rem', fontWeight: 500 } }}
                                         />
                                         <IconButton 
                                             onClick={handleSendCommand} disabled={isLoading || !command.trim()}
@@ -342,10 +348,10 @@ const AgenticCanvas = () => {
                             </Box>
 
                             <Box sx={{ pb: 10 }}>
-                                <Typography variant="subtitle2" fontWeight="800" mb={2} sx={{ opacity: 0.6, letterSpacing: '1px' }}>
+                                <Typography variant="subtitle2" fontWeight="600" mb={1.5} sx={{ opacity: 0.6, letterSpacing: '0.5px' }}>
                                     {i18n.language === 'en' ? 'EXPERIENCE FEED' : '실시간 에이전트 활동 피드'}
                                 </Typography>
-                                <Stack spacing={2.5}>
+                                <Stack spacing={2}>
                                     {activities.map((item, idx) => (
                                         <Fade in={true} key={idx} timeout={500 + (idx * 200)}>
                                             <Paper variant="outlined" sx={{ 
@@ -357,13 +363,7 @@ const AgenticCanvas = () => {
                                                         <item.icon size={18} />
                                                     </Box>
                                                     <Box flex={1} sx={{ 
-                                                        '& p': { m: 0 }, 
-                                                        '& table': { borderCollapse: 'collapse', width: '100%', my: 2, border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden' },
-                                                        '& th, & td': { border: '1px solid var(--border-color)', p: 1, textAlign: 'left', fontSize: '0.75rem' },
-                                                        '& th': { bgcolor: 'var(--bg-secondary)', color: 'var(--text-primary)', fontWeight: 800 },
-                                                        '& td': { color: 'var(--text-secondary)' },
-                                                        '& ul, & ol': { pl: 2, my: 1 },
-                                                        '& code': { bgcolor: 'var(--bg-secondary)', color: '#ef4444', p: '2px 4px', borderRadius: '4px', fontFormat: 'monospace', fontSize: '0.8rem' }
+                                                        '& p': { m: 0 }
                                                     }}>
                                                         {item.type === 'assistant' ? (
                                                             <div className="markdown-content">
@@ -381,7 +381,7 @@ const AgenticCanvas = () => {
                                                             <Stack direction="row" spacing={0.8} sx={{ mt: 1.5, opacity: 0.8, alignItems: "center" }}>
                                                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 1, py: 0.3, bgcolor: 'var(--bg-active)', borderRadius: 1.5, border: '1px solid var(--text-active)20' }}>
                                                                     <History size={12} color="var(--text-active)" />
-                                                                    <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--text-active)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                                                    <Typography variant="caption" sx={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-active)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                                                                         Execution Trace
                                                                     </Typography>
                                                                 </Box>
@@ -396,7 +396,6 @@ const AgenticCanvas = () => {
                                                                 <Button 
                                                                     size="small" variant="text" startIcon={expandedInsights[idx] ? <ShieldCheck size={12} /> : <Lightbulb size={12} />}
                                                                     onClick={() => toggleInsight(idx)}
-                                                                    sx={{ fontSize: '0.65rem', fontWeight: 900, color: '#3b82f6', p: 0, textTransform: 'none', mb: expandedInsights[idx] ? 1 : 0 }}
                                                                 >
                                                                     {expandedInsights[idx] ? '사고 과정 숨기기' : '사고 과정 확인'}
                                                                 </Button>
@@ -404,7 +403,7 @@ const AgenticCanvas = () => {
                                                                     <Box sx={{ p: 1.2, bgcolor: '#3b82f608', borderRadius: 2, border: '1px dashed #3b82f630' }}>
                                                                         <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 0.5 }}>
                                                                             <Lightbulb size={12} color="#3b82f6" />
-                                                                            <Typography variant="caption" fontWeight="900" color="#3b82f6" sx={{ letterSpacing: '0.5px', fontSize: '0.65rem' }}>
+                                                                            <Typography variant="caption" fontWeight="700" color="#3b82f6" sx={{ letterSpacing: '0.5px', fontSize: '0.65rem' }}>
                                                                                 {i18n.language === 'en' ? 'AI ANALYSIS INSIGHT / REASONING PATH' : '지능형 사고 경로 및 분석 인사이트'}
                                                                             </Typography>
                                                                         </Stack>
@@ -497,7 +496,7 @@ const AgenticCanvas = () => {
                 }}>
                     {/* Sidebar Header */}
                     <Box sx={{ p: 2.5, borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography variant="subtitle2" fontWeight="900" sx={{ letterSpacing: '1px', color: 'var(--text-primary)' }}>
+                        <Typography variant="subtitle2" fontWeight="700" sx={{ letterSpacing: '1px', color: 'var(--text-primary)' }}>
                             {i18n.language === 'en' ? 'AGENT SQUAD' : '에이전트 스쿼드 유닛'}
                         </Typography>
                         <IconButton size="small" onClick={() => setShowRightPanel(false)} sx={{ opacity: 0.5, color: 'var(--text-primary)' }}>
@@ -515,7 +514,7 @@ const AgenticCanvas = () => {
                                         <Box sx={{ p: 0.8, bgcolor: '#3b82f615', color: '#3b82f6', borderRadius: 2 }}>
                                             <Layers size={16} />
                                         </Box>
-                                        <Typography variant="body2" fontWeight="800">Main Orchestrator</Typography>
+                                        <Typography variant="body2" fontWeight="700">Main Orchestrator</Typography>
                                     </Stack>
                                     <Chip label="ONLINE" size="small" sx={{ height: 16, fontSize: '0.6rem', bgcolor: '#10b98120', color: '#10b981', fontWeight: 900 }} />
                                 </Stack>
@@ -545,7 +544,7 @@ const AgenticCanvas = () => {
                                         <Box sx={{ p: 0.8, bgcolor: '#f59e0b15', color: '#f59e0b', borderRadius: 2 }}>
                                             <Users size={16} />
                                         </Box>
-                                        <Typography variant="body2" fontWeight="800">HR Specialist</Typography>
+                                        <Typography variant="body2" fontWeight="700">HR Specialist</Typography>
                                     </Stack>
                                     <Chip label="ACTIVE" size="small" sx={{ height: 16, fontSize: '0.6rem', bgcolor: '#10b98120', color: '#10b981', fontWeight: 900 }} />
                                 </Stack>
@@ -573,7 +572,7 @@ const AgenticCanvas = () => {
                                         <Box sx={{ p: 0.8, bgcolor: '#10b98115', color: '#10b981', borderRadius: 2 }}>
                                             <TrendingUp size={16} />
                                         </Box>
-                                        <Typography variant="body2" fontWeight="800">Attendance Analyst</Typography>
+                                        <Typography variant="body2" fontWeight="700">Attendance Analyst</Typography>
                                     </Stack>
                                     <Chip label="ACTIVE" size="small" sx={{ height: 16, fontSize: '0.6rem', bgcolor: '#10b98120', color: '#10b981', fontWeight: 900 }} />
                                 </Stack>
@@ -596,7 +595,7 @@ const AgenticCanvas = () => {
                         </Stack>
 
                         {/* 2. Recent History */}
-                        <Typography variant="subtitle2" fontWeight="900" sx={{ letterSpacing: '1px', mb: 2, mt: 4, opacity: 0.6 }}>
+                        <Typography variant="subtitle2" fontWeight="700" sx={{ letterSpacing: '1px', mb: 2, mt: 4, opacity: 0.6 }}>
                             {i18n.language === 'en' ? 'RECENT HISTORY' : '최근 분석 히스토리'}
                         </Typography>
                         <Stack spacing={1}>
@@ -605,11 +604,11 @@ const AgenticCanvas = () => {
                                     onClick={() => {
                                         // Re-hydrate this specific activity into the current session feed
                                         setActivities(prev => [{ 
-                                            user: 'You', text: h.command, time: h.createdAt, icon: UserCircle, type: 'user' 
+                                            user: 'You', text: h.command, time: formatDate(h.createdAt), icon: UserCircle, type: 'user' 
                                         }, { 
                                             user: 'Assistant', text: h.finalResponse, 
                                             trail: h.agentTrail, observation: h.observation, reasoning: h.reasoning,
-                                            time: h.createdAt, icon: Bot, type: 'assistant' 
+                                            time: formatDate(h.createdAt), icon: Bot, type: 'assistant' 
                                         }, ...prev])
                                         setCommand('')
                                     }}
@@ -652,7 +651,7 @@ const AgenticCanvas = () => {
 
                         {/* System Status */}
                         <Box sx={{ mt: 2, p: 2, borderRadius: 4, bgcolor: '#3b82f610', border: '1px dashed #3b82f640', textAlign: 'center' }}>
-                            <Typography variant="caption" fontWeight="900" color="#3b82f6" sx={{ display: 'block', mb: 0.5, letterSpacing: '1px' }}>
+                            <Typography variant="caption" fontWeight="700" color="#3b82f6" sx={{ display: 'block', mb: 0.5, letterSpacing: '1px' }}>
                                 RE-ACT ENGINE v3.0
                             </Typography>
                             <Typography variant="caption" color="var(--text-secondary)" sx={{ fontSize: '0.65rem', display: 'block', mb: 1, fontWeight: 700 }}>

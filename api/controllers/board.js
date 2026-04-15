@@ -106,7 +106,7 @@ export const getPost = async (req, res, next) => {
         const post = await Post.findByIdAndUpdate(
             id,
             { $inc: { viewCount: 1 } },
-            { new: true }
+            { returnDocument: 'after' }
         )
 
         if (!post) throw createError(404, 'Post not found')
@@ -141,7 +141,7 @@ export const updatePost = async (req, res, next) => {
         const updateData = { title, content: cleanContent, files }
         if (isAdmin) updateData.isPinned = isPinned
 
-        const updatedPost = await Post.findByIdAndUpdate(id, { $set: updateData }, { new: true })
+        const updatedPost = await Post.findByIdAndUpdate(id, { $set: updateData }, { returnDocument: 'after' })
         res.status(200).json(updatedPost)
     } catch (err) {
         next(err)

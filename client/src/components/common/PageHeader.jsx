@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, Fade } from '@mui/material';
+import AppBreadcrumbs from './AppBreadcrumbs';
 
 /**
  * 표준 페이지 헤더 컴포넌트
@@ -8,13 +9,17 @@ import { Box, Typography, Fade } from '@mui/material';
  * @param {string} props.title - 페이지 제목
  * @param {string} props.subtitle - 페이지 설명/부제
  * @param {string} props.color - 테마 포인트 컬러 (기본: #3b82f6)
+ * @param {Array} props.breadcrumbs - 브레드크럼 항목 [{label, path}]
+ * @param {string} props.color - 테마 포인트 컬러 (기본: #3b82f6)
  * @param {React.ReactNode} props.extra - 우측 추가 컨트롤 (버튼 등)
  */
-const PageHeader = ({ icon: Icon, title, subtitle, color = '#3b82f6', extra }) => {
+const PageHeader = ({ icon: Icon, title, subtitle, breadcrumbs, color = '#3b82f6', extra }) => {
     return (
         <Fade in timeout={600}>
-            <Box mb={4} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box mb={4}>
+                {breadcrumbs && <AppBreadcrumbs items={breadcrumbs} />}
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Box 
                         sx={{ 
                             p: 1.2, 
@@ -60,7 +65,8 @@ const PageHeader = ({ icon: Icon, title, subtitle, color = '#3b82f6', extra }) =
                     </Box>
                 )}
             </Box>
-        </Fade>
+        </Box>
+    </Fade>
     );
 };
 

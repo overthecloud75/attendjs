@@ -3,12 +3,16 @@ import { useNavigate } from 'react-router-dom'
 import {
     Box, Tab, Tabs, Typography, Paper, Chip
 } from '@mui/material'
-import { FileText, Megaphone } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { FileText, Megaphone, PenTool, LayoutDashboard } from 'lucide-react'
 import CustomTableWithSearch from '../../components/tables/CustomTableWithSearch'
+import EmptyState from '../../components/common/EmptyState'
+import PageHeader from '../../components/common/PageHeader'
 import { columnHeaders, csvHeaders, BOARD_TYPES } from '../../configs/board'
 
 const BoardListPage = () => {
     const navigate = useNavigate()
+    const { t } = useTranslation()
     const [currentTab, setCurrentTab] = useState('ALL')
 
     // Extend columnHeaders with custom rendering for the Board list
@@ -20,10 +24,10 @@ const BoardListPage = () => {
                     header: '구분',
                     size: 80,
                     cell: (info) => {
-                        const type = BOARD_TYPES.find(t => t.value === info.getValue())
+                        const val = info.getValue()
                         return (
                             <Chip
-                                label={type?.label || info.getValue()}
+                                label={t(`board-type-${val}`, val)}
                                 size="small"
                                 sx={{
                                     bgcolor: 'var(--bg-active)',
@@ -83,7 +87,7 @@ const BoardListPage = () => {
             }
             return col
         })
-    }, [])
+    }, [t])
 
     const handleRowClick = (row) => {
         navigate(`/board/${row._id}`)
@@ -93,21 +97,22 @@ const BoardListPage = () => {
     const apiUrl = currentTab === 'ALL' ? '/api/board' : `/api/board?boardType=${currentTab}`
 
     return (
-        <Box sx={{ p: { xs: 2, md: 3 }, height: 'calc(100vh - 64px)', overflow: 'auto' }}>
+        <Box sx={{ px: { xs: 2, md: 3 }, py: 2, height: 'calc(100vh - 64px)', overflow: 'auto' }}>
             {/* Header 섹션 */}
-            <Box sx={{ mb: 3 }}>
-                <Typography variant="h4" color="var(--text-primary)" sx={{ fontWeight: "900", letterSpacing: "-1px" }}>
-                    사내 게시판 📋
-                </Typography>
-                <Typography variant="body2" color="var(--text-secondary)" sx={{ mt: 0.5 }}>
-                    공지사항 및 자유로운 소통 공간입니다.
-                </Typography>
-            </Box>
+            <PageHeader
+                icon={LayoutDashboard}
+                title={t('sidebar-board', '사내 게시판')}
+                subtitle={t('board-subtitle', '공지사항 및 자유로운 소통 공간입니다.')}
+                breadcrumbs={[
+                    { label: t('sidebar-board', '사내 게시판'), path: '/board' },
+                    { label: t('board-tab-all', '전체보기') }
+                ]}
+            />
 
             <Paper
                 elevation={0}
                 sx={{
-                    borderRadius: 4,
+                    borderRadius: 3,
                     border: '1px solid var(--border-color)',
                     bgcolor: 'var(--card-bg)',
                     overflow: 'hidden'
@@ -132,24 +137,32 @@ const BoardListPage = () => {
                             '& .MuiTabs-indicator': { height: 3, borderRadius: '3px 3px 0 0' }
                         }}
                     >
-                        <Tab label="전체보기" value="ALL" />
+                        <Tab label={t('board-tab-all', '전체보기')} value="ALL" />
                         {BOARD_TYPES.map(type => (
-                            <Tab key={type.value} label={type.label} value={type.value} />
+                            <Tab key={type.value} label={t(`board-type-${type.value}`, type.label)} value={type.value} />
                         ))}
                     </Tabs>
                 </Box>
 
                 {/* 공통 테이블 적용 */}
-                <Box sx={{ p: 1 }}>
-                    <CustomTableWithSearch
-                        page="board"
-                        url={apiUrl}
-                        searchKeyword="search"
-                        columnHeaders={enhancedColumns}
-                        csvHeaders={csvHeaders}
-                        onIdClick={handleRowClick}
-                    />
-                </Box>
+                <CustomTableWithSearch
+                    page="board"
+                    url={apiUrl}
+                    searchKeyword="search"
+                    columnHeaders={enhancedColumns}
+                    csvHeaders={csvHeaders}
+                    onIdClick={handleRowClick}
+                    rowClickable={true}
+                    renderEmptyState={
+                        <EmptyState
+                            icon={PenTool}
+                            title={t('board-empty-title', '아직 게시글이 없습니다')}
+                            description={t('board-empty-desc', '우리 부서의 첫 번째 소식을 남겨보세요!')}
+                            actionLabel={t('board-empty-action', '첫 게시글 작성하기')}
+                            onAction={() => navigate('/board/write')}
+                        />
+                    }
+                />
             </Paper>
         </Box>
     )

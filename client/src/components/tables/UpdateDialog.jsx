@@ -5,6 +5,7 @@ import axios from 'axios'
 import { AdminEditableTitles, UserEditableTitles, EditableSelects } from '../../configs/pages.js'
 import { options } from '../../configs/options.js'
 import { useAuth } from '../../hooks/useAuth'
+import BaseDialog from '../common/BaseDialog'
 
 const getEditableTitles = (user) => user.isAdmin ? AdminEditableTitles : UserEditableTitles
 

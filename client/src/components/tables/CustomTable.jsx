@@ -58,7 +58,7 @@ const Th = ({ children, ...props }) => (
 )
 
 // https://geuni620.github.io/blog/2023/12/2/tanstack-table/
-const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdClick }) => {
+const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdClick, rowClickable = false, renderEmptyState }) => {
     // update시 page 설정
     const [selectedRowData, setSelectedRowData] = useState({})
     const [pagination, setPagination] = useState({
@@ -134,7 +134,7 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdC
                             {table.getRowModel().rows.map((row, rowIndex) => (
                                 <Box
                                     key={row.id}
-                                    onClick={(e) => onIdClick ? onIdClick(row.original) : handleUpdateClick(e, row.original)}
+                                    onClick={(e) => (rowClickable || onIdClick) ? (onIdClick ? onIdClick(row.original) : handleUpdateClick(e, row.original)) : null}
                                     sx={{
                                         p: 2,
                                         borderRadius: 3,
@@ -144,6 +144,12 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdC
                                         flexDirection: 'column',
                                         gap: 1,
                                         boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                                        cursor: (rowClickable || onIdClick) ? 'pointer' : 'default',
+                                        transition: 'all 0.2s',
+                                        '&:hover': (rowClickable || onIdClick) ? {
+                                            borderColor: 'var(--text-active)',
+                                            bgcolor: 'var(--bg-secondary)'
+                                        } : {},
                                         opacity: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 0.6 : 1,
                                         filter: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 'grayscale(0.5)' : 'none'
                                     }}
@@ -216,8 +222,10 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdC
                                         <TableRow
                                             key={row.id}
                                             hover
+                                            onClick={(e) => rowClickable ? (onIdClick ? onIdClick(row.original) : handleUpdateClick(e, row.original)) : null}
                                             sx={{
                                                 transition: 'background-color 0.1s',
+                                                cursor: rowClickable ? 'pointer' : 'default',
                                                 '&:hover': {
                                                     backgroundColor: 'var(--hover-bg) !important',
                                                 },
@@ -226,15 +234,15 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdC
                                                 filter: (row.original.status && row.original.status.toLowerCase().includes('cancel')) ? 'grayscale(0.5)' : 'none'
                                             }}
                                         >
-                                            <Td align="center" onClick={(e) => onIdClick ? onIdClick(row.original) : handleUpdateClick(e, row.original)}>
+                                            <Td align="center" onClick={(e) => !rowClickable ? (onIdClick ? onIdClick(row.original) : handleUpdateClick(e, row.original)) : null}>
                                                 <Typography
                                                     variant="body2"
                                                     sx={{
-                                                        color: 'var(--text-secondary)',
+                                                        color: rowClickable ? 'var(--text-secondary)' : 'var(--text-active)',
                                                         fontWeight: 500,
                                                         cursor: 'pointer',
                                                         textDecoration: 'none',
-                                                        '&:hover': { textDecoration: 'underline', color: '#3b82f6' }
+                                                        '&:hover': { textDecoration: !rowClickable ? 'underline' : 'none' }
                                                     }}
                                                 >
                                                     {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + rowIndex + 1}
@@ -255,11 +263,13 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdC
                         </TableContainer>
                     </>
                 ) : (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 8, color: 'var(--text-secondary)', textAlign: 'center' }}>
-                        <Typography sx={{ fontSize: 48, mb: 2, filter: 'grayscale(1)', opacity: 0.5 }}>📊</Typography>
-                        <Typography sx={{ fontSize: 16, fontWeight: 600, color: 'var(--text-primary)', mb: 1 }}>데이터가 없습니다</Typography>
-                        <Typography sx={{ fontSize: 14, color: 'var(--text-secondary)' }}>새로운 데이터를 추가하거나 검색 조건을 변경해보세요.</Typography>
-                    </Box>
+                    renderEmptyState ? renderEmptyState : (
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 8, color: 'var(--text-secondary)', textAlign: 'center' }}>
+                            <Typography sx={{ fontSize: 48, mb: 2, filter: 'grayscale(1)', opacity: 0.5 }}>📊</Typography>
+                            <Typography sx={{ fontSize: 16, fontWeight: 600, color: 'var(--text-primary)', mb: 1 }}>데이터가 없습니다</Typography>
+                            <Typography sx={{ fontSize: 14, color: 'var(--text-secondary)' }}>새로운 데이터를 추가하거나 검색 조건을 변경해보세요.</Typography>
+                        </Box>
+                    )
                 )}
 
                 <Pagination

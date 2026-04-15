@@ -6,16 +6,20 @@ import {
     Box, TextField, Button, MenuItem, Select, FormControl, InputLabel,
     Typography, FormControlLabel, Switch, Stack, Paper, Chip, IconButton
 } from '@mui/material'
-import { Save, X, ArrowLeft, Upload, CloudUpload } from 'lucide-react'
+import { Save, X, ArrowLeft, Upload, CloudUpload, Edit3 } from 'lucide-react'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 
 import { BOARD_TYPES } from '../../configs/board'
+import PageHeader from '../../components/common/PageHeader'
+import AppBreadcrumbs from '../../components/common/AppBreadcrumbs'
+import { useTranslation } from 'react-i18next'
 
 const BoardWritePage = () => {
     const navigate = useNavigate()
     const { id } = useParams() // For editing
     const { user: currentUser } = useAuth()
+    const { t } = useTranslation()
     const quillRef = useRef(null)
 
     const [boardType, setBoardType] = useState('FREE')
@@ -172,17 +176,18 @@ const BoardWritePage = () => {
     }
 
     return (
-        <Box sx={{ p: { xs: 2, md: 4 }, width: '100%', maxWidth: 1400, mx: 'auto', boxSizing: 'border-box' }}>
+        <Box sx={{ px: { xs: 1, md: 2 }, py: 2, width: '100%', maxWidth: 1600, mx: 'auto', boxSizing: 'border-box' }}>
 
                 {/* Header */}
-                <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 3 }}>
-                    <IconButton onClick={() => navigate('/board')}>
-                        <ArrowLeft size={24} color="var(--text-secondary)" />
-                    </IconButton>
-                    <Typography variant="h5" fontWeight="700" color="var(--text-primary)">
-                        게시글 작성
-                    </Typography>
-                </Stack>
+                <PageHeader
+                    icon={Edit3}
+                    title={isEdit ? t('board-edit-title', '게시글 수정') : t('board-write-title', '게시글 작성')}
+                    subtitle={t('board-write-subtitle', '새로운 소식을 사우들과 공유해보세요.')}
+                    breadcrumbs={[
+                        { label: t('sidebar-board', '사내 게시판'), path: '/board' },
+                        { label: isEdit ? t('board-edit-title', '게시글 수정') : t('board-write-title', '게시글 작성') }
+                    ]}
+                />
 
                 <Paper
                     elevation={0}

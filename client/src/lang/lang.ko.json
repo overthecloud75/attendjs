@@ -33,5 +33,22 @@
     "button-saving": "저장 중...",
     "msg-save-success": "설정이 성공적으로 저장되었습니다.",
     "msg-save-error": "설정 저장 중 오류가 발생했습니다.",
-    "msg-fetch-error": "설정을 불러오는 중 오류가 발생했습니다."
+    "msg-fetch-error": "설정을 불러오는 중 오류가 발생했습니다.",
+    "board-type-NOTICE": "공지사항",
+    "board-type-FREE": "자유게시판",
+    "board-type-QNA": "Q&A",
+    "board-type-ARCHIVE": "자료실",
+    "button-reply": "답글 달기",
+    "placeholder-reply": "답글을 입력하세요",
+    "button-back-to-list": "목록으로 돌아가기",
+    "board-label-pinned": "공지",
+    "button-edit-post": "게시글 수정",
+    "button-delete-post": "게시글 삭제",
+    "board-subtitle": "공지사항 및 자유로운 소통 공간입니다.",
+    "board-tab-all": "전체보기",
+    "board-empty-title": "아직 게시글이 없습니다",
+    "board-empty-desc": "우리 부서의 첫 번째 소식을 남겨보세요!",
+    "board-empty-action": "첫 게시글 작성하기",
+    "comments-empty-title": "댓글이 없습니다",
+    "comments-empty-desc": "첫 번째 댓글의 주인공이 되어보세요!"
 }

@@ -33,5 +33,22 @@
     "button-saving": "Saving...",
     "msg-save-success": "Settings saved successfully",
     "msg-save-error": "Error saving settings",
-    "msg-fetch-error": "Error fetching settings"
+    "msg-fetch-error": "Error fetching settings",
+    "board-type-NOTICE": "Notice",
+    "board-type-FREE": "Free",
+    "board-type-QNA": "Q&A",
+    "board-type-ARCHIVE": "Archive",
+    "button-reply": "Reply",
+    "placeholder-reply": "Enter a reply",
+    "button-back-to-list": "Back to List",
+    "board-label-pinned": "Pinned",
+    "button-edit-post": "Edit Post",
+    "button-delete-post": "Delete Post",
+    "board-subtitle": "Communication space for notices and freedom.",
+    "board-tab-all": "View All",
+    "board-empty-title": "No posts yet",
+    "board-empty-desc": "Share the first news of our department!",
+    "board-empty-action": "Write First Post",
+    "comments-empty-title": "No comments yet",
+    "comments-empty-desc": "Be the first to comment!"
 }

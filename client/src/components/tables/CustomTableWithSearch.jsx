@@ -31,7 +31,7 @@ const getInitialDate = (page) => {
     }]
 }
 
-const CustomTableWithSearch = ({ searchKeyword, page, url, columnHeaders, csvHeaders, onIdClick }) => {
+const CustomTableWithSearch = ({ searchKeyword, page, url, columnHeaders, csvHeaders, onIdClick, rowClickable = false, renderEmptyState }) => {
     // State initialization
     const [name, setName] = useState('')
     // Use lazy initialization for date to avoid recalculating on every render
@@ -83,6 +83,8 @@ const CustomTableWithSearch = ({ searchKeyword, page, url, columnHeaders, csvHea
                         fileName={fileName}
                         csvHeaders={csvHeaders}
                         onIdClick={onIdClick}
+                        rowClickable={rowClickable}
+                        renderEmptyState={renderEmptyState}
                     />
                 )}
             </Suspense>
