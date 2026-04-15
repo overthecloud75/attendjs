@@ -69,10 +69,7 @@ const SidebarItem = ({ item }) => {
     if (!hasAccess) return null
 
     // ... (rest of logic) ...
-    // Map title to translation key
-    // Title "Dashboard" -> "sidebar-dashboard"
-    const titleKey = `sidebar-${item.title.toLowerCase().replace(/\s+/g, '-')}`
-    const displayTitle = t(titleKey, item.title) // Fallback to original title
+    const displayTitle = t(`sidebar-${item.id}`, item.id)
 
     const hasChildren = item.children && item.children.length > 0
     const isActive = location.pathname === item.to || (item.to !== '/' && location.pathname.startsWith(item.to))
@@ -90,6 +87,8 @@ const SidebarItem = ({ item }) => {
         }
     }
 
+    const Icon = item.icon
+
     return (
         <>
             <StyledListItemButton
@@ -106,7 +105,7 @@ const SidebarItem = ({ item }) => {
                     arrow
                 >
                     <IconWrapper active={isActive ? 1 : 0}>
-                        {item.emoji}
+                        {Icon && <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />}
                     </IconWrapper>
                 </Tooltip>
                 <ItemText active={isActive ? 1 : 0}>

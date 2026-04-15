@@ -1,13 +1,35 @@
 import { Button } from '@mui/material'
 import { CSVLink } from 'react-csv'
 
-const CsvDownload = ({ data, csvHeaders, fileName }) => {
+const CsvDownload = ({ data, csvHeaders, fileName, customButton }) => {
+    if (!data || !Array.isArray(data) || data.length === 0) return null
+
+    const linkContent = customButton || 'CSV Download'
+
+    if (customButton) {
+        return (
+            <CSVLink
+                data={data}
+                headers={csvHeaders}
+                filename={fileName}
+                style={{
+                    color: 'inherit',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center'
+                }}
+            >
+                {customButton}
+            </CSVLink>
+        )
+    }
+
     return (
         <Button
             variant='outlined'
             color='info'
             sx={{
-                textTransform: 'none',  
+                textTransform: 'none',
                 px: 2,
                 py: 0.7,
             }}
@@ -17,11 +39,11 @@ const CsvDownload = ({ data, csvHeaders, fileName }) => {
                 headers={csvHeaders}
                 filename={fileName}
                 style={{
-                    color: 'inherit',        
-                    textDecoration: 'none',  
+                    color: 'inherit',
+                    textDecoration: 'none',
                 }}
             >
-                CSV Download
+                {linkContent}
             </CSVLink>
         </Button>
     )

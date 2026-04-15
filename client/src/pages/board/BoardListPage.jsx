@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     Box, Tab, Tabs, Typography, Paper, Chip
@@ -8,13 +8,16 @@ import { FileText, Megaphone, PenTool, LayoutDashboard } from 'lucide-react'
 import CustomTableWithSearch from '../../components/tables/CustomTableWithSearch'
 import EmptyState from '../../components/common/EmptyState'
 import PageHeader from '../../components/common/PageHeader'
+import CustomTableButtons from '../../components/tables/CustomTableButtons'
 import { columnHeaders, csvHeaders, BOARD_TYPES } from '../../configs/board'
 
 const BoardListPage = () => {
     const navigate = useNavigate()
     const { t } = useTranslation()
     const [currentTab, setCurrentTab] = useState('ALL')
+    const tableRef = useRef()
 
+    // ... (enhancedColumns code below) ...
     // Extend columnHeaders with custom rendering for the Board list
     const enhancedColumns = useMemo(() => {
         return columnHeaders.map(col => {
@@ -96,13 +99,26 @@ const BoardListPage = () => {
     // Dynamic API URL based on tab
     const apiUrl = currentTab === 'ALL' ? '/api/board' : `/api/board?boardType=${currentTab}`
 
+    // Header Actions
+    const PageActions = (
+        <CustomTableButtons 
+            page="board"
+            onWriteClick={() => {
+                const res = tableRef.current?.handleWriteClick()
+                if (res === 'NAVIGATE_BOARD_WRITE') {
+                    navigate('/board/write')
+                }
+            }}
+        />
+    )
+
     return (
         <Box sx={{ px: { xs: 2, md: 3 }, py: 2, height: 'calc(100vh - 64px)', overflow: 'auto' }}>
-            {/* Header 섹션 */}
             <PageHeader
                 icon={LayoutDashboard}
                 title={t('sidebar-board', '사내 게시판')}
                 subtitle={t('board-subtitle', '공지사항 및 자유로운 소통 공간입니다.')}
+                extra={PageActions}
                 breadcrumbs={[
                     { label: t('sidebar-board', '사내 게시판'), path: '/board' },
                     { label: t('board-tab-all', '전체보기') }
@@ -112,6 +128,7 @@ const BoardListPage = () => {
             <Paper
                 elevation={0}
                 sx={{
+                    mt: 2,
                     borderRadius: 3,
                     border: '1px solid var(--border-color)',
                     bgcolor: 'var(--card-bg)',
@@ -146,6 +163,7 @@ const BoardListPage = () => {
 
                 {/* 공통 테이블 적용 */}
                 <CustomTableWithSearch
+                    ref={tableRef}
                     page="board"
                     url={apiUrl}
                     searchKeyword="search"
@@ -153,6 +171,7 @@ const BoardListPage = () => {
                     csvHeaders={csvHeaders}
                     onIdClick={handleRowClick}
                     rowClickable={true}
+                    hideButtons={true}
                     renderEmptyState={
                         <EmptyState
                             icon={PenTool}

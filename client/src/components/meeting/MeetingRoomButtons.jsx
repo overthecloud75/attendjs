@@ -9,30 +9,26 @@ const MeetingRoomButtons = ({ setEventsData }) => {
     const handleReservationClick = () => setOpenReservation(true)
 
     return (
-        <Box sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            mb: 1
-        }}>
+        <>
             <Button
                 variant='contained'
                 startIcon={<CalendarPlus size={18} />}
                 onClick={handleReservationClick}
                 sx={{
-                    bgcolor: '#3b82f6',
+                    bgcolor: 'var(--text-active)',
                     color: '#fff',
                     textTransform: 'none',
-                    fontWeight: 600,
+                    fontWeight: 700,
                     borderRadius: 2,
-                    px: 2.5,
-                    py: 1,
-                    boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)',
+                    px: 2,
+                    py: 0.8,
+                    boxShadow: 'none',
                     '&:hover': {
-                        bgcolor: '#2563eb',
-                        boxShadow: '0 4px 12px rgba(59, 130, 246, 0.5)',
-                        transform: 'translateY(-1px)'
+                        bgcolor: 'var(--text-active)',
+                        opacity: 0.9,
+                        boxShadow: 'none'
                     },
-                    transition: 'all 0.2s ease-in-out'
+                    transition: 'all 0.2s'
                 }}
             >
                 회의실 예약
@@ -45,7 +41,7 @@ const MeetingRoomButtons = ({ setEventsData }) => {
                     setOpenReservation={setOpenReservation}
                 />
             )}
-        </Box>
+        </>
     )
 }
 

@@ -12,6 +12,7 @@ import {
 import DOMPurify from 'dompurify' // HTML XSS 방지용
 import EmptyState from '../../components/common/EmptyState'
 import AppBreadcrumbs from '../../components/common/AppBreadcrumbs'
+import { formatLocalTime } from '../../utils/DateUtil'
 
 // 링크 보안 설정 (Hook)
 DOMPurify.addHook('afterSanitizeAttributes', function (node) {
@@ -141,16 +142,7 @@ const BoardDetailPage = () => {
                                         {comment.authorName}
                                     </Typography>
                                     <Typography variant="caption" color="var(--text-secondary)">
-                                        {comment.createdAt ? (() => {
-                                            const d = new Date(comment.createdAt);
-                                            const yy = String(d.getFullYear()).slice(-2);
-                                            const mm = String(d.getMonth() + 1).padStart(2, '0');
-                                            const dd = String(d.getDate()).padStart(2, '0');
-                                            const hh = String(d.getHours()).padStart(2, '0');
-                                            const min = String(d.getMinutes()).padStart(2, '0');
-                                            const ss = String(d.getSeconds()).padStart(2, '0');
-                                            return `${yy}-${mm}-${dd} ${hh}:${min}:${ss}`;
-                                        })() : '-'}
+                                        {formatLocalTime(comment.createdAt)}
                                     </Typography>
                                 </Stack>
                                 {(currentUser.isAdmin || currentUser.email === comment.authorEmail) && (
@@ -288,16 +280,7 @@ const BoardDetailPage = () => {
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'var(--text-secondary)' }}>
                                     <Calendar size={16} />
                                     <Typography variant="body2">
-                                        {post.createdAt ? (() => {
-                                            const d = new Date(post.createdAt);
-                                            const yy = String(d.getFullYear()).slice(-2);
-                                            const mm = String(d.getMonth() + 1).padStart(2, '0');
-                                            const dd = String(d.getDate()).padStart(2, '0');
-                                            const hh = String(d.getHours()).padStart(2, '0');
-                                            const min = String(d.getMinutes()).padStart(2, '0');
-                                            const ss = String(d.getSeconds()).padStart(2, '0');
-                                            return `${yy}-${mm}-${dd} ${hh}:${min}:${ss}`;
-                                        })() : '-'}
+                                        {formatLocalTime(post.createdAt)}
                                     </Typography>
                                 </Box>
                             </Stack>

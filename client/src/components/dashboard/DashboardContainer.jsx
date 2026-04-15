@@ -1,37 +1,28 @@
-import { Grid, Container, Typography, Box } from '@mui/material'
+import { Grid, Container, Box } from '@mui/material'
 import UserInfoCard from './UserInfoCard'
 import LeaveSummary from './LeaveSummary'
 import WorkCalendar from './WorkCalendar'
 import { useLeftLeave } from '../../hooks/useLeftLeave'
 import { useAuth } from '../../hooks/useAuth'
+import { LayoutDashboard } from 'lucide-react'
+import PageHeader from '../common/PageHeader'
+import { useTranslation } from 'react-i18next'
 
 const DashboardContainer = () => {
-
     const { leftLeave } = useLeftLeave()
     const { user } = useAuth()
+    const { t } = useTranslation()
 
     return (
         <Container maxWidth='xl' sx={{ mt: 1 }}>
-            <Box sx={{ mb: 1 }}>
-                <Typography
-                    variant='h4'
-                    sx={{
-                        fontWeight: '900',
-                        color: 'var(--text-primary)',
-                        fontSize: { xs: '1.25rem', md: '2rem' },
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1.5,
-                        mb: 0.5,
-                        letterSpacing: '-0.5px'
-                    }}
-                >
-                    반가워요, {user.name}님! 👋
-                </Typography>
-                <Typography variant='subtitle1' sx={{ color: 'var(--text-secondary)', fontWeight: 500, fontSize: { xs: '0.875rem', md: '1rem' } }}>
-                    오늘의 근태 현황을 한눈에 확인하세요.
-                </Typography>
-            </Box>
+            <PageHeader
+                icon={LayoutDashboard}
+                title={`${t('dashboard-welcome', '반가워요')}, ${user.name}${t('dashboard-suffix', '님')}! 👋`}
+                subtitle={t('dashboard-subtitle', '오늘의 근태 현황을 한눈에 확인하세요.')}
+                breadcrumbs={[
+                    { label: 'Dashboard' }
+                ]}
+            />
 
            <Grid container spacing={4}>
                 <Grid size={{ xs: 12, md: 6 }}>

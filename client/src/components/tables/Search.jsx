@@ -4,8 +4,10 @@ import { DateRange } from 'react-date-range'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
 import { format } from 'date-fns'
-import { Box, TextField, Button, Typography, Popover } from '@mui/material'
+import { Box, TextField, Button, Typography, Popover, Divider } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import CsvDownload from './CsvDownload.jsx'
+import { Download } from 'lucide-react'
 
 const Search = ({
     page,
@@ -16,7 +18,10 @@ const Search = ({
     setDate,
     clickCount,
     setClickCount,
-    setFileName
+    setFileName,
+    data,
+    csvHeaders,
+    fileName
 }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [portalContainer, setPortalContainer] = useState(null)
@@ -185,6 +190,26 @@ const Search = ({
             <SearchButton type='submit' variant='contained'>
                 검색
             </SearchButton>
+
+            {/* Export Divider & Button */}
+            {data && data.length > 0 && (
+                <>
+                    <Divider orientation="vertical" flexItem sx={{ mx: 0.5, borderColor: 'var(--border-color)', height: 20, alignSelf: 'center' }} />
+                    <CsvDownload 
+                        data={data} 
+                        csvHeaders={csvHeaders} 
+                        fileName={fileName} 
+                        customButton={
+                            <IconButtonStyled>
+                                <Download size={18} />
+                                <Typography sx={{ fontSize: 13, fontWeight: 600, ml: 1, display: { xs: 'none', lg: 'block' } }}>
+                                    Export
+                                </Typography>
+                            </IconButtonStyled>
+                        }
+                    />
+                </>
+            )}
         </SearchForm>
     )
 
@@ -261,3 +286,17 @@ const SearchButton = styled(Button)({
         boxShadow: 'none',
     },
 })
+
+const IconButtonStyled = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: '6px 12px',
+    borderRadius: 8,
+    cursor: 'pointer',
+    color: 'var(--text-secondary)',
+    transition: 'all 0.2s ease',
+    '&:hover': {
+        backgroundColor: 'var(--hover-bg)',
+        color: 'var(--text-active)',
+    },
+}))

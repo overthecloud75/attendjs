@@ -3,6 +3,7 @@ import { Box, Typography, Divider, TextField, Button, Switch, FormControlLabel, 
 import { ShieldCheck, Lock, Clock, ShieldAlert, CheckCircle, Info, Sparkles, KeyRound } from 'lucide-react'
 import axios from 'axios'
 import { useTranslation } from 'react-i18next'
+import PageHeader from '../../../components/common/PageHeader'
 
 const SecuritySettings = () => {
     const { t } = useTranslation()
@@ -56,25 +57,20 @@ const SecuritySettings = () => {
     }
 
     return (
-        <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: '100%', mx: 0 }}>
-            {/* Header */}
-            <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ p: 1, bgcolor: '#ef444415', color: '#ef4444', borderRadius: 2 }}>
-                    <ShieldCheck size={28} />
-                </Box>
-                <Box>
-                    <Typography variant="h5" fontWeight="800" sx={{ color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
-                        Security Settings
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'var(--text-secondary)' }}>
-                        시스템 접근 보안 및 암호 정책을 구성하세요.
-                    </Typography>
-                </Box>
-            </Box>
+        <Box sx={{ p: { xs: 2, md: 3 } }}>
+            <PageHeader
+                icon={ShieldCheck}
+                color="#ef4444"
+                title={t('settings-security', 'Security Settings')}
+                subtitle={t('security-subtitle', '시스템 접근 보안 및 암호 정책을 구성하세요.')}
+                breadcrumbs={[
+                    { label: t('sidebar-admin', '관리자'), path: '#' },
+                    { label: t('sidebar-settings', '설정'), path: '/admin/settings' },
+                    { label: t('settings-security', '보안 설정') }
+                ]}
+            />
 
-            <Divider sx={{ mb: 4 }} />
-
-            <Grid container spacing={4} sx={{ width: '100%', m: 0 }}>
+            <Grid container spacing={4} sx={{ width: '100%', m: 0, mt: 2 }}>
                 {/* Left: Configuration Form (6/12) */}
                 <Grid size={{ xs: 12, md: 6 }}>
                     <Stack spacing={3}>

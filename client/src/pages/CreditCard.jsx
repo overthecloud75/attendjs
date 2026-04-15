@@ -1,17 +1,47 @@
+import { useRef } from 'react'
 import { useResponsive } from '../hooks/useResponsive'
 import CustomTableWithSearch from '../components/tables/CustomTableWithSearch'
 import { columnHeaders, mobileColumnHeaders, csvHeaders } from '../configs/creditcard'
+import { Box } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import PageHeader from '../components/common/PageHeader'
+import CustomTableButtons from '../components/tables/CustomTableButtons'
+import { CreditCard as CardIcon } from 'lucide-react'
 
 const CreditCard = () => {
     const { isMobile } = useResponsive()
+    const { t } = useTranslation()
+    const tableRef = useRef()
+
+    const PageActions = (
+        <CustomTableButtons 
+            page="creditcard"
+            onWriteClick={() => tableRef.current?.handleWriteClick()}
+        />
+    )
 
     return (
-        <CustomTableWithSearch
-            searchKeyword='name'
-            page='creditcard'
-            columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
-            csvHeaders={csvHeaders}
-        />
+        <Box sx={{ p: { xs: 2, md: 3 } }}>
+            <PageHeader
+                icon={CardIcon}
+                title={t('sidebar-creditcard', '법인카드 사용 내역')}
+                subtitle={t('creditcard-subtitle', '법인카드 사용 내역 및 결재 상태를 관리합니다.')}
+                extra={PageActions}
+                breadcrumbs={[
+                    { label: t('sidebar-common', '공통'), path: '#' },
+                    { label: t('sidebar-creditcard', '법인카드 사용 내역') }
+                ]}
+            />
+            <CustomTableWithSearch
+                ref={tableRef}
+                searchKeyword='name'
+                page='creditcard'
+                columnHeaders={isMobile ? mobileColumnHeaders : columnHeaders}
+                csvHeaders={csvHeaders}
+                hideButtons={true}
+                mt={2}
+            />
+        </Box>
     )
 }
 

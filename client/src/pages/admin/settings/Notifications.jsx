@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Box, Typography, Divider, Switch, FormControlLabel, Stack, Paper, Button, Grid, Card, CardContent, Snackbar, Alert } from '@mui/material'
 import { Bell, Mail, Smartphone, CheckCircle, Info, Sparkles, MessageSquare } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import PageHeader from '../../../components/common/PageHeader'
 
 const NotificationSettings = () => {
     const { t } = useTranslation()
@@ -29,25 +30,20 @@ const NotificationSettings = () => {
     }
 
     return (
-        <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: '100%', mx: 0 }}>
-            {/* Header */}
-            <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ p: 1, bgcolor: '#f59e0b15', color: '#f59e0b', borderRadius: 2 }}>
-                    <Bell size={28} />
-                </Box>
-                <Box>
-                    <Typography variant="h5" fontWeight="800" sx={{ color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
-                        Notification Settings
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'var(--text-secondary)' }}>
-                        직원들에게 전달될 이메일 및 푸시 알림 환경을 구성하세요.
-                    </Typography>
-                </Box>
-            </Box>
+        <Box sx={{ p: { xs: 2, md: 3 } }}>
+            <PageHeader
+                icon={Bell}
+                color="#f59e0b"
+                title={t('settings-notifications', 'Notification Settings')}
+                subtitle={t('notifications-subtitle', '직원들에게 전달될 이메일 및 푸시 알림 환경을 구성하세요.')}
+                breadcrumbs={[
+                    { label: t('sidebar-admin', '관리자'), path: '#' },
+                    { label: t('sidebar-settings', '설정'), path: '/admin/settings' },
+                    { label: t('settings-notifications', '알림 설정') }
+                ]}
+            />
 
-            <Divider sx={{ mb: 4 }} />
-
-            <Grid container spacing={4} sx={{ width: '100%', m: 0 }}>
+            <Grid container spacing={4} sx={{ width: '100%', m: 0, mt: 2 }}>
                 {/* Left: Configuration Form (6/12) */}
                 <Grid size={{ xs: 12, md: 6 }}>
                     <Stack spacing={3}>

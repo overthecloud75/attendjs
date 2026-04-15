@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Typography, Divider, TextField, Button, Chip, Stack, Paper, Alert, Snackbar, Grid, Card, CardContent } from '@mui/material'
-import { Settings, Users, Layers, CheckCircle, Info, Sparkles, Plus } from 'lucide-react'
 import axios from 'axios'
 import { useTranslation } from 'react-i18next'
+import PageHeader from '../../../components/common/PageHeader'
+import { Settings, Users, Layers, CheckCircle, Info, Sparkles, Plus } from 'lucide-react'
 
 const GeneralSettings = () => {
     const { t } = useTranslation()
@@ -61,25 +62,19 @@ const GeneralSettings = () => {
     }
 
     return (
-        <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: '100%', mx: 0 }}>
-            {/* Header */}
-            <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ p: 1, bgcolor: '#3b82f615', color: '#3b82f6', borderRadius: 2 }}>
-                    <Settings size={28} />
-                </Box>
-                <Box>
-                    <Typography variant="h5" fontWeight="800" sx={{ color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
-                        General Settings
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'var(--text-secondary)' }}>
-                        SmartWork의 기본 직무 및 직급 체계를 관리하세요.
-                    </Typography>
-                </Box>
-            </Box>
+        <Box sx={{ p: { xs: 2, md: 3 } }}>
+            <PageHeader
+                icon={Settings}
+                title={t('settings-general', 'General Settings')}
+                subtitle={t('general-subtitle', 'SmartWork의 기본 직무 및 직급 체계를 관리하세요.')}
+                breadcrumbs={[
+                    { label: t('sidebar-admin', '관리자'), path: '#' },
+                    { label: t('sidebar-settings', '설정'), path: '/admin/settings' },
+                    { label: t('settings-general', '기본 설정') }
+                ]}
+            />
 
-            <Divider sx={{ mb: 4 }} />
-
-            <Grid container spacing={4} sx={{ width: '100%', m: 0 }}>
+            <Grid container spacing={4} sx={{ width: '100%', m: 0, mt: 2 }}>
                 {/* Left: Configuration Form (6/12) */}
                 <Grid size={{ xs: 12, md: 6 }}>
                     <Stack spacing={3}>

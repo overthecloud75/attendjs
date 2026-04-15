@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, forwardRef, useImperativeHandle } from 'react'
 import {
     useReactTable,
     flexRender,
@@ -58,7 +58,10 @@ const Th = ({ children, ...props }) => (
 )
 
 // https://geuni620.github.io/blog/2023/12/2/tanstack-table/
-const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdClick, rowClickable = false, renderEmptyState }) => {
+const CustomTable = forwardRef(({ 
+    page, columns, data, setData, csvHeaders, fileName, onIdClick, 
+    rowClickable = false, renderEmptyState, hideButtons = false 
+}, ref) => {
     // update시 page 설정
     const [selectedRowData, setSelectedRowData] = useState({})
     const [pagination, setPagination] = useState({
@@ -70,6 +73,32 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdC
     // Write 화면, if writeMode is true, use empty value. else use existing value 
     const [writeMode, setWriteMode] = useState(true)
     const [openEditWrite, setOpenEditWrite] = useState(false)
+    useImperativeHandle(ref, () => ({
+        handleWriteClick: () => {
+            setSelectedRowData({})
+            setWriteMode(true)
+            if (page === 'board') {
+                // Board has a separate write page handled by CustomTableButtons usually
+                // but we can expose a common handler
+                return 'NAVIGATE_BOARD_WRITE'
+            }
+            if (page === 'report') {
+                setOpenEditWrite(true)
+                return 'OPEN_EDIT_WRITE'
+            }
+            if (UserEditablePages.includes(page)) {
+                setOpenEditWrite(true)
+            } else if (UpdatablePages.includes(page)) {
+                setOpenUpdate(true)
+            }
+        },
+        openUpdate: (rowData) => {
+            setSelectedRowData(rowData)
+            setWriteMode(false)
+            setOpenUpdate(true)
+        }
+    }))
+
     // eslint-disable-next-line
     const table =
         useReactTable({
@@ -104,17 +133,19 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdC
                 overflowX: 'hidden' // Prevent horizontal scroll on the outer container
             }}
         >
-            <CustomTableButtons
-                page={page}
-                data={data}
-                csvHeaders={csvHeaders}
-                fileName={fileName}
-                writeMode={writeMode}
-                setWriteMode={setWriteMode}
-                setOpenEditWrite={setOpenEditWrite}
-                setSelectedRowData={setSelectedRowData}
-                setOpenUpdate={setOpenUpdate}
-            />
+            {!hideButtons && (
+                <CustomTableButtons
+                    page={page}
+                    data={data}
+                    csvHeaders={csvHeaders}
+                    fileName={fileName}
+                    writeMode={writeMode}
+                    setWriteMode={setWriteMode}
+                    setOpenEditWrite={setOpenEditWrite}
+                    setSelectedRowData={setSelectedRowData}
+                    setOpenUpdate={setOpenUpdate}
+                />
+            )}
 
             <Paper
                 elevation={0}
@@ -330,6 +361,6 @@ const CustomTable = ({ page, columns, data, setData, csvHeaders, fileName, onIdC
             }
         </Box>
     )
-}
+})
 
 export default CustomTable

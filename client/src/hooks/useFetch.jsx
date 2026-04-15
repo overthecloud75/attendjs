@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { format } from 'date-fns'
+import { formatLocalTime } from '../utils/DateUtil'
 import { useAuth } from './useAuth'
 
 const useFetch = (page, url, params, clickCount) => {
@@ -14,8 +14,8 @@ const useFetch = (page, url, params, clickCount) => {
         if (item.createdAt) {
             return {
                 ...item,
-                createdAt: format(new Date(item.createdAt), 'yy-MM-dd HH:mm:ss'),
-                updatedAt: format(new Date(item.updatedAt), 'yy-MM-dd HH:mm:ss')
+                createdAt: formatLocalTime(item.createdAt),
+                updatedAt: formatLocalTime(item.updatedAt)
             }
         }
         return item

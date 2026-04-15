@@ -1,4 +1,4 @@
-import { useState, Suspense, lazy } from 'react'
+import { useState, Suspense, lazy, forwardRef } from 'react'
 import { format } from 'date-fns'
 import { Box } from '@mui/material'
 import useFetch from '../../hooks/useFetch'
@@ -31,7 +31,10 @@ const getInitialDate = (page) => {
     }]
 }
 
-const CustomTableWithSearch = ({ searchKeyword, page, url, columnHeaders, csvHeaders, onIdClick, rowClickable = false, renderEmptyState }) => {
+const CustomTableWithSearch = forwardRef(({ 
+    searchKeyword, page, url, columnHeaders, csvHeaders, onIdClick, 
+    rowClickable = false, renderEmptyState, hideButtons = false, mt = 0
+}, ref) => {
     // State initialization
     const [name, setName] = useState('')
     // Use lazy initialization for date to avoid recalculating on every render
@@ -56,7 +59,7 @@ const CustomTableWithSearch = ({ searchKeyword, page, url, columnHeaders, csvHea
     const showSearch = SearchPages.includes(page)
 
     return (
-        <Box sx={{ width: '100%', position: 'relative' }}>
+        <Box sx={{ width: '100%', position: 'relative', mt: mt }}>
             {showSearch && (
                 <Search
                     page={page}
@@ -68,6 +71,9 @@ const CustomTableWithSearch = ({ searchKeyword, page, url, columnHeaders, csvHea
                     clickCount={clickCount}
                     setClickCount={setClickCount}
                     setFileName={setFileName}
+                    data={data}
+                    csvHeaders={csvHeaders}
+                    fileName={fileName}
                 />
             )}
 
@@ -76,6 +82,7 @@ const CustomTableWithSearch = ({ searchKeyword, page, url, columnHeaders, csvHea
                     <LoadingSpinner />
                 ) : (
                     <CustomTable
+                        ref={ref}
                         page={page}
                         columns={columnHeaders}
                         data={data}
@@ -85,11 +92,12 @@ const CustomTableWithSearch = ({ searchKeyword, page, url, columnHeaders, csvHea
                         onIdClick={onIdClick}
                         rowClickable={rowClickable}
                         renderEmptyState={renderEmptyState}
+                        hideButtons={hideButtons}
                     />
                 )}
             </Suspense>
         </Box>
     )
-}
+})
 
 export default CustomTableWithSearch
