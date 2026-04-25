@@ -24,7 +24,7 @@ const DashboardContainer = () => {
                 ]}
             />
 
-           <Grid container spacing={4}>
+           <Grid container spacing={2}>
                 <Grid size={{ xs: 12, md: 6 }}>
                     <UserInfoCard
                         leftLeave={leftLeave}

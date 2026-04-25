@@ -113,25 +113,14 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
                     gap: 2 
                 }}
             >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <Box sx={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: '10px',
-                        bgcolor: '#eff6ff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#3b82f6'
-                    }}>
-                        <CalendarIcon size={20} />
-                    </Box>
-                    <Typography variant='h6' fontWeight='600' color="var(--text-primary)">
-                        회의실 예약 현황
+                <Stack direction="row" spacing={1.5} alignItems="center">
+                    <CalendarIcon size={22} color="#3b82f6" strokeWidth={2.5} />
+                    <Typography variant="h6" fontWeight="700" color="var(--text-primary)" sx={{ letterSpacing: '-0.02em' }}>
+                        주간 예약 일정
                     </Typography>
-                </Box>
+                </Stack>
 
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Stack direction="row" spacing={3} alignItems="center">
                     <FormControlLabel
                         control={
                             <Switch 
@@ -145,10 +134,11 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
                             />
                         }
                         label={
-                            <Typography variant="body2" fontWeight="500" color="var(--text-secondary)">
+                            <Typography variant="body2" fontWeight="600" color="var(--text-secondary)">
                                 주말 표시
                             </Typography>
                         }
+                        sx={{ mr: 0 }}
                     />
                     <Box sx={{ minWidth: 200 }}>
                         <SmallMeetingRoomForm
@@ -156,7 +146,7 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
                             setRoom={setRoom}
                         />
                     </Box>
-                </Box>
+                </Stack>
             </Stack>
 
             <Box
@@ -166,14 +156,6 @@ const MeetingRoomCalendar = ({ eventsData, setEventsData }) => {
                     '& .fc-timegrid-slot-label-cushion': { color: 'var(--text-secondary)', fontSize: '0.85rem' },
                     '& .fc-theme-standard td, .fc-theme-standard th': { borderColor: 'var(--border-color)' },
                     '& .fc-header-toolbar': { mb: 3 },
-                    '& .fc-buttons .fc-button': { // Added .fc-buttons to be more specific if possible, but keeping .fc-button is fine
-                        bgcolor: 'var(--bg-primary)',
-                        color: 'var(--text-secondary)',
-                        border: '1px solid var(--border-color)',
-                        boxShadow: 'none',
-                        textTransform: 'capitalize',
-                        fontWeight: 500
-                    },
                     '& .fc-button': {
                         bgcolor: 'var(--bg-primary)',
                         color: 'var(--text-secondary)',

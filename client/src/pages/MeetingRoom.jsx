@@ -15,7 +15,7 @@ const MeetingRoom = () => {
             <PageHeader
                 icon={Calendar}
                 title={t('sidebar-meetings', '회의실 예약')}
-                subtitle={t('meetings-subtitle', '실시간 회의실 예약 현황을 확인하고 일정을 등록합니다.')}
+                subtitle={t('meetings-subtitle', '회의실별 일정을 확인하고 새로운 예약을 관리합니다.')}
                 extra={
                     <MeetingRoomButtons 
                         eventsData={eventsData} 

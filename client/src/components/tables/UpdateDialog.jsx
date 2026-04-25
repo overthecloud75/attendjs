@@ -46,7 +46,7 @@ const Update = ({ writeMode, page, columns, data, setData, open, setOpen, rowDat
             if (writeMode) { insertData() }
             else { updateData() }
         } catch (err) {
-            console.log(url, err)
+            console.error(url, err)
         }
         handleClose()
     }
@@ -58,7 +58,7 @@ const Update = ({ writeMode, page, columns, data, setData, open, setOpen, rowDat
             await axios.post(url, value)
             deleteData()
         } catch (err) {
-            console.log(url, err)
+            console.error(url, err)
         }
         handleClose()
     }

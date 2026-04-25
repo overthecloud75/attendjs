@@ -14,6 +14,7 @@ import LostPassword from './pages/auth/LostPassword'
 import ResetPasswordWithOtp from './pages/auth/ResetPasswordWithOtp'
 import Callback from './pages/auth/Callback'
 import TooManyRequests from './pages/TooManyRequests'
+import CheckEmail from './pages/CheckEmail'
 import NotFound from './pages/NotFound'
 
 // Lazy Loading
@@ -61,6 +62,7 @@ function App() {
                     <Route exact path='/auth/lost-password' element={<LostPassword />} />
                     <Route exact path='/auth/reset-password-with-otp' element={<ResetPasswordWithOtp />} />
                     <Route exact path='/auth/callback' element={<Callback />} />
+                    <Route exact path='/check-email' element={<CheckEmail />} />
                     <Route exact path='/too-many-requests' element={<TooManyRequests />} />
 
                     {/* Shared Service Layout Cluster */}

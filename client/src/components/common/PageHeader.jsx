@@ -16,7 +16,7 @@ import AppBreadcrumbs from './AppBreadcrumbs';
 const PageHeader = ({ icon: Icon, title, subtitle, breadcrumbs, color = '#3b82f6', extra }) => {
     return (
         <Fade in timeout={600}>
-            <Box mb={4}>
+            <Box sx={{ mb: 2 }}>
                 {breadcrumbs && <AppBreadcrumbs items={breadcrumbs} />}
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

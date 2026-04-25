@@ -138,7 +138,7 @@ const CardUpdate = ({ writeMode, page, columns, data, setData, open, setOpen, ro
             if (writeMode) { insertData() }
             else { updateData() }
         } catch (err) {
-            console.log(url, err)
+            console.error(url, err)
         }
         handleClose()
     }
@@ -150,7 +150,7 @@ const CardUpdate = ({ writeMode, page, columns, data, setData, open, setOpen, ro
             await axios.post(url, value)
             deleteData()
         } catch (err) {
-            console.log(url, err)
+            console.error(url, err)
         }
         handleClose()
     }

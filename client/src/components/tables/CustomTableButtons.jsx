@@ -9,7 +9,10 @@ const CustomTableButtons = ({
     page,
     onWriteClick,
     onOpenApproval,
-    onOpenPayment
+    onOpenPayment,
+    data,
+    csvHeaders,
+    fileName
 }) => {
     const { user } = useAuth()
     const editablePages = getEditablePages(user)

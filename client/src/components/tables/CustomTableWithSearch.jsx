@@ -59,7 +59,7 @@ const CustomTableWithSearch = forwardRef(({
     const showSearch = SearchPages.includes(page)
 
     return (
-        <Box sx={{ width: '100%', position: 'relative', mt: mt }}>
+        <Box sx={{ width: '100%', position: 'relative', mt }}>
             {showSearch && (
                 <Search
                     page={page}

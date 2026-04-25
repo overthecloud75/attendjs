@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
  * @param {string} formatStr - 원하는 포맷 (기본값: yy. MM. dd. HH:mm:ss)
  * @returns {string} 포맷팅된 날짜 문자열
  */
-export const formatDateTime = (dateInput, formatStr = 'yy. MM. dd. HH:mm:ss') => {
+export const formatDateTime = (dateInput, formatStr = 'YY. MM. DD. HH:mm:ss') => {
     if (!dateInput) return '-'
     return dayjs(dateInput).format(formatStr)
 }
@@ -23,5 +23,5 @@ export const getToday = () => {
  */
 export const formatLocalTime = (dateInput) => {
     if (!dateInput) return '-'
-    return dayjs(dateInput).format('yy-MM-dd HH:mm:ss')
+    return dayjs(dateInput).format('YY-MM-DD HH:mm:ss')
 }
