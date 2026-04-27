@@ -284,6 +284,12 @@ export const attendUpdateColumnHeaders = [
         accessorKey: 'status',
         header: '상태',
         enableSorting: true,
+        cell: ({ getValue }) => <StatusBadge value={getValue()} />
+    },
+    {
+        id: 'cancel',
+        header: '취소',
+        cell: ({ row }) => <CancelRequestButton row={row.original} />
     },
     {
         accessorKey: 'createdAt',
@@ -332,11 +338,18 @@ export const paymentUpdateColumnHeaders = [
         accessorKey: 'status',
         header: '상태',
         enableSorting: true,
+        cell: ({ getValue }) => <StatusBadge value={getValue()} />
     },
     {
         accessorKey: 'content',
         header: '증빙',
         enableSorting: true,
+        cell: ({ getValue }) => getValue() ? <Tooltip title="증빙 있음">📎</Tooltip> : '-'
+    },
+    {
+        id: 'cancel',
+        header: '취소',
+        cell: ({ row }) => <CancelRequestButton row={row.original} />
     },
     {
         accessorKey: 'createdAt',

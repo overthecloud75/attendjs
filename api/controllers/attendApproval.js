@@ -72,12 +72,14 @@ const updateApprovalStatus = async (approval, newStatus, isAdmin) => {
 }
 
 const getApprovalHistory = async (req) => {
-    const { name, startDate: startDateStr, endDate: endDateStr } = req.query
+    const { name, startDate: startDateStr, endDate: endDateStr, approvalType } = req.query
     const startDate = DateUtil.parse(sanitizeData(startDateStr, 'date'))
     const endDate = DateUtil.addDays(sanitizeData(endDateStr, 'date'), 1)
     const { isAdmin, employeeId } = req.user
 
     let query = { createdAt: { $gte: startDate, $lte: endDate } }
+    if (approvalType) query.approvalType = approvalType
+    
     if (isAdmin) {
         if (name) query.name = name
     } else {

@@ -33,7 +33,8 @@ const getInitialDate = (page) => {
 
 const CustomTableWithSearch = forwardRef(({ 
     searchKeyword, page, url, columnHeaders, csvHeaders, onIdClick, 
-    rowClickable = false, renderEmptyState, hideButtons = false, mt = 0
+    rowClickable = false, renderEmptyState, hideButtons = false, mt = 0,
+    extraParams = {}
 }, ref) => {
     // State initialization
     const [name, setName] = useState('')
@@ -51,7 +52,8 @@ const CustomTableWithSearch = forwardRef(({
         {
             [searchKeyword]: name,
             startDate: format(date[0].startDate, 'yyyy-MM-dd'),
-            endDate: format(date[0].endDate, 'yyyy-MM-dd')
+            endDate: format(date[0].endDate, 'yyyy-MM-dd'),
+            ...extraParams
         },
         clickCount
     )

@@ -10,6 +10,10 @@ const CustomTableButtons = ({
     onWriteClick,
     onOpenApproval,
     onOpenPayment,
+    onOpenScan,
+    showApproval,
+    showPayment,
+    showScan,
     data,
     csvHeaders,
     fileName
@@ -31,6 +35,10 @@ const CustomTableButtons = ({
                     <ApprovalActions 
                         onOpenApproval={onOpenApproval} 
                         onOpenPayment={onOpenPayment} 
+                        onOpenScan={onOpenScan}
+                        showApproval={showApproval}
+                        showPayment={showPayment}
+                        showScan={showScan}
                     />
                 )}
 
