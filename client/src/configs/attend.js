@@ -54,7 +54,7 @@ export const mobileColumnHeaders = [
     },
     {
         accessorKey: 'reason',
-        Header: '사유',
+        header: '사유',
         enableSorting: true,
     },
 ]

@@ -190,15 +190,15 @@ const CustomTable = forwardRef(({
                                             No.{table.getState().pagination.pageIndex * table.getState().pagination.pageSize + rowIndex + 1}
                                         </Typography>
                                         {(() => {
-                                            const statusCell = row.getVisibleCells().find(c => c.column?.id === 'status' || c.column?.id === 'approvalStatus')
-                                            return statusCell ? flexRender(statusCell.column.columnDef.cell, statusCell.getContext()) : null
+                                            const statusCell = row.getVisibleCells().find(c => c?.column?.id === 'status' || c?.column?.id === 'approvalStatus')
+                                            return (statusCell && statusCell.column?.columnDef?.cell) ? flexRender(statusCell.column.columnDef.cell, statusCell.getContext()) : null
                                         })()}
                                     </Box>
 
-                                    {row.getVisibleCells().filter(c => !['status', 'approvalStatus', 'cancel'].includes(c.column?.id)).map(cell => (
+                                    {row.getVisibleCells().filter(c => c?.column && !['status', 'approvalStatus', 'cancel'].includes(c.column.id)).map(cell => (
                                         <Box key={cell.id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px dashed var(--border-color)', pb: 0.5 }}>
                                             <Typography variant="caption" sx={{ color: 'var(--text-secondary)', fontWeight: 600, minWidth: '80px' }}>
-                                                {flexRender(cell.column?.columnDef?.header, cell.getContext())}
+                                                {cell.column?.columnDef?.header ? flexRender(cell.column.columnDef.header, cell.getContext()) : ''}
                                             </Typography>
                                             <Box sx={{ 
                                                 fontSize: '0.825rem', 
@@ -207,14 +207,14 @@ const CustomTable = forwardRef(({
                                                 textAlign: 'right',
                                                 wordBreak: 'break-all'
                                             }}>
-                                                {flexRender(cell.column?.columnDef?.cell, cell.getContext())}
+                                                {cell.column?.columnDef?.cell ? flexRender(cell.column.columnDef.cell, cell.getContext()) : ''}
                                             </Box>
                                         </Box>
                                     ))}
                                     
                                     {(() => {
-                                        const cancelCell = row.getVisibleCells().find(c => c.column?.id === 'cancel')
-                                        return cancelCell ? (
+                                        const cancelCell = row.getVisibleCells().find(c => c?.column?.id === 'cancel')
+                                        return (cancelCell && cancelCell.column?.columnDef?.cell) ? (
                                             <Box sx={{ mt: 1, display: 'flex', justifyContent: 'flex-end' }}>
                                                 {flexRender(cancelCell.column.columnDef.cell, cancelCell.getContext())}
                                             </Box>
@@ -235,12 +235,12 @@ const CustomTable = forwardRef(({
                                                 <Th
                                                     key={header.id}
                                                     colSpan={header.colSpan}
-                                                    onClick={header.column.getToggleSortingHandler()}
+                                                    onClick={header.column?.getToggleSortingHandler?.()}
                                                 >
-                                                    {flexRender(
+                                                    {header.column?.columnDef?.header ? flexRender(
                                                         header.column.columnDef.header,
                                                         header.getContext()
-                                                    )}
+                                                    ) : ''}
                                                 </Th>
                                             ))}
                                         </TableRow>

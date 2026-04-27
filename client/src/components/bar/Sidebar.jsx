@@ -225,7 +225,10 @@ export default Sidebar
 // --- Styled Components ---
 
 const SidebarContainer = styled(Box)(({ theme }) => ({
-    width: 240, // Reduced from 260
+    width: 240,
+    [theme.breakpoints.down('md')]: {
+        width: '100%',
+    },
     height: '100vh',
     borderRight: '1px solid var(--border-color)',
     background: 'var(--bg-primary)',
@@ -342,8 +345,9 @@ const FooterContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
     padding: '16px',
     borderTop: '1px solid var(--border-color)',
-    bgcolor: 'var(--bg-secondary)',
-    justifyContent: 'center'
+    backgroundColor: 'var(--bg-secondary)',
+    justifyContent: 'center',
+    alignItems: 'center'
 }))
 
 const FooterText = styled(Typography)({
