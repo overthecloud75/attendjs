@@ -331,8 +331,9 @@ export const paymentUpdateColumnHeaders = [
     },
     {
         accessorKey: 'etc',
-        header: '기타',
+        header: '비용',
         enableSorting: true,
+        cell: ({ getValue }) => { const val = getValue(); return val && !isNaN(val) ? `${Number(val).toLocaleString()}원` : val; },
     },
     {
         accessorKey: 'status',

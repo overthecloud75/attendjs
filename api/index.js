@@ -31,6 +31,7 @@ import chatRoute from './routes/chat.js'
 import agentRoute from './routes/agent.js'
 import swaggerRoute from './routes/swagger.js'
 import settingsRoute from './routes/settings.js'
+import expenseRoute from './routes/expense.js'
 import { getClientIP } from './utils/util.js'
 
 dotenv.config()
@@ -79,7 +80,7 @@ app.use((req, res, next) => {
         '/api/auth/verify',
         '/api/auth/apiKey'
     ]
-    if (exemptPaths.includes(req.path) || req.path.startsWith('/api/agent/')) {
+    if (exemptPaths.includes(req.path) || req.path.startsWith('/api/agent/') || req.path.startsWith('/api/expense/') || req.path.startsWith('/api/payment')) {
         return next()
     }
     csrfProtection(req, res, next)
@@ -123,6 +124,7 @@ app.use('/api/upload', uploadRoute)
 app.use('/api/chat', chatRoute)
 app.use('/api/agent', agentRoute)
 app.use('/api/settings', settingsRoute)
+app.use('/api/expense', expenseRoute)
 app.use('/swagger', swaggerRoute)
 
 app.use((err, req, res, next) => {

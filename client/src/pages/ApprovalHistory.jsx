@@ -8,7 +8,9 @@ import {
     attendUpdateColumnHeaders,
     paymentUpdateColumnHeaders
 } from '../configs/approval'
-import { Box, Tabs, Tab, Paper } from '@mui/material'
+import { Box, Tabs, Tab, Paper, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material'
+import ReceiptScanner from '../components/expense/ReceiptScanner'
+import { ScanText } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import PageHeader from '../components/common/PageHeader'
 import CustomTableButtons from '../components/tables/CustomTableButtons'
@@ -19,6 +21,7 @@ const ApprovalHistory = () => {
     const { t } = useTranslation()
     const tableRef = useRef()
     const [tabValue, setTabValue] = useState(0)
+    const [scanOpen, setScanOpen] = useState(false)
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue)
@@ -32,7 +35,7 @@ const ApprovalHistory = () => {
             showScan={tabValue === 2} // Expense tab only for now
             onOpenApproval={() => tableRef.current?.openUpdate({})}
             onOpenPayment={() => tableRef.current?.openUpdate({})}
-            onOpenScan={() => alert('AI 영수증 스캔 기능을 준비 중입니다. (Gemma 4 26B 연동 예정)')}
+            onOpenScan={() => setScanOpen(true)}
         />
     )
 
@@ -134,6 +137,33 @@ const ApprovalHistory = () => {
                     mt={0}
                 />
             </Paper>
+
+            {/* Smart Receipt Scan Dialog */}
+            <Dialog 
+                open={scanOpen} 
+                onClose={() => setScanOpen(false)}
+                maxWidth="sm"
+                fullWidth
+                slotProps={{
+                    paper: { sx: { borderRadius: 4, bgcolor: 'var(--card-bg)', color: 'var(--text-primary)' } }
+                }}
+            >
+                <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pt: 3 }}>
+                    <Box sx={{ p: 1, bgcolor: 'var(--bg-active)', borderRadius: '50%', color: 'var(--text-active)', display: 'flex' }}>
+                        <ScanText size={22} />
+                    </Box>
+                    <Typography variant="h6" fontWeight="800" component="span">스마트 영수증 정산</Typography>
+                </DialogTitle>
+                <DialogContent>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                        AI가 영수증을 분석하고 법인카드 내역과 대조하여 지출 결재안을 작성합니다.
+                    </Typography>
+                    <ReceiptScanner onComplete={(data) => console.log('Scan Data:', data)} />
+                </DialogContent>
+                <DialogActions sx={{ p: 3 }}>
+                    <Button onClick={() => setScanOpen(false)} sx={{ color: 'var(--text-secondary)' }}>닫기</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }

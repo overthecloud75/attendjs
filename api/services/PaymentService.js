@@ -47,7 +47,8 @@ export default class PaymentService {
             approverEmail: approver.email,
             consenterName: consenter.name,
             consenterEmail: consenter.email,
-            content
+            content,
+            price: body.price || 0
         }
 
         const imageId = getImageId(approvalData.content)

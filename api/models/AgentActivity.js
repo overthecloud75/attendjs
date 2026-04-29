@@ -18,6 +18,7 @@ const AgentActivitySchema = new mongoose.Schema({
     }],
     reasoning: { type: String },
     observation: { type: String },
+    extractedData: { type: mongoose.Schema.Types.Mixed },
     finalResponse: { type: String },
     durationMs: { type: Number },
     createdAt: { type: Date, default: Date.now }

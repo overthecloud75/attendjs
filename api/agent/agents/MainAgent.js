@@ -1,6 +1,7 @@
 import BaseAgent from '../BaseAgent.js';
 import callHRAgentTool from '../tools/main/CallHRAgentTool.js';
 import callAttendanceAgentTool from '../tools/main/CallAttendanceAgentTool.js';
+import callExpenseAgentTool from '../tools/main/CallExpenseAgentTool.js';
 
 /**
  * [Core] Main Orchestrator Agent
@@ -22,6 +23,7 @@ export default class MainAgent extends BaseAgent {
         AVAILABLE AGENTS:
         1. HR_Agent: Handles vacations, leaves, and attendance data.
         2. Attendance_Agent: Handles daily clock-in/out records and work hour analytics.
+        3. Expense_Agent: Handles receipt OCR, expense scanning, and payment approvals.
 
         [SECURITY POLICY]
         1. Access Control: You ONLY provide info for the current user (${user?.name}).
@@ -30,6 +32,7 @@ export default class MainAgent extends BaseAgent {
         [RESPONSE PROTOCOL]
         - HR tasks: Call 'call_hr_agent'.
         - Attendance tasks: Call 'call_attendance_agent'.
+        - Expense/Receipt tasks: Call 'call_expense_agent'.
         - General questions / Refusals: Answer directly in Korean.
         - CRITICAL: DO NOT start with "안녕하세요" or introduce yourself. Skip greetings. Answer the question directly.`;
     }
@@ -64,7 +67,8 @@ export default class MainAgent extends BaseAgent {
         // Now returns modular tool definitions consistently
         return [
             callHRAgentTool.getDefinition(),
-            callAttendanceAgentTool.getDefinition()
+            callAttendanceAgentTool.getDefinition(),
+            callExpenseAgentTool.getDefinition()
         ];
     }
 }

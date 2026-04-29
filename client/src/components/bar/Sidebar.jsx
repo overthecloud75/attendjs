@@ -43,8 +43,8 @@ const itemDict = {
         icon: ShieldCheck,
         items: [
             pagesInfo['summary'],
-            pagesInfo['settings'],
             pagesInfo['loginhistory'],
+            pagesInfo['settings'],
         ]
     }
 }

@@ -49,7 +49,8 @@ class AgentService {
     /**
      * Entry point for processing user agent strings.
      */
-    async processCommand(user, command, isConfirmed, pendingAction, incomingSessionId) {
+    async processCommand(rawUser, command, isConfirmed, pendingAction, incomingSessionId, context = {}) {
+        const user = await this.hydrateUserContext(rawUser);
         const startTime = Date.now()
         const sessionId = (!incomingSessionId || incomingSessionId === 'N/A') ? crypto.randomUUID() : incomingSessionId;
 
@@ -95,7 +96,7 @@ class AgentService {
             }
 
             // Standard Orchestration Flow
-            const result = await this.orchestrate(user, command, logEntry, llmConfig, startTime, activityId)
+            const result = await this.orchestrate(user, command, logEntry, llmConfig, startTime, activityId, context)
             return result
         } catch (error) {
             agentLogger.error({ message: `Orchestration error in session ${sessionId}: ${error.stack}`, sessionId });
@@ -111,7 +112,7 @@ class AgentService {
     /**
      * Master AI Orchestration: Decides whether to handle directly or delegate.
      */
-    async orchestrate(user, command, logEntry, llmConfig, startTime, activityId) {
+    async orchestrate(user, command, logEntry, llmConfig, startTime, activityId, context = {}) {
         if (Object.keys(this.agents).length === 0) {
             await this.initializeAgents();
         }
@@ -135,13 +136,13 @@ class AgentService {
             const toolCall = firstMessage.tool_calls[0]
             const funcName = toolCall.function.name;
 
-            if (funcName === 'call_hr_agent' || funcName === 'call_attendance_agent') {
-                const subAgentName = (funcName === 'call_hr_agent') ? 'HR_Agent' : 'Attendance_Agent';
+            if (funcName === 'call_hr_agent' || funcName === 'call_attendance_agent' || funcName === 'call_expense_agent') {
+                const subAgentName = (funcName === 'call_hr_agent') ? 'HR_Agent' : (funcName === 'call_attendance_agent' ? 'Attendance_Agent' : 'Expense_Agent');
                 const args = JSON.parse(toolCall.function.arguments || "{}")
                 logEntry.intent = `Delegation (${subAgentName})`
 
                 const subAgent = this.agents[subAgentName]
-                const subResult = await subAgent.run(user, args.subTask, llmConfig, logEntry.sessionId)
+                const subResult = await subAgent.run(user, args.subTask, llmConfig, logEntry.sessionId, context)
                 
                 logEntry.agentTrail.push({
                     agent: subAgentName,
@@ -150,8 +151,10 @@ class AgentService {
                     observation: subResult.observation || `Processed task: ${args.subTask}`,
                     toolUsed: subResult.toolUsed,
                     toolArgs: subResult.toolArgs,
-                    rawToolResult: subResult.rawToolResult
+                    rawToolResult: subResult.rawToolResult,
+                    extractedData: subResult.extractedData
                 })
+                logEntry.extractedData = subResult.extractedData;
 
                 // Determine Output Voice (Main vs Specialist)
                 let finalAnswer = subResult.content;
@@ -213,6 +216,7 @@ class AgentService {
             agentTrail: logEntry.agentTrail,
             reasoning: result.reasoning || '',
             observation: result.observation || '',
+            extractedData: result.extractedData,
             finalResponse: result.content,
             durationMs: duration
         };
@@ -246,6 +250,7 @@ class AgentService {
             trail: logEntry.agentTrail,
             reasoning: logEntry.agentTrail.map(t => `[${t.agent}] ${t.thought}`).join('\n'),
             observation: logEntry.agentTrail.map(t => `[${t.agent}] ${t.observation}`).join('\n'),
+            extractedData: logEntry.extractedData,
             timestamp: logEntry.timestamp
         }
     }

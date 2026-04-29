@@ -43,6 +43,10 @@ const ApprovalSchema = new mongoose.Schema(
         etc: {
             type: String,
         },
+        price: {
+            type: Number,
+            default: 0
+        },
         approverName: {
             type: String,
             required: true

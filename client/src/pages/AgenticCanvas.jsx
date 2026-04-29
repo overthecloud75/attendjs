@@ -10,6 +10,9 @@ import AgentStatusCard from '../components/agentic/AgentStatusCard'
 import ExperienceFeed from '../components/agentic/ExperienceFeed'
 import AgentInput from '../components/agentic/AgentInput'
 import AgentSidebar from '../components/agentic/AgentSidebar'
+import SquadRoster from '../components/agentic/SquadRoster'
+import { Tabs, Tab } from '@mui/material'
+import { LayoutDashboard, Users } from 'lucide-react'
 
 // Utils
 import { formatDateTime } from '../utils/DateUtil'
@@ -23,6 +26,7 @@ const AgenticCanvas = () => {
     const [expandedInsights, setExpandedInsights] = useState({})
     const [history, setHistory] = useState([])
     const [activities, setActivities] = useState([])
+    const [tabValue, setTabValue] = useState(0)
 
     const fetchHistory = async () => {
         try {
@@ -31,7 +35,7 @@ const AgenticCanvas = () => {
             setHistory(historyData)
             
             if (historyData.length > 0 && activities.length === 0) {
-                const recentActivities = historyData.slice(0, 3).flatMap(h => [
+                const recentActivities = historyData.slice(0, 7).flatMap(h => [
                     { 
                         user: 'You', text: h.command, time: formatDateTime(h.createdAt), icon: UserCircle, type: 'user' 
                     },
@@ -140,49 +144,100 @@ const AgenticCanvas = () => {
         }
     }
 
+    const handleLoadHistoryItem = (h) => {
+        setActivities(prev => [{ 
+            user: 'You', text: h.command, time: formatDateTime(h.createdAt), icon: UserCircle, type: 'user' 
+        }, { 
+            user: 'Assistant', text: h.finalResponse, 
+            trail: h.agentTrail, observation: h.observation, reasoning: h.reasoning,
+            time: formatDateTime(h.createdAt), icon: Bot, type: 'assistant' 
+        }, ...prev])
+        setTabValue(0)
+    }
+
     return (
         <Box sx={{ display: 'flex', height: '100%', bgcolor: 'var(--bg-primary)', overflow: 'hidden', position: 'relative' }}>
             <Box sx={{ flex: 1, height: '100%', overflowY: 'auto', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                <Container maxWidth="xl" sx={{ py: 2, px: { xs: 2, md: 3 }, flex: 1 }}>
-                    <AppBreadcrumbs items={[{ label: 'Agentic Canvas' }]} />
+                <Container maxWidth={false} sx={{ py: 2, px: { xs: 2, md: 3 }, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <AppBreadcrumbs items={[{ label: 'Agentic Smartwork' }]} />
 
-                    <Box mb={2} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box mb={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
                             <Box sx={{ p: 1, bgcolor: '#3b82f615', color: '#3b82f6', borderRadius: 2.5 }}><Layers size={24} /></Box>
                             <Box>
-                                <Typography variant="h6" fontWeight="700" sx={{ color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>Agentic Canvas</Typography>
-                                <Typography variant="caption" color="var(--text-secondary)" sx={{ opacity: 0.7 }}>Intelligent Assistant Orchestration</Typography>
+                                <Typography variant="h6" fontWeight="900" sx={{ color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>Agentic Smartwork</Typography>
                             </Box>
                         </Stack>
-                        {!showRightPanel && (
-                            <Tooltip title="사이드 패널 열기">
-                                <IconButton onClick={() => setShowRightPanel(true)} sx={{ bgcolor: '#3b82f615', color: '#3b82f6', border: '1px solid #3b82f630' }}>
-                                    <PanelRightOpen size={20} />
-                                </IconButton>
-                            </Tooltip>
-                        )}
+                        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                            <Tabs 
+                                value={tabValue} 
+                                onChange={(e, val) => setTabValue(val)}
+                                sx={{
+                                    minHeight: 40,
+                                    bgcolor: 'var(--bg-secondary)',
+                                    borderRadius: '12px',
+                                    p: 0.5,
+                                    '& .MuiTabs-indicator': {
+                                        height: '100%',
+                                        borderRadius: '10px',
+                                        bgcolor: 'var(--card-bg)',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                                    },
+                                    '& .MuiTab-root': {
+                                        minHeight: 32,
+                                        px: 2.5,
+                                        borderRadius: '10px',
+                                        fontSize: '0.85rem',
+                                        fontWeight: 700,
+                                        color: 'var(--text-secondary)',
+                                        zIndex: 1,
+                                        transition: 'all 0.2s',
+                                        '&.Mui-selected': {
+                                            color: 'var(--text-active)'
+                                        }
+                                    }
+                                }}
+                            >
+                                <Tab icon={<LayoutDashboard size={16} />} iconPosition="start" label="Mission Canvas" />
+                                <Tab icon={<Users size={16} />} iconPosition="start" label="에이전트 현황" />
+                            </Tabs>
+
+                            {tabValue === 0 && !showRightPanel && (
+                                <Tooltip title="사이드 패널 열기">
+                                    <IconButton onClick={() => setShowRightPanel(true)} sx={{ bgcolor: '#3b82f615', color: '#3b82f6', border: '1px solid #3b82f630' }}>
+                                        <PanelRightOpen size={20} />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                        </Stack>
                     </Box>
 
-                    <Stack spacing={2}>
-                        <AgentInput 
-                            command={command} setCommand={setCommand} isLoading={isLoading} 
-                            statusMsg={statusMsg} handleSendCommand={handleSendCommand} suggestions={SUGGESTIONS} 
-                        />
-                        <ExperienceFeed 
-                            activities={activities} expandedInsights={expandedInsights} 
-                            toggleInsight={(idx) => setExpandedInsights(prev => ({ ...prev, [idx]: !prev[idx] }))}
-                            handleConfirmAction={handleConfirmAction}
-                        />
-                    </Stack>
+                    {tabValue === 0 ? (
+                        <Stack spacing={2} sx={{ flex: 1 }}>
+                            <AgentInput 
+                                command={command} setCommand={setCommand} isLoading={isLoading} 
+                                statusMsg={statusMsg} handleSendCommand={handleSendCommand} suggestions={SUGGESTIONS} 
+                            />
+                            <ExperienceFeed 
+                                activities={activities} expandedInsights={expandedInsights} 
+                                toggleInsight={(idx) => setExpandedInsights(prev => ({ ...prev, [idx]: !prev[idx] }))}
+                                handleConfirmAction={handleConfirmAction}
+                            />
+                        </Stack>
+                    ) : (
+                        <SquadRoster />
+                    )}
                 </Container>
             </Box>
 
-            <AgentSidebar 
-                showRightPanel={showRightPanel} setShowRightPanel={setShowRightPanel}
-                history={history} handleDeleteHistory={handleDeleteHistory}
-                setActivities={setActivities} setCommand={setCommand}
-                formatDateTime={formatDateTime}
-            />
+            {tabValue === 0 && (
+                <AgentSidebar 
+                    showRightPanel={showRightPanel} setShowRightPanel={setShowRightPanel}
+                    history={history} handleDeleteHistory={handleDeleteHistory}
+                    setActivities={setActivities} setCommand={setCommand}
+                    formatDateTime={formatDateTime}
+                />
+            )}
         </Box>
     )
 }

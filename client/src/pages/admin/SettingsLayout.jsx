@@ -107,15 +107,6 @@ const SettingsLayout = () => {
                     })}
                 </List>
 
-                {/* Bottom Status (Optional) */}
-                <Box sx={{ mt: 'auto', p: 3 }}>
-                    <Paper sx={{ p: 1.5, bgcolor: 'var(--bg-primary)', borderRadius: 3, border: '1px solid var(--border-color)' }} elevation={0}>
-                        <Typography variant="caption" sx={{ color: 'var(--text-secondary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <Box sx={{ width: 8, height: 8, bgcolor: '#10b981', borderRadius: '50%' }} />
-                            Core System Online
-                        </Typography>
-                    </Paper>
-                </Box>
             </Paper>
 
             {/* Content Area */}

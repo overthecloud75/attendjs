@@ -26,13 +26,15 @@ const BaseDialog = ({ open, onClose, title, titleIcon, children, actions, maxWid
                 anchor="bottom"
                 open={open}
                 onClose={onClose}
-                PaperProps={{
-                    sx: {
-                        borderTopLeftRadius: 20,
-                        borderTopRightRadius: 20,
-                        bgcolor: 'var(--card-bg)',
-                        maxHeight: '90vh',
-                        pb: 2
+                slotProps={{
+                    paper: {
+                        sx: {
+                            borderTopLeftRadius: 20,
+                            borderTopRightRadius: 20,
+                            bgcolor: 'var(--card-bg)',
+                            maxHeight: '90vh',
+                            pb: 2
+                        }
                     }
                 }}
             >
@@ -76,8 +78,8 @@ const BaseDialog = ({ open, onClose, title, titleIcon, children, actions, maxWid
             onClose={onClose} 
             fullWidth 
             maxWidth={maxWidth}
-            PaperProps={{
-                sx: { borderRadius: 3, bgcolor: 'var(--card-bg)', backgroundImage: 'none' }
+            slotProps={{
+                paper: { sx: { borderRadius: 3, bgcolor: 'var(--card-bg)', backgroundImage: 'none' } }
             }}
         >
             <DialogTitle sx={{ 
@@ -91,7 +93,7 @@ const BaseDialog = ({ open, onClose, title, titleIcon, children, actions, maxWid
             }}>
                 <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
                     {titleIcon && <Box sx={{ color: 'var(--text-active)', display: 'flex' }}>{titleIcon}</Box>}
-                    <Typography variant="h6" fontWeight="700">{title}</Typography>
+                    <Typography variant="h6" fontWeight="700" component="span">{title}</Typography>
                 </Stack>
                 <IconButton onClick={onClose} size="small" sx={{ color: 'var(--text-secondary)' }}>
                     <X size={20} />
